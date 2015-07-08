@@ -108,7 +108,7 @@ static uint_fast16_t glob_packages(char *);
 
 static uint_fast16_t glob_packages(char *str1)
 {
-uint_fast16_t packs_num = 0;
+    uint_fast16_t packs_num = 0;
     glob_t gl;
 
     if (!(glob(str1, GLOB_NOSORT, NULL, &gl)))
