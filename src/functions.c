@@ -104,82 +104,82 @@ void get_ssd(char *str1)
 
 /* Source (my improved screenfetch-c fork):
  * https://github.com/wifiextender/screenfetch-c/blob/master/src/plat/linux/detect.c */
-static uint_fast16_t glob_packages(char *str1);
+static uint_fast16_t glob_packages(char *);
 
 static uint_fast16_t glob_packages(char *str1)
 {
-	uint_fast16_t packs_num = 0;
-	glob_t gl;
+uint_fast16_t packs_num = 0;
+    glob_t gl;
 
-	if (!(glob(str1, GLOB_NOSORT, NULL, &gl)))
-		packs_num = gl.gl_pathc;
+    if (!(glob(str1, GLOB_NOSORT, NULL, &gl)))
+        packs_num = gl.gl_pathc;
 
-	else
+    else
         exit(EXIT_FAILURE);
 
-	globfree(&gl);
+    globfree(&gl);
 
-	return packs_num;
+    return packs_num;
 }
 
 void get_packs(char *str1)
 {
-	FILE *pkgs_file;
-	uint_fast16_t packages = 0;
+    FILE *pkgs_file;
+    uint_fast16_t packages = 0;
 
-	if (STREQ(str1, "archlinux")
-		|| STREQ(str1, "parabola")
-		|| STREQ(str1, "chakra") || STREQ(str1, "manjaro"))
+    if (STREQ(str1, "archlinux")
+        || STREQ(str1, "parabola")
+        || STREQ(str1, "chakra") || STREQ(str1, "manjaro"))
 
-		packages = glob_packages("/var/lib/pacman/local/*");
+        packages = glob_packages("/var/lib/pacman/local/*");
 
-	else if (STREQ(str1, "frugalware"))
-	{
-		pkgs_file = popen("pacman-g2 -Q 2> /dev/null | wc -l", "r");
-		fscanf(pkgs_file, "%"SCNuFAST16, &packages);
-		pclose(pkgs_file);
-	}
+    else if (STREQ(str1, "frugalware"))
+    {
+        pkgs_file = popen("pacman-g2 -Q 2> /dev/null | wc -l", "r");
+        fscanf(pkgs_file, "%"SCNuFAST16, &packages);
+        pclose(pkgs_file);
+    }
 
-	else if (STREQ(str1, "ubuntu") || STREQ(str1, "lubuntu")
-			|| STREQ(str1, "xubuntu") || STREQ(str1, "linuxmint")
-			|| STREQ(str1, "solusos") || STREQ(str1, "debian")
-			|| STREQ(str1, "lmde") || STREQ(str1, "crunchbang")
-			|| STREQ(str1, "peppermint")
-			|| STREQ(str1, "linuxdeepin")	|| STREQ(str1, "trisquel")
-			|| STREQ(str1, "elementary")
-			|| STREQ(str1, "backtrack")
-			|| STREQ(str1, "kali"))
-		packages = glob_packages("/var/lib/dpkg/info/*.list");
+    else if (STREQ(str1, "ubuntu") || STREQ(str1, "lubuntu")
+            || STREQ(str1, "xubuntu") || STREQ(str1, "linuxmint")
+            || STREQ(str1, "solusos") || STREQ(str1, "debian")
+            || STREQ(str1, "lmde") || STREQ(str1, "crunchbang")
+            || STREQ(str1, "peppermint")
+            || STREQ(str1, "linuxdeepin")	|| STREQ(str1, "trisquel")
+            || STREQ(str1, "elementary")
+            || STREQ(str1, "backtrack")
+            || STREQ(str1, "kali"))
+        packages = glob_packages("/var/lib/dpkg/info/*.list");
 
-	else if (STREQ(str1, "slackware"))
-		packages = glob_packages("/var/log/packages/*");
+    else if (STREQ(str1, "slackware"))
+        packages = glob_packages("/var/log/packages/*");
 
-	else if (STREQ(str1, "gentoo") || STREQ(str1, "sabayon")
-			|| STREQ(str1, "funtoo"))
-		packages = glob_packages("/var/db/pkg/*/*");
+    else if (STREQ(str1, "gentoo") || STREQ(str1, "sabayon")
+            || STREQ(str1, "funtoo"))
+        packages = glob_packages("/var/db/pkg/*/*");
 
-	else if (STREQ(str1, "fuduntu") || STREQ(str1, "fedora")
-			|| STREQ(str1, "opensuse")
-			|| STREQ(str1, "rhel")
-			|| STREQ(str1, "mandriva") || STREQ(str1, "mandrake")
-			|| STREQ(str1, "mageia") || STREQ(str1, "viperr"))
-	{
-		pkgs_file = popen("rpm -qa 2> /dev/null | wc -l", "r");
-		fscanf(pkgs_file, "%"SCNuFAST16, &packages);
-		pclose(pkgs_file);
-	}
+    else if (STREQ(str1, "fuduntu") || STREQ(str1, "fedora")
+            || STREQ(str1, "opensuse")
+            || STREQ(str1, "rhel")
+            || STREQ(str1, "mandriva") || STREQ(str1, "mandrake")
+            || STREQ(str1, "mageia") || STREQ(str1, "viperr"))
+    {
+        pkgs_file = popen("rpm -qa 2> /dev/null | wc -l", "r");
+        fscanf(pkgs_file, "%"SCNuFAST16, &packages);
+        pclose(pkgs_file);
+    }
 
-	else if (STREQ(str1, "angstrom"))
-	{
-		pkgs_file = popen("opkg list-installed 2> /dev/null | wc -l", "r");
-		fscanf(pkgs_file, "%"SCNuFAST16, &packages);
-		pclose(pkgs_file);
-	}
+    else if (STREQ(str1, "angstrom"))
+    {
+        pkgs_file = popen("opkg list-installed 2> /dev/null | wc -l", "r");
+        fscanf(pkgs_file, "%"SCNuFAST16, &packages);
+        pclose(pkgs_file);
+    }
 
-	else
+    else
         exit(EXIT_FAILURE);
 
-	snprintf(str1, VLA, "%"PRIuFAST16, packages);
+    snprintf(str1, VLA, "%"PRIuFAST16, packages);
 }
 
 

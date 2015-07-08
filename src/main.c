@@ -26,6 +26,16 @@
 
 #include "functions.h"
 
+#define FMT       "\x0a%s \x0b%s%%%c "
+#define FMT_TIME  "\x0a%s \x0b%s"
+#define FMT_CPU   FMT
+#define FMT_RAM   FMT
+#define FMT_SSD   FMT
+#define FMT_PKGS  FMT_TIME"%c "
+#define FMT_KERN  "\x09%s%c "
+#define FMT_VOL   FMT
+#define COMMA     ','
+
 int main(void)
 {
     char packs[VLA] = GIVEN_DISTRO;
@@ -45,7 +55,7 @@ int main(void)
     get_time(Time);
 
     snprintf(combine, VLA*7,
-        FMT FMT FMT FMT_PACKS "\x09%s%c " FMT "\x0a%s \x0b%s",
+        FMT_CPU FMT_RAM FMT_SSD FMT_PKGS FMT_KERN FMT_VOL FMT_TIME,
         "CPU", cpu, COMMA,
         "RAM", ram, COMMA,
         "SSD", ssd, COMMA,

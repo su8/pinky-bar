@@ -23,9 +23,6 @@
 #define MB 1048576
 #define GB 1073741824
 #define VLA 100
-#define COMMA ','
-#define FMT "\x0a%s \x0b%s%%%c "
-#define FMT_PACKS "\x0a%s \x0b%s%c "
 #define FMT_UINT "%"PRIuMAX
 #define FILL_ARR(x,z) (snprintf(x, VLA, FMT_UINT, z))
 #define STREQ(x, z) (!strcmp(x, z))
