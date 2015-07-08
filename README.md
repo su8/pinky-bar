@@ -1,5 +1,6 @@
 ## dwm-bar.c
 <img src="img/pic.png" alt="" />
+
 Statusbar program for dwm that I've written in my very first day as dwm user.
 
 ## Installation
@@ -30,7 +31,7 @@ Replace **distro** with:
 - [x] mageia
 - [x] parabola
 - [x] viperr
-- [x] vinuxdeepin
+- [x] linuxdeepin
 - [x] chakra
 - [x] fuduntu
 - [x] trisquel
@@ -53,6 +54,7 @@ Replace **distro** with:
 * alsa-lib
 * libx11
 * xorg-server
+* dwm compiled with [statuscolor](https://github.com/wifiextender/dwm-fork/blob/master/patches/statuscolours.diff) patch. The colors in use are specified in your [config.h](https://github.com/wifiextender/dwm-fork/blob/master/config.h#L6)
 
 ## Now what ?
 
