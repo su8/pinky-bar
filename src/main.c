@@ -28,7 +28,9 @@
 
 #define FMT       "\x0a%s \x0b%s%%%c "
 #define FMT_TIME  "\x0a%s \x0b%s"
-#define FMT_CPU   "\x0a%s \x0b%s%% \x09%sC\x0b%c "
+#define TEMP      "\x09%sC\x0b%c "
+#define FMT_MOBO  FMT_TIME" "TEMP
+#define FMT_CPU   FMT_TIME"%% "TEMP
 #define FMT_RAM   FMT
 #define FMT_SSD   FMT
 #define FMT_PKGS  FMT_TIME"%c "
@@ -39,15 +41,16 @@
 int main(void)
 {
     char packs[VLA] = GIVEN_DISTRO;
-    char cpu[VLA], cpu_temp[VLA], ram[VLA], ssd[VLA], kern[VLA];
-    char volume[VLA], Time[VLA], combine[VLA*8];
+    char mobo[VLA], cpu[VLA], ram[VLA], ssd[VLA];
+    char kern[VLA], volume[VLA], Time[VLA], combine[VLA*9];
+    char cpu_temp[VLA], mobo_temp[VLA];
 
-    get_cpu(cpu);
+    get_cpu(cpu, cpu_temp);
 
     sleep(1);
 
-    get_cpu(cpu);
-    get_cpu_temp(cpu_temp);
+    get_mobo(mobo, mobo_temp);
+    get_cpu(cpu, cpu_temp);
     get_ram(ram);
     get_ssd(ssd);
     get_packs(packs);
@@ -55,8 +58,9 @@ int main(void)
     get_volume(volume);
     get_time(Time);
 
-    snprintf(combine, VLA*8,
-        FMT_CPU FMT_RAM FMT_SSD FMT_PKGS FMT_KERN FMT_VOL FMT_TIME,
+    snprintf(combine, VLA*9,
+        FMT_MOBO FMT_CPU FMT_RAM FMT_SSD FMT_PKGS FMT_KERN FMT_VOL FMT_TIME,
+        "Mobo", mobo, mobo_temp, COMMA,
         "CPU", cpu, cpu_temp, COMMA,
         "RAM", ram, COMMA,
         "SSD", ssd, COMMA,

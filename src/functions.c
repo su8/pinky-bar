@@ -33,9 +33,51 @@
 
 #include "functions.h"
 
-
-void get_cpu(char *str1)
+void get_temp(char *, char *);
+void get_temp(char *str1, char *str2)
 {
+    uintmax_t temp;
+
+    FILE *fp = fopen(str1, "r");
+    if (NULL == fp)
+        exit(EXIT_FAILURE);
+
+    fscanf(fp, FMT_UINT, &temp);
+    fclose(fp);
+
+    temp /= 1000;
+
+    snprintf(str2, VLA, FMT_UINT, temp);
+}
+
+void get_mobo(char *str1, char *str2)
+{
+    char vendor[VLA], name[VLA], temp[VLA];
+
+    FILE *fp = fopen(MOBO_VENDOR, "r");
+    if (NULL == fp)
+        exit(EXIT_FAILURE);
+
+    /* use %[^\n] to get the whole line */
+    fscanf(fp, "%s", vendor);
+    fclose(fp);
+
+    if (!(fp = fopen(MOBO_NAME, "r")))
+        exit(EXIT_FAILURE);
+
+    /* use %[^\n] to get the whole line */
+    fscanf(fp, "%s", name);
+    fclose(fp);
+
+    get_temp(MOBO_TEMP_FILE, temp);
+
+    snprintf(str1, VLA*2, "%s %s", vendor, name);
+    snprintf(str2, VLA, "%s", temp);
+}
+
+void get_cpu(char *str1, char *str2)
+{
+    char temp[VLA];
     static uintmax_t previous_total = 0, previous_idle = 0;
     uintmax_t x, percent, diff_total, diff_idle, cpu_active[10];
     uintmax_t total = 0;
@@ -43,7 +85,7 @@ void get_cpu(char *str1)
     memset(cpu_active, 0, sizeof(cpu_active));
 
     FILE *fstat = fopen("/proc/stat", "r");
-    if (fstat == NULL)
+    if (NULL == fstat)
         exit(EXIT_FAILURE);
 
     /* Some kernels will produce 7, 8 and 9 columns
@@ -70,23 +112,10 @@ void get_cpu(char *str1)
 
     percent        = (1000 * (diff_total - diff_idle) / diff_total + 5) / 10;
 
+    get_temp(CPU_TEMP_FILE, temp);
+
     FILL_ARR(str1, percent);
-}
-
-void get_cpu_temp(char *str1)
-{
-    float temp;
-
-    FILE *fp = fopen("/sys/class/hwmon/hwmon0/temp1_input", "r");
-    if (fp == NULL)
-        exit(EXIT_FAILURE);
-
-    fscanf(fp, "%f", &temp);
-    fclose(fp);
-
-    temp /= 1000.0;
-
-    snprintf(str1, VLA, "%.1f", temp);
+    snprintf(str2, VLA, "%s", temp);
 }
 
 void get_ram(char *str1)
@@ -211,7 +240,6 @@ void get_kernel(char *str1)
 void get_time(char *str1)
 {
     char time_str[VLA];
-
     time_t t = time(NULL);
 
     strftime(time_str, VLA, "%I:%M %p", localtime(&t));
@@ -235,7 +263,7 @@ void get_volume(char *str1)
 
     elem = snd_mixer_find_selem(handle, s_elem);
 
-    if (elem == NULL)
+    if (NULL == elem)
     {
         snd_mixer_selem_id_free(s_elem);
         snd_mixer_close(handle);

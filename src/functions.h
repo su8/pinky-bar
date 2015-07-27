@@ -26,9 +26,13 @@
 #define FMT_UINT "%"PRIuMAX
 #define FILL_ARR(x,z) (snprintf(x, VLA, FMT_UINT, z))
 #define STREQ(x, z) (!strcmp(x, z))
+#define CPU_TEMP_FILE "/sys/class/hwmon/hwmon0/temp1_input"
+#define MOBO_TEMP_FILE "/sys/class/hwmon/hwmon0/temp2_input"
+#define MOBO_NAME "/sys/class/dmi/id/board_name"
+#define MOBO_VENDOR "/sys/class/dmi/id/board_vendor"
 
-void get_cpu(char *);
-void get_cpu_temp(char *);
+void get_mobo(char *, char *);
+void get_cpu(char *, char *);
 void get_ram(char *);
 void get_ssd(char *);
 void get_packs(char *);
