@@ -73,6 +73,22 @@ void get_cpu(char *str1)
     FILL_ARR(str1, percent);
 }
 
+void get_cpu_temp(char *str1)
+{
+    float temp;
+
+    FILE *fp = fopen("/sys/class/hwmon/hwmon0/temp1_input", "r");
+    if (fp == NULL)
+        exit(EXIT_FAILURE);
+
+    fscanf(fp, "%f", &temp);
+    fclose(fp);
+
+    temp /= 1000.0;
+
+    snprintf(str1, VLA, "%.1f", temp);
+}
+
 void get_ram(char *str1)
 {
     uintmax_t used = 0, total = 0, percent = 0;

@@ -28,6 +28,7 @@
 #define STREQ(x, z) (!strcmp(x, z))
 
 void get_cpu(char *);
+void get_cpu_temp(char *);
 void get_ram(char *);
 void get_ssd(char *);
 void get_packs(char *);
