@@ -276,7 +276,7 @@ void get_fans(char *str1)
         for (x = 0; x < z; ++x)
             all_fans += snprintf(all_fans,
                 sizeof(buffer) - (all_fans - buffer),
-                    UFINT" ", rpm[x]);
+                    (rpm[x] > 0 ? UFINT" " : ""), rpm[x]);
 
         FILL_STR_ARR(str1, buffer);
     }
