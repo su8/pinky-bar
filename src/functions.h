@@ -33,13 +33,15 @@
 #define MOBO_NAME DMI_DIR"board_name"
 #define MOBO_VENDOR DMI_DIR"board_vendor"
 
-void get_voltage(char *);
-void get_mobo(char *, char *);
+
 void get_cpu(char *, char *);
 void get_ram(char *);
 void get_ssd(char *);
 void get_packs(char *);
 void get_kernel(char *);
+void get_voltage(char *);
+void get_fans(char *);
+void get_mobo(char *, char *);
 void get_time(char *);
 void get_volume(char *);
 void set_status(const char *);

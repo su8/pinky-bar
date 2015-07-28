@@ -19,6 +19,7 @@
 
 #include <time.h>
 #include <stdio.h>
+#include <stdbool.h>
 #include <string.h>
 #include <stdlib.h>
 #include <inttypes.h>
@@ -32,6 +33,8 @@
 #include <alsa/asoundlib.h>
 
 #include "functions.h"
+
+#define UFINT "%"PRIuFAST16
 
 void get_temp(char *, char *);
 void get_temp(char *str1, char *str2)
@@ -50,58 +53,6 @@ void get_temp(char *str1, char *str2)
     snprintf(str2, VLA, FMT_UINT, temp);
 }
 
-void get_voltage(char *str1)
-{
-    float voltage[4];
-    FILE *fp;
-    uint_fast16_t x = 0;
-
-    char *voltage_files[] =
-    {
-        HWMON_DIR"in0_input",
-        HWMON_DIR"in1_input",
-        HWMON_DIR"in2_input",
-        HWMON_DIR"in3_input"
-    };
-
-    for (x = 0; x < 4; x++)
-    {
-        if(!(fp = fopen(voltage_files[x], "r")))
-            exit(EXIT_FAILURE);
-
-        fscanf(fp, "%f", &voltage[x]);
-        fclose(fp);
-
-        voltage[x] /= (float)1000.0;
-    }
-
-    snprintf(str1, VLA, "%.2f %.2f %.2f %.2f",
-            voltage[0], voltage[1], voltage[2], voltage[3]);
-}
-
-void get_mobo(char *str1, char *str2)
-{
-    char vendor[VLA], name[VLA];
-
-    FILE *fp = fopen(MOBO_VENDOR, "r");
-    if (NULL == fp)
-        exit(EXIT_FAILURE);
-
-    /* use %[^\n] to get the whole line */
-    fscanf(fp, "%s", vendor);
-    fclose(fp);
-
-    if (!(fp = fopen(MOBO_NAME, "r")))
-        exit(EXIT_FAILURE);
-
-    /* use %[^\n] to get the whole line */
-    fscanf(fp, "%s", name);
-    fclose(fp);
-
-    get_temp(MOBO_TEMP_FILE, str2);
-
-    snprintf(str1, VLA*2, "%s %s", vendor, name);
-}
 
 void get_cpu(char *str1, char *str2)
 {
@@ -143,6 +94,7 @@ void get_cpu(char *str1, char *str2)
 
     FILL_ARR(str1, percent);
 }
+
 
 void get_ram(char *str1)
 {
@@ -192,6 +144,7 @@ static uint_fast16_t glob_packages(char *str1)
 
     return packs_num;
 }
+
 
 void get_packs(char *str1)
 {
@@ -260,6 +213,99 @@ void get_kernel(char *str1)
     uname(&KerneL);
 
     snprintf(str1, VLA, "%s %s", KerneL.sysname, KerneL.release);
+}
+
+
+void get_voltage(char *str1)
+{
+    float voltage[4];
+    FILE *fp;
+    uint_fast16_t x = 0;
+
+    char *voltage_files[] =
+    {
+        HWMON_DIR"in0_input",
+        HWMON_DIR"in1_input",
+        HWMON_DIR"in2_input",
+        HWMON_DIR"in3_input"
+    };
+
+    for (x = 0; x < 4; x++)
+    {
+        if (!(fp = fopen(voltage_files[x], "r")))
+            exit(EXIT_FAILURE);
+
+        fscanf(fp, "%f", &voltage[x]);
+        fclose(fp);
+
+        voltage[x] /= (float)1000.0;
+    }
+
+    snprintf(str1, VLA, "%.2f %.2f %.2f %.2f",
+            voltage[0], voltage[1], voltage[2], voltage[3]);
+}
+
+
+void get_fans(char *str1)
+{
+    FILE *fp;
+    bool found_fans = true;
+    char tempstr[VLA], buffer[VLA*5];
+    char *all_fans = buffer;
+    uint_fast16_t x = 0, z = 0, rpm[11];
+
+    for (x = 1; x < 10; x++, z++)
+    {
+        snprintf(tempstr, VLA, HWMON_DIR"fan"UFINT"_input", x);
+
+        if (!(fp = fopen(tempstr, "r")) && x > 1)
+            break;
+        else
+            if (NULL == fp) /* no system fans */
+            {
+                snprintf(str1, VLA, "%s", "Not found");
+                found_fans = false;
+                break;
+            }
+
+        fscanf(fp, UFINT, &rpm[z]);
+        fclose(fp);
+    }
+
+    if (found_fans)
+    {
+        for (x = 0; x < z; ++x)
+            all_fans += snprintf(all_fans,
+                sizeof(buffer) - (all_fans - buffer),
+                    UFINT" ", rpm[x]);
+
+        snprintf(str1, VLA, "%s", buffer);
+    }
+}
+
+
+void get_mobo(char *str1, char *str2)
+{
+    char vendor[VLA], name[VLA];
+
+    FILE *fp = fopen(MOBO_VENDOR, "r");
+    if (NULL == fp)
+        exit(EXIT_FAILURE);
+
+    /* use %[^\n] to get the whole line */
+    fscanf(fp, "%s", vendor);
+    fclose(fp);
+
+    if (!(fp = fopen(MOBO_NAME, "r")))
+        exit(EXIT_FAILURE);
+
+    /* use %[^\n] to get the whole line */
+    fscanf(fp, "%s", name);
+    fclose(fp);
+
+    get_temp(MOBO_TEMP_FILE, str2);
+
+    snprintf(str1, VLA*2, "%s %s", vendor, name);
 }
 
 

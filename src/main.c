@@ -35,6 +35,7 @@
 #define FMT_SSD   FMT
 #define FMT_PKGS  FMT_TIME"%c "
 #define FMT_VOLT  FMT_PKGS
+#define FMT_FANS  FMT_TIME
 #define FMT_KERN  "\x09%s%c "
 #define FMT_VOL   FMT
 #define COMMA     ','
@@ -44,30 +45,33 @@ int main(void)
     char packs[VLA] = GIVEN_DISTRO;
     char mobo[VLA], cpu[VLA], ram[VLA], ssd[VLA];
     char kern[VLA], volume[VLA], Time[VLA], combine[VLA*9];
-    char voltage[VLA], cpu_temp[VLA], mobo_temp[VLA];
+    char voltage[VLA], cpu_temp[VLA], mobo_temp[VLA], fans[VLA];
 
     get_cpu(cpu, cpu_temp);
 
     sleep(1);
 
-    get_voltage(voltage);
-    get_mobo(mobo, mobo_temp);
     get_cpu(cpu, cpu_temp);
     get_ram(ram);
     get_ssd(ssd);
     get_packs(packs);
     get_kernel(kern);
+    get_voltage(voltage);
+    get_fans(fans);
+    get_mobo(mobo, mobo_temp);
     get_volume(volume);
     get_time(Time);
 
     snprintf(combine, VLA*9,
-        FMT_CPU FMT_RAM FMT_SSD FMT_PKGS FMT_KERN FMT_VOLT FMT_MOBO FMT_VOL FMT_TIME,
+        FMT_CPU FMT_RAM FMT_SSD FMT_PKGS FMT_KERN
+        FMT_VOLT FMT_FANS FMT_MOBO FMT_VOL FMT_TIME,
         "CPU", cpu, cpu_temp, COMMA,
         "RAM", ram, COMMA,
         "SSD", ssd, COMMA,
         "Pkgs", packs, COMMA,
         kern, COMMA,
         "Voltage", voltage, COMMA,
+        "Fans/RPM", fans,
         "Mobo", mobo, mobo_temp, COMMA,
         "Volume", volume, COMMA,
         "Time", Time);
