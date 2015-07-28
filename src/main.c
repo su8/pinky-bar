@@ -39,13 +39,14 @@
 #define FMT_KERN  "\x09%s%c "
 #define FMT_VOL   FMT
 #define COMMA     ','
+#define WHOLE_MAIN_ARR_LEN VLA*14
 
 int main(void)
 {
     char packs[VLA] = GIVEN_DISTRO;
-    char mobo[VLA], cpu[VLA], ram[VLA], ssd[VLA];
-    char kern[VLA], volume[VLA], Time[VLA], combine[VLA*9];
-    char voltage[VLA], cpu_temp[VLA], mobo_temp[VLA], fans[VLA];
+    char mobo[VLA*2], cpu[VLA], ram[VLA], ssd[VLA];
+    char kern[VLA], volume[VLA], Time[VLA], combine[WHOLE_MAIN_ARR_LEN];
+    char voltage[VLA], cpu_temp[VLA], mobo_temp[VLA], fans[VLA*2];
 
     get_cpu(cpu, cpu_temp);
 
@@ -62,7 +63,7 @@ int main(void)
     get_volume(volume);
     get_time(Time);
 
-    snprintf(combine, VLA*9,
+    snprintf(combine, WHOLE_MAIN_ARR_LEN,
         FMT_CPU FMT_RAM FMT_SSD FMT_PKGS FMT_KERN
         FMT_VOLT FMT_FANS FMT_MOBO FMT_VOL FMT_TIME,
         "CPU", cpu, cpu_temp, COMMA,

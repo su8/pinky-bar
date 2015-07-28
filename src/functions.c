@@ -34,7 +34,6 @@
 
 #include "functions.h"
 
-#define UFINT "%"PRIuFAST16
 
 void get_temp(char *, char *);
 void get_temp(char *str1, char *str2)
@@ -92,7 +91,7 @@ void get_cpu(char *str1, char *str2)
 
     get_temp(CPU_TEMP_FILE, str2);
 
-    FILL_ARR(str1, percent);
+    FILL_UINT_ARR(str1, percent);
 }
 
 
@@ -108,7 +107,7 @@ void get_ram(char *str1)
                      mem.bufferram - mem.sharedram) / MB;
     percent = (used * 100) / total;
 
-    FILL_ARR(str1, percent);
+    FILL_UINT_ARR(str1, percent);
 }
 
 
@@ -121,7 +120,7 @@ void get_ssd(char *str1)
 
     percent = ((ssd.f_blocks - ssd.f_bfree) * ssd.f_bsize) / GB;
 
-    FILL_ARR(str1, percent);
+    FILL_UINT_ARR(str1, percent);
 }
 
 
@@ -250,7 +249,7 @@ void get_fans(char *str1)
 {
     FILE *fp;
     bool found_fans = true;
-    char tempstr[VLA], buffer[VLA*5];
+    char tempstr[VLA], buffer[VLA*2];
     char *all_fans = buffer;
     uint_fast16_t x = 0, z = 0, rpm[11];
 
@@ -263,7 +262,7 @@ void get_fans(char *str1)
         else
             if (NULL == fp) /* no system fans */
             {
-                snprintf(str1, VLA, "%s", "Not found");
+                FILL_STR_ARR(str1, "Not found");
                 found_fans = false;
                 break;
             }
@@ -279,7 +278,7 @@ void get_fans(char *str1)
                 sizeof(buffer) - (all_fans - buffer),
                     UFINT" ", rpm[x]);
 
-        snprintf(str1, VLA, "%s", buffer);
+        FILL_STR_ARR(str1, buffer);
     }
 }
 
@@ -316,7 +315,7 @@ void get_time(char *str1)
 
     strftime(time_str, VLA, "%I:%M %p", localtime(&t));
 
-    snprintf(str1, VLA, "%s", time_str);
+    FILL_STR_ARR(str1, time_str);
 }
 
 
