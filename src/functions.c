@@ -274,9 +274,15 @@ void get_fans(char *str1)
     if (found_fans)
     {
         for (x = 0; x < z; ++x)
-            all_fans += snprintf(all_fans,
-                sizeof(buffer) - (all_fans - buffer),
-                    (rpm[x] > 0 ? UFINT" " : ""), rpm[x]);
+        {
+            if (rpm[x] > 0)
+                all_fans += snprintf(all_fans,
+                    sizeof(buffer) - (all_fans - buffer),
+                        UFINT" ", rpm[x]);
+
+            else /* Don't include non-spinning or removed fans */
+                all_fans += snprintf(all_fans, 5, "%s", "");
+        }
 
         FILL_STR_ARR(str1, buffer);
     }
