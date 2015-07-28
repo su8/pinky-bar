@@ -23,11 +23,15 @@
 #define MB 1048576
 #define GB 1073741824
 #define VLA 100
+
 #define FMT_UINT "%"PRIuMAX
 #define UFINT "%"PRIuFAST16
+
 #define FILL_UINT_ARR(x, z) (snprintf(x, VLA, FMT_UINT, z))
 #define FILL_STR_ARR(x, z) (snprintf(x, VLA*2, "%s", z))
+#define FILL_STR2_ARR(x, y, z) (snprintf(x, VLA*2, "%s %s", y, z))
 #define STREQ(x, z) (!strcmp(x, z))
+
 #define HWMON_DIR "/sys/class/hwmon/hwmon0/"
 #define CPU_TEMP_FILE HWMON_DIR"temp1_input"
 #define MOBO_TEMP_FILE HWMON_DIR"temp2_input"

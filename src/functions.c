@@ -211,7 +211,7 @@ void get_kernel(char *str1)
     struct utsname KerneL;
     uname(&KerneL);
 
-    snprintf(str1, VLA, "%s %s", KerneL.sysname, KerneL.release);
+    FILL_STR2_ARR(str1, KerneL.sysname, KerneL.release);
 }
 
 
@@ -262,7 +262,7 @@ void get_fans(char *str1)
         else
             if (NULL == fp) /* no system fans */
             {
-                FILL_STR_ARR(str1, "Not found");
+                FILL_STR_ARR(str1, "Not found, ");
                 found_fans = false;
                 break;
             }
@@ -304,7 +304,7 @@ void get_mobo(char *str1, char *str2)
 
     get_temp(MOBO_TEMP_FILE, str2);
 
-    snprintf(str1, VLA*2, "%s %s", vendor, name);
+    FILL_STR2_ARR(str1, vendor, name);
 }
 
 

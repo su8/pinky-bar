@@ -26,7 +26,7 @@ if [[ ! -z $1 ]]
 then
 
   prog_name='dwmbar'
-  prog_ver='0.5'
+  prog_ver='0.6'
 
 
   # configure.ac
@@ -65,7 +65,7 @@ then
   ')
 
 
-# src/Makefile.am
+  # src/Makefile.am
   src_files=(
       'main.c'
       'functions.c'
