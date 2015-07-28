@@ -49,7 +49,7 @@ void get_temp(char *str1, char *str2)
 
     temp /= (uintmax_t)1000;
 
-    snprintf(str2, VLA, FMT_UINT, temp);
+    FILL_UINT_ARR(str2, temp);
 }
 
 
