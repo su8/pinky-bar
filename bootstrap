@@ -79,7 +79,7 @@ then
     '${prog_name}'
 
   '${prog_name}'_CFLAGS = \
-    -O2 -Wextra -Wall
+    -O2 -Wextra -Wall -fno-aggressive-loop-optimizations
 
   '${prog_name}'_LDADD = $(X_LIBS) $(ALSA_LIBS)
 

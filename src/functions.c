@@ -45,14 +45,43 @@ void get_temp(char *str1, char *str2)
     fscanf(fp, FMT_UINT, &temp);
     fclose(fp);
 
-    temp /= 1000;
+    temp /= (uintmax_t)1000;
 
     snprintf(str2, VLA, FMT_UINT, temp);
 }
 
+void get_voltage(char *str1)
+{
+    float voltage[4];
+    FILE *fp;
+    uint_fast16_t x = 0;
+
+    char *voltage_files[] =
+    {
+        HWMON_DIR"in0_input",
+        HWMON_DIR"in1_input",
+        HWMON_DIR"in2_input",
+        HWMON_DIR"in3_input"
+    };
+
+    for (x = 0; x < 4; x++)
+    {
+        if(!(fp = fopen(voltage_files[x], "r")))
+            exit(EXIT_FAILURE);
+
+        fscanf(fp, "%f", &voltage[x]);
+        fclose(fp);
+
+        voltage[x] /= (float)1000.0;
+    }
+
+    snprintf(str1, VLA, "%.2f %.2f %.2f %.2f",
+            voltage[0], voltage[1], voltage[2], voltage[3]);
+}
+
 void get_mobo(char *str1, char *str2)
 {
-    char vendor[VLA], name[VLA], temp[VLA];
+    char vendor[VLA], name[VLA];
 
     FILE *fp = fopen(MOBO_VENDOR, "r");
     if (NULL == fp)
@@ -69,15 +98,13 @@ void get_mobo(char *str1, char *str2)
     fscanf(fp, "%s", name);
     fclose(fp);
 
-    get_temp(MOBO_TEMP_FILE, temp);
+    get_temp(MOBO_TEMP_FILE, str2);
 
     snprintf(str1, VLA*2, "%s %s", vendor, name);
-    snprintf(str2, VLA, "%s", temp);
 }
 
 void get_cpu(char *str1, char *str2)
 {
-    char temp[VLA];
     static uintmax_t previous_total = 0, previous_idle = 0;
     uintmax_t x, percent, diff_total, diff_idle, cpu_active[10];
     uintmax_t total = 0;
@@ -112,10 +139,9 @@ void get_cpu(char *str1, char *str2)
 
     percent        = (1000 * (diff_total - diff_idle) / diff_total + 5) / 10;
 
-    get_temp(CPU_TEMP_FILE, temp);
+    get_temp(CPU_TEMP_FILE, str2);
 
     FILL_ARR(str1, percent);
-    snprintf(str2, VLA, "%s", temp);
 }
 
 void get_ram(char *str1)
