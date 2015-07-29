@@ -3,6 +3,10 @@
 
 Statusbar program for dwm that I've written in my very first day as dwm user.
 
+Please note that the program won't detect fans connected via molex connetor(s) or external fan controller. Also I have not tested it with fan splitter(s) either.
+
+The program is smart enough to detect whether some of your fan(s) blades are spinning, or the particular fan have been removed. Hold down some of your fan blades and you'll see that the program won't include this fan and it's RPM, release the blades and you'll see the fan and it's RPM in the statusbar.
+
 ## Installation
 
     bash bootstrap distro

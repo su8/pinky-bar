@@ -28,6 +28,7 @@
 #include <sys/sysinfo.h>
 #include <sys/utsname.h>
 #include <glob.h>
+#include <unistd.h>
 
 #include <X11/Xlib.h>
 #include <alsa/asoundlib.h>
@@ -87,7 +88,8 @@ void get_cpu(char *str1, char *str2)
     previous_total = total;
     previous_idle  = cpu_active[3];
 
-    percent        = (1000 * (diff_total - diff_idle) / diff_total + 5) / 10;
+    percent        = (uintmax_t)sysconf(_SC_CLK_TCK) *
+                        (diff_total - diff_idle) / diff_total;
 
     get_temp(CPU_TEMP_FILE, str2);
 
