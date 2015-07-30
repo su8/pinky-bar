@@ -70,7 +70,8 @@ then
       'main.c'
       'functions.c'
       'functions.h'
-      'constants.h'
+      'constants1.h'
+      'constants2.h'
   )
 
   src_makefile=('AM_CPPFLAGS = \

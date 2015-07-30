@@ -33,7 +33,8 @@
 #include <X11/Xlib.h>
 #include <alsa/asoundlib.h>
 
-#include "constants.h"
+#include "constants1.h"
+#include "constants2.h"
 
 void get_temp(char *, char *);
 static uint_fast16_t glob_packages(char *);

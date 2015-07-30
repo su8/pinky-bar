@@ -19,11 +19,9 @@
 
 #include <time.h>
 #include <stdio.h>
-#include <string.h>
 #include <stdlib.h>
-#include <inttypes.h>
 
-#include "constants.h"
+#include "constants1.h"
 #include "functions.h"
 
 int main(void)
