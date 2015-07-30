@@ -26,7 +26,7 @@ if [[ ! -z $1 ]]
 then
 
   prog_name='dwmbar'
-  prog_ver='0.6'
+  prog_ver='0.7'
 
 
   # configure.ac
@@ -70,6 +70,7 @@ then
       'main.c'
       'functions.c'
       'functions.h'
+      'constants.h'
   )
 
   src_makefile=('AM_CPPFLAGS = \

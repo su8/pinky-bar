@@ -17,32 +17,20 @@
    MA 02110-1301, USA.
 */
 
+#include <time.h>
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
 #include <inttypes.h>
 
-#include <unistd.h>
-
+#include "constants.h"
 #include "functions.h"
-
-#define FMT       "\x0a%s \x0b%s%%%c "
-#define FMT_TIME  "\x0a%s \x0b%s"
-#define TEMP      "\x09%sC\x0b%c "
-#define FMT_MOBO  FMT_TIME" "TEMP
-#define FMT_CPU   FMT_TIME"%% "TEMP
-#define FMT_RAM   FMT
-#define FMT_SSD   FMT
-#define FMT_PKGS  FMT_TIME"%c "
-#define FMT_VOLT  FMT_PKGS
-#define FMT_FANS  FMT_TIME
-#define FMT_KERN  "\x09%s%c "
-#define FMT_VOL   FMT
-#define COMMA     ','
-#define WHOLE_MAIN_ARR_LEN VLA*14
 
 int main(void)
 {
+    struct timespec tc = {0};
+    tc.tv_nsec = 100000000L;
+
     char packs[VLA] = GIVEN_DISTRO;
     char mobo[VLA*2], cpu[VLA], ram[VLA], ssd[VLA];
     char kern[VLA], volume[VLA], Time[VLA], combine[WHOLE_MAIN_ARR_LEN];
@@ -50,7 +38,7 @@ int main(void)
 
     get_cpu(cpu, cpu_temp);
 
-    sleep(1);
+    nanosleep(&tc, NULL);
 
     get_cpu(cpu, cpu_temp);
     get_ram(ram);

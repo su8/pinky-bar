@@ -33,10 +33,11 @@
 #include <X11/Xlib.h>
 #include <alsa/asoundlib.h>
 
-#include "functions.h"
-
+#include "constants.h"
 
 void get_temp(char *, char *);
+static uint_fast16_t glob_packages(char *);
+
 void get_temp(char *str1, char *str2)
 {
     uintmax_t temp;
@@ -128,8 +129,6 @@ void get_ssd(char *str1)
 
 /* Source (my improved screenfetch-c fork):
  * https://github.com/wifiextender/screenfetch-c/blob/master/src/plat/linux/detect.c */
-static uint_fast16_t glob_packages(char *);
-
 static uint_fast16_t glob_packages(char *str1)
 {
     uint_fast16_t packs_num = 0;
@@ -316,17 +315,6 @@ void get_mobo(char *str1, char *str2)
 }
 
 
-void get_time(char *str1)
-{
-    char time_str[VLA];
-    time_t t = time(NULL);
-
-    strftime(time_str, VLA, "%I:%M %p", localtime(&t));
-
-    FILL_STR_ARR(str1, time_str);
-}
-
-
 void get_volume(char *str1)
 {
     snd_mixer_t *handle;
@@ -362,6 +350,17 @@ void get_volume(char *str1)
     snd_mixer_close(handle);
 
     snprintf(str1, VLA, "%ld", percent);
+}
+
+
+void get_time(char *str1)
+{
+    char time_str[VLA];
+    time_t t = time(NULL);
+
+    strftime(time_str, VLA, "%I:%M %p", localtime(&t));
+
+    FILL_STR_ARR(str1, time_str);
 }
 
 
