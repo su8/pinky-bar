@@ -81,7 +81,10 @@ then
     '${prog_name}'
 
   '${prog_name}'_CFLAGS = \
-    -O2 -Wextra -Wall -fno-aggressive-loop-optimizations
+    -O2 -Wextra -Wall -fno-aggressive-loop-optimizations \
+    -Wundef -Wwrite-strings -Wcast-align -Wstrict-overflow=5 \
+    -W -Wshadow -Wconversion -Wpointer-arith -Wstrict-prototypes \
+    -Wformat=2 -Wmissing-prototypes
 
   '${prog_name}'_LDADD = $(X_LIBS) $(ALSA_LIBS)
 

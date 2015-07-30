@@ -35,11 +35,12 @@
 
 #include "constants1.h"
 #include "constants2.h"
+#include "functions.h"
 
-void get_temp(char *, char *);
-static uint_fast16_t glob_packages(char *);
+void get_temp(const char *, char *);
+static uint_fast16_t glob_packages(const char *);
 
-void get_temp(char *str1, char *str2)
+void get_temp(const char *str1, char *str2)
 {
     uintmax_t temp;
 
@@ -130,7 +131,7 @@ void get_ssd(char *str1)
 
 /* Source (my improved screenfetch-c fork):
  * https://github.com/wifiextender/screenfetch-c/blob/master/src/plat/linux/detect.c */
-static uint_fast16_t glob_packages(char *str1)
+static uint_fast16_t glob_packages(const char *str1)
 {
     uint_fast16_t packs_num = 0;
     glob_t gl;
@@ -223,7 +224,7 @@ void get_voltage(char *str1)
     FILE *fp;
     uint_fast16_t x = 0;
 
-    char *voltage_files[] =
+    const char *voltage_files[] =
     {
         HWMON_DIR"in0_input",
         HWMON_DIR"in1_input",
@@ -279,7 +280,7 @@ void get_fans(char *str1)
         {
             if (rpm[x] > 0)
                 all_fans += snprintf(all_fans,
-                    sizeof(buffer) - (all_fans - buffer),
+                    sizeof(buffer) - (uint_least32_t)(all_fans - buffer),
                         UFINT" ", rpm[x]);
 
             else /* Don't include non-spinning or removed fans */
