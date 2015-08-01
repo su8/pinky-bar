@@ -254,7 +254,7 @@ void get_fans(char *str1)
     bool found_fans = true;
     char tempstr[VLA], buffer[VLA*2];
     char *all_fans = buffer;
-    uint_fast16_t x = 0, z = 0, rpm[11];
+    uint_fast16_t x = 0, y = 0, z = 0, rpm[11];
 
     for (x = 1; x < 10; x++, z++)
     {
@@ -276,7 +276,7 @@ void get_fans(char *str1)
 
     if (found_fans)
     {
-        for (x = 0; x < z; ++x)
+        for (x = 0; x < z; x++)
         {
             if (rpm[x] > 0)
                 all_fans += snprintf(all_fans,
@@ -284,10 +284,13 @@ void get_fans(char *str1)
                         UFINT" ", rpm[x]);
 
             else /* Don't include non-spinning or removed fans */
+            {
+                ++y;
                 all_fans += snprintf(all_fans, 5, "%s", "");
+            }
         }
 
-        FILL_STR_ARR(str1, buffer);
+        FILL_STR_ARR(str1, (y != x ? buffer : "Not found, "));
     }
 }
 
