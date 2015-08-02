@@ -22,11 +22,25 @@
 # ./configure --prefix=$HOME/.cache
 # make && make install
 
-if [[ ! -z $1 ]]
-then
+declare -a _bases
+_bases=(
+    'archlinux'
+    'debian'
+    'gentoo'
+    'slackware'
+    'rhel'
+    'frugalware'
+    'angstrom'
+)
 
+_printf_err() {
+    printf '%s\n' "try again with: bash $0 basedistro"
+    printf '%s ' "Bases: ${_bases[@]}"
+}
+
+_gen_files() {
   prog_name='dwmbar'
-  prog_ver='0.7'
+  prog_ver='0.8'
 
 
   # configure.ac
@@ -107,8 +121,10 @@ EOF
 
   # do not remove nor edit
   autoreconf --install --force
+}
 
 
-else
-    printf '%s\n' "try again with: bash $0 distro"
-fi
+[[ -z $1 ]] && _printf_err $@ || {
+    [[ " ${_bases[@]} " =~ " $1 " ]] && \
+        _gen_files $@ || _printf_err $@
+}

@@ -13,13 +13,13 @@ The program is smart enough to detect whether some of your fan(s) blades are spi
     ./configure --prefix=$HOME/.cache
     make && make install
 
-Replace **distro** archlinux, debian, gentoo, slackware, frugalware, angstrom:
+Replace **distro** with archlinux, debian, gentoo, slackware, rhel, frugalware, angstrom. Note the lowercase naming. Linux Mint, LMDE and Ubuntu are Debian based distributions, so the **get_packs** function will work properly, that's because those distros are using the same base:
 
-- [x] archlinux based distros (parabola, chakra, manjaro)
-- [x] debian based distros (ubuntu, linux mint, trisquel, back track, kali linux, peppermint linux, solusos, crunchbang, deepin, elementary os, and the rest \*buntu based distros)
-- [x] gentoo based distros (funtoo, sabayon, calculate linux)
+- [x] archlinux based distros: parabola, chakra, manjaro
+- [x] debian based distros: ubuntu, linux mint, trisquel, back track, kali linux, peppermint linux, solusos, crunchbang, deepin, elementary os, and the rest \*buntu based distros
+- [x] gentoo based distros: funtoo, sabayon, calculate linux
 - [x] slackware
-- [x] rhel based distros (opensuse (uses rpm), fedora, fuduntu, mandriva, mandrake, viperr, mageia)
+- [x] rhel based distros: opensuse (uses rpm), fedora, fuduntu, mandriva, mandrake, viperr, mageia
 - [x] frugalware
 - [x] angstrom
 

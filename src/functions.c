@@ -236,7 +236,7 @@ void get_fans(char *str1)
 {
     FILE *fp;
     bool found_fans = true;
-    char tempstr[VLA], buffer[VLA*2];
+    char tempstr[VLA], buffer[VLA];
     char *all_fans = buffer;
     uint_fast16_t x = 0, y = 0, z = 0, rpm[11];
 
