@@ -26,9 +26,10 @@
 #define FMT_UINT "%"PRIuMAX
 #define UFINT "%"PRIuFAST16
 
-#define FILL_UINT_ARR(x, z) (snprintf(x, VLA, FMT_UINT, z))
-#define FILL_STR_ARR(x, z) (snprintf(x, VLA*2, "%s", z))
-#define FILL_STR2_ARR(x, y, z) (snprintf(x, VLA*2, "%s %s", y, z))
+/* stay away from va_list */
+#define FILL_ARR(x, z, ...) (snprintf(x, VLA, z, __VA_ARGS__))
+#define FILL_UINT_ARR(x, z) (FILL_ARR(x, FMT_UINT, z))
+#define FILL_STR_ARR(x, z, ...) (FILL_ARR(z, (x == 1 ? "%s" : "%s %s"), __VA_ARGS__))
 #define STREQ(x, z) (!strcmp(x, z))
 
 #define HWMON_DIR "/sys/class/hwmon/hwmon0/"

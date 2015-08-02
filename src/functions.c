@@ -37,10 +37,10 @@
 #include "constants2.h"
 #include "functions.h"
 
-void get_temp(const char *, char *);
+static void get_temp(const char *, char *);
 static uint_fast16_t glob_packages(const char *);
 
-void get_temp(const char *str1, char *str2)
+static void get_temp(const char *str1, char *str2)
 {
     uintmax_t temp;
 
@@ -153,10 +153,7 @@ void get_packs(char *str1)
     FILE *pkgs_file;
     uint_fast16_t packages = 0;
 
-    if (STREQ(str1, "archlinux")
-        || STREQ(str1, "parabola")
-        || STREQ(str1, "chakra") || STREQ(str1, "manjaro"))
-
+    if (STREQ(str1, "archlinux"))
         packages = glob_packages("/var/lib/pacman/local/*");
 
     else if (STREQ(str1, "frugalware"))
@@ -166,29 +163,16 @@ void get_packs(char *str1)
         pclose(pkgs_file);
     }
 
-    else if (STREQ(str1, "ubuntu") || STREQ(str1, "lubuntu")
-            || STREQ(str1, "xubuntu") || STREQ(str1, "linuxmint")
-            || STREQ(str1, "solusos") || STREQ(str1, "debian")
-            || STREQ(str1, "lmde") || STREQ(str1, "crunchbang")
-            || STREQ(str1, "peppermint")
-            || STREQ(str1, "linuxdeepin")	|| STREQ(str1, "trisquel")
-            || STREQ(str1, "elementary")
-            || STREQ(str1, "backtrack")
-            || STREQ(str1, "kali"))
+    else if (STREQ(str1, "debian"))
         packages = glob_packages("/var/lib/dpkg/info/*.list");
 
     else if (STREQ(str1, "slackware"))
         packages = glob_packages("/var/log/packages/*");
 
-    else if (STREQ(str1, "gentoo") || STREQ(str1, "sabayon")
-            || STREQ(str1, "funtoo"))
+    else if (STREQ(str1, "gentoo"))
         packages = glob_packages("/var/db/pkg/*/*");
 
-    else if (STREQ(str1, "fuduntu") || STREQ(str1, "fedora")
-            || STREQ(str1, "opensuse")
-            || STREQ(str1, "rhel")
-            || STREQ(str1, "mandriva") || STREQ(str1, "mandrake")
-            || STREQ(str1, "mageia") || STREQ(str1, "viperr"))
+    else if (STREQ(str1, "rhel"))
     {
         pkgs_file = popen("rpm -qa 2> /dev/null | wc -l", "r");
         fscanf(pkgs_file, "%"SCNuFAST16, &packages);
@@ -205,7 +189,7 @@ void get_packs(char *str1)
     else
         exit(EXIT_FAILURE);
 
-    snprintf(str1, VLA, "%"PRIuFAST16, packages);
+    FILL_ARR(str1, "%"PRIuFAST16, packages);
 }
 
 
@@ -214,7 +198,7 @@ void get_kernel(char *str1)
     struct utsname KerneL;
     uname(&KerneL);
 
-    FILL_STR2_ARR(str1, KerneL.sysname, KerneL.release);
+    FILL_STR_ARR(2, str1, KerneL.sysname, KerneL.release);
 }
 
 
@@ -243,7 +227,7 @@ void get_voltage(char *str1)
         voltage[x] /= (float)1000.0;
     }
 
-    snprintf(str1, VLA, "%.2f %.2f %.2f %.2f",
+    FILL_ARR(str1, "%.2f %.2f %.2f %.2f",
             voltage[0], voltage[1], voltage[2], voltage[3]);
 }
 
@@ -258,14 +242,14 @@ void get_fans(char *str1)
 
     for (x = 1; x < 10; x++, z++)
     {
-        snprintf(tempstr, VLA, HWMON_DIR"fan"UFINT"_input", x);
+        FILL_ARR(tempstr, HWMON_DIR"fan"UFINT"_input", x);
 
         if (!(fp = fopen(tempstr, "r")) && x > 1)
             break;
         else
             if (NULL == fp) /* no system fans */
             {
-                FILL_STR_ARR(str1, "Not found, ");
+                FILL_STR_ARR(1, str1, "Not found, ");
                 found_fans = false;
                 break;
             }
@@ -290,7 +274,7 @@ void get_fans(char *str1)
             }
         }
 
-        FILL_STR_ARR(str1, (y != x ? buffer : "Not found, "));
+        FILL_STR_ARR(1, str1, (y != x ? buffer : "Not found, "));
     }
 }
 
@@ -316,7 +300,7 @@ void get_mobo(char *str1, char *str2)
 
     get_temp(MOBO_TEMP_FILE, str2);
 
-    FILL_STR2_ARR(str1, vendor, name);
+    FILL_STR_ARR(2, str1, vendor, name);
 }
 
 
@@ -354,7 +338,7 @@ void get_volume(char *str1)
     snd_mixer_selem_id_free(s_elem);
     snd_mixer_close(handle);
 
-    snprintf(str1, VLA, "%ld", percent);
+    FILL_ARR(str1, "%ld", percent);
 }
 
 
@@ -365,7 +349,7 @@ void get_time(char *str1)
 
     strftime(time_str, VLA, "%I:%M %p", localtime(&t));
 
-    FILL_STR_ARR(str1, time_str);
+    FILL_STR_ARR(1, str1, time_str);
 }
 
 

@@ -13,37 +13,14 @@ The program is smart enough to detect whether some of your fan(s) blades are spi
     ./configure --prefix=$HOME/.cache
     make && make install
 
-Replace **distro** with:
+Replace **distro** archlinux, debian, gentoo, slackware, frugalware, angstrom:
 
-- [x] archlinux
-- [x] fedora
-- [x] linuxmint
-- [x] lmde
-- [x] ubuntu/lubuntu/xubuntu
-- [x] fedora
-- [x] debian
-- [x] crunchbang
-- [x] gentoo
-- [x] funtoo
-- [x] opensuse
-- [x] mandriva/mandrake
+- [x] archlinux based distros (parabola, chakra, manjaro)
+- [x] debian based distros (ubuntu, linux mint, trisquel, back track, kali linux, peppermint linux, solusos, crunchbang, deepin, elementary os, and the rest \*buntu based distros)
+- [x] gentoo based distros (funtoo, sabayon, calculate linux)
 - [x] slackware
-- [x] rhel
+- [x] rhel based distros (opensuse (uses rpm), fedora, fuduntu, mandriva, mandrake, viperr, mageia)
 - [x] frugalware
-- [x] peppermint
-- [x] solusos
-- [x] mageia
-- [x] parabola
-- [x] viperr
-- [x] linuxdeepin
-- [x] chakra
-- [x] fuduntu
-- [x] trisquel
-- [x] manjaro
-- [x] elementary
-- [x] backtrack
-- [x] kali
-- [x] sabayon
 - [x] angstrom
 
 ## Requirements

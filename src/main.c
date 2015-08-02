@@ -27,12 +27,12 @@
 int main(void)
 {
     struct timespec tc = {0};
-    tc.tv_nsec = 100000000L;
+    tc.tv_nsec = 10000000L;
 
     char packs[VLA] = GIVEN_DISTRO;
-    char mobo[VLA*2], cpu[VLA], ram[VLA], ssd[VLA];
+    char mobo[VLA], cpu[VLA], ram[VLA], ssd[VLA];
     char kern[VLA], volume[VLA], Time[VLA], combine[WHOLE_MAIN_ARR_LEN];
-    char voltage[VLA], cpu_temp[VLA], mobo_temp[VLA], fans[VLA*2];
+    char voltage[VLA], cpu_temp[VLA], mobo_temp[VLA], fans[VLA];
 
     get_cpu(cpu, cpu_temp);
 
