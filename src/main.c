@@ -27,7 +27,7 @@
 int main(void)
 {
     struct timespec tc = {0};
-    tc.tv_nsec = 10000000L;
+    tc.tv_nsec = 100000000L;
 
     char packs[VLA] = GIVEN_DISTRO;
     char mobo[VLA], cpu[VLA], ram[VLA], ssd[VLA];
