@@ -329,7 +329,6 @@ void get_volume(char *str1)
 
     long int vol, max, min, percent;
 
-    snd_mixer_handle_events(handle);
     snd_mixer_selem_get_playback_volume_range(elem, &min, &max);
     snd_mixer_selem_get_playback_volume(elem, 0, &vol);
 
