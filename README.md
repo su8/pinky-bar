@@ -1,11 +1,16 @@
 ## dwm-bar.c
 <img src="img/pic.png" alt="" />
+<img src="img/pic2.png" alt="" />
 
-Statusbar program for dwm that I've written in my very first day as dwm user.
+Statusbar program for dwm and xmonad that I've written in my very first day as dwm user.
 
 Please note that the program won't detect fans connected via molex connetor(s) or external fan controller. Also I have not tested it with fan splitter(s) either.
 
 The program is smart enough to detect whether some of your fan(s) blades are spinning, or the particular fan have been removed. Hold down some of your fan blades and you'll see that the program won't include this fan and it's RPM, release the blades and you'll see the fan and it's RPM in the statusbar.
+
+If you compile your kernel from source code make sure to include your motherboard sensor module.
+
+The second snapshot (above) was taken in **xmonad**.
 
 ## Installation
 
