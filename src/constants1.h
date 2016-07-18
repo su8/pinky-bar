@@ -49,6 +49,7 @@
 /* dzen colours and xbm icons for xmonad */
 #else
 
+#define XBM_ICON(given_icon) ("^i("ICONS_DIR"/"given_icon")")
 #define YELLOW   "^fg(#f0c674)"
 #define BLUE     "^fg(#1793D1)"
 #define PINK     "^fg(#b294bb)"
@@ -57,15 +58,15 @@
 #define TEMP      YELLOW"%s^i("ICONS_DIR"/temp.xbm)"PINK"%c "  /* 32C, */
 #define FMT_KERN  YELLOW"%s%c "       /* Kernel Version,  */
 
-#define CPU_STR    "^i("ICONS_DIR"/cpu.xbm)"
-#define RAM_STR    "^i("ICONS_DIR"/mem.xbm)"
-#define SSD_STR    "^i("ICONS_DIR"/diskette.xbm)"
-#define PKG_STR    "^i("ICONS_DIR"/arch.xbm)"
-#define VOLT_STR   "^i("ICONS_DIR"/voltage.xbm)"
-#define FANS_STR   "^i("ICONS_DIR"/fan.xbm)"
-#define MOBO_STR   "^i("ICONS_DIR"/mobo.xbm)"
-#define VOL_STR    "^i("ICONS_DIR"/vol.xbm)"
-#define TIME_STR   "^i("ICONS_DIR"/clock.xbm)"
+#define CPU_STR    XBM_ICON("cpu.xbm")
+#define RAM_STR    XBM_ICON("mem.xbm")
+#define SSD_STR    XBM_ICON("diskette.xbm")
+#define PKG_STR    XBM_ICON("arch.xbm")
+#define VOLT_STR   XBM_ICON("voltage.xbm")
+#define FANS_STR   XBM_ICON("fan.xbm")
+#define MOBO_STR   XBM_ICON("mobo.xbm")
+#define VOL_STR    XBM_ICON("vol.xbm")
+#define TIME_STR   XBM_ICON("clock.xbm")
 
 #endif /* dwm/xmonad colours */
 
