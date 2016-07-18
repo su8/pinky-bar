@@ -19,7 +19,8 @@ If you compile your kernel from source code make sure to include your cpu and mo
 ```bash
 bash bootstrap distro
 ./configure --prefix=$HOME/.cache
-make && make install
+make -j$(grep -c '^processor' /proc/cpuinfo)
+make install
 ```
 
 Put the following in your **xinitrc** or the script used to start dwm.
@@ -39,14 +40,15 @@ done &
 mkdir -p --mode=700 $HOME/.xmonad/icons
 cp -r xbm_icons/*.xbm $HOME/.xmonad/icons
 
-# remove the X headers and rename the program
-sed -i 's/dwmbar/xmonadbar/g;s/TEST_X11//g;s/$(X_LIBS)//g' bootstrap
+# rename the program
+sed -i 's/dwmbar/xmonadbar/g' bootstrap
 
 # point the xbm icons location
 bash bootstrap distro $HOME/.xmonad/icons
 
 ./configure --prefix=$HOME/.cache
-make && make install
+make -j$(grep -c '^processor' /proc/cpuinfo)
+make install
 ```
 
 Put the following in your **xinitrc** or the script used to start xmonad.

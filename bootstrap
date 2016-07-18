@@ -43,6 +43,17 @@ _gen_files() {
   prog_name='dwmbar'
   prog_ver='0.9'
 
+  # compile for dwm
+  [[ -z $2 ]] && {
+    TEST_X='TEST_X11'
+    X_LIBS='$(X_LIBS)'  # "$()" != '$()'
+  } || {
+
+    # compile for non-dwm
+    TEST_X=''
+    X_LIBS=''
+  }
+
 
   # configure.ac
   configure_ac=("# This file is processed by autoconf to create a configure script
@@ -58,7 +69,7 @@ _gen_files() {
   AM_PROG_CC_C_O
 
   # The linker flags tests in m4 dir
-  TEST_X11
+  "${TEST_X}"
   TEST_ALSA
 
   AC_CONFIG_FILES([
@@ -102,7 +113,7 @@ _gen_files() {
     -W -Wshadow -Wconversion -Wpointer-arith -Wstrict-prototypes \
     -Wformat=2 -Wmissing-prototypes -Wno-unused-result
 
-  '${prog_name}'_LDADD = $(X_LIBS) $(ALSA_LIBS)
+  '${prog_name}'_LDADD = '${X_LIBS}' $(ALSA_LIBS)
 
   '${prog_name}'_SOURCES = '${src_files[@]}'
   ')
