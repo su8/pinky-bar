@@ -34,13 +34,14 @@ _bases=(
 )
 
 _printf_err() {
-    printf '%s\n' "try again with: bash $0 basedistro"
+    printf '%s\n' "try again with: bash ${0} basedistro"
     printf '%s ' "Bases: ${_bases[@]}"
+    printf '\n'
 }
 
 _gen_files() {
   prog_name='dwmbar'
-  prog_ver='0.8'
+  prog_ver='0.9'
 
 
   # configure.ac
@@ -89,7 +90,8 @@ _gen_files() {
   )
 
   src_makefile=('AM_CPPFLAGS = \
-      -DGIVEN_DISTRO=\"'$1'\"
+      -DGIVEN_DISTRO=\"'${1}'\" \
+      -DICONS_DIR=\"'${2}'\"
 
   bin_PROGRAMS = \
     '${prog_name}'
@@ -98,7 +100,7 @@ _gen_files() {
     -O2 -Wextra -Wall -fno-aggressive-loop-optimizations \
     -Wundef -Wwrite-strings -Wcast-align -Wstrict-overflow=5 \
     -W -Wshadow -Wconversion -Wpointer-arith -Wstrict-prototypes \
-    -Wformat=2 -Wmissing-prototypes
+    -Wformat=2 -Wmissing-prototypes -Wno-unused-result
 
   '${prog_name}'_LDADD = $(X_LIBS) $(ALSA_LIBS)
 

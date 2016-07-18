@@ -1,5 +1,6 @@
 /*
-   Copyright 02/22/2015 Aaron Caffrey https://github.com/wifiextender
+   Copyright 02/22/2015, 07/18/2016
+   Aaron Caffrey https://github.com/wifiextender
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -21,49 +22,58 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#include <unistd.h>
+
 #include "constants1.h"
 #include "functions.h"
 
 int main(void)
 {
-    struct timespec tc = {0};
-    tc.tv_nsec = 100000000L;
+  struct timespec tc = {0};
+  tc.tv_nsec = sysconf(_SC_CLK_TCK) * 1000000L;
 
-    char packs[VLA] = GIVEN_DISTRO;
-    char mobo[VLA], cpu[VLA], ram[VLA], ssd[VLA];
-    char kern[VLA], volume[VLA], Time[VLA], combine[WHOLE_MAIN_ARR_LEN];
-    char voltage[VLA], cpu_temp[VLA], mobo_temp[VLA], fans[VLA];
+  char packs[VLA] = GIVEN_DISTRO;
+  char mobo[VLA], cpu[VLA], ram[VLA], ssd[VLA];
+  char kern[VLA], volume[VLA], Time[VLA], combine[WHOLE_MAIN_ARR_LEN];
+  char voltage[VLA], cpu_temp[VLA], mobo_temp[VLA], fans[VLA];
 
-    get_cpu(cpu, cpu_temp);
+  get_cpu(cpu, cpu_temp);
 
-    nanosleep(&tc, NULL);
+  nanosleep(&tc, NULL);
 
-    get_cpu(cpu, cpu_temp);
-    get_ram(ram);
-    get_ssd(ssd);
-    get_packs(packs);
-    get_kernel(kern);
-    get_voltage(voltage);
-    get_fans(fans);
-    get_mobo(mobo, mobo_temp);
-    get_volume(volume);
-    get_time(Time);
+  get_cpu(cpu, cpu_temp);
+  get_ram(ram);
+  get_ssd(ssd);
+  get_packs(packs);
+  get_kernel(kern);
+  get_voltage(voltage);
+  get_fans(fans);
+  get_mobo(mobo, mobo_temp);
+  get_volume(volume);
+  get_time(Time);
 
-    snprintf(combine, WHOLE_MAIN_ARR_LEN,
-        FMT_CPU FMT_RAM FMT_SSD FMT_PKGS FMT_KERN
-        FMT_VOLT FMT_FANS FMT_MOBO FMT_VOL FMT_TIME,
-        "CPU", cpu, cpu_temp, COMMA,
-        "RAM", ram, COMMA,
-        "SSD", ssd, COMMA,
-        "Pkgs", packs, COMMA,
-        kern, COMMA,
-        "Voltage", voltage, COMMA,
-        "Fans/RPM", fans,
-        "Mobo", mobo, mobo_temp, COMMA,
-        "Volume", volume, COMMA,
-        "Time", Time);
+  snprintf(combine, WHOLE_MAIN_ARR_LEN,
+    /* formatting specifiers */
+    FMT_CPU FMT_RAM FMT_SSD FMT_PKGS FMT_KERN
+    FMT_VOLT FMT_FANS FMT_MOBO FMT_VOL FMT_TIME,
 
-    set_status(combine);
+    /* the data */
+    CPU_STR, cpu, cpu_temp, COMMA,
+    RAM_STR, ram, COMMA,
+    SSD_STR, ssd, COMMA,
+    PKG_STR, packs, COMMA,
+    kern, COMMA,
+    VOLT_STR, voltage, COMMA,
+    FANS_STR, fans,
+    MOBO_STR, mobo, mobo_temp, COMMA,
+    VOL_STR, volume, COMMA,
+    TIME_STR, Time);
 
-    return EXIT_SUCCESS;
+#if defined (HAVE_X11_XLIB_H)
+  set_status(combine);
+#else
+  printf("%s\n", combine);
+#endif
+
+  return EXIT_SUCCESS;
 }

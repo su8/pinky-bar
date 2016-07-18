@@ -1,5 +1,6 @@
 /*
-   Copyright 07/06/2015 Aaron Caffrey https://github.com/wifiextender
+   Copyright 07/06/2015, 07/18/2016
+   Aaron Caffrey https://github.com/wifiextender
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -30,6 +31,9 @@ void get_fans(char *);
 void get_mobo(char *, char *);
 void get_time(char *);
 void get_volume(char *);
+
+#if defined (HAVE_X11_XLIB_H)
 void set_status(const char *);
+#endif
 
 #endif /* FUNCTIONS_H_ */

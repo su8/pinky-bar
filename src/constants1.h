@@ -1,5 +1,6 @@
 /*
-   Copyright 07/29/2015 Aaron Caffrey https://github.com/wifiextender
+   Copyright 07/29/2015, 07/18/2016
+   Aaron Caffrey https://github.com/wifiextender
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -22,14 +23,58 @@
 
 #define VLA 200
 
+/* dwm colours */
+#if defined (HAVE_X11_XLIB_H)
+
 /*
-   main.c constants, the colors in use are
+   the colours in use are
    specified in your dwm config.h
 */
 #define NAME_VAL  "\x0a%s \x0b%s"   /* STR1 STR2        */
+#define TEMP      "\x09%sC\x0b%c "  /* 32C,             */
+#define FMT_KERN  "\x09%s%c "       /* Kernel Version,  */
+
+#define CPU_STR    "CPU"
+#define RAM_STR    "RAM"
+#define SSD_STR    "SSD"
+#define PKG_STR    "Pkgs"
+#define VOLT_STR   "Voltage"
+#define FANS_STR   "Fans/RPM"
+#define MOBO_STR   "Mobo"
+#define VOL_STR    "Volume"
+#define TIME_STR   "Time"
+
+
+
+/* dzen colours and xbm icons for xmonad */
+#else
+
+#define YELLOW   "^fg(#f0c674)"
+#define BLUE     "^fg(#1793D1)"
+#define PINK     "^fg(#b294bb)"
+
+#define NAME_VAL  BLUE"%s "PINK"%s"   /* STR1 STR2        */
+#define TEMP      YELLOW"%s^i("ICONS_DIR"/temp.xbm)"PINK"%c "  /* 32C, */
+#define FMT_KERN  YELLOW"%s%c "       /* Kernel Version,  */
+
+#define CPU_STR    "^i("ICONS_DIR"/cpu.xbm)"
+#define RAM_STR    "^i("ICONS_DIR"/mem.xbm)"
+#define SSD_STR    "^i("ICONS_DIR"/diskette.xbm)"
+#define PKG_STR    "^i("ICONS_DIR"/arch.xbm)"
+#define VOLT_STR   "^i("ICONS_DIR"/voltage.xbm)"
+#define FANS_STR   "^i("ICONS_DIR"/fan.xbm)"
+#define MOBO_STR   "^i("ICONS_DIR"/mobo.xbm)"
+#define VOL_STR    "^i("ICONS_DIR"/vol.xbm)"
+#define TIME_STR   "^i("ICONS_DIR"/clock.xbm)"
+
+#endif /* dwm/xmonad colours */
+
+
+/*
+   main.c constants
+*/
 #define FMT       NAME_VAL"%%%c "   /* STR1 10%,        */
 #define FMT_TIME  NAME_VAL          /* Time 10:00 PM    */
-#define TEMP      "\x09%sC\x0b%c "  /* 32C,             */
 #define FMT_MOBO  FMT_TIME" "TEMP   /* VEND NAME 32C,   */
 #define FMT_CPU   FMT_TIME"%% "TEMP /* CPU 10% 32C,     */
 #define FMT_RAM   FMT               /* RAM 10%,         */
@@ -37,7 +82,6 @@
 #define FMT_PKGS  FMT_TIME"%c "     /* Pkgs 123,        */
 #define FMT_VOLT  FMT_PKGS          /* Voltage 1 2 3 4, */
 #define FMT_FANS  FMT_TIME          /* Fans varying     */
-#define FMT_KERN  "\x09%s%c "       /* Kernel Version,  */
 #define FMT_VOL   FMT               /* Volume 10%,      */
 #define COMMA     ','
 #define WHOLE_MAIN_ARR_LEN VLA*14
