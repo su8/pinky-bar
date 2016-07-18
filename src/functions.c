@@ -239,9 +239,9 @@ void get_fans(char *str1)
     bool found_fans = true;
     char tempstr[VLA], buffer[VLA];
     char *all_fans = buffer;
-    uint_fast16_t x = 0, y = 0, z = 0, rpm[11];
+    uint_fast16_t x = 0, y = 0, z = 0, rpm[21];
 
-    for (x = 1; x < 10; x++, z++) {
+    for (x = 1; x < 20; x++, z++) {
       FILL_ARR(tempstr, HWMON_DIR"/fan"UFINT"_input", x);
 
       if (!(fp = fopen(tempstr, "r")) && x > 1)

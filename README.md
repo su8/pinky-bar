@@ -9,9 +9,10 @@ Please note that the program won't detect fans connected via molex connetor(s) o
 
 The program is smart enough to detect whether some of your fan(s) blades are spinning, or the particular fan have been removed. Hold down some of your fan blades and you'll see that the program won't include this fan and it's RPM, release the blades and you'll see the fan and it's RPM in the statusbar.
 
-If you compile your kernel from source code make sure to include your motherboard sensor module.
+If you compile your kernel from source code make sure to include your cpu and motherboard sensors as **modules** and not inlined.
 
-The second snapshot (above) was taken in **xmonad**.
+![](img/cpu-temp.png)
+![](img/mobo-temp.png)
 
 ## Installation for dwm
 
