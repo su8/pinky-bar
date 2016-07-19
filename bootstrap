@@ -71,6 +71,7 @@ _gen_files() {
   # The linker flags tests in m4 dir
   "${TEST_X}"
   TEST_ALSA
+  TEST_TYPEZ
 
   AC_CONFIG_FILES([
   Makefile
