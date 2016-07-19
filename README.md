@@ -1,9 +1,7 @@
-## dwm-bar.c
-
 ![](img/pic.png)
 ![](img/pic2.png)
 
-Statusbar program for dwm and xmonad that I've written in my very first day as dwm user.
+Statusbar program for ~~dwm and xmonad~~ any WM that I've written in my very first day as dwm user.
 
 Please note that the program won't detect fans connected via molex connetor(s) or external fan controller. Also I have not tested it with fan splitter(s) either.
 
@@ -18,7 +16,7 @@ If you compile your kernel from source code make sure to include your cpu and mo
 
 ```bash
 bash bootstrap distro
-./configure --prefix=$HOME/.cache
+./configure --prefix=$HOME/.cache --with-x11
 make -j$(grep -c '^processor' /proc/cpuinfo)
 make install
 ```
@@ -43,10 +41,12 @@ cp -r xbm_icons/*.xbm $HOME/.xmonad/icons
 # rename the program
 sed -i 's/dwmbar/xmonadbar/g' bootstrap
 
-# point the xbm icons location
-bash bootstrap distro $HOME/.xmonad/icons
+bash bootstrap distro
 
-./configure --prefix=$HOME/.cache
+# disable X11, point the location to the icons
+./configure --prefix=$HOME/.cache --without-x11 icons=$HOME/.xmonad/icons
+
+# compile 'n install
 make -j$(grep -c '^processor' /proc/cpuinfo)
 make install
 ```
