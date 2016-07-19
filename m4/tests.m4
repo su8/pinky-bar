@@ -59,6 +59,18 @@ AC_DEFUN([TEST_X11],[
 ])
 
 
+dnl Internal function to perform
+dnl explicit data check type
+AC_DEFUN([CHECK_TYPEZ],[
+  AC_CHECK_TYPES([$1],[],[
+    AC_MSG_WARN([Some C data type failed, checking which one.])
+    m4_foreach([tYpe], [$1],[
+      AC_CHECK_SIZEOF(tYpe)
+    ])dnl
+    ERR([Your compiler does not understand C data types.])
+  ])
+])
+
 dnl TEST_TYPEZ() function in configure.ac
 dnl
 dnl Check for the presence of all used
@@ -68,7 +80,8 @@ dnl mandatory since uintmax makes it
 dnl easy for us.
 AC_DEFUN([TEST_TYPEZ],[
 
-  AC_CHECK_TYPES([
+  CHECK_TYPEZ([
+    size_t,
     float,
     double,
     signed char,
@@ -81,8 +94,6 @@ AC_DEFUN([TEST_TYPEZ],[
     unsigned int,
     unsigned long int,
     uintmax_t
-  ],[],[
-    ERR([Your compiler does not understand C data types.])
   ])
 
   AC_CHECK_HEADERS([ \
