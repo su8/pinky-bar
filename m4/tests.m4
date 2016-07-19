@@ -1,17 +1,22 @@
 dnl Author: Aaron Caffrey
 
+dnl Be Loud when ErRo0rZ are detected
+AC_DEFUN([ERR],[
+  AC_MSG_ERROR($1)
+])
+
+
 dnl TEST_ALSA() function in configure.ac
 dnl
 dnl Check for the presence of ALSA headers and
 dnl substitute the linker flags -lasound to the
 dnl the variable 'ALSA_LIBS' if they are available.
-AC_DEFUN([TEST_ALSA],
-[
+AC_DEFUN([TEST_ALSA],[
   AC_CHECK_HEADERS([alsa/asoundlib.h], [
     ALSA_LIBS="-lasound"
     AC_SUBST(ALSA_LIBS)
   ],[
-    AC_MSG_ERROR([Install alsa-utils and alsa-lib in order to compile the program.])
+    ERR([Install alsa-utils and alsa-lib in order to compile the program.])
   ])
 
 ])
@@ -22,8 +27,7 @@ dnl
 dnl Check for the presence of X11 headers and
 dnl substitute the linker flags -lX11 to the
 dnl the variable 'X_LIBS' if they are available.
-AC_DEFUN([TEST_X11],
-[
+AC_DEFUN([TEST_X11],[
   X_LIBS=""
 
   AC_ARG_WITH([x11],
@@ -37,7 +41,7 @@ AC_DEFUN([TEST_X11],
     AC_CHECK_HEADERS([X11/Xlib.h], [
       X_LIBS="-lX11"
       ],[
-        AC_MSG_ERROR([Install xorg and libx11 in order to compile the program.])
+        ERR([Install xorg and libx11 in order to compile the program.])
       ])
     ]
   )
@@ -62,18 +66,24 @@ dnl library functions, their header files
 dnl and some int types. 64bit is not
 dnl mandatory since uintmax makes it 
 dnl easy for us.
-AC_DEFUN([TEST_TYPEZ],
-[
+AC_DEFUN([TEST_TYPEZ],[
 
-  AC_TYPE_SIZE_T
-  AC_TYPE_INT8_T
-  AC_TYPE_INT16_T
-  AC_TYPE_INT32_T
-  AC_TYPE_INTMAX_T
-  AC_TYPE_UINT8_T
-  AC_TYPE_UINT16_T
-  AC_TYPE_UINT32_T
-  AC_TYPE_UINTMAX_T
+  AC_CHECK_TYPES([
+    float,
+    double,
+    signed char,
+    unsigned char,
+    signed short int,
+    signed int,
+    signed long int,
+    intmax_t,
+    unsigned short int,
+    unsigned int,
+    unsigned long int,
+    uintmax_t
+  ],[],[
+    ERR([Your compiler does not understand C data types.])
+  ])
 
   AC_CHECK_HEADERS([ \
     time.h           \
@@ -87,7 +97,7 @@ AC_DEFUN([TEST_TYPEZ],
     sys/utsname.h    \
     unistd.h         \
   ],[],[
-    AC_MSG_ERROR([Some header files are missing.])
+    ERR([Some header files are missing.])
   ])
 
   AC_CHECK_FUNCS([  \
@@ -110,7 +120,7 @@ AC_DEFUN([TEST_TYPEZ],
     strftime        \
     exit            \
   ],[],[
-    AC_MSG_ERROR([Missing core library functions.])
+    ERR([Missing core library functions.])
   ])
 
 ])
