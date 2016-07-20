@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 
-# Copyright 07/06/2015 Aaron Caffrey https://github.com/wifiextender
+# Copyright 07/06/2015, 07/18/2016 
+# Aaron Caffrey https://github.com/wifiextender
 
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -18,25 +19,20 @@
 # MA 02110-1301, USA.
 
 
-# bash bootstrap archlinux
-# ./configure --prefix=$HOME/.cache
-# make && make install
-
-declare -a _bases
-_bases=(
-    'archlinux'
-    'debian'
-    'gentoo'
-    'slackware'
-    'rhel'
-    'frugalware'
-    'angstrom'
+declare -a _bases=(
+  'archlinux'
+  'debian'
+  'gentoo'
+  'slackware'
+  'rhel'
+  'frugalware'
+  'angstrom'
 )
 
 _printf_err() {
-    printf '%s\n' "try again with: bash ${0} basedistro"
-    printf '%s ' "Bases: ${_bases[@]}"
-    printf '\n'
+  printf '%s\n' "try again with: bash ${0} basedistro"
+  printf '%s ' "Bases: ${_bases[@]}"
+  printf '\n'
 }
 
 _gen_files() {
@@ -82,11 +78,11 @@ _gen_files() {
 
   # src/Makefile.am
   src_files=(
-      'main.c'
-      'functions.c'
-      'functions.h'
-      'constants1.h'
-      'constants2.h'
+    'main.c'
+    'functions.c'
+    'functions.h'
+    'constants1.h'
+    'constants2.h'
   )
 
   src_makefile=('AM_CPPFLAGS = \
@@ -126,7 +122,7 @@ EOF
 }
 
 
-[[ -z $1 ]] && _printf_err $@ || {
-    [[ " ${_bases[@]} " =~ " $1 " ]] && \
-        _gen_files $@ || _printf_err $@
+[[ -z "${1}" ]] && _printf_err "$@" || {
+  [[ " ${_bases[@]} " =~ " $1 " ]] && \
+    _gen_files "$@" || _printf_err "$@"
 }

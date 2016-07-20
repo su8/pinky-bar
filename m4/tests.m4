@@ -82,6 +82,7 @@ AC_DEFUN([TEST_TYPEZ],[
 
   CHECK_TYPEZ([
     size_t,
+    time_t,
     float,
     double,
     signed char,
@@ -108,7 +109,7 @@ AC_DEFUN([TEST_TYPEZ],[
     sys/utsname.h    \
     unistd.h         \
   ],[],[
-    ERR([Some header files are missing.])
+    ERR([Missing core header files.])
   ])
 
   AC_CHECK_FUNCS([  \

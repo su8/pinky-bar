@@ -27,8 +27,7 @@
 #include "constants1.h"
 #include "functions.h"
 
-int main(void)
-{
+int main(void) {
   struct timespec tc = {0};
   tc.tv_nsec = sysconf(_SC_CLK_TCK) * 1000000L;
 

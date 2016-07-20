@@ -233,44 +233,43 @@ void get_voltage(char *str1) {
 }
 
 
-void get_fans(char *str1)
-{
-    FILE *fp;
-    bool found_fans = true;
-    char tempstr[VLA], buffer[VLA];
-    char *all_fans = buffer;
-    uint_fast16_t x = 0, y = 0, z = 0, rpm[21];
+void get_fans(char *str1) {
+  FILE *fp;
+  bool found_fans = true;
+  char tempstr[VLA], buffer[VLA];
+  char *all_fans = buffer;
+  uint_fast16_t x = 0, y = 0, z = 0, rpm[21];
 
-    for (x = 1; x < 20; x++, z++) {
-      FILL_ARR(tempstr, HWMON_DIR"/fan"UFINT"_input", x);
+  for (x = 1; x < 20; x++, z++) {
+    FILL_ARR(tempstr, HWMON_DIR"/fan"UFINT"_input", x);
 
-      if (!(fp = fopen(tempstr, "r")) && x > 1)
-        break;
-      else if (NULL == fp) { /* no system fans */
-        FILL_STR_ARR(1, str1, "Not found, ");
-        found_fans = false;
-        break;
-      }
-
-      fscanf(fp, UFINT, &rpm[z]);
-      fclose(fp);
+    if (!(fp = fopen(tempstr, "r")) && x > 1)
+      break;
+    else if (NULL == fp) { /* no system fans */
+      FILL_STR_ARR(1, str1, "Not found, ");
+      found_fans = false;
+      break;
     }
 
-    if (found_fans) {
-      for (x = 0; x < z; x++) {
-        if (rpm[x] > 0)
-          all_fans += snprintf(all_fans,
-              sizeof(buffer) - (uint_least32_t)(all_fans - buffer),
-                  UFINT" ", rpm[x]);
+    fscanf(fp, UFINT, &rpm[z]);
+    fclose(fp);
+  }
 
-        else  {/* Don't include non-spinning or removed fans */
-          ++y;
-          all_fans += snprintf(all_fans, 5, "%s", "");
-        }
+  if (found_fans) {
+    for (x = 0; x < z; x++) {
+      if (rpm[x] > 0)
+        all_fans += snprintf(all_fans,
+            sizeof(buffer) - (uint_least32_t)(all_fans - buffer),
+                UFINT" ", rpm[x]);
+
+      else  {/* Don't include non-spinning or removed fans */
+        ++y;
+        all_fans += snprintf(all_fans, 5, "%s", "");
       }
-
-      FILL_STR_ARR(1, str1, (y != x ? buffer : "Not found, "));
     }
+
+    FILL_STR_ARR(1, str1, (y != x ? buffer : "Not found, "));
+  }
 }
 
 
@@ -337,12 +336,18 @@ void get_volume(char *str1) {
 }
 
 
-void get_time(char *str1)
-{
+/* The `strftime' man page showed potential bugs */
+void get_time(char *str1) {
   char time_str[VLA];
-  time_t t = time(NULL);
+  time_t t;
+  struct tm *taim;
 
-  strftime(time_str, VLA, "%I:%M %p", localtime(&t));
+  if (-1 == (t = time(NULL)) || 
+      NULL == (taim = localtime(&t)) ||
+      0 == (strftime(time_str, VLA, "%I:%M %p", taim))) {
+    ERR("Error:","time() or localtime() or strftime() failed");
+    exit(EXIT_FAILURE);
+  }
 
   FILL_STR_ARR(1, str1, time_str);
 }
