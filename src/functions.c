@@ -40,6 +40,7 @@
 #include "constants1.h"
 #include "constants2.h"
 #include "functions.h"
+/* #include "config.h" */
 
 static void get_temp(const char *, char *);
 static uint_fast16_t glob_packages(const char *);
@@ -166,44 +167,41 @@ glob_packages(const char *str1) {
 }
 
 
+/* perform stripping during runtime
+ * instead conditionally checking 
+ * each time the program is executed */
 void 
 get_packs(char *str1) {
-  FILE *pkgs_file;
   uint_fast16_t packages = 0;
 
-  if (STREQ(str1, "archlinux"))
-    packages = glob_packages("/var/lib/pacman/local/*");
+#if DISTRO == 0 /* archlinux */
+  packages = glob_packages("/var/lib/pacman/local/*");
 
-  else if (STREQ(str1, "frugalware")) {
-    pkgs_file = popen("pacman-g2 -Q 2> /dev/null | wc -l", "r");
-    fscanf(pkgs_file, "%"SCNuFAST16, &packages);
-    pclose(pkgs_file);
-  }
+#elif DISTRO == 5 /* frugalware */
+  FILE *pkgs_file = popen("pacman-g2 -Q 2> /dev/null | wc -l", "r");
+  fscanf(pkgs_file, "%"SCNuFAST16, &packages);
+  pclose(pkgs_file);
 
-  else if (STREQ(str1, "debian"))
-    packages = glob_packages("/var/lib/dpkg/info/*.list");
+#elif DISTRO == 1 /* debian */
+  packages = glob_packages("/var/lib/dpkg/info/*.list");
 
-  else if (STREQ(str1, "slackware"))
-    packages = glob_packages("/var/log/packages/*");
+#elif DISTRO == 4 /* slackware */
+  packages = glob_packages("/var/log/packages/*");
 
-  else if (STREQ(str1, "gentoo"))
-    packages = glob_packages("/var/db/pkg/*/*");
+#elif DISTRO == 2 /* gentoo */
+  packages = glob_packages("/var/db/pkg/*/*");
 
-  else if (STREQ(str1, "rhel")) {
-    pkgs_file = popen("rpm -qa 2> /dev/null | wc -l", "r");
-    fscanf(pkgs_file, "%"SCNuFAST16, &packages);
-    pclose(pkgs_file);
-  }
+#elif DISTRO == 4 /* rhel */
+  FILE *pkgs_file = popen("rpm -qa 2> /dev/null | wc -l", "r");
+  fscanf(pkgs_file, "%"SCNuFAST16, &packages);
+  pclose(pkgs_file);
 
-  else if (STREQ(str1, "angstrom")) {
-    pkgs_file = popen("opkg list-installed 2> /dev/null | wc -l", "r");
-    fscanf(pkgs_file, "%"SCNuFAST16, &packages);
-    pclose(pkgs_file);
-  }
+#elif DISTRO == 6 /* angstrom */
+  FILE *pkgs_file = popen("opkg list-installed 2> /dev/null | wc -l", "r");
+  fscanf(pkgs_file, "%"SCNuFAST16, &packages);
+  pclose(pkgs_file);
 
-  else {
-    exit_with_err(ERR,"You have supplied a wrong distro");
-  }
+#endif
 
   FILL_ARR(str1, "%"PRIuFAST16, packages);
 }

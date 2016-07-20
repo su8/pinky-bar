@@ -36,8 +36,7 @@ int main(void) {
   struct timespec tc = {0};
   tc.tv_nsec = sysconf(_SC_CLK_TCK) * 1000000L;
 
-  char packs[VLA] = GIVEN_DISTRO;
-  char mobo[VLA], cpu[VLA], ram[VLA], ssd[VLA];
+  char packs[VLA], mobo[VLA], cpu[VLA], ram[VLA], ssd[VLA];
   char kern[VLA], volume[VLA], Time[VLA], combine[WHOLE_MAIN_ARR_LEN];
   char voltage[VLA], cpu_temp[VLA], mobo_temp[VLA], fans[VLA];
 
