@@ -90,5 +90,6 @@
 
 /* functions.c constants */
 #define CANNOT_OPEN "Could not open"
+#define ERR "Error:"
 
 #endif /* CONSTANTS_H_ */

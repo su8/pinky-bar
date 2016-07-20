@@ -90,7 +90,7 @@ get_cpu(char *str1, char *str2) {
     &cpu_active[4], &cpu_active[5], &cpu_active[6], &cpu_active[7],
     &cpu_active[8], &cpu_active[9]) == EOF) {
       fclose(fstat);
-      exit_with_err("Error:","Upgrade to a newer kernel");
+      exit_with_err(ERR,"Upgrade to a newer kernel");
   }
 
   fclose(fstat);
@@ -119,7 +119,7 @@ get_ram(char *str1) {
   struct sysinfo mem;
 
   if (-1 == (sysinfo(&mem))) {
-    exit_with_err("Error:","sysinfo() failed");
+    exit_with_err(ERR, "sysinfo() failed");
   }
 
   total   = (uintmax_t) mem.totalram / MB;
@@ -137,7 +137,7 @@ get_ssd(char *str1) {
   struct statvfs ssd;
 
   if(-1 == (statvfs(getenv("HOME"), &ssd))) {
-    exit_with_err("Error:","statvfs() failed");
+    exit_with_err(ERR, "statvfs() failed");
   }
 
   percent = ((ssd.f_blocks - ssd.f_bfree) * ssd.f_bsize) / GB;
@@ -202,7 +202,7 @@ get_packs(char *str1) {
   }
 
   else {
-    exit_with_err("Error:","You have supplied a wrong distro");
+    exit_with_err(ERR,"You have supplied a wrong distro");
   }
 
   FILL_ARR(str1, "%"PRIuFAST16, packages);
@@ -214,7 +214,7 @@ get_kernel(char *str1) {
   struct utsname KerneL;
 
   if (-1 == (uname(&KerneL))) {
-    exit_with_err("Error:","uname() failed");
+    exit_with_err(ERR, "uname() failed");
   }
 
   FILL_STR_ARR(2, str1, KerneL.sysname, KerneL.release);
@@ -325,7 +325,7 @@ get_volume(char *str1) {
   long int vol, max, min, percent;
 
   if (0 < (snd_mixer_open(&handle, 0))) {
-    exit_with_err("Error:","alsa failed");
+    exit_with_err(ERR, "alsa failed");
   }
 
   if (0 < (snd_mixer_attach(handle, "default"))) {
@@ -363,16 +363,16 @@ get_volume(char *str1) {
   FILL_ARR(str1, "%ld", percent);
   return;
 
-  error:
-    if (NULL != s_elem) {
-      snd_mixer_selem_id_free(s_elem);
-      s_elem = NULL;
-    }
-    if (handle) {
-      snd_mixer_close(handle);
-      handle = NULL;
-    }
-    exit_with_err("Error:","alsa failed");
+error:
+  if (NULL != s_elem) {
+    snd_mixer_selem_id_free(s_elem);
+    s_elem = NULL;
+  }
+  if (NULL != handle) {
+    snd_mixer_close(handle);
+    handle = NULL;
+  }
+  exit_with_err(ERR, "alsa failed");
 }
 
 
@@ -386,7 +386,7 @@ get_time(char *str1) {
   if (-1 == (t = time(NULL)) || 
       NULL == (taim = localtime(&t)) ||
       0 == (strftime(time_str, VLA, "%I:%M %p", taim))) {
-    exit_with_err("Error:","time() or localtime() or strftime() failed");
+    exit_with_err(ERR, "time() or localtime() or strftime() failed");
   }
 
   FILL_STR_ARR(1, str1, time_str);
@@ -403,7 +403,7 @@ set_status(const char *str1) {
 
     XCloseDisplay(display);
   } else {
-    exit_with_err(CANNOT_OPEN,"X server");
+    exit_with_err(CANNOT_OPEN, "X server");
   }
 }
 #endif
