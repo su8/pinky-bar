@@ -314,32 +314,46 @@ get_mobo(char *str1, char *str2) {
   FILL_STR_ARR(2, str1, vendor, name);
 }
 
-
+/* http://www.alsa-project.org/alsa-doc/alsa-lib/group___mixer.html 
+ * http://www.alsa-project.org/alsa-doc/alsa-lib/group___simple_mixer.html 
+ * for the return values */
 void 
 get_volume(char *str1) {
-  snd_mixer_t *handle;
-  snd_mixer_elem_t *elem;
-  snd_mixer_selem_id_t *s_elem;
-
-  snd_mixer_open(&handle, 0);
-  snd_mixer_attach(handle, "default");
-  snd_mixer_selem_register(handle, NULL, NULL);
-  snd_mixer_load(handle);
-  snd_mixer_selem_id_malloc(&s_elem);
-  snd_mixer_selem_id_set_name(s_elem, "Master");
-
-  elem = snd_mixer_find_selem(handle, s_elem);
-
-  if (NULL == elem) {
-    snd_mixer_selem_id_free(s_elem);
-    snd_mixer_close(handle);
-    exit_with_err("Error:","You dont have Master ALSA channel");
-  }
-
+  snd_mixer_t *handle = NULL;
+  snd_mixer_elem_t *elem = NULL;
+  snd_mixer_selem_id_t *s_elem = NULL;
   long int vol, max, min, percent;
 
+  if (0 < (snd_mixer_open(&handle, 0))) {
+    exit_with_err("Error:","alsa failed");
+  }
+
+  if (0 < (snd_mixer_attach(handle, "default"))) {
+    goto error;
+  }
+
+  if (0 < (snd_mixer_selem_register(handle, NULL, NULL))) {
+    goto error;
+  }
+
+  if (0 < (snd_mixer_load(handle))) {
+    goto error;
+  }
+
+  snd_mixer_selem_id_malloc(&s_elem);
+  if (NULL == s_elem) {
+    goto error;
+  }
+
+  snd_mixer_selem_id_set_name(s_elem, "Master");
+  if (NULL == (elem = snd_mixer_find_selem(handle, s_elem))) {
+    goto error;
+  }
+
+  if (0 < (snd_mixer_selem_get_playback_volume(elem, 0, &vol))) {
+    goto error;
+  }
   snd_mixer_selem_get_playback_volume_range(elem, &min, &max);
-  snd_mixer_selem_get_playback_volume(elem, 0, &vol);
 
   percent = (vol * 100) / max;
 
@@ -347,6 +361,18 @@ get_volume(char *str1) {
   snd_mixer_close(handle);
 
   FILL_ARR(str1, "%ld", percent);
+  return;
+
+  error:
+    if (NULL != s_elem) {
+      snd_mixer_selem_id_free(s_elem);
+      s_elem = NULL;
+    }
+    if (handle) {
+      snd_mixer_close(handle);
+      handle = NULL;
+    }
+    exit_with_err("Error:","alsa failed");
 }
 
 
