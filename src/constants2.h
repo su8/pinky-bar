@@ -31,7 +31,6 @@
 #define FILL_UINT_ARR(x, z) (FILL_ARR(x, FMT_UINT, z))
 #define FILL_STR_ARR(x, z, ...) (FILL_ARR(z, (1 == x ? "%s" : "%s %s"), __VA_ARGS__))
 #define STREQ(x, z) (!strcmp(x, z))
-#define ERR(str1, str2) (printf("%s %s\n", str1, str2))
 
 #define HWMON_DIR "/sys/class/hwmon/hwmon0"
 #define CPU_TEMP_FILE HWMON_DIR"/temp1_input"

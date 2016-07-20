@@ -43,14 +43,22 @@
 
 static void get_temp(const char *, char *);
 static uint_fast16_t glob_packages(const char *);
+static void exit_with_err(const char *, const char *);
 
-static void get_temp(const char *str1, char *str2) {
+static void
+exit_with_err(const char *str1, const char *str2) {
+  printf("%s %s\n", str1, str2);
+  exit(EXIT_FAILURE);
+}
+
+
+static void
+get_temp(const char *str1, char *str2) {
   uintmax_t temp;
 
   FILE *fp = fopen(str1, "r");
   if (NULL == fp) {
-    ERR("Could not open", str1);
-    exit(EXIT_FAILURE);
+    exit_with_err(CANNOT_OPEN, str1);
   }
 
   fscanf(fp, FMT_UINT, &temp);
@@ -62,7 +70,8 @@ static void get_temp(const char *str1, char *str2) {
 }
 
 
-void get_cpu(char *str1, char *str2) {
+void 
+get_cpu(char *str1, char *str2) {
   static uintmax_t previous_total = 0, previous_idle = 0;
   uintmax_t x, percent, diff_total, diff_idle, cpu_active[10];
   uintmax_t total = 0;
@@ -71,8 +80,7 @@ void get_cpu(char *str1, char *str2) {
 
   FILE *fstat = fopen("/proc/stat", "r");
   if (NULL == fstat) {
-    ERR("Could not open", "/proc/stat");
-    exit(EXIT_FAILURE);
+    exit_with_err(CANNOT_OPEN, "/proc/stat");
   }
 
   /* Some kernels will produce 7, 8 and 9 columns
@@ -82,8 +90,7 @@ void get_cpu(char *str1, char *str2) {
     &cpu_active[4], &cpu_active[5], &cpu_active[6], &cpu_active[7],
     &cpu_active[8], &cpu_active[9]) == EOF) {
       fclose(fstat);
-      ERR("Error:","Upgrade to a newer kernel");
-      exit(EXIT_FAILURE);
+      exit_with_err("Error:","Upgrade to a newer kernel");
   }
 
   fclose(fstat);
@@ -106,11 +113,14 @@ void get_cpu(char *str1, char *str2) {
 }
 
 
-void get_ram(char *str1) {
+void 
+get_ram(char *str1) {
   uintmax_t used = 0, total = 0, percent = 0;
-
   struct sysinfo mem;
-  sysinfo(&mem);
+
+  if (-1 == (sysinfo(&mem))) {
+    exit_with_err("Error:","sysinfo() failed");
+  }
 
   total   = (uintmax_t) mem.totalram / MB;
   used    = (uintmax_t) (mem.totalram - mem.freeram -
@@ -121,11 +131,14 @@ void get_ram(char *str1) {
 }
 
 
-void get_ssd(char *str1) {
+void 
+get_ssd(char *str1) {
   uintmax_t percent = 0;
-
   struct statvfs ssd;
-  statvfs(getenv("HOME"), &ssd);
+
+  if(-1 == (statvfs(getenv("HOME"), &ssd))) {
+    exit_with_err("Error:","statvfs() failed");
+  }
 
   percent = ((ssd.f_blocks - ssd.f_bfree) * ssd.f_bsize) / GB;
 
@@ -135,7 +148,8 @@ void get_ssd(char *str1) {
 
 /* Source (my improved screenfetch-c fork):
  * https://github.com/wifiextender/screenfetch-c/blob/master/src/plat/linux/detect.c */
-static uint_fast16_t glob_packages(const char *str1) {
+static uint_fast16_t 
+glob_packages(const char *str1) {
   uint_fast16_t packs_num = 0;
   glob_t gl;
 
@@ -143,8 +157,7 @@ static uint_fast16_t glob_packages(const char *str1) {
     packs_num = gl.gl_pathc;
 
   else {
-    ERR("Could not traverse", str1);
-    exit(EXIT_FAILURE);
+    exit_with_err("Could not traverse", str1);
   }
 
   globfree(&gl);
@@ -153,7 +166,8 @@ static uint_fast16_t glob_packages(const char *str1) {
 }
 
 
-void get_packs(char *str1) {
+void 
+get_packs(char *str1) {
   FILE *pkgs_file;
   uint_fast16_t packages = 0;
 
@@ -188,23 +202,27 @@ void get_packs(char *str1) {
   }
 
   else {
-    ERR("Error:","You have supplied a wrong distro");
-    exit(EXIT_FAILURE);
+    exit_with_err("Error:","You have supplied a wrong distro");
   }
 
   FILL_ARR(str1, "%"PRIuFAST16, packages);
 }
 
 
-void get_kernel(char *str1) {
+void 
+get_kernel(char *str1) {
   struct utsname KerneL;
-  uname(&KerneL);
+
+  if (-1 == (uname(&KerneL))) {
+    exit_with_err("Error:","uname() failed");
+  }
 
   FILL_STR_ARR(2, str1, KerneL.sysname, KerneL.release);
 }
 
 
-void get_voltage(char *str1) {
+void 
+get_voltage(char *str1) {
   float voltage[4];
   FILE *fp;
   uint_fast16_t x = 0;
@@ -218,8 +236,7 @@ void get_voltage(char *str1) {
 
   for (x = 0; x < 4; x++) {
     if (!(fp = fopen(voltage_files[x], "r"))) {
-      ERR("Could not open", voltage_files[x]);
-      exit(EXIT_FAILURE);
+      exit_with_err(CANNOT_OPEN, voltage_files[x]);
     }
 
     fscanf(fp, "%f", &voltage[x]);
@@ -233,7 +250,8 @@ void get_voltage(char *str1) {
 }
 
 
-void get_fans(char *str1) {
+void 
+get_fans(char *str1) {
   FILE *fp;
   bool found_fans = true;
   char tempstr[VLA], buffer[VLA];
@@ -258,10 +276,7 @@ void get_fans(char *str1) {
   if (found_fans) {
     for (x = 0; x < z; x++) {
       if (rpm[x] > 0)
-        all_fans += snprintf(all_fans,
-            sizeof(buffer) - (uint_least32_t)(all_fans - buffer),
-                UFINT" ", rpm[x]);
-
+        all_fans += snprintf(all_fans, VLA, UFINT" ", rpm[x]);
       else  {/* Don't include non-spinning or removed fans */
         ++y;
         all_fans += snprintf(all_fans, 5, "%s", "");
@@ -273,13 +288,13 @@ void get_fans(char *str1) {
 }
 
 
-void get_mobo(char *str1, char *str2) {
+void 
+get_mobo(char *str1, char *str2) {
   char vendor[VLA], name[VLA];
 
   FILE *fp = fopen(MOBO_VENDOR, "r");
   if (NULL == fp) {
-    ERR("Could not open", MOBO_VENDOR);
-    exit(EXIT_FAILURE);
+    exit_with_err(CANNOT_OPEN, MOBO_VENDOR);
   }
 
   /* use %[^\n] to get the whole line */
@@ -287,8 +302,7 @@ void get_mobo(char *str1, char *str2) {
   fclose(fp);
 
   if (!(fp = fopen(MOBO_NAME, "r"))) {
-    ERR("Could not open", MOBO_NAME);
-    exit(EXIT_FAILURE);
+    exit_with_err(CANNOT_OPEN, MOBO_NAME);
   }
 
   /* use %[^\n] to get the whole line */
@@ -301,7 +315,8 @@ void get_mobo(char *str1, char *str2) {
 }
 
 
-void get_volume(char *str1) {
+void 
+get_volume(char *str1) {
   snd_mixer_t *handle;
   snd_mixer_elem_t *elem;
   snd_mixer_selem_id_t *s_elem;
@@ -318,8 +333,7 @@ void get_volume(char *str1) {
   if (NULL == elem) {
     snd_mixer_selem_id_free(s_elem);
     snd_mixer_close(handle);
-    ERR("Error:","You dont have Master ALSA channel");
-    exit(EXIT_FAILURE);
+    exit_with_err("Error:","You dont have Master ALSA channel");
   }
 
   long int vol, max, min, percent;
@@ -337,7 +351,8 @@ void get_volume(char *str1) {
 
 
 /* The `strftime' man page showed potential bugs */
-void get_time(char *str1) {
+void 
+get_time(char *str1) {
   char time_str[VLA];
   time_t t;
   struct tm *taim;
@@ -345,15 +360,15 @@ void get_time(char *str1) {
   if (-1 == (t = time(NULL)) || 
       NULL == (taim = localtime(&t)) ||
       0 == (strftime(time_str, VLA, "%I:%M %p", taim))) {
-    ERR("Error:","time() or localtime() or strftime() failed");
-    exit(EXIT_FAILURE);
+    exit_with_err("Error:","time() or localtime() or strftime() failed");
   }
 
   FILL_STR_ARR(1, str1, time_str);
 }
 
 #if defined (HAVE_X11_XLIB_H)
-void set_status(const char *str1) {
+void 
+set_status(const char *str1) {
   Display *display = XOpenDisplay(NULL);
 
   if (display) {
@@ -362,8 +377,7 @@ void set_status(const char *str1) {
 
     XCloseDisplay(display);
   } else {
-    ERR("Error:","Could not open X server");
-    exit(EXIT_FAILURE);
+    exit_with_err(CANNOT_OPEN,"X server");
   }
 }
 #endif

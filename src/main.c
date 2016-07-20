@@ -28,6 +28,11 @@
 #include "functions.h"
 
 int main(void) {
+  if (-1 == (sysconf(_SC_CLK_TCK))) {
+    printf("%s\n", "Error: sysconf() failed");
+    return EXIT_FAILURE;
+  }
+
   struct timespec tc = {0};
   tc.tv_nsec = sysconf(_SC_CLK_TCK) * 1000000L;
 
@@ -38,7 +43,10 @@ int main(void) {
 
   get_cpu(cpu, cpu_temp);
 
-  nanosleep(&tc, NULL);
+  if (-1 == (nanosleep(&tc, NULL))) {
+    printf("%s\n", "Error: nanosleep() failed");
+    return EXIT_FAILURE;
+  }
 
   get_cpu(cpu, cpu_temp);
   get_ram(ram);

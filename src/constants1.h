@@ -87,4 +87,8 @@
 #define COMMA     ','
 #define WHOLE_MAIN_ARR_LEN VLA*14
 
+
+/* functions.c constants */
+#define CANNOT_OPEN "Could not open"
+
 #endif /* CONSTANTS_H_ */
