@@ -185,7 +185,7 @@ get_packs(char *str1) {
 #elif DISTRO == 1 /* debian */
   packages = glob_packages("/var/lib/dpkg/info/*.list");
 
-#elif DISTRO == 4 /* slackware */
+#elif DISTRO == 3 /* slackware */
   packages = glob_packages("/var/log/packages/*");
 
 #elif DISTRO == 2 /* gentoo */
