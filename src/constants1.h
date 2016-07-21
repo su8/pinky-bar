@@ -23,13 +23,13 @@
 
 #define VLA 200
 
-/* dwm colours */
+/*
+ * dwm colours
+ * the colours in use are
+ * specified in your dwm config.h
+*/
 #if defined (HAVE_X11_XLIB_H)
 
-/*
-   the colours in use are
-   specified in your dwm config.h
-*/
 #define NAME_VAL  "\x0a%s \x0b%s"   /* STR1 STR2        */
 #define TEMP      "\x09%sC\x0b%c "  /* 32C,             */
 #define FMT_KERN  "\x09%s%c "       /* Kernel Version,  */

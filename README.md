@@ -5,7 +5,7 @@ Statusbar program for ~~dwm and xmonad~~ any WM that I've written in my very fir
 
 Please note that the program won't detect fans connected via molex connetor(s) or external fan controller. Also I have not tested it with fan splitter(s) either.
 
-The program is smart enough to detect whether some of your fan(s) blades are spinning, or the particular fan have been removed. Hold down some of your fan blades and you'll see that the program won't include this fan and it's RPM, release the blades and you'll see the fan and it's RPM in the statusbar.
+The program is smart enough to detect whether some of your fan(s) blades are spinning, or the particular fan have been removed. Hold down some of your fan blades and you'll see that the program won't include this fan and it's RPM, release the blades and you'll see the fan and it's RPM in the statusbar. Try simulating real fan hardware failure by holding down all system fan blades and watch what the program will show you.
 
 If you compile your kernel from source code make sure to include your cpu and motherboard sensors as **modules** and not inlined.
 
@@ -63,7 +63,7 @@ done | dzen2 -w 1800 -x 130 -ta r -fn '-*-dejavusans-*-r-*-*-11-*-*-*-*-*-*-*' &
 
 ---
 
-Replace **distro** with archlinux, debian, gentoo, slackware, rhel, frugalware, angstrom. Note the lowercase naming. Linux Mint, LMDE and Ubuntu are Debian based distributions, so the **get\_packs** function will work properly, that's because those distros are using the same base:
+Replace **distro** with archlinux, debian, gentoo, slackware, rhel, frugalware, angstrom. Here's some short distros list of some popular distros that are based on another one:
 
 - [x] archlinux based distros: parabola, chakra, manjaro
 - [x] debian based distros: ubuntu, linux mint, trisquel, back track, kali linux, peppermint linux, solusos, crunchbang, deepin, elementary os, and the rest \*buntu based distros
@@ -84,7 +84,7 @@ Replace **distro** with archlinux, debian, gentoo, slackware, rhel, frugalware, 
 * alsa-utils
 * alsa-lib
 
-xmonad specific requirements:
+requirements for xmonad or other non-dwm WM:
 
 * dzen2
 

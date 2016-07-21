@@ -40,7 +40,6 @@
 #include "constants1.h"
 #include "constants2.h"
 #include "functions.h"
-/* #include "config.h" */
 
 static void get_temp(const char *, char *);
 static uint_fast16_t glob_packages(const char *);
@@ -79,22 +78,22 @@ get_cpu(char *str1, char *str2) {
 
   memset(cpu_active, 0, sizeof(cpu_active));
 
-  FILE *fstat = fopen("/proc/stat", "r");
-  if (NULL == fstat) {
+  FILE *fp = fopen("/proc/stat", "r");
+  if (NULL == fp) {
     exit_with_err(CANNOT_OPEN, "/proc/stat");
   }
 
   /* Some kernels will produce 7, 8 and 9 columns
    * We rely on 10, refer to `man proc' for more details */
-  if (fscanf(fstat, "%*s " FMT_UINT FMT_UINT FMT_UINT FMT_UINT FMT_UINT FMT_UINT FMT_UINT FMT_UINT FMT_UINT FMT_UINT,
+  if (fscanf(fp, "%*s " FMT_UINT FMT_UINT FMT_UINT FMT_UINT FMT_UINT FMT_UINT FMT_UINT FMT_UINT FMT_UINT FMT_UINT,
     &cpu_active[0], &cpu_active[1], &cpu_active[2], &cpu_active[3],
     &cpu_active[4], &cpu_active[5], &cpu_active[6], &cpu_active[7],
     &cpu_active[8], &cpu_active[9]) == EOF) {
-      fclose(fstat);
+      fclose(fp);
       exit_with_err(ERR,"Upgrade to a newer kernel");
   }
 
-  fclose(fstat);
+  fclose(fp);
 
   for (x = 0; x < 10; x++)
     total += cpu_active[x];
@@ -140,7 +139,6 @@ get_ssd(char *str1) {
   if(-1 == (statvfs(getenv("HOME"), &ssd))) {
     exit_with_err(ERR, "statvfs() failed");
   }
-
   percent = ((ssd.f_blocks - ssd.f_bfree) * ssd.f_bsize) / GB;
 
   FILL_UINT_ARR(str1, percent);
@@ -154,7 +152,7 @@ glob_packages(const char *str1) {
   uint_fast16_t packs_num = 0;
   glob_t gl;
 
-  if (!(glob(str1, GLOB_NOSORT, NULL, &gl)))
+  if (0 == (glob(str1, GLOB_NOSORT, NULL, &gl)))
     packs_num = gl.gl_pathc;
 
   else {
@@ -174,29 +172,29 @@ void
 get_packs(char *str1) {
   uint_fast16_t packages = 0;
 
-#if DISTRO == 0 /* archlinux */
+#if DISTRO == ARCHLINUX
   packages = glob_packages("/var/lib/pacman/local/*");
 
-#elif DISTRO == 5 /* frugalware */
+#elif DISTRO == FRUGALWARE
   FILE *pkgs_file = popen("pacman-g2 -Q 2> /dev/null | wc -l", "r");
   fscanf(pkgs_file, "%"SCNuFAST16, &packages);
   pclose(pkgs_file);
 
-#elif DISTRO == 1 /* debian */
+#elif DISTRO == DEBIAN
   packages = glob_packages("/var/lib/dpkg/info/*.list");
 
-#elif DISTRO == 3 /* slackware */
+#elif DISTRO == SLACKWARE
   packages = glob_packages("/var/log/packages/*");
 
-#elif DISTRO == 2 /* gentoo */
+#elif DISTRO == GENTOO
   packages = glob_packages("/var/db/pkg/*/*");
 
-#elif DISTRO == 4 /* rhel */
+#elif DISTRO == RHEL
   FILE *pkgs_file = popen("rpm -qa 2> /dev/null | wc -l", "r");
   fscanf(pkgs_file, "%"SCNuFAST16, &packages);
   pclose(pkgs_file);
 
-#elif DISTRO == 6 /* angstrom */
+#elif DISTRO == ANGSTROM
   FILE *pkgs_file = popen("opkg list-installed 2> /dev/null | wc -l", "r");
   fscanf(pkgs_file, "%"SCNuFAST16, &packages);
   pclose(pkgs_file);
@@ -214,7 +212,6 @@ get_kernel(char *str1) {
   if (-1 == (uname(&KerneL))) {
     exit_with_err(ERR, "uname() failed");
   }
-
   FILL_STR_ARR(2, str1, KerneL.sysname, KerneL.release);
 }
 
@@ -233,7 +230,7 @@ get_voltage(char *str1) {
   };
 
   for (x = 0; x < 4; x++) {
-    if (!(fp = fopen(voltage_files[x], "r"))) {
+    if (NULL == (fp = fopen(voltage_files[x], "r"))) {
       exit_with_err(CANNOT_OPEN, voltage_files[x]);
     }
 
@@ -259,7 +256,7 @@ get_fans(char *str1) {
   for (x = 1; x < 20; x++, z++) {
     FILL_ARR(tempstr, HWMON_DIR"/fan"UFINT"_input", x);
 
-    if (!(fp = fopen(tempstr, "r")) && x > 1)
+    if (NULL == (fp = fopen(tempstr, "r")) && x > 1)
       break;
     else if (NULL == fp) { /* no system fans */
       FILL_STR_ARR(1, str1, "Not found, ");
@@ -280,7 +277,6 @@ get_fans(char *str1) {
         all_fans += snprintf(all_fans, 5, "%s", "");
       }
     }
-
     FILL_STR_ARR(1, str1, (y != x ? buffer : "Not found, "));
   }
 }
@@ -299,7 +295,7 @@ get_mobo(char *str1, char *str2) {
   fscanf(fp, "%s", vendor);
   fclose(fp);
 
-  if (!(fp = fopen(MOBO_NAME, "r"))) {
+  if (NULL == (fp = fopen(MOBO_NAME, "r"))) {
     exit_with_err(CANNOT_OPEN, MOBO_NAME);
   }
 
@@ -311,6 +307,7 @@ get_mobo(char *str1, char *str2) {
 
   FILL_STR_ARR(2, str1, vendor, name);
 }
+
 
 /* http://www.alsa-project.org/alsa-doc/alsa-lib/group___mixer.html 
  * http://www.alsa-project.org/alsa-doc/alsa-lib/group___simple_mixer.html 
@@ -386,9 +383,9 @@ get_time(char *str1) {
       0 == (strftime(time_str, VLA, "%I:%M %p", taim))) {
     exit_with_err(ERR, "time() or localtime() or strftime() failed");
   }
-
   FILL_STR_ARR(1, str1, time_str);
 }
+
 
 #if defined (HAVE_X11_XLIB_H)
 void 

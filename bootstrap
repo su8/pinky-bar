@@ -42,10 +42,18 @@ _gen_files() {
   # to strip get_packs() at runtime
   for x in {0..6}
   do
-    [[ "${1}" == "${_bases[${x}]}" ]] && {
+    [[ "${1,,}" == "${_bases[${x}]}" ]] && {
       distro_num="${x}"
       break;
     }
+  done
+  
+  # instead using more hard-coded macros
+  # let the shell enumerate them for us
+  declare -a enumDistros=()
+  for x in {0..6}
+  do
+    enumDistros[${x}]="-D${_bases[${x}]^^}=${x}"
   done
 
   # configure.ac
@@ -96,7 +104,8 @@ _gen_files() {
 
   src_makefile=('AM_CPPFLAGS = \
       -DICONS_DIR=\"$(ICONZ)\" \
-      -DDISTRO='${distro_num}'
+      -DDISTRO='${distro_num}' \
+      '${enumDistros[@]}'
 
   bin_PROGRAMS = \
     '${prog_name}'
@@ -133,6 +142,6 @@ EOF
 
 
 [[ -z "${1}" ]] && _printf_err "$@" || {
-  [[ " ${_bases[@]} " =~ " $1 " ]] && \
+  [[ " ${_bases[@]} " =~ " ${1,,} " ]] && \
     _gen_files "$@" || _printf_err "$@"
 }
