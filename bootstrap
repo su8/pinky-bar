@@ -18,7 +18,6 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
 # MA 02110-1301, USA.
 
-
 declare -a _bases=(
   'archlinux'
   'debian'
@@ -60,6 +59,8 @@ _gen_files() {
   AM_INIT_AUTOMAKE([1.11 -Wall no-define foreign subdir-objects dist-xz no-dist-gzip std-options])
 
   AM_SILENT_RULES([yes])
+  # Favour clang and fallback to gcc
+  AC_PROG_CC([clang llvm-gcc gcc])
   AC_PROG_CC_C99
   AC_C_CONST
   AC_HEADER_STDC
@@ -107,12 +108,13 @@ _gen_files() {
   bin_PROGRAMS = \
     '${prog_name}'
 
+  # clang does not set std=bar as gcc
   '${prog_name}'_CFLAGS = \
-    -O2 -Wextra -Wall -Waggressive-loop-optimizations \
-    -Wundef -Wwrite-strings -Wcast-align -Wstrict-overflow=5 \
-    -W -Wshadow -Wconversion -Wpointer-arith -Wstrict-prototypes \
-    -Wformat=2 -Wmissing-prototypes -Wno-unused-result \
-    -Wno-unused-function -pedantic
+    -O2 -std=c99 -Wextra -Wall -Wundef -W -Wshadow \
+    -Wwrite-strings -Wcast-align -Wstrict-overflow=5 \
+    -Wconversion -Wpointer-arith -Wstrict-prototypes \
+    -Wformat=0 -Wmissing-prototypes -Wno-unused-result \
+    -Wno-unused-function -pedantic -Wno-missing-field-initializers
 
   '${prog_name}'_LDADD = $(X_LIBS) $(ALSA_LIBS)
 
