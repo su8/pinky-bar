@@ -88,13 +88,31 @@ AC_DEFUN([TEST_TYPEZ],[
     signed char,
     unsigned char,
     signed short int,
+    int8_t,
     signed int,
+    int16_t,
     signed long int,
+    int32_t,
     intmax_t,
     unsigned short int,
+    uint8_t,
     unsigned int,
+    uint16_t,
     unsigned long int,
-    uintmax_t
+    uint32_t,
+    uintmax_t,
+    int_least8_t,
+    int_least16_t,
+    int_least32_t,
+    uint_least8_t,
+    uint_least16_t,
+    uint_least32_t,
+    int_fast8_t,
+    int_fast16_t,
+    int_fast32_t,
+    uint_fast8_t,
+    uint_fast16_t,
+    uint_fast32_t
   ])
 
   AC_CHECK_HEADERS([ \

@@ -38,4 +38,7 @@
 #define MOBO_NAME DMI_DIR"/board_name"
 #define MOBO_VENDOR DMI_DIR"/board_vendor"
 
+#define VOLTAGE_FILE(x) (HWMON_DIR"/in"x"_input")
+#define FAN_FILE HWMON_DIR"/fan"UFINT"_input"
+
 #endif /* CONSTANTS2_H_ */

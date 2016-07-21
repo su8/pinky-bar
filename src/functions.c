@@ -223,10 +223,10 @@ get_voltage(char *str1) {
   uint_fast16_t x = 0;
 
   const char *voltage_files[] = {
-    HWMON_DIR"/in0_input",
-    HWMON_DIR"/in1_input",
-    HWMON_DIR"/in2_input",
-    HWMON_DIR"/in3_input"
+    VOLTAGE_FILE("0"),
+    VOLTAGE_FILE("1"),
+    VOLTAGE_FILE("2"),
+    VOLTAGE_FILE("3")
   };
 
   for (x = 0; x < 4; x++) {
@@ -254,12 +254,12 @@ get_fans(char *str1) {
   uint_fast16_t x = 0, y = 0, z = 0, rpm[21];
 
   for (x = 1; x < 20; x++, z++) {
-    FILL_ARR(tempstr, HWMON_DIR"/fan"UFINT"_input", x);
+    FILL_ARR(tempstr, FAN_FILE, x);
 
     if (NULL == (fp = fopen(tempstr, "r")) && x > 1)
       break;
     else if (NULL == fp) { /* no system fans */
-      FILL_STR_ARR(1, str1, "Not found, ");
+      FILL_STR_ARR(1, str1, NOT_FOUND);
       found_fans = false;
       break;
     }
@@ -277,7 +277,7 @@ get_fans(char *str1) {
         all_fans += snprintf(all_fans, 5, "%s", "");
       }
     }
-    FILL_STR_ARR(1, str1, (y != x ? buffer : "Not found, "));
+    FILL_STR_ARR(1, str1, (y != x ? buffer : NOT_FOUND));
   }
 }
 
@@ -290,7 +290,6 @@ get_mobo(char *str1, char *str2) {
   if (NULL == fp) {
     exit_with_err(CANNOT_OPEN, MOBO_VENDOR);
   }
-
   /* use %[^\n] to get the whole line */
   fscanf(fp, "%s", vendor);
   fclose(fp);
@@ -298,7 +297,6 @@ get_mobo(char *str1, char *str2) {
   if (NULL == (fp = fopen(MOBO_NAME, "r"))) {
     exit_with_err(CANNOT_OPEN, MOBO_NAME);
   }
-
   /* use %[^\n] to get the whole line */
   fscanf(fp, "%s", name);
   fclose(fp);
