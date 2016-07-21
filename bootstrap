@@ -60,7 +60,7 @@ _gen_files() {
   AM_INIT_AUTOMAKE([1.11 -Wall no-define foreign subdir-objects dist-xz no-dist-gzip std-options])
 
   AM_SILENT_RULES([yes])
-  AC_PROG_CC_STDC
+  AC_PROG_CC_C99
   AC_C_CONST
   AC_HEADER_STDC
   AM_PROG_CC_C_O
@@ -99,6 +99,7 @@ _gen_files() {
   )
 
   src_makefile=('AM_CPPFLAGS = \
+      -D_POSIX_C_SOURCE=200112L \
       -DICONS_DIR=\"$(ICONZ)\" \
       -DDISTRO='${distro_num}' \
       '${enumDistros[@]}'
@@ -107,11 +108,11 @@ _gen_files() {
     '${prog_name}'
 
   '${prog_name}'_CFLAGS = \
-    -O2 -Wextra -Wall -fno-aggressive-loop-optimizations \
+    -O2 -Wextra -Wall -Waggressive-loop-optimizations \
     -Wundef -Wwrite-strings -Wcast-align -Wstrict-overflow=5 \
     -W -Wshadow -Wconversion -Wpointer-arith -Wstrict-prototypes \
     -Wformat=2 -Wmissing-prototypes -Wno-unused-result \
-    -Wno-unused-function
+    -Wno-unused-function -pedantic
 
   '${prog_name}'_LDADD = $(X_LIBS) $(ALSA_LIBS)
 
