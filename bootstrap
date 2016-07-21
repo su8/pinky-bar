@@ -37,23 +37,19 @@ _printf_err() {
 
 _gen_files() {
   prog_name='dwmbar'
-  prog_ver='0.9'
+  prog_ver='1.0.0'
 
-  # to strip get_packs() at runtime
-  for x in {0..6}
-  do
-    [[ "${1,,}" == "${_bases[${x}]}" ]] && {
-      distro_num="${x}"
-      break;
-    }
-  done
-  
+  # to strip get_packs() at runtime, also
   # instead using more hard-coded macros
   # let the shell enumerate them for us
   declare -a enumDistros=()
   for x in {0..6}
   do
     enumDistros[${x}]="-D${_bases[${x}]^^}=${x}"
+
+    [[ "${1,,}" == "${_bases[${x}]}" ]] && {
+      distro_num="${x}"
+    }
   done
 
   # configure.ac
