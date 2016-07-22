@@ -106,6 +106,39 @@ To see the currently played song name:
 * libmpdclient
 * mpd (with properly configured config)
 
+Here's an example of my **/etc/mpd.conf**
+
+```nginx
+music_directory "/home/frost/music"
+playlist_directory "/home/frost/music"
+db_file "/tmp/mpddb"
+log_file "/tmp/mpdlog"
+state_file "/tmp/mpdstate"
+pid_file "/tmp/mpdpid"
+user "mpd"
+log_level "default"
+
+
+audio_output {
+  type "alsa"
+  name "My sound card"
+  mixer_type "software"
+}
+
+audio_output {
+  type "httpd"
+  name "HTTP Stream"
+  encoder "vorbis"
+  port "8000"
+  bitrate "128"
+  format "44100:16:1"
+}
+
+bind_to_address "127.0.0.1"
+```
+
+Keep an eye on the **log file size** if you are using raspberry pi (or equivalent device) that streams the music, make sure that it's deleted automatically if it exceeds some pre-defined size.
+
 
 ## WM specific requirements
 

@@ -416,7 +416,7 @@ get_song(char *str1) {
     return;
   }
   if (!(mpd_send_command(conn, "currentsong", NULL)) ||
-      mpd_connection_get_error(conn)) {
+      0 != (mpd_connection_get_error(conn))) {
     goto error;
   }
   if (NULL == (song = mpd_recv_song(conn))) {
@@ -430,6 +430,7 @@ get_song(char *str1) {
 error:
   if (NULL != conn) {
     mpd_connection_free(conn);
+    conn = NULL;
   }
   return;
 }
