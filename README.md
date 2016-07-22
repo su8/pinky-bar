@@ -1,10 +1,13 @@
 dwm
+
 ![](img/pic.png)
 
 xmonad
+
 ![](img/pic2.png)
 
 With MPD
+
 ![](img/pic3.png)
 
 Statusbar program for ~~dwm and xmonad~~ any WM that I've written in my very first day as dwm user.
