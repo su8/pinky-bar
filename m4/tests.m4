@@ -43,8 +43,21 @@ AC_DEFUN([TEST_X11],[
       ],[
         ERR([Install xorg and libx11 in order to compile the program.])
       ])
-    ]
-  )
+    
+    WITH_COLOURS=0
+    AC_ARG_WITH([colours],
+      AS_HELP_STRING([--with-colours],
+        [Colorize the output]),
+      [],
+      [with_colours=yes]
+    )
+
+    AS_IF([test "x$with_colours" = "xyes"], [
+      WITH_COLOURS=1
+    ])
+    AC_SUBST(WITH_COLOURS)
+
+  ])
 
   dnl xbm icons for non-dwm window manager
   AC_ARG_VAR(icons, [path to xbm icons for non-dwm WM])

@@ -1,4 +1,7 @@
+dwm
 ![](img/pic.png)
+
+xmonad
 ![](img/pic2.png)
 
 With MPD
@@ -24,7 +27,9 @@ make -j$(grep -c '^processor' /proc/cpuinfo)
 make install
 ```
 
-To see the current playing song add **--with-mpd** to configure.
+To see the currently played song name add **--with-mpd** to configure.
+
+To disable the colours you can add **--without-colours** to configure.
 
 Put the following in your **xinitrc** or the script used to start dwm.
 
@@ -56,7 +61,7 @@ make -j$(grep -c '^processor' /proc/cpuinfo)
 make install
 ```
 
-To see the current playing song add **--with-mpd** to configure.
+To see the currently played song name add **--with-mpd** to configure.
 
 Put the following in your **xinitrc** or the script used to start xmonad.
 
@@ -80,7 +85,7 @@ Replace **distro** with archlinux, debian, gentoo, slackware, rhel, frugalware, 
 - [x] frugalware
 - [x] angstrom
 
-## Requirements
+## Mandatory requirements
 
 * gcc/clang
 * glibc
@@ -91,19 +96,27 @@ Replace **distro** with archlinux, debian, gentoo, slackware, rhel, frugalware, 
 * alsa-utils
 * alsa-lib
 
-requirements to see the current playing song:
+## Opt-in requirements
+
+To see the currently played song name:
 
 * libmpdclient
 * mpd (with properly configured config)
 
-requirements for xmonad or other non-dwm WM:
+
+## WM specific requirements
+
+for non-dwm WM:
 
 * dzen2
 
-dwm specific requirements:
+for dwm:
 
 * libx11
 * xorg-server
+
+use **--without-colours** to skip the following step:
+
 * dwm compiled with [statuscolor](https://github.com/wifiextender/dwm-fork/blob/master/patches/statuscolours.diff) patch. The colors in use are specified in your [config.h](https://github.com/wifiextender/dwm-fork/blob/master/config.h#L6)
 
 ## Want xinitrc template ?

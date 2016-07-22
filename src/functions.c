@@ -409,7 +409,7 @@ set_status(const char *str1) {
 #if defined (HAVE_MPD_CLIENT_H)
 void
 get_song(char *str1) {
-  struct mpd_connection *conn;
+  struct mpd_connection *conn = NULL;
   struct mpd_song *song;
 
   if (NULL == (conn = mpd_connection_new(NULL, 0, 0))) {

@@ -103,6 +103,7 @@ _gen_files() {
   src_makefile=('AM_CPPFLAGS = \
       -D_POSIX_C_SOURCE=200112L \
       -DICONS_DIR=\"$(ICONZ)\" \
+      -DWITH_COLOURS=$(WITH_COLOURS) \
       -DDISTRO='${distro_num}' \
       '${enumDistros[@]}'
 
