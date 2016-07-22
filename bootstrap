@@ -69,6 +69,7 @@ _gen_files() {
   # The linker flags tests in m4 dir
   TEST_X11
   TEST_ALSA
+  TEST_MPD
   TEST_TYPEZ
 
   AC_CONFIG_FILES([
@@ -117,7 +118,7 @@ _gen_files() {
     -Wformat=0 -Wmissing-prototypes -Wno-unused-result \
     -Wno-unused-function -pedantic -Wno-missing-field-initializers
 
-  '${prog_name}'_LDADD = $(X_LIBS) $(ALSA_LIBS)
+  '${prog_name}'_LDADD = $(X_LIBS) $(ALSA_LIBS) $(MPD_LIBS)
 
   '${prog_name}'_SOURCES = '${src_files[@]}'
   ')

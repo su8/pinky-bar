@@ -36,4 +36,8 @@ void get_volume(char *);
 void set_status(const char *);
 #endif
 
+#if defined (HAVE_MPD_CLIENT_H)
+void get_song(char *);
+#endif
+
 #endif /* FUNCTIONS_H_ */

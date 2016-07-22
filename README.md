@@ -1,6 +1,9 @@
 ![](img/pic.png)
 ![](img/pic2.png)
 
+With MPD
+![](img/pic3.png)
+
 Statusbar program for ~~dwm and xmonad~~ any WM that I've written in my very first day as dwm user.
 
 Please note that the program won't detect fans connected via molex connetor(s) or external fan controller. Also I have not tested it with fan splitter(s) either.
@@ -20,6 +23,8 @@ bash bootstrap distro
 make -j$(grep -c '^processor' /proc/cpuinfo)
 make install
 ```
+
+To see the current playing song add **--with-mpd** to configure.
 
 Put the following in your **xinitrc** or the script used to start dwm.
 
@@ -50,6 +55,8 @@ bash bootstrap distro
 make -j$(grep -c '^processor' /proc/cpuinfo)
 make install
 ```
+
+To see the current playing song add **--with-mpd** to configure.
 
 Put the following in your **xinitrc** or the script used to start xmonad.
 
@@ -83,6 +90,11 @@ Replace **distro** with archlinux, debian, gentoo, slackware, rhel, frugalware, 
 * gawk
 * alsa-utils
 * alsa-lib
+
+requirements to see the current playing song:
+
+* libmpdclient
+* mpd (with properly configured config)
 
 requirements for xmonad or other non-dwm WM:
 

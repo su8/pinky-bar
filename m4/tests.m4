@@ -59,6 +59,35 @@ AC_DEFUN([TEST_X11],[
 ])
 
 
+dnl TEST_MPD() function in configure.ac
+dnl
+dnl Substitute the linker flags -lmpdclient to the
+dnl the variable 'MPD_LIBS' if the user enabled
+dnl the --with-mpd switch
+AC_DEFUN([TEST_MPD],[
+  MPD_LIBS=""
+
+  AC_ARG_WITH([mpd],
+    AS_HELP_STRING([--with-mpd],
+      [mpd linker flag to show the current playing song]),
+    [],
+    [with_mpd=no]
+  )
+
+  AS_IF([test "x$with_mpd" = "xyes"], [
+    AC_CHECK_HEADERS([mpd/client.h], [
+      MPD_LIBS="-lmpdclient"
+      ],[
+        ERR([Install libmpdclient in order to compile the program.])
+      ])
+    ]
+  )
+
+  AC_SUBST(MPD_LIBS)
+
+])
+
+
 dnl Internal function to perform
 dnl explicit data check type
 AC_DEFUN([CHECK_TYPEZ],[

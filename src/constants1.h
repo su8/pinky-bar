@@ -33,6 +33,7 @@
 #define NAME_VAL  "\x0a%s \x0b%s"   /* STR1 STR2        */
 #define TEMP      "\x09%sC\x0b%c "  /* 32C,             */
 #define FMT_KERN  "\x09%s%c "       /* Kernel Version,  */
+#define FMT_SONG  "\x0b%s  "        /* Song             */
 
 #define CPU_STR    "CPU"
 #define RAM_STR    "RAM"
@@ -57,6 +58,7 @@
 #define NAME_VAL  BLUE"%s "PINK"%s"   /* STR1 STR2        */
 #define TEMP      YELLOW"%s^i("ICONS_DIR"/temp.xbm)"PINK"%c "  /* 32C, */
 #define FMT_KERN  YELLOW"%s%c "       /* Kernel Version,  */
+#define FMT_SONG  PINK"%s  "          /* Song             */
 
 #define CPU_STR    XBM_ICON("cpu.xbm")
 #define RAM_STR    XBM_ICON("mem.xbm")

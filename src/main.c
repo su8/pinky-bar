@@ -36,16 +36,19 @@ int main(void) {
   struct timespec tc = {0};
   tc.tv_nsec = sysconf(_SC_CLK_TCK) * 1000000L;
 
-  char packs[VLA], mobo[VLA], cpu[VLA], ram[VLA], ssd[VLA];
+  char packs[VLA], mobo[VLA], cpu[VLA], ram[VLA], ssd[VLA], song[VLA];
   char kern[VLA], volume[VLA], Time[VLA], combine[WHOLE_MAIN_ARR_LEN];
   char voltage[VLA], cpu_temp[VLA], mobo_temp[VLA], fans[VLA];
 
   get_cpu(cpu, cpu_temp);
-
   if (-1 == (nanosleep(&tc, NULL))) {
     printf("%s\n", "Error: nanosleep() failed");
     return EXIT_FAILURE;
   }
+
+#if defined (HAVE_MPD_CLIENT_H)
+  get_song(song);
+#endif
 
   get_cpu(cpu, cpu_temp);
   get_ram(ram);
@@ -60,10 +63,12 @@ int main(void) {
 
   snprintf(combine, WHOLE_MAIN_ARR_LEN,
     /* formatting specifiers */
+    FMT_SONG
     FMT_CPU FMT_RAM FMT_SSD FMT_PKGS FMT_KERN
     FMT_VOLT FMT_FANS FMT_MOBO FMT_VOL FMT_TIME,
 
     /* the data */
+    song,
     CPU_STR, cpu, cpu_temp, COMMA,
     RAM_STR, ram, COMMA,
     SSD_STR, ssd, COMMA,
