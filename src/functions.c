@@ -417,16 +417,20 @@ get_song(char *str1) {
   }
   if (!(mpd_send_command(conn, "currentsong", NULL)) ||
       mpd_connection_get_error(conn)) {
-    return;
+    goto error;
   }
   if (NULL == (song = mpd_recv_song(conn))) {
-    if (NULL != conn) {
-      mpd_connection_free(conn);
-    }
-    return;
+    goto error;
   }
   mpd_connection_free(conn);
 
   FILL_STR_ARR(1, str1, mpd_song_get_uri(song));
+  return;
+
+error:
+  if (NULL != conn) {
+    mpd_connection_free(conn);
+  }
+  return;
 }
 #endif
