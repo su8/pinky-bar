@@ -39,7 +39,8 @@ Put the following in your **xinitrc** or the script used to start dwm.
 ```bash
 # Execute the "statusbar" program every 5 secs
 while true; do
-  "$HOME/.cache/bin/dwmbar"
+  # short program options   crspkvfmVt
+  "$HOME/.cache/bin/dwmbar" --cpu --ram --storage --packages --kernel --voltage --fans --mobo --volume --time
   sleep 5
 done &
 ```
@@ -71,7 +72,8 @@ Put the following in your **xinitrc** or the script used to start xmonad.
 ```bash
 # Execute the "statusbar" program every 2 secs
 while true; do
-  "$HOME/.cache/bin/xmonadbar"
+  # short program options   crspkvfmVt
+  "$HOME/.cache/bin/xmonadbar" --cpu --ram --storage --packages --kernel --voltage --fans --mobo --volume --time
   sleep 2
 done | dzen2 -w 1800 -x 130 -ta r -fn '-*-dejavusans-*-r-*-*-11-*-*-*-*-*-*-*' &
 ```

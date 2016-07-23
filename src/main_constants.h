@@ -42,8 +42,8 @@
 #endif /* WITH_COLOURS */
 
 #define NAME_VAL  BLUE"%s "PINK"%s"     /* STR1 STR2        */
-#define TEMP      YELLOW"%sC"PINK"%c "  /* 32C,             */
-#define FMT_KERN  YELLOW"%s%c "         /* Kernel Version,  */
+#define TEMP      YELLOW"%sC"           /* 32C             */
+#define FMT_KERN  YELLOW"%s "           /* Kernel Version  */
 #define FMT_SONG  PINK"%s  "            /* Song             */
 
 #define CPU_STR    "CPU"
@@ -67,8 +67,8 @@
 #define PINK     "^fg(#b294bb)"
 
 #define NAME_VAL  BLUE"%s "PINK"%s"   /* STR1 STR2        */
-#define TEMP      YELLOW"%s^i("ICONS_DIR"/temp.xbm)"PINK"%c "  /* 32C, */
-#define FMT_KERN  YELLOW"%s%c "       /* Kernel Version,  */
+#define TEMP      YELLOW"%s^i("ICONS_DIR"/temp.xbm)"  /* 32C */
+#define FMT_KERN  YELLOW"%s   "       /* Kernel Version  */
 #define FMT_SONG  PINK"%s  "          /* Song             */
 
 #define CPU_STR    XBM_ICON("cpu.xbm")
@@ -87,17 +87,18 @@
 /*
    main.c constants
 */
-#define FMT       NAME_VAL"%%%c "   /* STR1 10%,        */
+#define FMT       NAME_VAL"%% "   /* STR1 10%        */
 #define FMT_TIME  NAME_VAL          /* Time 10:00 PM    */
-#define FMT_MOBO  FMT_TIME" "TEMP   /* VEND NAME 32C,   */
-#define FMT_CPU   FMT_TIME"%% "TEMP /* CPU 10% 32C,     */
-#define FMT_RAM   FMT               /* RAM 10%,         */
-#define FMT_SSD   FMT               /* SSD 10%,         */
-#define FMT_PKGS  FMT_TIME"%c "     /* Pkgs 123,        */
-#define FMT_VOLT  FMT_PKGS          /* Voltage 1 2 3 4, */
+#define FMT_MOBO  FMT_TIME" "TEMP   /* VEND NAME 32C   */
+#define FMT_CPU   FMT_TIME"%% "TEMP /* CPU 10% 32C     */
+#define FMT_RAM   FMT               /* RAM 10%         */
+#define FMT_SSD   FMT               /* SSD 10%         */
+#define FMT_PKGS  FMT_TIME          /* Pkgs 123        */
+#define FMT_VOLT  FMT_PKGS          /* Voltage 1 2 3 4 */
 #define FMT_FANS  FMT_TIME          /* Fans varying     */
-#define FMT_VOL   FMT               /* Volume 10%,      */
-#define COMMA     ','
+#define FMT_VOL   FMT               /* Volume 10%      */
 #define WHOLE_MAIN_ARR_LEN VLA*14
+
+#define GLUE(x, z, ...) (snprintf(x, WHOLE_MAIN_ARR_LEN, z, __VA_ARGS__))
 
 #endif /* CONSTANTS_H_ */
