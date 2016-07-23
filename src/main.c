@@ -54,25 +54,25 @@ int main(int argc, char *argv[]) {
   char voltage[VLA], cpu_temp[VLA], mobo_temp[VLA], fans[VLA];
 
   const struct option options[] = {
-		{ "mpd",          no_argument, NULL, 'M' },
-		{ "cpu",          no_argument, NULL, 'c' },
-		{ "ram",          no_argument, NULL, 'r' },
-		{ "storage",      no_argument, NULL, 's' },
-		{ "packages",     no_argument, NULL, 'p' },
-		{ "kernel",       no_argument, NULL, 'k' },
-		{ "voltage",      no_argument, NULL, 'v' },
-		{ "fans",         no_argument, NULL, 'f' },
-		{ "mobo",         no_argument, NULL, 'm' },
-		{ "volume",       no_argument, NULL, 'V' },
-		{ "time",         no_argument, NULL, 't' },
-		{ "help",         no_argument, NULL, 'h' },
-		{ NULL,           NULL,        NULL, NULL} 
-	};
+    { "mpd",          no_argument, NULL, 'M' },
+    { "cpu",          no_argument, NULL, 'c' },
+    { "ram",          no_argument, NULL, 'r' },
+    { "storage",      no_argument, NULL, 's' },
+    { "packages",     no_argument, NULL, 'p' },
+    { "kernel",       no_argument, NULL, 'k' },
+    { "voltage",      no_argument, NULL, 'v' },
+    { "fans",         no_argument, NULL, 'f' },
+    { "mobo",         no_argument, NULL, 'm' },
+    { "volume",       no_argument, NULL, 'V' },
+    { "time",         no_argument, NULL, 't' },
+    { "help",         no_argument, NULL, 'h' },
+    { NULL,           NULL,        NULL, NULL}
+  };
 
-	char c;
-	short int index = 0;
-	while ((c = getopt_long(argc, argv, "McrspkvfmVth", options, &index)) != -1) {
-		switch (c) {
+  char c;
+  short int index = 0;
+  while ((c = getopt_long(argc, argv, "McrspkvfmVth", options, &index)) != -1) {
+    switch (c) {
       case 'M':
 #if defined (HAVE_MPD_CLIENT_H)
         get_song(song);
@@ -82,7 +82,7 @@ int main(int argc, char *argv[]) {
 #endif
         break;
 
-			case 'c':
+      case 'c':
         get_cpu(cpu, cpu_temp);
         if (-1 == (nanosleep(&tc, NULL))) {
           printf("%s\n", "Error: nanosleep() failed");
@@ -90,62 +90,62 @@ int main(int argc, char *argv[]) {
         }
         get_cpu(cpu, cpu_temp);
         all += GLUE(all, FMT_CPU, CPU_STR, cpu, cpu_temp);
-				break;
+        break;
 
-			case 'r':
+      case 'r':
         get_ram(ram);
         all += GLUE(all, FMT_RAM, RAM_STR, ram);
-				break;
+        break;
 
-			case 's':
+      case 's':
         get_ssd(ssd);
         all += GLUE(all, FMT_SSD, SSD_STR, ssd);
-				break;
+        break;
 
-			case 'p':
+      case 'p':
         get_packs(packs);
         all += GLUE(all, FMT_PKGS, PKG_STR, packs);
-				break;
+        break;
 
-			case 'k':
+      case 'k':
         get_kernel(kern);
         all += GLUE(all, FMT_KERN, kern);
-				break;
+        break;
 
-			case 'v':
+      case 'v':
         get_voltage(voltage);
         all += GLUE(all, FMT_VOLT, VOLT_STR, voltage);
-				break;
+        break;
 
-			case 'f':
+      case 'f':
         get_fans(fans);
         all += GLUE(all, FMT_FANS, FANS_STR, fans);
-			  break;
+        break;
 
-			case 'm':
+      case 'm':
         get_mobo(mobo, mobo_temp);
         all += GLUE(all, FMT_MOBO, MOBO_STR, mobo, mobo_temp);
-			  break;
+        break;
 
 			case 'V':
         get_volume(volume);
         all += GLUE(all, FMT_VOL, VOL_STR, volume);
-			  break;
+        break;
 
-			case 't':
+      case 't':
         get_time(Time);
         all += GLUE(all, FMT_TIME, TIME_STR, Time);
-			  break;
+        break;
 
-			case 'h':
-			  help_msg();
-			  return EXIT_SUCCESS;
+      case 'h':
+        help_msg();
+        return EXIT_SUCCESS;
 
 			default:
-			  help_msg();
-				return EXIT_FAILURE;
-		}
-	}
+        help_msg();
+        return EXIT_FAILURE;
+    }
+  }
 
 #if defined (HAVE_X11_XLIB_H)
   set_status(combine);
@@ -158,18 +158,18 @@ int main(int argc, char *argv[]) {
 
 
 void help_msg(void) {
-	printf("%s\n",
-	    "Available options:\n"
-			"  -M, --mpd\t Output the currently played song name (if any).\n"
-			"  -c, --cpu\t Output the current cpu load and temperature.\n"
-			"  -r, --ram\t Output the used ram.\n"
-			"  -s, --storage\t Output the used drive storage.\n"
-			"  -p, --packages Output the number of installed packages.\n"
-			"  -k, --kernel\t Output the kernel version.\n"
-			"  -v, --voltage\t Output the system voltage.\n"
-			"  -f, --fans\t Output all system fans.\n"
-			"  -m, --mobo\t Show the motherboard name, vendor and temperature.\n"
-			"  -V, --volume\t Output the volume.\n"
-			"  -t, --time\t Output the current time.\n"
+  printf("%s\n",
+      "Available options:\n"
+      "  -M, --mpd\t Output the currently played song name (if any).\n"
+      "  -c, --cpu\t Output the current cpu load and temperature.\n"
+      "  -r, --ram\t Output the used ram.\n"
+      "  -s, --storage\t Output the used drive storage.\n"
+      "  -p, --packages Output the number of installed packages.\n"
+      "  -k, --kernel\t Output the kernel version.\n"
+      "  -v, --voltage\t Output the system voltage.\n"
+      "  -f, --fans\t Output all system fans.\n"
+      "  -m, --mobo\t Show the motherboard name, vendor and temperature.\n"
+      "  -V, --volume\t Output the volume.\n"
+      "  -t, --time\t Output the current time.\n"
   );
 }
