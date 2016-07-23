@@ -100,10 +100,4 @@
 #define COMMA     ','
 #define WHOLE_MAIN_ARR_LEN VLA*14
 
-
-/* functions.c constants */
-#define CANNOT_OPEN "Could not open"
-#define ERR "Error:"
-#define NOT_FOUND "Not found, "
-
 #endif /* CONSTANTS_H_ */

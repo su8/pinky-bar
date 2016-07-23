@@ -41,8 +41,8 @@
 
 #include <alsa/asoundlib.h>
 
-#include "constants1.h"
-#include "constants2.h"
+#include "main_constants.h"
+#include "functions_constants.h"
 #include "functions.h"
 
 static void get_temp(const char *, char *);
@@ -64,7 +64,6 @@ get_temp(const char *str1, char *str2) {
   if (NULL == fp) {
     exit_with_err(CANNOT_OPEN, str1);
   }
-
   fscanf(fp, FMT_UINT, &temp);
   fclose(fp);
 
@@ -169,7 +168,7 @@ glob_packages(const char *str1) {
 }
 
 
-/* perform stripping during runtime
+/* Let the compiler strip the code
  * instead conditionally checking 
  * each time the program is executed */
 void 
@@ -397,8 +396,8 @@ set_status(const char *str1) {
   if (display) {
     XStoreName(display, DefaultRootWindow(display), str1);
     XSync(display, 0);
-
     XCloseDisplay(display);
+
   } else {
     exit_with_err(CANNOT_OPEN, "X server");
   }

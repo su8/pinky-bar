@@ -24,7 +24,7 @@
 
 #include <unistd.h>
 
-#include "constants1.h"
+#include "main_constants.h"
 #include "functions.h"
 
 int main(void) {

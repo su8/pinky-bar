@@ -46,4 +46,9 @@
 #define VOLTAGE_FILE(x) (HWMON_DIR"/in"x"_input")
 #define FAN_FILE HWMON_DIR"/fan"UFINT"_input"
 
+/* exit with error */
+#define CANNOT_OPEN "Could not open"
+#define ERR "Error:"
+#define NOT_FOUND "Not found, "
+
 #endif /* CONSTANTS2_H_ */

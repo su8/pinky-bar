@@ -38,8 +38,8 @@ _gen_files() {
   prog_name='dwmbar'
   prog_ver='1.0.0'
 
-  # to strip get_packs() at runtime, also
-  # instead using more hard-coded macros
+  # to strip get_packs() at compile time,
+  # also instead using more hard-coded macros
   # let the shell enumerate them for us
   declare -a enumDistros=()
   for x in {0..6}
@@ -96,8 +96,8 @@ _gen_files() {
     'main.c'
     'functions.c'
     'functions.h'
-    'constants1.h'
-    'constants2.h'
+    'main_constants.h'
+    'functions_constants.h'
   )
 
   src_makefile=('AM_CPPFLAGS = \
