@@ -69,10 +69,9 @@ int main(int argc, char *argv[]) {
     { NULL,           0,           NULL,  0  }
   };
 
-  char c;
-  short int index = 0;
-  while ((c = getopt_long(argc, argv, "McrspkvfmVth", options, &index)) != -1) {
-    switch (c) {
+  short int ch = 0;
+  while ((ch = getopt_long(argc, argv, "McrspkvfmVth", options, NULL)) != -1) {
+    switch (ch) {
       case 'M':
 #if defined (HAVE_MPD_CLIENT_H)
         get_song(song);
