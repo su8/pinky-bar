@@ -117,8 +117,7 @@ _gen_files() {
     -w -Wwrite-strings -Wcast-align -Wstrict-overflow=5 \
     -Wconversion -Wpointer-arith -Wstrict-prototypes \
     -Wformat=0 -Wmissing-prototypes -Wno-unused-result \
-    -Wno-unused-function -Wno-missing-field-initializers \
-    -Wno-unused-parameter
+    -Wno-unused-function -Wno-missing-field-initializers
 
   '${prog_name}'_LDADD = $(X_LIBS) $(ALSA_LIBS) $(MPD_LIBS)
 
