@@ -66,7 +66,7 @@ int main(int argc, char *argv[]) {
     { "volume",       no_argument, NULL, 'V' },
     { "time",         no_argument, NULL, 't' },
     { "help",         no_argument, NULL, 'h' },
-    { NULL,           NULL,        NULL, NULL}
+    { NULL,           0,           NULL,  0  }
   };
 
   char c;

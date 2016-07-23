@@ -168,6 +168,7 @@ AC_DEFUN([TEST_TYPEZ],[
     sys/sysinfo.h    \
     sys/utsname.h    \
     unistd.h         \
+    getopt.h         \
   ],[],[
     ERR([Missing core header files.])
   ])
@@ -191,6 +192,8 @@ AC_DEFUN([TEST_TYPEZ],[
     uname           \
     strftime        \
     exit            \
+    getopt          \
+    getopt_long     \
   ],[],[
     ERR([Missing core library functions.])
   ])
