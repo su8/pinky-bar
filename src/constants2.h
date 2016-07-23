@@ -31,13 +31,18 @@
 #define FILL_UINT_ARR(x, z) (FILL_ARR(x, FMT_UINT, z))
 #define FILL_STR_ARR(x, z, ...) (FILL_ARR(z, (1 == x ? "%s" : "%s %s"), __VA_ARGS__))
 
+/* temperature sensors */
 #define HWMON_DIR "/sys/class/hwmon/hwmon0"
-#define CPU_TEMP_FILE HWMON_DIR"/temp1_input"
-#define MOBO_TEMP_FILE HWMON_DIR"/temp2_input"
-#define DMI_DIR "/sys/class/dmi/id"
-#define MOBO_NAME DMI_DIR"/board_name"
-#define MOBO_VENDOR DMI_DIR"/board_vendor"
+#define TEMPERATURE(x) (HWMON_DIR"/temp"x"_input")
+#define CPU_TEMP_FILE TEMPERATURE("1")
+#define MOBO_TEMP_FILE TEMPERATURE("2")
 
+/* motherboard model and vendor */
+#define MOTHERBOARD(x) ("/sys/class/dmi/id/board_"x)
+#define MOBO_NAME MOTHERBOARD("name")
+#define MOBO_VENDOR MOTHERBOARD("vendor")
+
+/* voltage and fans */
 #define VOLTAGE_FILE(x) (HWMON_DIR"/in"x"_input")
 #define FAN_FILE HWMON_DIR"/fan"UFINT"_input"
 
