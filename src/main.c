@@ -127,7 +127,7 @@ int main(int argc, char *argv[]) {
         all += GLUE(all, FMT_MOBO, MOBO_STR, mobo, mobo_temp);
         break;
 
-			case 'V':
+      case 'V':
         get_volume(volume);
         all += GLUE(all, FMT_VOL, VOL_STR, volume);
         break;
@@ -141,7 +141,7 @@ int main(int argc, char *argv[]) {
         help_msg();
         return EXIT_SUCCESS;
 
-			default:
+      default:
         help_msg();
         return EXIT_FAILURE;
     }
