@@ -70,7 +70,7 @@ int main(int argc, char *argv[]) {
   };
 
   short int ch = 0;
-  while ((ch = getopt_long(argc, argv, "McrspkvfmVth", options, NULL)) != -1) {
+  while (0 < (ch = getopt_long(argc, argv, "McrspkvfmVth", options, NULL))) {
     switch (ch) {
       case 'M':
 #if defined (HAVE_MPD_CLIENT_H)
@@ -159,16 +159,16 @@ int main(int argc, char *argv[]) {
 void help_msg(void) {
   printf("%s\n",
       "Available options:\n"
-      "  -M, --mpd\t Output the currently played song name (if any).\n"
-      "  -c, --cpu\t Output the current cpu load and temperature.\n"
-      "  -r, --ram\t Output the used ram.\n"
-      "  -s, --storage\t Output the used drive storage.\n"
-      "  -p, --packages Output the number of installed packages.\n"
-      "  -k, --kernel\t Output the kernel version.\n"
-      "  -v, --voltage\t Output the system voltage.\n"
-      "  -f, --fans\t Output all system fans.\n"
+      "  -M, --mpd\t The currently played song name (if any).\n"
+      "  -c, --cpu\t The current cpu load and temperature.\n"
+      "  -r, --ram\t The used ram.\n"
+      "  -s, --storage\t The used drive storage.\n"
+      "  -p, --packages The number of installed packages.\n"
+      "  -k, --kernel\t The kernel version.\n"
+      "  -v, --voltage\t The system voltage.\n"
+      "  -f, --fans\t All system fans and their speed in RPM.\n"
       "  -m, --mobo\t Show the motherboard name, vendor and temperature.\n"
-      "  -V, --volume\t Output the volume.\n"
-      "  -t, --time\t Output the current time.\n"
+      "  -V, --volume\t The volume.\n"
+      "  -t, --time\t The current time.\n"
   );
 }
