@@ -22,6 +22,23 @@
 #define CONSTANTS_H_
 
 #define VLA 200
+#define WHOLE_MAIN_ARR_LEN VLA*14
+#define GLUE(x, z, ...) (x+=snprintf(x, WHOLE_MAIN_ARR_LEN, z, __VA_ARGS__))
+
+#if defined (HAVE_X11_XLIB_H) || WITH_COLOURS == 0
+
+#define CPU_STR    "CPU"
+#define RAM_STR    "RAM"
+#define SSD_STR    "SSD"
+#define PKG_STR    "Pkgs"
+#define VOLT_STR   "Voltage"
+#define FANS_STR   "Fans/RPM"
+#define MOBO_STR   "Mobo"
+#define VOL_STR    "Volume"
+#define TIME_STR   "Time"
+
+#endif
+
 
 /* If compiled --with-colours
  * The dwm colours are specified
@@ -46,21 +63,10 @@
 #define FMT_KERN  YELLOW"%s "           /* Kernel Version  */
 #define FMT_SONG  PINK"%s  "            /* Song            */
 
-#define CPU_STR    "CPU"
-#define RAM_STR    "RAM"
-#define SSD_STR    "SSD"
-#define PKG_STR    "Pkgs"
-#define VOLT_STR   "Voltage"
-#define FANS_STR   "Fans/RPM"
-#define MOBO_STR   "Mobo"
-#define VOL_STR    "Volume"
-#define TIME_STR   "Time"
-
-
-
-/* dzen colours and xbm icons for xmonad */
+/* dzen colours */
 #else
 
+#if WITH_COLOURS == 1
 #define XBM_ICON(given_icon) ("^i("ICONS_DIR"/"given_icon")")
 #define YELLOW   "^fg(#f0c674)"
 #define BLUE     "^fg(#1793D1)"
@@ -81,6 +87,16 @@
 #define VOL_STR    XBM_ICON("vol.xbm")
 #define TIME_STR   XBM_ICON("clock.xbm")
 
+#else
+/* tmux or other program that can spice
+ * the output on it's own */
+#define NAME_VAL  "%s %s"           /* STR1 STR2       */
+#define TEMP      "%sC "            /* 32C             */
+#define FMT_KERN  "%s "             /* Kernel Version  */
+#define FMT_SONG  "%s  "            /* Song            */
+
+#endif /* WITH_COLOURS */
+
 #endif /* dwm/xmonad colours */
 
 
@@ -97,8 +113,5 @@
 #define FMT_VOLT  FMT_PKGS               /* Voltage 1 2 3 4 */
 #define FMT_FANS  FMT_TIME               /* Fans varying    */
 #define FMT_VOL   FMT                    /* Volume 10%      */
-#define WHOLE_MAIN_ARR_LEN VLA*14
-
-#define GLUE(x, z, ...) (x+=snprintf(x, WHOLE_MAIN_ARR_LEN, z, __VA_ARGS__))
 
 #endif /* CONSTANTS_H_ */

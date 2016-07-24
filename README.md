@@ -10,7 +10,7 @@ With MPD
 
 ![](img/pic3.png)
 
-Statusbar program for ~~dwm and xmonad~~ any WM that I've written in my very first day as dwm user.
+Statusbar program for anything (Window Manager, terminal multiplexer, etc..) that I've written in my very first day as dwm user.
 
 Please note that the program won't detect fans connected via molex connetor(s) or external fan controller. Also I have not tested it with fan splitter(s) either.
 
@@ -77,6 +77,25 @@ while true; do
   sleep 2
 done | dzen2 -w 1800 -x 130 -ta r -fn '-*-dejavusans-*-r-*-*-11-*-*-*-*-*-*-*' &
 ```
+
+## Installation for anything else
+
+pinky-bar is no longer tied to only Window Managers. With the addition of "without colours", the output can be shown in any program, just bear in mind that the more options you've supplied the more system information will be shown.
+
+![](img/pic4.png)
+
+Here's the Installation steps:
+
+```bash
+bash bootstrap distro
+./configure --prefix=$HOME/.cache --without-x11 --without-colours
+make -j$(grep -c '^processor' /proc/cpuinfo)
+make install
+```
+
+Will mention that you can add **--with-mpd** too, but scroll a few lines up, re-read **Installation for anything else** and see the tmux snapshot.
+
+Choosing this 3rd method of installation it is up to you where, how to start and use the system information that's produced by pinky-bar.
 
 ---
 
@@ -155,7 +174,7 @@ for dwm:
 
 use **--without-colours** to skip the following step:
 
-* dwm compiled with [statuscolor](https://github.com/wifiextender/dwm-fork/blob/master/patches/statuscolours.diff) patch. The colors in use are specified in your [config.h](https://github.com/wifiextender/dwm-fork/blob/master/config.h#L6)
+* dwm compiled with [statuscolor](https://github.com/wifiextender/dwm-fork/blob/master/patches/statuscolours.diff) patch. The colours in use are specified in your [config.h](https://github.com/wifiextender/dwm-fork/blob/master/config.h#L6)
 
 ## Want xinitrc template ?
 
