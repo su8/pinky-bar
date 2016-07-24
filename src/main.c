@@ -35,7 +35,7 @@ int main(int argc, char *argv[]) {
 
   if (1 == argc) {
     help_msg();
-    exit(EXIT_FAILURE);
+    return EXIT_FAILURE;
   }
 
   if (-1 == (sysconf(_SC_CLK_TCK))) {
@@ -50,8 +50,8 @@ int main(int argc, char *argv[]) {
   char combine[WHOLE_MAIN_ARR_LEN] = "";
   char *all = combine;
   char packs[VLA], mobo[VLA], cpu[VLA], ram[VLA], ssd[VLA];
-  char kern[VLA], volume[VLA], Time[VLA];
-  char voltage[VLA], cpu_temp[VLA], mobo_temp[VLA], fans[VLA];
+  char kern[VLA], volume[VLA], Time[VLA], fans[VLA];
+  char voltage[VLA], cpu_temp[VLA], mobo_temp[VLA];
 
   const struct option options[] = {
     { "mpd",          no_argument, NULL, 'M' },
@@ -78,6 +78,7 @@ int main(int argc, char *argv[]) {
         all += GLUE(all, FMT_SONG, song);
 #else
         printf("%s\n", "recompile the program --with-mpd");
+        return EXIT_FAILURE;
 #endif
         break;
 
