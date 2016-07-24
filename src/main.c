@@ -47,8 +47,8 @@ int main(int argc, char *argv[]) {
   tc.tv_nsec = sysconf(_SC_CLK_TCK) * 1000000L;
 
   char song[VLA] = "";
-  char combine[WHOLE_MAIN_ARR_LEN] = "";
-  char *all = combine;
+  char combined[WHOLE_MAIN_ARR_LEN] = "";
+  char *all = combined;
   char packs[VLA], mobo[VLA], cpu[VLA], ram[VLA], ssd[VLA];
   char kern[VLA], volume[VLA], Time[VLA], fans[VLA];
   char voltage[VLA], cpu_temp[VLA], mobo_temp[VLA];
@@ -75,12 +75,12 @@ int main(int argc, char *argv[]) {
       case 'M':
 #if defined (HAVE_MPD_CLIENT_H)
         get_song(song);
-        all += GLUE(all, FMT_SONG, song);
+        GLUE(all, FMT_SONG, song);
+        break;
 #else
         printf("%s\n", "recompile the program --with-mpd");
         return EXIT_FAILURE;
 #endif
-        break;
 
       case 'c':
         get_cpu(cpu, cpu_temp);
@@ -89,52 +89,52 @@ int main(int argc, char *argv[]) {
           return EXIT_FAILURE;
         }
         get_cpu(cpu, cpu_temp);
-        all += GLUE(all, FMT_CPU, CPU_STR, cpu, cpu_temp);
+        GLUE(all, FMT_CPU, CPU_STR, cpu, cpu_temp);
         break;
 
       case 'r':
         get_ram(ram);
-        all += GLUE(all, FMT_RAM, RAM_STR, ram);
+        GLUE(all, FMT_RAM, RAM_STR, ram);
         break;
 
       case 's':
         get_ssd(ssd);
-        all += GLUE(all, FMT_SSD, SSD_STR, ssd);
+        GLUE(all, FMT_SSD, SSD_STR, ssd);
         break;
 
       case 'p':
         get_packs(packs);
-        all += GLUE(all, FMT_PKGS, PKG_STR, packs);
+        GLUE(all, FMT_PKGS, PKG_STR, packs);
         break;
 
       case 'k':
         get_kernel(kern);
-        all += GLUE(all, FMT_KERN, kern);
+        GLUE(all, FMT_KERN, kern);
         break;
 
       case 'v':
         get_voltage(voltage);
-        all += GLUE(all, FMT_VOLT, VOLT_STR, voltage);
+        GLUE(all, FMT_VOLT, VOLT_STR, voltage);
         break;
 
       case 'f':
         get_fans(fans);
-        all += GLUE(all, FMT_FANS, FANS_STR, fans);
+        GLUE(all, FMT_FANS, FANS_STR, fans);
         break;
 
       case 'm':
         get_mobo(mobo, mobo_temp);
-        all += GLUE(all, FMT_MOBO, MOBO_STR, mobo, mobo_temp);
+        GLUE(all, FMT_MOBO, MOBO_STR, mobo, mobo_temp);
         break;
 
       case 'V':
         get_volume(volume);
-        all += GLUE(all, FMT_VOL, VOL_STR, volume);
+        GLUE(all, FMT_VOL, VOL_STR, volume);
         break;
 
       case 't':
         get_time(Time);
-        all += GLUE(all, FMT_TIME, TIME_STR, Time);
+        GLUE(all, FMT_TIME" ", TIME_STR, Time);
         break;
 
       case 'h':
@@ -148,9 +148,9 @@ int main(int argc, char *argv[]) {
   }
 
 #if defined (HAVE_X11_XLIB_H)
-  set_status(combine);
+  set_status(combined);
 #else
-  printf("%s\n", combine);
+  printf("%s\n", combined);
 #endif
 
   return EXIT_SUCCESS;

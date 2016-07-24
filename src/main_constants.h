@@ -99,6 +99,6 @@
 #define FMT_VOL   FMT                    /* Volume 10%      */
 #define WHOLE_MAIN_ARR_LEN VLA*14
 
-#define GLUE(x, z, ...) (snprintf(x, WHOLE_MAIN_ARR_LEN, z, __VA_ARGS__))
+#define GLUE(x, z, ...) (x+=snprintf(x, WHOLE_MAIN_ARR_LEN, z, __VA_ARGS__))
 
 #endif /* CONSTANTS_H_ */
