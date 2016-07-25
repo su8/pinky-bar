@@ -23,13 +23,13 @@
 
 
 #if WITH_COLOURS == 1
-#define XBM_ICON(given_icon) ("^i("ICONS_DIR"/"given_icon")")
+#define XBM_ICON(given_icon) "^i("ICONS_DIR"/"given_icon")"
 #define YELLOW   "^fg(#f0c674)"
 #define BLUE     "^fg(#1793D1)"
 #define PINK     "^fg(#b294bb)"
 
 #define NAME_VAL  BLUE STR_SPEC " " PINK STR_SPEC      /* STR1 STR2        */
-#define TEMP      YELLOW"%s^i("ICONS_DIR"/temp.xbm) "  /* 32C              */
+#define TEMP      YELLOW "%s" XBM_ICON("temp.xbm") " " /* 32C              */
 #define FMT_KERN  YELLOW KERN_ORIG                     /* Kernel Version   */
 #define FMT_SONG  PINK SONG_ORIG                       /* Song             */
 
@@ -42,6 +42,7 @@
 #define MOBO_STR   XBM_ICON("mobo.xbm")
 #define VOL_STR    XBM_ICON("vol.xbm")
 #define TIME_STR   XBM_ICON("clock.xbm")
+#define MPD_ICON   XBM_ICON("mpd.xbm")
 
 
 /* tmux or other program that can spice

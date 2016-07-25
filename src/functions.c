@@ -95,7 +95,6 @@ get_cpu(char *str1, char *str2) {
       fclose(fp);
       exit_with_err(ERR,"Upgrade to a newer kernel");
   }
-
   fclose(fp);
 
   for (x = 0; x < 10; x++)
@@ -139,7 +138,7 @@ get_ssd(char *str1) {
   uintmax_t percent = 0;
   struct statvfs ssd;
 
-  if(-1 == (statvfs(getenv("HOME"), &ssd))) {
+  if (-1 == (statvfs(getenv("HOME"), &ssd))) {
     exit_with_err(ERR, "statvfs() failed");
   }
   percent = ((ssd.f_blocks - ssd.f_bfree) * ssd.f_bsize) / GB;
@@ -236,13 +235,11 @@ get_voltage(char *str1) {
     if (NULL == (fp = fopen(voltage_files[x], "r"))) {
       exit_with_err(CANNOT_OPEN, voltage_files[x]);
     }
-
     fscanf(fp, "%f", &voltage[x]);
     fclose(fp);
 
     voltage[x] /= (float)1000.0;
   }
-
   FILL_ARR(str1, "%.2f %.2f %.2f %.2f",
     voltage[0], voltage[1], voltage[2], voltage[3]);
 }
@@ -266,19 +263,16 @@ get_fans(char *str1) {
       found_fans = false;
       break;
     }
-
     fscanf(fp, UFINT, &rpm[z]);
     fclose(fp);
   }
 
   if (found_fans) {
     for (x = 0; x < z; x++) {
-      if (rpm[x] > 0)
+      if (0 < rpm[x])
         all_fans += snprintf(all_fans, VLA, UFINT" ", rpm[x]);
-      else  {/* Don't include non-spinning or removed fans */
-        ++y;
-        all_fans += snprintf(all_fans, 5, "%s", "");
-      }
+      else
+        ++y; /* non-spinning | removed | failed fan */
     }
     FILL_STR_ARR(1, str1, (y != x ? buffer : NOT_FOUND));
   }
