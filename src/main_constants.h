@@ -29,6 +29,7 @@
 #define SONG_ORIG STR_SPEC " "
 #define KERN_ORIG STR_SPEC " "
 
+
 #if defined (HAVE_X11_XLIB_H) || WITH_COLOURS == 0
 
 #define CPU_STR    "CPU"
@@ -41,72 +42,19 @@
 #define VOL_STR    "Volume"
 #define TIME_STR   "Time"
 
-#endif
+#endif /* HAVE_X11_XLIB_H || WITH_COLOURS */
 
 
-/* If compiled --with-colours
- * The dwm colours are specified
- * in your dwm config.h
-*/
 #if defined (HAVE_X11_XLIB_H)
-
-#if WITH_COLOURS == 1
-#define PINK "\x0b"
-#define BLUE "\x0a"
-#define YELLOW "\x09"
+#include "x11_colours.h"
 
 #else
-#define PINK ""
-#define BLUE ""
-#define YELLOW ""
+#include "non_x11_colours.h"
 
-#endif /* WITH_COLOURS */
-
-#define NAME_VAL  BLUE STR_SPEC " " PINK STR_SPEC      /* STR1 STR2       */
-#define TEMP      YELLOW STR_SPEC "C "                 /* 32C             */
-#define FMT_KERN  YELLOW KERN_ORIG                     /* Kernel Version  */
-#define FMT_SONG  PINK SONG_ORIG                       /* Song            */
-
-/* dzen colours */
-#else
-
-#if WITH_COLOURS == 1
-#define XBM_ICON(given_icon) ("^i("ICONS_DIR"/"given_icon")")
-#define YELLOW   "^fg(#f0c674)"
-#define BLUE     "^fg(#1793D1)"
-#define PINK     "^fg(#b294bb)"
-
-#define NAME_VAL  BLUE STR_SPEC " " PINK STR_SPEC      /* STR1 STR2        */
-#define TEMP      YELLOW"%s^i("ICONS_DIR"/temp.xbm) "  /* 32C */
-#define FMT_KERN  YELLOW KERN_ORIG                     /* Kernel Version   */
-#define FMT_SONG  PINK SONG_ORIG                       /* Song             */
-
-#define CPU_STR    XBM_ICON("cpu.xbm")
-#define RAM_STR    XBM_ICON("mem.xbm")
-#define SSD_STR    XBM_ICON("diskette.xbm")
-#define PKG_STR    XBM_ICON("arch.xbm")
-#define VOLT_STR   XBM_ICON("voltage.xbm")
-#define FANS_STR   XBM_ICON("fan.xbm")
-#define MOBO_STR   XBM_ICON("mobo.xbm")
-#define VOL_STR    XBM_ICON("vol.xbm")
-#define TIME_STR   XBM_ICON("clock.xbm")
-
-#else
-/* tmux or other program that can spice
- * the output on it's own */
-#define NAME_VAL  STR_SPEC " " STR_SPEC               /* STR1 STR2       */
-#define TEMP      STR_SPEC "C "                       /* 32C             */
-#define FMT_KERN  KERN_ORIG                           /* Kernel Version  */
-#define FMT_SONG  SONG_ORIG                           /* Song            */
-
-#endif /* WITH_COLOURS */
-
-#endif /* dwm/xmonad colours */
+#endif /* HAVE_X11_XLIB_H */
 
 
-/*
-   main.c constants
-*/
+/* main.c constants */
 #define FMT       NAME_VAL"%% "                       /* STR1 10%        */
 #define FMT_TIME  NAME_VAL                            /* Time 10:00 PM   */
 #define FMT_MOBO  FMT_TIME" "TEMP                     /* VEND NAME 32C   */
