@@ -26,7 +26,7 @@
 #define GLUE(x, z, ...) (x+=snprintf(x, WHOLE_MAIN_ARR_LEN, z, __VA_ARGS__))
 
 #define STR_SPEC "%s"
-#define SONG_ORIG " " STR_SPEC " "
+#define SONG_ORIG STR_SPEC " "
 #define KERN_ORIG STR_SPEC " "
 
 #if defined (HAVE_X11_XLIB_H) || WITH_COLOURS == 0
@@ -110,7 +110,7 @@
 #define FMT       NAME_VAL"%% "                       /* STR1 10%        */
 #define FMT_TIME  NAME_VAL                            /* Time 10:00 PM   */
 #define FMT_MOBO  FMT_TIME" "TEMP                     /* VEND NAME 32C   */
-#define FMT_CPU   " "FMT_TIME"%% "TEMP                /* CPU 10% 32C     */
+#define FMT_CPU   FMT_TIME"%% "TEMP                   /* CPU 10% 32C     */
 #define FMT_RAM   FMT                                 /* RAM 10%         */
 #define FMT_SSD   FMT                                 /* SSD 10%         */
 #define FMT_PKGS  FMT_TIME" "                         /* Pkgs 123        */

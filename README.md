@@ -80,7 +80,7 @@ done | dzen2 -w 1800 -x 130 -ta r -fn '-*-dejavusans-*-r-*-*-11-*-*-*-*-*-*-*' &
 
 ## Installation for anything else
 
-pinky-bar is no longer tied to only Window Managers. With the addition of "without colours", the output can be shown in any program, just bear in mind that the more options you've supplied the more system information will be shown.
+pinky-bar is no longer tied to Window Managers only. With the addition of "without colours", the output can be shown in any program, just bear in mind that the more options you've supplied the more system information will be shown.
 
 ![](img/pic4.png)
 
@@ -160,8 +160,11 @@ bind_to_address "127.0.0.1"
 
 Keep an eye on the **log file size** if you are using raspberry pi (or equivalent device) that streams the music, make sure that it's deleted automatically if it exceeds some pre-defined size.
 
+---
 
 ## WM specific requirements
+
+If you would like the output to be shown in your Window Manager, those are the following requirements:
 
 for non-dwm WM:
 
@@ -175,6 +178,8 @@ for dwm:
 use **--without-colours** to skip the following step:
 
 * dwm compiled with [statuscolor](https://github.com/wifiextender/dwm-fork/blob/master/patches/statuscolours.diff) patch. The colours in use are specified in your [config.h](https://github.com/wifiextender/dwm-fork/blob/master/config.h#L6)
+
+---
 
 ## Want xinitrc template ?
 
