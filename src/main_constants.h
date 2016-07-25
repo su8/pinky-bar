@@ -25,6 +25,10 @@
 #define WHOLE_MAIN_ARR_LEN VLA*14
 #define GLUE(x, z, ...) (x+=snprintf(x, WHOLE_MAIN_ARR_LEN, z, __VA_ARGS__))
 
+#define STR_SPEC "%s"
+#define SONG_ORIG " " STR_SPEC " "
+#define KERN_ORIG STR_SPEC " "
+
 #if defined (HAVE_X11_XLIB_H) || WITH_COLOURS == 0
 
 #define CPU_STR    "CPU"
@@ -58,10 +62,10 @@
 
 #endif /* WITH_COLOURS */
 
-#define NAME_VAL  BLUE"%s "PINK"%s"     /* STR1 STR2       */
-#define TEMP      YELLOW"%sC "          /* 32C             */
-#define FMT_KERN  YELLOW"%s "           /* Kernel Version  */
-#define FMT_SONG  PINK"%s  "            /* Song            */
+#define NAME_VAL  BLUE STR_SPEC " " PINK STR_SPEC      /* STR1 STR2       */
+#define TEMP      YELLOW STR_SPEC "C "                 /* 32C             */
+#define FMT_KERN  YELLOW KERN_ORIG                     /* Kernel Version  */
+#define FMT_SONG  PINK SONG_ORIG                       /* Song            */
 
 /* dzen colours */
 #else
@@ -72,10 +76,10 @@
 #define BLUE     "^fg(#1793D1)"
 #define PINK     "^fg(#b294bb)"
 
-#define NAME_VAL  BLUE"%s "PINK"%s"    /* STR1 STR2        */
+#define NAME_VAL  BLUE STR_SPEC " " PINK STR_SPEC      /* STR1 STR2        */
 #define TEMP      YELLOW"%s^i("ICONS_DIR"/temp.xbm) "  /* 32C */
-#define FMT_KERN  YELLOW"%s"           /* Kernel Version   */
-#define FMT_SONG  PINK" %s  "          /* Song             */
+#define FMT_KERN  YELLOW KERN_ORIG                     /* Kernel Version   */
+#define FMT_SONG  PINK SONG_ORIG                       /* Song             */
 
 #define CPU_STR    XBM_ICON("cpu.xbm")
 #define RAM_STR    XBM_ICON("mem.xbm")
@@ -90,10 +94,10 @@
 #else
 /* tmux or other program that can spice
  * the output on it's own */
-#define NAME_VAL  "%s %s"           /* STR1 STR2       */
-#define TEMP      "%sC "            /* 32C             */
-#define FMT_KERN  "%s "             /* Kernel Version  */
-#define FMT_SONG  "%s  "            /* Song            */
+#define NAME_VAL  STR_SPEC " " STR_SPEC               /* STR1 STR2       */
+#define TEMP      STR_SPEC "C "                       /* 32C             */
+#define FMT_KERN  KERN_ORIG                           /* Kernel Version  */
+#define FMT_SONG  SONG_ORIG                           /* Song            */
 
 #endif /* WITH_COLOURS */
 
@@ -103,15 +107,15 @@
 /*
    main.c constants
 */
-#define FMT       NAME_VAL"%% "          /* STR1 10%        */
-#define FMT_TIME  NAME_VAL               /* Time 10:00 PM   */
-#define FMT_MOBO  FMT_TIME" "TEMP        /* VEND NAME 32C   */
-#define FMT_CPU   " "FMT_TIME"%% "TEMP   /* CPU 10% 32C     */
-#define FMT_RAM   FMT                    /* RAM 10%         */
-#define FMT_SSD   FMT                    /* SSD 10%         */
-#define FMT_PKGS  FMT_TIME" "            /* Pkgs 123        */
-#define FMT_VOLT  FMT_PKGS               /* Voltage 1 2 3 4 */
-#define FMT_FANS  FMT_TIME               /* Fans varying    */
-#define FMT_VOL   FMT                    /* Volume 10%      */
+#define FMT       NAME_VAL"%% "                       /* STR1 10%        */
+#define FMT_TIME  NAME_VAL                            /* Time 10:00 PM   */
+#define FMT_MOBO  FMT_TIME" "TEMP                     /* VEND NAME 32C   */
+#define FMT_CPU   " "FMT_TIME"%% "TEMP                /* CPU 10% 32C     */
+#define FMT_RAM   FMT                                 /* RAM 10%         */
+#define FMT_SSD   FMT                                 /* SSD 10%         */
+#define FMT_PKGS  FMT_TIME" "                         /* Pkgs 123        */
+#define FMT_VOLT  FMT_PKGS                            /* Voltage 1 2 3 4 */
+#define FMT_FANS  FMT_TIME                            /* Fans varying    */
+#define FMT_VOL   FMT                                 /* Volume 10%      */
 
 #endif /* CONSTANTS_H_ */

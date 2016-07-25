@@ -1,8 +1,15 @@
 dnl Author: Aaron Caffrey
 
-dnl Be Loud when ErRo0rZ are detected
+dnl Internal function to show
+dnl error message when smth is wrong
 AC_DEFUN([ERR],[
   AC_MSG_ERROR($1)
+])
+
+dnl Internal function to show what must to
+dnl be installed in order to compile the program.
+AC_DEFUN([ERR_MUST_INSTALL],[
+  ERR([Install $1 in order to compile the program.])
 ])
 
 
@@ -16,7 +23,7 @@ AC_DEFUN([TEST_ALSA],[
     ALSA_LIBS="-lasound"
     AC_SUBST(ALSA_LIBS)
   ],[
-    ERR([Install alsa-utils and alsa-lib in order to compile the program.])
+    ERR_MUST_INSTALL([alsa-utils and alsa-lib])
   ])
 
 ])
@@ -41,7 +48,7 @@ AC_DEFUN([TEST_X11],[
     AC_CHECK_HEADERS([X11/Xlib.h], [
       X_LIBS="-lX11"
       ],[
-        ERR([Install xorg and libx11 in order to compile the program.])
+        ERR_MUST_INSTALL([xorg and libx11])
       ])
   ])
 
@@ -90,7 +97,7 @@ AC_DEFUN([TEST_MPD],[
     AC_CHECK_HEADERS([mpd/client.h], [
       MPD_LIBS="-lmpdclient"
       ],[
-        ERR([Install libmpdclient in order to compile the program.])
+        ERR_MUST_INSTALL([libmpdclient])
       ])
     ]
   )
