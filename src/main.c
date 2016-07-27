@@ -140,11 +140,6 @@ int main(int argc, char *argv[]) {
 
       case 'i':
         get_net(net, optarg);
-        if (-1 == (nanosleep(&tc, NULL))) {
-          printf("%s\n", "Error: nanosleep() failed");
-          return EXIT_FAILURE;
-        }
-        get_net(net, optarg);
         GLUE(all, FMT_NET, NET_STR, net);
         break;
 
@@ -182,6 +177,6 @@ void help_msg(void) {
       "  -m, --mobo\t Show the motherboard name, vendor and temperature.\n"
       "  -V, --volume\t The volume.\n"
       "  -t, --time\t The current time.\n"
-      "  -i, --interface The network throughput [requires argument].\n"
+      "  -i, --interface The network throughput consumed so far [requires argument].\n"
   );
 }

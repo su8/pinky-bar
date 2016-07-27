@@ -160,6 +160,10 @@ bind_to_address "127.0.0.1"
 
 Keep an eye on the **log file size** if you are using raspberry pi (or equivalent device) that streams the music, make sure that it's deleted automatically if it exceeds some pre-defined size.
 
+## Bandwidth measurment
+
+pinky-bar supplies bandwitdh/network throughput measurment to satisfy those users that pay for overpriced 3G/mobile internet, and want to monitor every single megabit/megabyte.
+
 ---
 
 ## WM specific requirements

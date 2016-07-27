@@ -435,12 +435,12 @@ error:
 #endif
 
 
+/* Thanks to http://www.matisse.net/bitcalc/?source=print */
 void
 get_net(char *str1, char *str2) {
   struct ifaddrs *ifaddr, *ifa;
   struct rtnl_link_stats *stats;
-  static uintmax_t prev_recv = 0, prev_sent = 0;
-  uintmax_t cur_recv, cur_sent, family;
+  uintmax_t family;
 
   if (-1 == getifaddrs(&ifaddr)) {
     exit_with_err(ERR, "getifaddrs() failed");
@@ -456,15 +456,9 @@ get_net(char *str1, char *str2) {
       if (!strcmp(str2, ifa->ifa_name)) {
         stats = ifa->ifa_data;
 
-        cur_recv = (uintmax_t)stats->rx_bytes;
-        cur_sent = (uintmax_t)stats->tx_bytes;
-
-        FILL_ARR(str1, "Down " FMT_UINT " Up " FMT_UINT,
-          (cur_recv != prev_recv ? BYTES_TO_KB(cur_recv) : 0),
-          (cur_sent != prev_sent ? BYTES_TO_KB(prev_sent) : 0));
-
-        prev_recv = cur_recv;
-        prev_sent = cur_sent;
+        FILL_ARR(str1, "Down " FMT_UINT "MB, Up " FMT_UINT " MB",
+          ((uintmax_t)stats->rx_bytes / MB),
+          ((uintmax_t)stats->tx_bytes / MB));
       }
     }
   }

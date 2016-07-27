@@ -20,9 +20,9 @@
 #ifndef CONSTANTS2_H_
 #define CONSTANTS2_H_
 
-#define MB 1048576
-#define GB 1073741824
-#define BYTES_TO_KB(x) (((uintmax_t)x)/1024/1024)
+#define MB 1048576     /* 1024 * 1024     */
+#define GB 1073741824  /* MB * 1024       */
+#define Mb 131072      /* 1024 * 1024 / 8 */
 
 #define FMT_UINT "%"PRIuMAX
 #define UFINT "%"PRIuFAST16
