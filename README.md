@@ -10,7 +10,7 @@ With MPD
 
 ![](img/pic3.png)
 
-Statusbar program for anything (Window Manager, terminal multiplexer, etc..) that I've written in my very first day as dwm user.
+Gather some system information and show it in this statusbar program, not tied to any Window Manager, terminal multiplexer, etc.
 
 Please note that the program won't detect fans connected via molex connetor(s) or external fan controller. Also I have not tested it with fan splitter(s) either.
 
@@ -39,7 +39,7 @@ Put the following in your **xinitrc** or the script used to start dwm.
 ```bash
 # Execute the "statusbar" program every 5 secs
 while true; do
-  # short program options   crspkvfmVt
+  # short program options   -McrspkvfmVti
   "$HOME/.cache/bin/dwmbar" --cpu --ram --storage --packages --kernel --voltage --fans --mobo --volume --time
   sleep 5
 done &
@@ -72,7 +72,7 @@ Put the following in your **xinitrc** or the script used to start xmonad.
 ```bash
 # Execute the "statusbar" program every 2 secs
 while true; do
-  # short program options   crspkvfmVt
+  # short program options   -McrspkvfmVti
   "$HOME/.cache/bin/xmonadbar" --cpu --ram --storage --packages --kernel --voltage --fans --mobo --volume --time
   sleep 2
 done | dzen2 -w 1800 -x 130 -ta r -fn '-*-dejavusans-*-r-*-*-11-*-*-*-*-*-*-*' &
@@ -95,7 +95,7 @@ make install
 
 Will mention that you can add **--with-mpd** too, but scroll a few lines up, re-read **Installation for anything else** and see the tmux snapshot.
 
-Choosing this 3rd method of installation it is up to you where, how to start and use the system information that's produced by pinky-bar.
+By choosing this 3rd installation method it is up to you where, how to start and use the system information that's produced by pinky-bar.
 
 ---
 

@@ -30,6 +30,11 @@
 #include <sys/utsname.h>
 #include <glob.h>
 #include <unistd.h>
+/* #include <arpa/inet.h> */
+/* #include <netdb.h> */
+#include <sys/socket.h>
+#include <ifaddrs.h>
+#include <linux/if_link.h>
 
 #if defined (HAVE_X11_XLIB_H)
 #include <X11/Xlib.h>
@@ -428,3 +433,41 @@ error:
   return;
 }
 #endif
+
+
+void
+get_net(char *str1, char *str2) {
+  struct ifaddrs *ifaddr, *ifa;
+  struct rtnl_link_stats *stats;
+  static uintmax_t prev_recv = 0, prev_sent = 0;
+  uintmax_t cur_recv, cur_sent, family;
+
+  if (-1 == getifaddrs(&ifaddr)) {
+    exit_with_err(ERR, "getifaddrs() failed");
+  }
+
+  for (ifa = ifaddr; NULL != ifa; ifa = ifa->ifa_next) {
+    if (NULL == ifa->ifa_addr)
+      continue;
+
+    family = ifa->ifa_addr->sa_family;
+
+    if (family == AF_PACKET && NULL != ifa->ifa_data) {
+      if (!strcmp(str2, ifa->ifa_name)) {
+        stats = ifa->ifa_data;
+
+        cur_recv = (uintmax_t)stats->rx_bytes;
+        cur_sent = (uintmax_t)stats->tx_bytes;
+
+        FILL_ARR(str1, "Down " FMT_UINT " Up " FMT_UINT,
+          (cur_recv != prev_recv ? BYTES_TO_KB(cur_recv) : 0),
+          (cur_sent != prev_sent ? BYTES_TO_KB(prev_sent) : 0));
+
+        prev_recv = cur_recv;
+        prev_sent = cur_sent;
+      }
+    }
+  }
+
+  freeifaddrs(ifaddr);
+}

@@ -51,26 +51,27 @@ int main(int argc, char *argv[]) {
   char *all = combined;
   char packs[VLA], mobo[VLA], cpu[VLA], ram[VLA], ssd[VLA];
   char kern[VLA], volume[VLA], Time[VLA], fans[VLA];
-  char voltage[VLA], cpu_temp[VLA], mobo_temp[VLA];
+  char voltage[VLA], cpu_temp[VLA], mobo_temp[VLA], net[VLA];
 
   const struct option options[] = {
-    { "mpd",          no_argument, NULL, 'M' },
-    { "cpu",          no_argument, NULL, 'c' },
-    { "ram",          no_argument, NULL, 'r' },
-    { "storage",      no_argument, NULL, 's' },
-    { "packages",     no_argument, NULL, 'p' },
-    { "kernel",       no_argument, NULL, 'k' },
-    { "voltage",      no_argument, NULL, 'v' },
-    { "fans",         no_argument, NULL, 'f' },
-    { "mobo",         no_argument, NULL, 'm' },
-    { "volume",       no_argument, NULL, 'V' },
-    { "time",         no_argument, NULL, 't' },
-    { "help",         no_argument, NULL, 'h' },
-    { NULL,           0,           NULL,  0  }
+    { "mpd",          no_argument,       NULL, 'M' },
+    { "cpu",          no_argument,       NULL, 'c' },
+    { "ram",          no_argument,       NULL, 'r' },
+    { "storage",      no_argument,       NULL, 's' },
+    { "packages",     no_argument,       NULL, 'p' },
+    { "kernel",       no_argument,       NULL, 'k' },
+    { "voltage",      no_argument,       NULL, 'v' },
+    { "fans",         no_argument,       NULL, 'f' },
+    { "mobo",         no_argument,       NULL, 'm' },
+    { "volume",       no_argument,       NULL, 'V' },
+    { "time",         no_argument,       NULL, 't' },
+    { "help",         no_argument,       NULL, 'h' },
+    { "interface",    required_argument, NULL, 'i' },
+    { NULL,           0,                 NULL,  0  }
   };
 
   short int ch = 0;
-  while (0 < (ch = getopt_long(argc, argv, "McrspkvfmVth", options, NULL))) {
+  while (0 < (ch = getopt_long(argc, argv, "McrspkvfmVthi:", options, NULL))) {
     switch (ch) {
       case 'M':
 #if defined (HAVE_MPD_CLIENT_H)
@@ -137,6 +138,16 @@ int main(int argc, char *argv[]) {
         GLUE(all, FMT_TIME" ", TIME_STR, Time);
         break;
 
+      case 'i':
+        get_net(net, optarg);
+        if (-1 == (nanosleep(&tc, NULL))) {
+          printf("%s\n", "Error: nanosleep() failed");
+          return EXIT_FAILURE;
+        }
+        get_net(net, optarg);
+        GLUE(all, FMT_NET, NET_STR, net);
+        break;
+
       case 'h':
         help_msg();
         return EXIT_SUCCESS;
@@ -171,5 +182,6 @@ void help_msg(void) {
       "  -m, --mobo\t Show the motherboard name, vendor and temperature.\n"
       "  -V, --volume\t The volume.\n"
       "  -t, --time\t The current time.\n"
+      "  -i, --interface The network throughput [requires argument].\n"
   );
 }

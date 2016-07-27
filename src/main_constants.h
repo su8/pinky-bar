@@ -41,6 +41,7 @@
 #define MOBO_STR   "Mobo"
 #define VOL_STR    "Volume"
 #define TIME_STR   "Time"
+#define NET_STR    "Net"
 
 #endif /* HAVE_X11_XLIB_H || WITH_COLOURS */
 
@@ -65,5 +66,6 @@
 #define FMT_VOLT  FMT_PKGS                            /* Voltage 1 2 3 4 */
 #define FMT_FANS  FMT_TIME                            /* Fans varying    */
 #define FMT_VOL   FMT                                 /* Volume 10%      */
+#define FMT_NET   NAME_VAL" "                         /* Down 123 Up 123 */
 
 #endif /* CONSTANTS_H_ */

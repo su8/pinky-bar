@@ -43,6 +43,7 @@
 #define VOL_STR    XBM_ICON("vol.xbm")
 #define TIME_STR   XBM_ICON("clock.xbm")
 #define MPD_ICON   XBM_ICON("mpd.xbm")
+#define NET_STR    XBM_ICON("net.xbm")
 
 
 /* tmux or other program that can spice
