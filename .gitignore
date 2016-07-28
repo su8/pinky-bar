@@ -1,0 +1,8 @@
+Make*
+auto*
+conf*
+aclocal.m4
+*.o
+*bar
+temp_dir/
+src/.deps/

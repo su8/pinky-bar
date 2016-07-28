@@ -440,20 +440,19 @@ void
 get_net(char *str1, char *str2) {
   struct ifaddrs *ifaddr, *ifa;
   struct rtnl_link_stats *stats;
-  uintmax_t family;
 
   if (-1 == getifaddrs(&ifaddr)) {
     exit_with_err(ERR, "getifaddrs() failed");
   }
 
   for (ifa = ifaddr; NULL != ifa; ifa = ifa->ifa_next) {
-    if (NULL == ifa->ifa_addr)
+    if (NULL == ifa->ifa_addr) {
       continue;
+    }
 
-    family = ifa->ifa_addr->sa_family;
-
-    if (family == AF_PACKET && NULL != ifa->ifa_data) {
-      if (!strcmp(str2, ifa->ifa_name)) {
+    if (ifa->ifa_addr->sa_family == AF_PACKET &&
+        NULL != ifa->ifa_data) {
+      if (!(strcmp(str2, ifa->ifa_name))) {
         stats = ifa->ifa_data;
 
         FILL_ARR(str1, "Down " FMT_UINT "MB, Up " FMT_UINT " MB",
