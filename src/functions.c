@@ -487,6 +487,5 @@ get_statio(char *str1, char *str2) {
   fclose(fp);
 
   FILL_ARR(str1, "Read " FMT_UINT " MB, Written " FMT_UINT " MB",
-    BYTES_TO_MB((uintmax_t)statio[2]),
-    BYTES_TO_MB((uintmax_t)statio[6]));
+    BYTES_TO_MB(statio[2]), BYTES_TO_MB(statio[6]));
 }
