@@ -449,18 +449,17 @@ get_net(char *str1, char *str2) {
     if (NULL == ifa->ifa_addr) {
       continue;
     }
-
     if (ifa->ifa_addr->sa_family == AF_PACKET &&
         NULL != ifa->ifa_data) {
       if (!(strcmp(str2, ifa->ifa_name))) {
         stats = ifa->ifa_data;
 
-        FILL_ARR(str1, "Down " FMT_UINT "MB, Up " FMT_UINT " MB",
+        FILL_ARR(str1, "Down " FMT_UINT " MB, Up " FMT_UINT " MB",
           ((uintmax_t)stats->rx_bytes / MB),
           ((uintmax_t)stats->tx_bytes / MB));
+        break;
       }
     }
   }
-
   freeifaddrs(ifaddr);
 }
