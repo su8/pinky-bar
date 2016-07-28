@@ -210,6 +210,8 @@ use **--without-colours** to skip the following step:
 
 ## Wish list
 
+Per core/thread CPU frequency detection: Can add it at any time if there is enough demand, but needs some consideration first.
+
 The kernels cpu frequency governor "performance" will always run at the highest possible clock rate regardless of it's use/idle. The only side effect of this is higher temps when on idle (true if the cpu has multiple cores and or threads).
 
 The "powersaving" governor will always run at the lowest possible clock rate regardless of it's use/idle. The side effect - slower machine no matter what you do.
@@ -218,9 +220,17 @@ The "ondemand" governor does what it says - ondemand scaling. With it you get th
 
 For example I manually turn off the cpu frequency governor in my kernel builds, which sets it to performance.
 
-The cpu frequency detection is easy, but it poses a roadblock by assuming that the "ondemand" is set and/or is enabled in the user kernel. Decision 1: On a multicore/thread cpu the detection for each core/thread will produce up to 8 digit number, thus 4 core and 4 thread cpu will produce: 1234.5678 1234.5678 1234.5678 1234.5678 1234.5678 1234.5678 1234.5678 1234.5678, without including MHz for each core/thread, which will take a lot of space in the final statusbar output. This way the user will know for how long and which core/thread is under some load. Decision 2: On other hand it will be lame on a 10/16 core/thread system to show the overall (not per core/thread) cpu frequency that have been summed up, which will beat the purpose of cpu frequency detection in first place, as the user will not be aware that some core/thread is running at full cpu clock speed as the load will be spread equally.
+The cpu frequency detection is easy, but it poses a roadblock by assuming that the "ondemand" is set and/or is enabled in the user kernel.
 
-It would be nice to have decent gpu temperature, voltage, fan(s) speed and used RAM detection. Should we detect multiple gpus (SLI,single dual gpu card), how to detect which of the multiple gpu cards is actually the one for **this** monitor in case the program is compiled **--without-x11** and/or xinerama ? What about hybrid combination and some gpu manufactor that is not supported by MESA ? My legacy gpu only shows it's vendor name, model and used ram (in MESA) because it's onboard gpu.
+Decision 1: On a multicore/thread cpu, the detection for each core/thread will produce up to 8 digit number, thus 4 core and 4 thread cpu will produce: 1234.5678 1234.5678 1234.5678 1234.5678 1234.5678 1234.5678 1234.5678 1234.5678, without including MHz for each core/thread, which will take a lot of space in the final statusbar output. This way the user will know for how long and which core/thread is under some load.
+
+Decision 2: On other hand it will be lame on a 10/16 core/thread system to show the overall (not per core/thread) cpu frequency that have been summed up, which will beat the purpose of cpu frequency detection in first place, as the user will not be aware that some core/thread is running at full cpu clock speed as the load will be spread equally when summing the numbers up.
+
+---
+
+GPU temperature, voltage, fan(s) and used RAM: hard, but not impossible.
+
+It would be nice to have decent gpu temperature, voltage, fan(s) speed and used RAM detection. Should we detect multiple gpus (SLI,single dual gpu card), how to detect which of the multiple gpu cards is actually the one used for **this** monitor in case the program is compiled **--without-x11** and/or xinerama ? What about hybrid combination and some gpu manufactor that is not supported by MESA ? My legacy gpu only shows it's vendor name, model and used ram (in MESA) because it's onboard gpu.
 
 ---
 
