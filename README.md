@@ -21,6 +21,33 @@ If you compile your kernel from source code make sure to include your cpu and mo
 ![](img/cpu-temp.png)
 ![](img/mobo-temp.png)
 
+---
+
+## Bandwidth measurment
+
+pinky-bar supplies bandwitdh/network throughput measurment to satisfy those users that pay for overpriced 3G/mobile internet, and want to monitor every single megabit/megabyte.
+
+## Program options
+
+The order of supplied options will dictate how, where and what system information to be shown.
+
+| short option | long option | Descrtiption                                              |
+|--------------|-------------|-----------------------------------------------------------|
+| -M           | --mpd       | The currently played song name (if any)                   |
+| -c           | --cpu       | The current cpu load and temperature                      |
+| -r           | --ram       | The used ram                                              |
+| -s           | --stroage   | The used drive storage                                    |
+| -p           | --packages  | The number of installed packages                          |
+| -k           | --kernel    | The kernel version                                        |
+| -v           | --voltage   | The system voltage                                        |
+| -f           | --fans      | All system fans and their speed in RPM                    |
+| -m           | --mobo      | Show the motherboard name, vendor and temperature         |
+| -V           | --volume    | The volume                                                |
+| -t           | --time      | The current time                                          |
+| -i           | --interface | The network throughput consumed so far [requres argument] |
+
+---
+
 ## Installation for dwm
 
 ```bash
@@ -160,10 +187,6 @@ bind_to_address "127.0.0.1"
 
 Keep an eye on the **log file size** if you are using raspberry pi (or equivalent device) that streams the music, make sure that it's deleted automatically if it exceeds some pre-defined size.
 
-## Bandwidth measurment
-
-pinky-bar supplies bandwitdh/network throughput measurment to satisfy those users that pay for overpriced 3G/mobile internet, and want to monitor every single megabit/megabyte.
-
 ---
 
 ## WM specific requirements
@@ -182,6 +205,22 @@ for dwm:
 use **--without-colours** to skip the following step:
 
 * dwm compiled with [statuscolor](https://github.com/wifiextender/dwm-fork/blob/master/patches/statuscolours.diff) patch. The colours in use are specified in your [config.h](https://github.com/wifiextender/dwm-fork/blob/master/config.h#L6)
+
+---
+
+## Wish list
+
+The kernels cpu frequency governor "performance" will always run at the highest possible clock rate regardless of it's use/idle. The only side effect of this is higher temps when on idle (true if the cpu has multiple cores and or threads).
+
+The "powersaving" governor will always run at the lowest possible clock rate regardless of it's use/idle. The side effect - slower machine no matter what you do.
+
+The "ondemand" governor does what it says - ondemand scaling. With it you get the best performance when you need to, powersaving and lower temps when on idle.
+
+For example I manually turn off the cpu frequency governor in my kernel builds, which sets it to performance.
+
+The cpu frequency detection is easy, but it poses a roadblock by assuming that the "ondemand" is set and/or is enabled in the user kernel. Decision 1: On a multicore/thread cpu the detection for each core/thread will produce up to 8 digit number, thus 4 core and 4 thread cpu will produce: 1234.5678 1234.5678 1234.5678 1234.5678 1234.5678 1234.5678 1234.5678 1234.5678, without including MHz for each core/thread, which will take a lot of space in the final statusbar output. This way the user will know for how long and which core/thread is under some load. Decision 2: On other hand it will be lame on a 10/16 core/thread system to show the overall (not per core/thread) cpu frequency that have been summed up, which will beat the purpose of cpu frequency detection in first place, as the user will not be aware that some core/thread is running at full cpu clock speed as the load will be spread equally.
+
+It would be nice to have decent gpu temperature, voltage, fan(s) speed and used RAM detection. Should we detect multiple gpus (SLI,single dual gpu card), how to detect which of the multiple gpu cards is actually the one for **this** monitor in case the program is compiled **--without-x11** and/or xinerama ? What about hybrid combination and some gpu manufactor that is not supported by MESA ? My legacy gpu only shows it's vendor name, model and used ram (in MESA) because it's onboard gpu.
 
 ---
 
