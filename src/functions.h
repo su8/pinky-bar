@@ -32,6 +32,7 @@ void get_mobo(char *, char *);
 void get_time(char *);
 void get_volume(char *);
 void get_net(char *, char *);
+void get_statio(char *, char *);
 
 #if defined (HAVE_X11_XLIB_H)
 void set_status(const char *);

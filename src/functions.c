@@ -463,3 +463,30 @@ get_net(char *str1, char *str2) {
   }
   freeifaddrs(ifaddr);
 }
+
+
+void 
+get_statio(char *str1, char *str2) {
+  uintmax_t statio[7];
+  char stat_file[VLA];
+  FILL_ARR(stat_file, "%s%s%s", "/sys/block/", str2, "/stat");
+
+  memset(statio, 0, sizeof(statio));
+
+  FILE *fp = fopen(stat_file, "r");
+  if (NULL == fp) {
+    exit_with_err(CANNOT_OPEN, stat_file);
+  }
+
+  if (fscanf(fp, FMT_UINT FMT_UINT FMT_UINT FMT_UINT FMT_UINT FMT_UINT FMT_UINT,
+    &statio[0], &statio[1], &statio[2], &statio[3],
+    &statio[4], &statio[5], &statio[6]) == EOF) {
+      fclose(fp);
+      exit_with_err(ERR, "reading the stat file failed");
+  }
+  fclose(fp);
+
+  FILL_ARR(str1, "Read " FMT_UINT " MB, Written " FMT_UINT " MB",
+    BYTES_TO_MB((uintmax_t)statio[2]),
+    BYTES_TO_MB((uintmax_t)statio[6]));
+}

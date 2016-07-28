@@ -22,7 +22,7 @@
 #define CONSTANTS_H_
 
 #define VLA 200
-#define WHOLE_MAIN_ARR_LEN VLA*14
+#define WHOLE_MAIN_ARR_LEN VLA*15
 #define GLUE(x, z, ...) (x+=snprintf(x, WHOLE_MAIN_ARR_LEN, z, __VA_ARGS__))
 
 #define STR_SPEC "%s"
@@ -42,6 +42,7 @@
 #define VOL_STR    "Volume"
 #define TIME_STR   "Time"
 #define NET_STR    "Net"
+#define STATIO_STR "Statio"
 
 #endif /* HAVE_X11_XLIB_H || WITH_COLOURS */
 
@@ -56,16 +57,17 @@
 
 
 /* main.c constants */
-#define FMT       NAME_VAL"%% "                       /* STR1 10%        */
-#define FMT_TIME  NAME_VAL                            /* Time 10:00 PM   */
-#define FMT_MOBO  FMT_TIME" "TEMP                     /* VEND NAME 32C   */
-#define FMT_CPU   FMT_TIME"%% "TEMP                   /* CPU 10% 32C     */
-#define FMT_RAM   FMT                                 /* RAM 10%         */
-#define FMT_SSD   FMT                                 /* SSD 10%         */
-#define FMT_PKGS  FMT_TIME" "                         /* Pkgs 123        */
-#define FMT_VOLT  FMT_PKGS                            /* Voltage 1 2 3 4 */
-#define FMT_FANS  FMT_TIME                            /* Fans varying    */
-#define FMT_VOL   FMT                                 /* Volume 10%      */
-#define FMT_NET   NAME_VAL" "                         /* Down 123 Up 123 */
+#define FMT           NAME_VAL"%% "                       /* STR1 10%             */
+#define FMT_TIME      NAME_VAL                            /* Time 10:00 PM        */
+#define FMT_MOBO      FMT_TIME" "TEMP                     /* VEND NAME 32C        */
+#define FMT_CPU       FMT_TIME"%% "TEMP                   /* CPU 10% 32C          */
+#define FMT_RAM       FMT                                 /* RAM 10%              */
+#define FMT_SSD       FMT                                 /* SSD 10%              */
+#define FMT_PKGS      FMT_TIME" "                         /* Pkgs 123             */
+#define FMT_VOLT      FMT_PKGS                            /* Voltage 1 2 3 4      */
+#define FMT_FANS      FMT_TIME                            /* Fans varying         */
+#define FMT_VOL       FMT                                 /* Volume 10%           */
+#define FMT_NET       FMT_PKGS                            /* Down 123 Up 123      */
+#define FMT_STATIO    FMT_NET                             /* Read 123 Written 123 */
 
 #endif /* CONSTANTS_H_ */

@@ -36,7 +36,7 @@ The order of supplied options will dictate how, where and what system informatio
 | -M           | --mpd       | The currently played song name (if any)                   |
 | -c           | --cpu       | The current cpu load and temperature                      |
 | -r           | --ram       | The used ram                                              |
-| -s           | --stroage   | The used drive storage                                    |
+| -s           | --storage   | The used drive storage                                    |
 | -p           | --packages  | The number of installed packages                          |
 | -k           | --kernel    | The kernel version                                        |
 | -v           | --voltage   | The system voltage                                        |
@@ -44,7 +44,8 @@ The order of supplied options will dictate how, where and what system informatio
 | -m           | --mobo      | Show the motherboard name, vendor and temperature         |
 | -V           | --volume    | The volume                                                |
 | -t           | --time      | The current time                                          |
-| -i           | --interface | The network throughput consumed so far [requres argument] |
+| -i           | --interface | The network throughput consumed so far [argument - eth0]  |
+| -S           | --statio    | Read and written MBs to the drive so far [argument - sda] |
 
 ---
 

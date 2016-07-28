@@ -50,7 +50,7 @@ int main(int argc, char *argv[]) {
   char combined[WHOLE_MAIN_ARR_LEN] = "";
   char *all = combined;
   char packs[VLA], mobo[VLA], cpu[VLA], ram[VLA], ssd[VLA];
-  char kern[VLA], volume[VLA], Time[VLA], fans[VLA];
+  char kern[VLA], volume[VLA], Time[VLA], fans[VLA], statio[VLA];
   char voltage[VLA], cpu_temp[VLA], mobo_temp[VLA], net[VLA];
 
   const struct option options[] = {
@@ -67,11 +67,12 @@ int main(int argc, char *argv[]) {
     { "time",         no_argument,       NULL, 't' },
     { "help",         no_argument,       NULL, 'h' },
     { "interface",    required_argument, NULL, 'i' },
+    { "statio",       required_argument, NULL, 'S' },
     { NULL,           0,                 NULL,  0  }
   };
 
   short int ch = 0;
-  while (0 < (ch = getopt_long(argc, argv, "McrspkvfmVthi:", options, NULL))) {
+  while (0 < (ch = getopt_long(argc, argv, "McrspkvfmVthi:S:", options, NULL))) {
     switch (ch) {
       case 'M':
 #if defined (HAVE_MPD_CLIENT_H)
@@ -143,6 +144,11 @@ int main(int argc, char *argv[]) {
         GLUE(all, FMT_NET, NET_STR, net);
         break;
 
+      case 'S':
+        get_statio(statio, optarg);
+        GLUE(all, FMT_STATIO, STATIO_STR, statio);
+        break;
+
       case 'h':
         help_msg();
         return EXIT_SUCCESS;
@@ -177,6 +183,7 @@ void help_msg(void) {
       "  -m, --mobo\t Show the motherboard name, vendor and temperature.\n"
       "  -V, --volume\t The volume.\n"
       "  -t, --time\t The current time.\n"
-      "  -i, --interface The network throughput consumed so far [requires argument].\n"
+      "  -i, --interface The network throughput consumed so far [argument - eth0].\n"
+      "  -S, --statio\t Read and written MBs to the drive so far [argument - sda].\n"
   );
 }
