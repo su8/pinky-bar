@@ -42,4 +42,8 @@ void set_status(const char *);
 void get_song(char *);
 #endif
 
+#if defined(__i386__) || defined(__i686__) || defined(__x86_64__)
+void get_cpu_clock_speed(char *);
+#endif
+
 #endif /* FUNCTIONS_H_ */

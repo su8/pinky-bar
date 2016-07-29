@@ -503,3 +503,45 @@ get_statio(char *str1, char *str2) {
   FILL_ARR(str1, "Read " FMT_UINT " MB, Written " FMT_UINT " MB",
     BYTES_TO_MB(statio[2]), BYTES_TO_MB(statio[6]));
 }
+
+
+/*  Taken from the gcc documentation
+ *  https://gcc.gnu.org/onlinedocs/gcc/Machine-Constraints.html
+ *
+ *  other useful resources:
+ *  http://www.felixcloutier.com/x86/RDTSC.html 
+ *  http://ref.x86asm.net/coder32.html#x0F31 
+*/
+
+/* Not going to test for i486 and i586 */
+#if defined(__i386__) || defined(__i686__)
+static __inline__ uintmax_t rdtsc(void) {
+  uintmax_t x;
+  __asm__ __volatile__ (".byte 0x0f, 0x31" : "=A" (x));
+  return x;
+}
+
+#elif defined(__x86_64__)
+static __inline__ uintmax_t rdtsc(void) {
+  unsigned int tickhi, ticklo;
+  __asm__ __volatile__ ("rdtsc" : "=a"(ticklo), "=d"(tickhi));
+  return (((uintmax_t)tickhi << 32) | (uintmax_t)ticklo);
+}
+#endif
+
+#if defined(__i386__) || defined(__i686__) || defined(__x86_64__)
+void
+get_cpu_clock_speed(char *str1) {
+  uintmax_t x, z;
+  struct timespec tc = {0};
+  tc.tv_nsec = sysconf(_SC_CLK_TCK) * 1000000L;
+
+  x = rdtsc();
+  if (-1 == (nanosleep(&tc, NULL))) {
+    exit_with_err(ERR, "nanosleep() failed");
+  }
+  z = rdtsc();
+
+  FILL_ARR(str1, FMT_UINT " MHz", ((z - x) / 100000));
+}
+#endif
