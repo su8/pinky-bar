@@ -44,8 +44,8 @@ The order of supplied options will dictate how, where and what system informatio
 | -m           | --mobo      | Show the motherboard name, vendor and temperature                  |
 | -V           | --volume    | The volume                                                         |
 | -t           | --time      | The current time                                                   |
-| -i           | --interface | The network throughput consumed so far [argument - eth0]           |
-| -z           | --zpeed     | Show the current download and upload speed [argument - eth0]       |
+| -b           | --bandwitdh | The consumed internet bandwidth so far [argument - eth0]           |
+| -i           | --iface     | The current download and upload speed [argument - eth0]            |
 | -S           | --statio    | Read and written MBs to the drive so far [argument - sda]          |
 
 ---
@@ -68,7 +68,7 @@ Put the following in your **xinitrc** or the script used to start dwm.
 ```bash
 # Execute the "statusbar" program every 5 secs
 while true; do
-  # short program options   -McrspkvfmVti
+  # scroll a few lines up to see the rest options
   "$HOME/.cache/bin/dwmbar" --cpu --ram --storage --packages --kernel --voltage --fans --mobo --volume --time
   sleep 5
 done &
@@ -101,7 +101,7 @@ Put the following in your **xinitrc** or the script used to start xmonad.
 ```bash
 # Execute the "statusbar" program every 2 secs
 while true; do
-  # short program options   -McrspkvfmVti
+  # scroll a few lines up to see the rest options
   "$HOME/.cache/bin/xmonadbar" --cpu --ram --storage --packages --kernel --voltage --fans --mobo --volume --time
   sleep 2
 done | dzen2 -w 1800 -x 130 -ta r -fn '-*-dejavusans-*-r-*-*-11-*-*-*-*-*-*-*' &

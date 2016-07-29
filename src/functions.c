@@ -460,7 +460,7 @@ get_net(char *str1, char *str2, bool measure_speed) {
           cur_recv = (uintmax_t)stats->rx_bytes - prev_recv;
           cur_sent = (uintmax_t)stats->tx_bytes - prev_sent;
 
-          FILL_ARR(str1, "Down " FMT_UINT "KB, Up " FMT_UINT " KB",
+          FILL_ARR(str1, "Down " FMT_UINT " KB, Up " FMT_UINT " KB",
             (cur_recv / KB), (cur_sent / KB));
 
           prev_recv = cur_recv;

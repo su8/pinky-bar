@@ -41,7 +41,7 @@
 #define MOBO_STR   "Mobo"
 #define VOL_STR    "Volume"
 #define TIME_STR   "Time"
-#define NET_STR    "Net"
+#define NET_STR    "Used Net"
 #define STATIO_STR "Statio"
 #define SPEED_STR  "Speed"
 
