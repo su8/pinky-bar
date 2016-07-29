@@ -70,6 +70,6 @@
 #define FMT_VOL       FMT                                 /* Volume 10%           */
 #define FMT_NET       FMT_PKGS                            /* Down 123 Up 123      */
 #define FMT_STATIO    FMT_NET                             /* Read 123 Written 123 */
-#define FMT_CPUSPEED  STR_SPEC " "                        /* 1234 MHz             */
+#define FMT_CPUSPEED  PINK STR_SPEC " "                   /* 1234 MHz             */
 
 #endif /* CONSTANTS_H_ */

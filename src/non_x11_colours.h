@@ -51,6 +51,7 @@
  * the output on it's own */
 #else
 
+#define PINK ""
 #define NAME_VAL  STR_SPEC " " STR_SPEC               /* STR1 STR2       */
 #define TEMP      STR_SPEC "C "                       /* 32C             */
 #define FMT_KERN  KERN_ORIG                           /* Kernel Version  */
