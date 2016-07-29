@@ -31,7 +31,7 @@ void get_fans(char *);
 void get_mobo(char *, char *);
 void get_time(char *);
 void get_volume(char *);
-void get_net_speed(char *, char *, bool measure_speed);
+void get_net(char *, char *, bool measure_speed);
 void get_statio(char *, char *);
 
 #if defined (HAVE_X11_XLIB_H)
