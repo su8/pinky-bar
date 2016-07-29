@@ -35,6 +35,7 @@ The order of supplied options will dictate how, where and what system informatio
 |--------------|-------------|--------------------------------------------------------------------|
 | -M           | --mpd       | The currently played song name (if any)                            |
 | -c           | --cpu       | The current cpu load and temperature                               |
+| -C           | --cpuspeed  | Show your maximum cpu clock speed in MHz, regardless of the used governor |
 | -r           | --ram       | The used ram                                                       |
 | -s           | --storage   | The used drive storage                                             |
 | -p           | --packages  | The number of installed packages                                   |
