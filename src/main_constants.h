@@ -43,6 +43,7 @@
 #define TIME_STR   "Time"
 #define NET_STR    "Net"
 #define STATIO_STR "Statio"
+#define SPEED_STR  "Speed"
 
 #endif /* HAVE_X11_XLIB_H || WITH_COLOURS */
 

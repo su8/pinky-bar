@@ -21,6 +21,7 @@
 #include <time.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <stdbool.h>
 #include <string.h>
 #include <getopt.h>
 
@@ -49,7 +50,7 @@ int main(int argc, char *argv[]) {
   char song[VLA] = "";
   char combined[WHOLE_MAIN_ARR_LEN] = "";
   char *all = combined;
-  char packs[VLA], mobo[VLA], cpu[VLA], ram[VLA], ssd[VLA];
+  char packs[VLA], mobo[VLA], cpu[VLA], ram[VLA], ssd[VLA], net_speed[VLA];
   char kern[VLA], volume[VLA], Time[VLA], fans[VLA], statio[VLA];
   char voltage[VLA], cpu_temp[VLA], mobo_temp[VLA], net[VLA];
 
@@ -67,12 +68,13 @@ int main(int argc, char *argv[]) {
     { "time",         no_argument,       NULL, 't' },
     { "help",         no_argument,       NULL, 'h' },
     { "interface",    required_argument, NULL, 'i' },
+    { "zpeed",        required_argument, NULL, 'z' },
     { "statio",       required_argument, NULL, 'S' },
     { NULL,           0,                 NULL,  0  }
   };
 
   short int ch = 0;
-  while (0 < (ch = getopt_long(argc, argv, "McrspkvfmVthi:S:", options, NULL))) {
+  while (0 < (ch = getopt_long(argc, argv, "McrspkvfmVthi:S:z:", options, NULL))) {
     switch (ch) {
       case 'M':
 #if defined (HAVE_MPD_CLIENT_H)
@@ -140,8 +142,19 @@ int main(int argc, char *argv[]) {
         break;
 
       case 'i':
-        get_net(net, optarg);
+        get_net(net, optarg, false);
         GLUE(all, FMT_NET, NET_STR, net);
+        break;
+
+      case 'z':
+        get_net(net_speed, optarg, true);
+        tc.tv_nsec = 850000000L;
+        if (-1 == (nanosleep(&tc, NULL))) {
+          printf("%s\n", "Error: nanosleep() failed");
+          return EXIT_FAILURE;
+        }
+        get_net(net_speed, optarg, true);
+        GLUE(all, FMT_NET, SPEED_STR, net_speed);
         break;
 
       case 'S':
@@ -184,6 +197,7 @@ void help_msg(void) {
       "  -V, --volume\t The volume.\n"
       "  -t, --time\t The current time.\n"
       "  -i, --interface The network throughput consumed so far [argument - eth0].\n"
+      "  -z, --zpeed\t Show the current download and upload speed [argument - eth0].\n"
       "  -S, --statio\t Read and written MBs to the drive so far [argument - sda].\n"
   );
 }

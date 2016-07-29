@@ -31,21 +31,22 @@ pinky-bar supplies bandwitdh/network throughput measurment to satisfy those user
 
 The order of supplied options will dictate how, where and what system information to be shown.
 
-| short option | long option | Descrtiption                                              |
-|--------------|-------------|-----------------------------------------------------------|
-| -M           | --mpd       | The currently played song name (if any)                   |
-| -c           | --cpu       | The current cpu load and temperature                      |
-| -r           | --ram       | The used ram                                              |
-| -s           | --storage   | The used drive storage                                    |
-| -p           | --packages  | The number of installed packages                          |
-| -k           | --kernel    | The kernel version                                        |
-| -v           | --voltage   | The system voltage                                        |
-| -f           | --fans      | All system fans and their speed in RPM                    |
-| -m           | --mobo      | Show the motherboard name, vendor and temperature         |
-| -V           | --volume    | The volume                                                |
-| -t           | --time      | The current time                                          |
-| -i           | --interface | The network throughput consumed so far [argument - eth0]  |
-| -S           | --statio    | Read and written MBs to the drive so far [argument - sda] |
+| short option | long option | Descrtiption                                                       |
+|--------------|-------------|--------------------------------------------------------------------|
+| -M           | --mpd       | The currently played song name (if any)                            |
+| -c           | --cpu       | The current cpu load and temperature                               |
+| -r           | --ram       | The used ram                                                       |
+| -s           | --storage   | The used drive storage                                             |
+| -p           | --packages  | The number of installed packages                                   |
+| -k           | --kernel    | The kernel version                                                 |
+| -v           | --voltage   | The system voltage                                                 |
+| -f           | --fans      | All system fans and their speed in RPM                             |
+| -m           | --mobo      | Show the motherboard name, vendor and temperature                  |
+| -V           | --volume    | The volume                                                         |
+| -t           | --time      | The current time                                                   |
+| -i           | --interface | The network throughput consumed so far [argument - eth0]           |
+| -z           | --zpeed     | Show the current download and upload speed [argument - eth0]       |
+| -S           | --statio    | Read and written MBs to the drive so far [argument - sda]          |
 
 ---
 

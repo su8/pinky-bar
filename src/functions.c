@@ -437,9 +437,11 @@ error:
 
 /* Thanks to http://www.matisse.net/bitcalc/?source=print */
 void
-get_net(char *str1, char *str2) {
+get_net(char *str1, char *str2, bool measure_speed) {
   struct ifaddrs *ifaddr, *ifa;
   struct rtnl_link_stats *stats;
+  static uintmax_t prev_recv = 0, prev_sent = 0;
+  uintmax_t cur_recv, cur_sent;
 
   if (-1 == getifaddrs(&ifaddr)) {
     exit_with_err(ERR, "getifaddrs() failed");
@@ -454,9 +456,21 @@ get_net(char *str1, char *str2) {
       if (!(strcmp(str2, ifa->ifa_name))) {
         stats = ifa->ifa_data;
 
-        FILL_ARR(str1, "Down " FMT_UINT " MB, Up " FMT_UINT " MB",
-          ((uintmax_t)stats->rx_bytes / MB),
-          ((uintmax_t)stats->tx_bytes / MB));
+        if (measure_speed) {
+          cur_recv = (uintmax_t)stats->rx_bytes - prev_recv;
+          cur_sent = (uintmax_t)stats->tx_bytes - prev_sent;
+
+          FILL_ARR(str1, "Down " FMT_UINT "KB, Up " FMT_UINT " KB",
+            (cur_recv / KB), (cur_sent / KB));
+
+          prev_recv = cur_recv;
+          prev_sent = cur_sent;
+        } else {
+  
+          FILL_ARR(str1, "Down " FMT_UINT " MB, Up " FMT_UINT " MB",
+            ((uintmax_t)stats->rx_bytes / MB),
+            ((uintmax_t)stats->tx_bytes / MB));
+        }
         break;
       }
     }

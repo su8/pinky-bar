@@ -20,6 +20,7 @@
 #ifndef CONSTANTS2_H_
 #define CONSTANTS2_H_
 
+#define KB 1024
 #define MB 1048576     /* 1024 * 1024     */
 #define GB 1073741824  /* MB * 1024       */
 #define Mb 131072      /* 1024 * 1024 / 8 */
