@@ -45,8 +45,6 @@ int main(int argc, char *argv[]) {
   }
 
   struct timespec tc = {0};
-  tc.tv_nsec = sysconf(_SC_CLK_TCK) * 1000000L;
-
   char song[VLA] = "";
   char combined[WHOLE_MAIN_ARR_LEN] = "";
   char *all = combined;
@@ -88,6 +86,7 @@ int main(int argc, char *argv[]) {
 
       case 'c':
         get_cpu(cpu, cpu_temp);
+        tc.tv_nsec = sysconf(_SC_CLK_TCK) * 1000000L;
         if (-1 == (nanosleep(&tc, NULL))) {
           printf("%s\n", "Error: nanosleep() failed");
           return EXIT_FAILURE;
