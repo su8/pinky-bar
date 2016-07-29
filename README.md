@@ -235,6 +235,22 @@ It would be nice to have decent gpu temperature, voltage, fan(s) speed and used 
 
 ---
 
+[Currently played filename in VLC](https://github.com/videolan/vlc/blob/master/src/libvlc.c): easy to be added.
+
+Unless MPRIS is replaced with sockets, I am not willing to add dbus as dependency to pinky-bar.
+
+```cpp
+// The "MPRIS_BUS_NAME" macro from libvlc
+dbus_message_new_method_call(
+  "org.mpris.MediaPlayer2.vlc",
+  "/org/mpris/MediaPlayer2",
+  "org.mpris.MediaPlayer2.Player",
+  "Metadata");
+// results in:  'xesam:url': <'file:///home/frost/music/Summer_Sixteen.mp3'> 
+```
+
+---
+
 ## Want xinitrc template ?
 
 Take a look in my [xinitrc](https://github.com/wifiextender/dotfiles/blob/master/gentoo/home/frost/.config/misc/xinitrc) and [dwm-start](https://github.com/wifiextender/dotfiles/blob/master/gentoo/home/frost/.config/dwm_scripts/dwm-start).
