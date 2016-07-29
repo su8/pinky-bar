@@ -29,7 +29,7 @@ void get_kernel(char *);
 void get_voltage(char *);
 void get_fans(char *);
 void get_mobo(char *, char *);
-void get_time(char *);
+void get_taim(char *);
 void get_volume(char *);
 void get_net(char *, char *, bool measure_speed);
 void get_statio(char *, char *);

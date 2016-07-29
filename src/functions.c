@@ -48,7 +48,7 @@
 
 #include "main_constants.h"
 #include "functions_constants.h"
-#include "functions.h"
+#include "functions_prototypes.h"
 
 static void get_temp(const char *, char *);
 static uint_fast16_t glob_packages(const char *);
@@ -373,7 +373,7 @@ error:
 
 /* The `strftime' man page showed potential bugs */
 void 
-get_time(char *str1) {
+get_taim(char *str1) {
   char time_str[VLA];
   time_t t;
   struct tm *taim;

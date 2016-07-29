@@ -28,7 +28,7 @@
 #include <unistd.h>
 
 #include "main_constants.h"
-#include "functions.h"
+#include "functions_prototypes.h"
 
 void help_msg(void);
 
@@ -49,8 +49,8 @@ int main(int argc, char *argv[]) {
   char combined[WHOLE_MAIN_ARR_LEN] = "";
   char *all = combined;
   char packs[VLA], mobo[VLA], cpu[VLA], ram[VLA], ssd[VLA], net_speed[VLA];
-  char kern[VLA], volume[VLA], Time[VLA], fans[VLA], statio[VLA];
-  char voltage[VLA], cpu_temp[VLA], mobo_temp[VLA], net[VLA], clock_speed[VLA];
+  char kernel[VLA], volume[VLA], taim[VLA], fans[VLA], statio[VLA];
+  char voltage[VLA], cpu_temp[VLA], mobo_temp[VLA], net[VLA], cpu_clock_speed[VLA];
 
   const struct option options[] = {
     { "mpd",          no_argument,       NULL, 'M' },
@@ -77,8 +77,7 @@ int main(int argc, char *argv[]) {
     switch (ch) {
       case 'M':
 #if defined (HAVE_MPD_CLIENT_H)
-        get_song(song);
-        GLUE(all, FMT_SONG, song);
+        GET_N_FMT(song, all, FMT_SONG, song);
         break;
 #else
         printf("%s\n", "recompile the program --with-mpd");
@@ -97,33 +96,27 @@ int main(int argc, char *argv[]) {
         break;
 
       case 'r':
-        get_ram(ram);
-        GLUE(all, FMT_RAM, RAM_STR, ram);
+        GET_N_FMT(ram, all, FMT_RAM, RAM_STR, ram);
         break;
 
       case 's':
-        get_ssd(ssd);
-        GLUE(all, FMT_SSD, SSD_STR, ssd);
+        GET_N_FMT(ssd, all, FMT_SSD, SSD_STR, ssd);
         break;
 
       case 'p':
-        get_packs(packs);
-        GLUE(all, FMT_PKGS, PKG_STR, packs);
+        GET_N_FMT(packs, all, FMT_PKGS, PKG_STR, packs);
         break;
 
       case 'k':
-        get_kernel(kern);
-        GLUE(all, FMT_KERN, kern);
+        GET_N_FMT(kernel, all, FMT_KERN, kernel);
         break;
 
       case 'v':
-        get_voltage(voltage);
-        GLUE(all, FMT_VOLT, VOLT_STR, voltage);
+        GET_N_FMT(voltage, all, FMT_VOLT, VOLT_STR, voltage);
         break;
 
       case 'f':
-        get_fans(fans);
-        GLUE(all, FMT_FANS, FANS_STR, fans);
+        GET_N_FMT(fans, all, FMT_FANS, FANS_STR, fans);
         break;
 
       case 'm':
@@ -132,13 +125,11 @@ int main(int argc, char *argv[]) {
         break;
 
       case 'V':
-        get_volume(volume);
-        GLUE(all, FMT_VOL, VOL_STR, volume);
+        GET_N_FMT(volume, all, FMT_VOL, VOL_STR, volume);
         break;
 
       case 't':
-        get_time(Time);
-        GLUE(all, FMT_TIME" ", TIME_STR, Time);
+        GET_N_FMT(taim, all, FMT_TIME" ", TIME_STR, taim);
         break;
 
       case 'b':
@@ -164,8 +155,7 @@ int main(int argc, char *argv[]) {
 
       case 'C':
 #if defined(__i386__) || defined(__i686__) || defined(__x86_64__)
-        get_cpu_clock_speed(clock_speed);
-        GLUE(all, FMT_CPUSPEED, clock_speed);
+        GET_N_FMT(cpu_clock_speed, all, FMT_CPUSPEED, cpu_clock_speed);
         break;
 #else
         printf("%s\n", "This option is not supported "

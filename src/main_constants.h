@@ -24,6 +24,10 @@
 #define VLA 200
 #define WHOLE_MAIN_ARR_LEN VLA*15
 #define GLUE(x, z, ...) (x+=snprintf(x, WHOLE_MAIN_ARR_LEN, z, __VA_ARGS__))
+#define GET_N_FMT(func, ...) \
+  get_##func(func); \
+  GLUE(__VA_ARGS__);
+
 
 #define STR_SPEC "%s"
 #define SONG_ORIG STR_SPEC " "
