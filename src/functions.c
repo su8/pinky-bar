@@ -521,15 +521,36 @@ static __inline__ uintmax_t rdtsc(void) {
   return x;
 }
 
+void
+get_cpu_clock_speed(char *str1) {
+  uintmax_t x, y, z[2];
+  struct timespec start = {0}, stop = {0}, tc = {0};
+  tc.tv_nsec = sysconf(_SC_CLK_TCK) * 1000000L;
+
+  x = rdtsc();
+  clock_gettime(CLOCK_MONOTONIC, &start);
+  z[0] = (uintmax_t)(start.tv_nsec - start.tv_sec);
+
+  if (-1 == (nanosleep(&tc, NULL))) {
+    exit_with_err(ERR, "nanosleep() failed");
+  }
+
+  y = rdtsc();
+  clock_gettime(CLOCK_MONOTONIC, &stop);
+  z[1] = (uintmax_t)(stop.tv_nsec - stop.tv_sec);
+
+  FILL_ARR(str1, FMT_UINT " MHz",
+    (1000 * (y - x) / (z[1] - z[0])));
+}
+
+
 #elif defined(__x86_64__)
 static __inline__ uintmax_t rdtsc(void) {
   unsigned int tickhi, ticklo;
   __asm__ __volatile__ ("rdtsc" : "=a"(ticklo), "=d"(tickhi));
   return (((uintmax_t)tickhi << 32) | (uintmax_t)ticklo);
 }
-#endif
 
-#if defined(__i386__) || defined(__i686__) || defined(__x86_64__)
 void
 get_cpu_clock_speed(char *str1) {
   uintmax_t x, z;
