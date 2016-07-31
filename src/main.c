@@ -49,13 +49,14 @@ int main(int argc, char *argv[]) {
   char combined[WHOLE_MAIN_ARR_LEN] = "";
   char *all = combined;
   char packs[VLA], mobo[VLA], cpu[VLA], ram[VLA], ssd[VLA], net_speed[VLA];
-  char kernel[VLA], volume[VLA], taim[VLA], fans[VLA], statio[VLA];
+  char kernel[VLA], volume[VLA], taim[VLA], fans[VLA], statio[VLA], cpu_info[VLA];
   char voltage[VLA], cpu_temp[VLA], mobo_temp[VLA], net[VLA], cpu_clock_speed[VLA];
 
   const struct option options[] = {
     { "mpd",          no_argument,       NULL, 'M' },
     { "cpu",          no_argument,       NULL, 'c' },
     { "cpuspeed",     no_argument,       NULL, 'C' },
+    { "cpuinfo",      no_argument,       NULL, 'I' },
     { "ram",          no_argument,       NULL, 'r' },
     { "storage",      no_argument,       NULL, 's' },
     { "packages",     no_argument,       NULL, 'p' },
@@ -73,7 +74,7 @@ int main(int argc, char *argv[]) {
   };
 
   short int ch = 0;
-  while (0 < (ch = getopt_long(argc, argv, "McCrspkvfmVthi:S:b:", options, NULL))) {
+  while (0 < (ch = getopt_long(argc, argv, "McCIrspkvfmVthi:S:b:", options, NULL))) {
     switch (ch) {
       case 'M':
 #if defined (HAVE_MPD_CLIENT_H)
@@ -163,6 +164,16 @@ int main(int argc, char *argv[]) {
         return EXIT_FAILURE;
 #endif
 
+      case 'I':
+#if defined(__i386__) || defined(__i686__) || defined(__x86_64__)
+        GET_N_FMT(cpu_info, all, FMT_CPUSPEED, cpu_info);
+        break;
+#else
+        printf("%s\n", "This option is not supported "
+                  "by your CPU architecture");
+        return EXIT_FAILURE;
+#endif
+
       case 'h':
         help_msg();
         return EXIT_SUCCESS;
@@ -189,6 +200,7 @@ void help_msg(void) {
       "  -M, --mpd\t The currently played song name (if any).\n"
       "  -c, --cpu\t The current cpu load and temperature.\n"
       "  -C, --cpuspeed Show your maximum cpu clock speed in MHz.\n"
+      "  -I, --cpuinfo\t Detect your CPU vendor, stepping, family.\n"
       "  -r, --ram\t The used ram.\n"
       "  -s, --storage\t The used drive storage.\n"
       "  -p, --packages The number of installed packages.\n"

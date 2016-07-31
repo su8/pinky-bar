@@ -55,4 +55,13 @@
 #define NOT_FOUND "Not found, "
 
 
+/* Inspired from  https://en.wikipedia.org/wiki/CPUID and
+ * llvm Host.cpp */
+#define CPU_VENDOR(x, z) __asm__("cpuid": "=b" (z) : "a" (x))
+#define CPU_FEATURE(x, z) __asm__("cpuid": "=a" (z) : "a" (x))
+#define BIT_SHIFT(x) ((x) & 0xf)
+#define AmD    0x68747541
+#define InteL  0x756e6547
+
+
 #endif /* CONSTANTS2_H_ */
