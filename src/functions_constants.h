@@ -59,6 +59,15 @@
  * llvm Host.cpp */
 #define CPU_VENDOR(x, z) __asm__("cpuid": "=b" (z) : "a" (x))
 #define CPU_FEATURE(x, z) __asm__("cpuid": "=a" (z) : "a" (x))
+#define CPU_STR(regizter, a, b, c, d) __asm__( \
+  "cpuid": \
+    "=a" (a), \
+    "=b" (b), \
+    "=c" (c), \
+    "=d" (d) \
+    : "a" (regizter) \
+)
+
 #define BIT_SHIFT(x) ((x) & 0xf)
 #define AmD    0x68747541
 #define InteL  0x756e6547

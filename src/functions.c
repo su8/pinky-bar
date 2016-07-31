@@ -576,7 +576,12 @@ get_cpu_info(char *str1) {
   uintmax_t eax = 0, vend = 0, num = 0;
 
   CPU_VENDOR(0, vend);
+  if (0 == vend) {
+    FILL_STR_ARR(1, str1, "Null");
+    return;
+  }
   CPU_FEATURE(1, eax);
+	/* CPU_STR(0x80000000, vend_str, dummy, dummy, dummy); /1* movl $0x80000000, %eax *1/ */
 
   switch(vend) {
     case AmD:
@@ -587,6 +592,27 @@ get_cpu_info(char *str1) {
       num = 1;
       break;
   }
+
+  /* Dont have intel cpu to verify the following code */
+  /* if (0 == num && 0 != vend_str) { */
+  /*   for (x = 0x80000002; x <= 0x80000004; x++) {    /1* movl $0x80000002, %esi *1/ */
+  /*     CPU_STR(x, eax, ebx, ecx, edx);               /1* cmpl $0x80000004, %eax *1/ */
+  /*     char vend_chars[17]; /1* 12 + 4 *1/ */
+
+  /*     for (z = 0; z < 4; z++) { */
+  /*       vend_chars[z] = (char)(eax >> (z * 8));     /1* movl %eax *1/ */
+  /*       vend_chars[z+4] = (char)(ebx >> (z * 8));   /1* movl %ebx, 4 *1/ */
+  /*       vend_chars[z+8] = (char)(ecx >> (z * 8));   /1* movl %ecx, 8 *1/ */
+  /*       vend_chars[z+12] = (char)(edx >> (z * 8));  /1* movl %edx, 12 *1/ */
+  /*     } */
+  /*     all += snprintf(all, VLA, "%s", vend_chars); */
+  /*   } */
+
+  /*   FILL_ARR(str1, "%s Stepping " FMT_UINT " Family " FMT_UINT " Model " FMT_UINT, */
+  /*     buffer, BIT_SHIFT(eax), */
+  /*     BIT_SHIFT(eax >> 8), BIT_SHIFT(eax >> 4)); */
+  /*   return; */
+  /* } */
 
   FILL_ARR(str1, "%s Stepping " FMT_UINT " Family " FMT_UINT " Model " FMT_UINT,
     (0 == num ? "AMD" : "Intel"), BIT_SHIFT(eax),
