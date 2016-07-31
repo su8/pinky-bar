@@ -576,7 +576,7 @@ get_cpu_info(char *str1) {
   uintmax_t eax = 0, vend = 0, num = 0;
 
   CPU_VENDOR(0, vend);
-	CPU_FEATURE(1, eax);
+  CPU_FEATURE(1, eax);
 
   switch(vend) {
     case AmD:
