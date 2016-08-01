@@ -573,15 +573,17 @@ get_cpu_clock_speed(char *str1) {
 #if defined(__i386__) || defined(__i686__) || defined(__x86_64__)
 void
 get_cpu_info(char *str1) {
-  uintmax_t eax = 0, vend = 0, num = 0;
+  char buffer[VLA];
+  char *all = buffer;
+  uintmax_t vend = 0, num = 0, vend_str = 0, x = 0, z = 0;
+  uintmax_t eax = 0, ecx = 0, edx = 0, ebx = 0, eax_old = 0;
 
   CPU_VENDOR(0, vend);
   if (0 == vend) {
     FILL_STR_ARR(1, str1, "Null");
     return;
   }
-  CPU_FEATURE(1, eax);
-	/* CPU_STR(0x80000000, vend_str, dummy, dummy, dummy); /1* movl $0x80000000, %eax *1/ */
+  CPU_FEATURE(1, eax_old);
 
   switch(vend) {
     case AmD:
@@ -593,29 +595,35 @@ get_cpu_info(char *str1) {
       break;
   }
 
-  /* Dont have intel cpu to verify the following code */
-  /* if (0 == num && 0 != vend_str) { */
-  /*   for (x = 0x80000002; x <= 0x80000004; x++) {    /1* movl $0x80000002, %esi *1/ */
-  /*     CPU_STR(x, eax, ebx, ecx, edx);               /1* cmpl $0x80000004, %eax *1/ */
-  /*     char vend_chars[17]; /1* 12 + 4 *1/ */
+  /* Dont have intel cpu to verify the following code
+     It works fine on both of my primary amd systems */
+  if (0 == num) {
+    CPU_FEATURE(0x80000000, vend_str);                /* movl $0x80000000, %eax */
+    if (0 != vend_str) {
 
-  /*     for (z = 0; z < 4; z++) { */
-  /*       vend_chars[z] = (char)(eax >> (z * 8));     /1* movl %eax *1/ */
-  /*       vend_chars[z+4] = (char)(ebx >> (z * 8));   /1* movl %ebx, 4 *1/ */
-  /*       vend_chars[z+8] = (char)(ecx >> (z * 8));   /1* movl %ecx, 8 *1/ */
-  /*       vend_chars[z+12] = (char)(edx >> (z * 8));  /1* movl %edx, 12 *1/ */
-  /*     } */
-  /*     all += snprintf(all, VLA, "%s", vend_chars); */
-  /*   } */
+      for (x = 0x80000002; x <= 0x80000004; x++) {    /* movl $0x80000002, %esi */
+        CPU_STR(x, eax, ebx, ecx, edx);               /* cmpl $0x80000004, %eax */
+        char vend_chars[17]; /* 12 + 4 */
 
-  /*   FILL_ARR(str1, "%s Stepping " FMT_UINT " Family " FMT_UINT " Model " FMT_UINT, */
-  /*     buffer, BIT_SHIFT(eax), */
-  /*     BIT_SHIFT(eax >> 8), BIT_SHIFT(eax >> 4)); */
-  /*   return; */
-  /* } */
+        for (z = 0; z < 4; z++) {
+          vend_chars[z] = (char)(eax >> (z * 8));     /* movl %eax */
+          vend_chars[z+4] = (char)(ebx >> (z * 8));   /* movl %ebx, 4 */
+          vend_chars[z+8] = (char)(ecx >> (z * 8));   /* movl %ecx, 8 */
+          vend_chars[z+12] = (char)(edx >> (z * 8));  /* movl %edx, 12 */
+        }
+        vend_chars[16] = '\0';
+        all += snprintf(all, VLA, "%s", vend_chars);
+      }
+
+      FILL_ARR(str1, "%s Stepping " FMT_UINT " Family " FMT_UINT " Model " FMT_UINT,
+        buffer, BIT_SHIFT(eax_old),
+        BIT_SHIFT(eax_old >> 8), BIT_SHIFT(eax_old >> 4));
+      return;
+    }
+  }
 
   FILL_ARR(str1, "%s Stepping " FMT_UINT " Family " FMT_UINT " Model " FMT_UINT,
-    (0 == num ? "AMD" : "Intel"), BIT_SHIFT(eax),
-    BIT_SHIFT(eax >> 8), BIT_SHIFT(eax >> 4));
+    (0 == num ? "AMD" : "Intel"), BIT_SHIFT(eax_old),
+    BIT_SHIFT(eax_old >> 8), BIT_SHIFT(eax_old >> 4));
 }
 #endif
