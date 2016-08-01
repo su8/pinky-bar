@@ -67,6 +67,13 @@
     "=d" (d) \
     : "a" (regizter) \
 )
+#define CPU_ID_STR(regizter, b, c, d) __asm__( \
+  "cpuid": \
+    "=b" (b), \
+    "=c" (c), \
+    "=d" (d) \
+    : "a" (regizter) \
+)
 
 #define BIT_SHIFT(x) ((x) & 0xf)
 #define AmD    0x68747541

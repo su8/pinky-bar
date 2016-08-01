@@ -573,7 +573,7 @@ get_cpu_clock_speed(char *str1) {
 #if defined(__i386__) || defined(__i686__) || defined(__x86_64__)
 void
 get_cpu_info(char *str1) {
-  char buffer[VLA];
+  char buffer[VLA], vend_id[13];
   char *all = buffer;
   uintmax_t vend = 0, num = 0, vend_str = 0, x = 0, z = 0;
   uintmax_t eax = 0, ecx = 0, edx = 0, ebx = 0, eax_old = 0;
@@ -596,7 +596,9 @@ get_cpu_info(char *str1) {
   }
 
   /* Dont have intel cpu to verify the following code
-     It works fine on both of my primary amd systems */
+     It works fine on both of my primary amd systems.
+     I'm also aware of linking again assembly object file,
+     Wanted to learn more assembly by back porting it to C */
   if (0 == num) {
     CPU_FEATURE(0x80000000, vend_str);                /* movl $0x80000000, %eax */
     if (0 != vend_str) {
@@ -615,8 +617,16 @@ get_cpu_info(char *str1) {
         all += snprintf(all, VLA, "%s", vend_chars);
       }
 
-      FILL_ARR(str1, "%s Stepping " FMT_UINT " Family " FMT_UINT " Model " FMT_UINT,
-        buffer, BIT_SHIFT(eax_old),
+      CPU_ID_STR(0, ebx, ecx, edx);                   /* mov $0, %eax */
+      for (z = 0; z < 4; z++) {
+        vend_id[z] = (char)(ebx >> (z * 8));          /* movl %ebx, 0 */
+        vend_id[z+4] = (char)(edx >> (z * 8));        /* movl %edx, 4 */
+        vend_id[z+8] = (char)(ecx >> (z * 8));        /* movl %ecx, 8 */
+      }
+      vend_id[12] = '\0';
+
+      FILL_ARR(str1, "%s ID %s Stepping " FMT_UINT " Family " FMT_UINT " Model " FMT_UINT,
+        buffer, vend_id, BIT_SHIFT(eax_old),
         BIT_SHIFT(eax_old >> 8), BIT_SHIFT(eax_old >> 4));
       return;
     }
