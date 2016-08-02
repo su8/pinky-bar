@@ -30,9 +30,12 @@ void get_voltage(char *);
 void get_fans(char *);
 void get_mobo(char *, char *);
 void get_taim(char *);
-void get_volume(char *);
 void get_net(char *, char *, bool measure_speed);
 void get_statio(char *, char *);
+
+#if defined (HAVE_ALSA_ASOUNDLIB_H)
+void get_volume(char *);
+#endif
 
 #if defined (HAVE_X11_XLIB_H)
 void set_status(const char *);

@@ -126,8 +126,13 @@ int main(int argc, char *argv[]) {
         break;
 
       case 'V':
+#if defined (HAVE_ALSA_ASOUNDLIB_H)
         GET_N_FMT(volume, all, FMT_VOL, VOL_STR, volume);
         break;
+#else
+        printf("%s\n", "recompile the program --with-alsa");
+        return EXIT_FAILURE;
+#endif
 
       case 't':
         GET_N_FMT(taim, all, FMT_TIME" ", TIME_STR, taim);

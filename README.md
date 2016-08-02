@@ -142,14 +142,15 @@ Replace **distro** with archlinux, debian, gentoo, slackware, rhel, frugalware, 
 
 ## Mandatory requirements
 
-* gcc/clang
-* glibc
+* gcc/clang   # Compiler
+* glibc       # Standard C libraries
+
+GNU Build System
+
 * autoconf
 * automake
 * m4
 * gawk
-* alsa-utils
-* alsa-lib
 
 ## Opt-in requirements
 
@@ -157,6 +158,13 @@ To see the currently played song name:
 
 * libmpdclient
 * mpd (with properly configured config)
+
+To get the sound volume level:
+
+* alsa-utils
+* alsa-lib
+
+Then pass **--with-alsa** to configure.
 
 Here's an example of my **/etc/mpd.conf**
 

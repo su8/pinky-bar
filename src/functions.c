@@ -44,7 +44,9 @@
 #include <mpd/client.h>
 #endif
 
+#if defined (HAVE_ALSA_ASOUNDLIB_H)
 #include <alsa/asoundlib.h>
+#endif
 
 #include "main_constants.h"
 #include "functions_constants.h"
@@ -309,6 +311,7 @@ get_mobo(char *str1, char *str2) {
 }
 
 
+#if defined (HAVE_ALSA_ASOUNDLIB_H)
 /* http://www.alsa-project.org/alsa-doc/alsa-lib/group___mixer.html 
  * http://www.alsa-project.org/alsa-doc/alsa-lib/group___simple_mixer.html 
  * for the return values */
@@ -369,6 +372,7 @@ error:
   }
   exit_with_err(ERR, "alsa failed");
 }
+#endif
 
 
 /* The `strftime' man page showed potential bugs */
@@ -597,8 +601,8 @@ get_cpu_info(char *str1) {
 
   /* Dont have intel cpu to verify the following code
      It works fine on both of my primary amd systems.
-     I'm also aware of linking again assembly object file,
-     Wanted to learn more assembly by back porting it to C */
+     I'm also aware of linking against assembly object file,
+     wanted to learn more assembly by back porting it to C */
   if (0 == num) {
     CPU_FEATURE(0x80000000, vend_str);                /* movl $0x80000000, %eax */
     if (0 != vend_str) {

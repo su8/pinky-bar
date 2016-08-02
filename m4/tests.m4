@@ -19,12 +19,24 @@ dnl Check for the presence of ALSA headers and
 dnl substitute the linker flags -lasound to the
 dnl the variable 'ALSA_LIBS' if they are available.
 AC_DEFUN([TEST_ALSA],[
-  AC_CHECK_HEADERS([alsa/asoundlib.h], [
-    ALSA_LIBS="-lasound"
-    AC_SUBST(ALSA_LIBS)
-  ],[
-    ERR_MUST_INSTALL([alsa-utils and alsa-lib])
+  ALSA_LIBS=""
+
+  AC_ARG_WITH([alsa],
+    AS_HELP_STRING([--with-alsa],
+      [ALSA linker flag for sound support]),
+    [],
+    [with_alsa=no]
+  )
+
+  AS_IF([test "x$with_alsa" = "xyes"], [
+    AC_CHECK_HEADERS([alsa/asoundlib.h], [
+      ALSA_LIBS="-lasound"
+      ],[
+        ERR_MUST_INSTALL([alsa-utils and alsa-lib])
+      ])
   ])
+
+  AC_SUBST(ALSA_LIBS)
 
 ])
 
