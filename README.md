@@ -6,10 +6,6 @@ xmonad
 
 ![](img/pic2.png)
 
-With MPD
-
-![](img/pic3.png)
-
 Gather some system information and show it in this statusbar program, not tied to any Window Manager, terminal multiplexer, etc.
 
 Please note that the program won't detect fans connected via molex connetor(s) or external fan controller. Also I have not tested it with fan splitter(s) either.
@@ -241,6 +237,17 @@ for dwm:
 use **--without-colours** to skip the following step:
 
 * dwm compiled with [statuscolor](https://github.com/wifiextender/dwm-fork/blob/master/patches/statuscolours.diff) patch. The colours in use are specified in your [config.h](https://github.com/wifiextender/dwm-fork/blob/master/config.h#L6)
+
+
+## Maximum clock speed
+
+At least on any AMD model that I tested the program, the maximum clock speed with/without overclock is reported correctly. Even when enabling the 4th core on my 3 core amd cpu and overclocking it even further afterwards.
+
+![](img/small-oc.png)
+
+![](img/huge-oc.png)
+
+Compare the voltage usage in both snapshots.
 
 ---
 
