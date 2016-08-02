@@ -56,6 +56,7 @@ _gen_files() {
   AC_INIT(["${prog_name}"], ["${prog_ver}"])
   AC_CONFIG_AUX_DIR([temp_dir])
   AC_CONFIG_MACRO_DIR([m4])
+  AC_CONFIG_HEADER([src/config.h])
   AM_INIT_AUTOMAKE([1.11 -Wall no-define foreign subdir-objects dist-xz no-dist-gzip std-options])
 
   AM_SILENT_RULES([yes])
@@ -95,7 +96,7 @@ _gen_files() {
   src_files=(
     'main.c'
     'functions.c'
-    'functions.h'
+    'functions_prototypes.h'
     'main_constants.h'
     'functions_constants.h'
   )

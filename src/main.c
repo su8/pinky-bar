@@ -27,6 +27,7 @@
 
 #include <unistd.h>
 
+#include "config.h" /* auto-generated */
 #include "main_constants.h"
 #include "functions_prototypes.h"
 

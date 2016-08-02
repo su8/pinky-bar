@@ -36,6 +36,9 @@
 #include <ifaddrs.h>
 #include <linux/if_link.h>
 
+/* Auto-generated */
+#include "config.h"
+
 #if defined (HAVE_X11_XLIB_H)
 #include <X11/Xlib.h>
 #endif
