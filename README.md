@@ -50,6 +50,21 @@ The order of supplied options will dictate how, where and what system informatio
 | -i           | --iface     | The current download and upload speed [argument - eth0]            |
 | -S           | --statio    | Read and written MBs to the drive so far [argument - sda]          |
 
+## GNU Build System (configure) options
+
+Before the source code is passed to the compiler, you can enable/disable the following **configure** options 
+that will increase/reduce the number of dependencies required to compile the program.
+
+It's up to you to decide which features suit you best.
+
+| To include     | Not to include      | Descrtiption                                                                               |
+|----------------|---------------------|--------------------------------------------------------------------------------------------|
+| --with-x11     | --without-x11       | Enable it if you are using Window Manager (dwm) to be more specific.                       |
+| --with-alsa    | --without-alsa      | To get the sound volume level.                                                             |
+| --with-colours | --without-colours   | Colorize the output data.                                                                  |
+| icons=/tmp     |                     | Use xbm icons that can be used by dzen2 for example. Discarded when **--with-x11** is used |
+| --with-mpd     | --without-mpd       | To see the currently played song name (if any).                                            |
+
 ---
 
 ## Installation for dwm
