@@ -50,6 +50,8 @@ The order of supplied options will dictate how, where and what system informatio
 | -i           | --iface     | The current download and upload speed [argument - eth0]            |
 | -S           | --statio    | Read and written MBs to the drive so far [argument - sda]          |
 
+---
+
 ## GNU Build System (configure) options
 
 Before the source code is passed to the compiler, you can enable/disable the following **configure** options 
@@ -64,6 +66,13 @@ It's up to you to decide which features suit you best.
 | --with-colours | --without-colours   | Colorize the output data.                                                                  |
 | icons=/tmp     |                     | Use xbm icons that can be used by dzen2 for example. Discarded when **--with-x11** is used |
 | --with-mpd     | --without-mpd       | To see the currently played song name (if any).                                            |
+| --prefix=/tmp  |                     | The directory where the program will be installed                                          |
+
+By default, if **no** options are passed, the program will be compiled with/without:
+
+```bash
+--without-alsa --without-x11 --without-mpd --with-colours
+```
 
 ---
 
