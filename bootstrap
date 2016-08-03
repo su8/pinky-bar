@@ -72,6 +72,7 @@ _gen_files() {
   TEST_ALSA
   TEST_MPD
   TEST_TYPEZ
+  TEST_CFLAGZ
 
   AC_CONFIG_FILES([
   Makefile
@@ -110,15 +111,6 @@ _gen_files() {
 
   bin_PROGRAMS = \
     '${prog_name}'
-
-  # clang will not append std=bar
-  # on its own which gcc does
-  '${prog_name}'_CFLAGS = \
-    -O2 -std=c99 -Wextra -Wall -pedantic -Wundef -Wshadow \
-    -w -Wwrite-strings -Wcast-align -Wstrict-overflow=5 \
-    -Wconversion -Wpointer-arith -Wstrict-prototypes \
-    -Wformat=0 -Wmissing-prototypes -Wno-unused-result \
-    -Wno-unused-function -Wno-missing-field-initializers
 
   '${prog_name}'_LDADD = $(X_LIBS) $(ALSA_LIBS) $(MPD_LIBS)
 

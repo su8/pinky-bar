@@ -120,6 +120,58 @@ AC_DEFUN([TEST_MPD],[
 
 
 dnl Internal function to perform
+dnl explicit compiler CFLAGS support test
+AC_DEFUN([CHECK_CFLAGZ],[
+  m4_foreach([tYpe], [$1], [
+    AX_CHECK_COMPILE_FLAG(
+      [tYpe],
+      AX_APPEND_FLAG([tYpe], [CFLAGS]),
+      ERR([Your compiler does not understand the above cflag])
+    )
+  ])dnl
+])
+
+dnl TEST_CFLAGZ() function in configure.ac
+dnl
+dnl Check for the presence and whether
+dnl the given FLAG will work flawlessly
+dnl with the currently used compiler.
+dnl Will Substitute each successful flag
+dnl and bail out with pre-defined error msg
+dnl when some FLAG is unsupported.
+AC_DEFUN([TEST_CFLAGZ],[
+
+  CHECK_CFLAGZ([
+    -O2,
+    -pipe,
+    -std=c99,
+    -Wextra,
+    -Wall,
+    -pedantic,
+    -Wundef,
+    -Wshadow,
+    -w,
+    -Wwrite-strings,
+    -Wcast-align,
+    -Wstrict-overflow=5,
+    -Wconversion,
+    -Wpointer-arith,
+    -Wstrict-prototypes,
+    -Wformat=0,
+    -Wsign-compare,
+    -Wdeclaration-after-statement,
+    -Wendif-labels,
+    -Wredundant-decls,
+    -Wmissing-prototypes,
+    -Wno-unused-result,
+    -Wno-unused-function,
+    -Wno-missing-field-initializers
+  ])
+
+])
+
+
+dnl Internal function to perform
 dnl explicit data check type
 AC_DEFUN([CHECK_TYPEZ],[
   AC_CHECK_TYPES([$1],[],[
