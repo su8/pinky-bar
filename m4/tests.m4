@@ -154,6 +154,14 @@ dnl Internal function to check
 dnl the compiler for assembly support
 AC_DEFUN([TEST_ASSEMBLY],[
 
+  AC_COMPILE_IFELSE([
+    AC_LANG_PROGRAM([[
+      #include <stdint.h>]],[[
+      uintmax_t x;
+      __asm__ __volatile__ (".byte 0x0f, 0x31" : "=A" (x));
+    ]])
+  ],[supportz_assembly=yes],[supportz_assembly=no])
+
   AC_MSG_CHECKING([for assembly support])
 
   AC_COMPILE_IFELSE([
@@ -167,7 +175,7 @@ AC_DEFUN([TEST_ASSEMBLY],[
   AC_MSG_RESULT([$supportz_assembly])
 
   AS_IF([test "x$supportz_assembly" = "xno"], [
-      ERR([Your compiler does not support assembly])
+      ERR([Your compiler does not support assembly.])
     ]
   )
 
@@ -209,6 +217,17 @@ AC_DEFUN([TEST_CFLAGZ],[
     -Wno-unused-function,
     -Wno-missing-field-initializers
   ])
+
+  AC_MSG_CHECKING([all CFLAGS with simple test])
+  AC_COMPILE_IFELSE([
+    AC_LANG_PROGRAM([[  ]], [[ return 0; ]])
+  ],[cflagz_ok=yes],[cflagz_ok=no])
+  AC_MSG_RESULT([$cflagz_ok])
+
+  AS_IF([test "x$cflagz_ok" = "xno"], [
+      ERR([Your compiler failed to compile the test with all substituted CFLAGS.])
+    ]
+  )
 
   TEST_ASSEMBLY()
 
