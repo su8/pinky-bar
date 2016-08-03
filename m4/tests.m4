@@ -141,13 +141,24 @@ AC_DEFUN([TEST_MPD],[
 dnl Internal function to perform
 dnl explicit compiler CFLAGS support test
 AC_DEFUN([CHECK_CFLAGZ],[
+
   m4_foreach([tYpe], [$1], [
     AX_CHECK_COMPILE_FLAG(
       [tYpe],
       AX_APPEND_FLAG([tYpe], [CFLAGS]),
       ERR([Your compiler does not understand the above cflag])
     )
+
+    AC_COMPILE_IFELSE([
+      AC_LANG_PROGRAM([[  ]], [[ return 0; ]])
+    ],[cflagz_ok=yes],[cflagz_ok=no])
+
+    AS_IF([test "x$cflagz_ok" = "xno"], [
+        ERR([Failed to compile a simple test with the above CFLAG.])
+      ]
+    )
   ])dnl
+
 ])
 
 dnl Internal function to check
@@ -178,7 +189,7 @@ dnl
 dnl Check for the presence and whether
 dnl the given FLAG will work flawlessly
 dnl with the currently used compiler.
-dnl Will Substitute each successful flag
+dnl Will substitute each successful flag
 dnl and bail out with pre-defined error msg
 dnl when some FLAG is unsupported.
 AC_DEFUN([TEST_CFLAGZ],[
@@ -209,17 +220,6 @@ AC_DEFUN([TEST_CFLAGZ],[
     -Wno-unused-function,
     -Wno-missing-field-initializers
   ])
-
-  AC_MSG_CHECKING([all CFLAGS with simple test])
-  AC_COMPILE_IFELSE([
-    AC_LANG_PROGRAM([[  ]], [[ return 0; ]])
-  ],[cflagz_ok=yes],[cflagz_ok=no])
-  AC_MSG_RESULT([$cflagz_ok])
-
-  AS_IF([test "x$cflagz_ok" = "xno"], [
-      ERR([Your compiler failed to compile the test with all substituted CFLAGS.])
-    ]
-  )
 
   TEST_ASSEMBLY()
 
