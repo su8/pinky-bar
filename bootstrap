@@ -115,6 +115,14 @@ _gen_files() {
     '${prog_name}'_LDADD = $(X_LIBS) $(ALSA_LIBS) $(MPD_LIBS)
 
     '${prog_name}'_SOURCES = '${src_files[@]}'
+
+    # To satisfy make dist
+    EXTRA_DIST = \
+      ../bootstrap \
+      ../README.md \
+      ../.gitignore \
+      non_x11_colours.h \
+      x11_colours.h
   ')
 
 
