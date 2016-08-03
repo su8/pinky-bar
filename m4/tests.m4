@@ -154,14 +154,6 @@ dnl Internal function to check
 dnl the compiler for assembly support
 AC_DEFUN([TEST_ASSEMBLY],[
 
-  AC_COMPILE_IFELSE([
-    AC_LANG_PROGRAM([[
-      #include <stdint.h>]],[[
-      uintmax_t x;
-      __asm__ __volatile__ (".byte 0x0f, 0x31" : "=A" (x));
-    ]])
-  ],[supportz_assembly=yes],[supportz_assembly=no])
-
   AC_MSG_CHECKING([for assembly support])
 
   AC_COMPILE_IFELSE([
