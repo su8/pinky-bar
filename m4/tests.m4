@@ -75,14 +75,16 @@ AC_DEFUN([TEST_X11],[
   AS_IF([test "x$with_colours" = "xyes"], [
     WITH_COLOURS=1
   ])
-  AC_SUBST(WITH_COLOURS)
+  AC_DEFINE_UNQUOTED([WITH_COLOURS],[$WITH_COLOURS],[Colorize the output])
+
 
   dnl xbm icons for non-dwm window manager
   AC_ARG_VAR(icons, [path to xbm icons for non-dwm WM])
   if [[ ! -z "${icons}" ]]
   then
-    ICONZ="${icons}"
-    AC_SUBST(ICONZ)
+    dnl Da stupid shell expansion only works on "UNQUOTED"
+    ICONZ=\""${icons}"\"
+    AC_DEFINE_UNQUOTED([ICONS_DIR],[$ICONZ],[xbm icons for non-dwm WM])
   fi
 
   AC_SUBST(X_LIBS)

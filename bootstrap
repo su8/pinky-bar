@@ -44,10 +44,10 @@ _gen_files() {
   declare -a enumDistros=()
   for x in {0..6}
   do
-    enumDistros[${x}]="-D${_bases[${x}]^^}=${x}"
+    enumDistros[${x}]="AC_DEFINE_UNQUOTED([${_bases[${x}]^^}],[${x}],[distro enum generator])"
 
     [[ "${1,,}" == "${_bases[${x}]}" ]] && {
-      distro_num="${x}"
+      distro_num="AC_DEFINE_UNQUOTED([DISTRO],["${x}"],[passed distro as shell variable])"
     }
   done
 
@@ -61,8 +61,8 @@ _gen_files() {
 
   AM_SILENT_RULES([yes])
   # Favour clang and fallback to gcc
-  AC_PROG_CC([clang llvm-gcc gcc])
-  AC_PROG_CC_C99
+  AC_PROG_CC([clang llvm-gcc gcc]) # first attemp to find compiler
+  AC_PROG_CC_C99 # second and last attempt to find compiler
   AC_C_CONST
   AC_HEADER_STDC
   AM_PROG_CC_C_O
@@ -74,9 +74,13 @@ _gen_files() {
   TEST_TYPEZ
   TEST_CFLAGZ
 
+  # Definitions
+  "${distro_num}"
+  "${enumDistros[@]}"
+
   AC_CONFIG_FILES([
-  Makefile
-  src/Makefile
+    Makefile
+    src/Makefile
   ])
 
   AC_OUTPUT
@@ -88,8 +92,7 @@ _gen_files() {
 
   # Makefile.am
   main_makefile=('
-  SUBDIRS = \
-      src
+    SUBDIRS = src
   ')
 
 
@@ -102,19 +105,16 @@ _gen_files() {
     'functions_constants.h'
   )
 
-  src_makefile=('AM_CPPFLAGS = \
-      -D_POSIX_C_SOURCE=200112L \
-      -DICONS_DIR=\"$(ICONZ)\" \
-      -DWITH_COLOURS=$(WITH_COLOURS) \
-      -DDISTRO='${distro_num}' \
-      '${enumDistros[@]}'
+  # Do not pass more definitions to AM_CFLAGS
+  # Think of the line limit
+  src_makefile=('AM_CFLAGS = \
+    -D_POSIX_C_SOURCE=200112L
 
-  bin_PROGRAMS = \
-    '${prog_name}'
+    bin_PROGRAMS = '${prog_name}'
 
-  '${prog_name}'_LDADD = $(X_LIBS) $(ALSA_LIBS) $(MPD_LIBS)
+    '${prog_name}'_LDADD = $(X_LIBS) $(ALSA_LIBS) $(MPD_LIBS)
 
-  '${prog_name}'_SOURCES = '${src_files[@]}'
+    '${prog_name}'_SOURCES = '${src_files[@]}'
   ')
 
 
