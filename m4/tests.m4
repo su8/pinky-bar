@@ -150,6 +150,29 @@ AC_DEFUN([CHECK_CFLAGZ],[
   ])dnl
 ])
 
+dnl Internal function to check
+dnl the compiler for assembly support
+AC_DEFUN([TEST_ASSEMBLY],[
+
+  AC_MSG_CHECKING([for assembly support])
+
+  AC_COMPILE_IFELSE([
+    AC_LANG_PROGRAM([[
+      #include <stdint.h>]],[[
+      uintmax_t x;
+      __asm__ __volatile__ (".byte 0x0f, 0x31" : "=A" (x));
+    ]])
+  ],[supportz_assembly=yes],[supportz_assembly=no])
+
+  AC_MSG_RESULT([$supportz_assembly])
+
+  AS_IF([test "x$supportz_assembly" = "xno"], [
+      ERR([Your compiler does not support assembly])
+    ]
+  )
+
+])
+
 dnl TEST_CFLAGZ() function in configure.ac
 dnl
 dnl Check for the presence and whether
@@ -187,6 +210,8 @@ AC_DEFUN([TEST_CFLAGZ],[
     -Wno-missing-field-initializers
   ])
 
+  TEST_ASSEMBLY()
+
 ])
 
 
@@ -201,6 +226,7 @@ AC_DEFUN([CHECK_TYPEZ],[
     ERR([Your compiler does not understand C data types.])
   ])
 ])
+
 
 dnl TEST_TYPEZ() function in configure.ac
 dnl
