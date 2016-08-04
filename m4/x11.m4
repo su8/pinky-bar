@@ -53,7 +53,6 @@ AC_DEFUN([TEST_X11],[
   ])
   AC_DEFINE_UNQUOTED([WITH_COLOURS],[$WITH_COLOURS],[Colorize the output])
 
-
   dnl xbm icons for non-dwm window manager
   AC_ARG_VAR(icons, [path to xbm icons for non-dwm WM])
   if [[ ! -z "${icons}" ]]

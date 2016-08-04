@@ -20,22 +20,32 @@ dnl MA 02110-1301, USA.
 dnl Internal function to perform
 dnl explicit compiler CFLAGS support test
 AC_DEFUN([CHECK_CFLAGZ],[
+  m4_foreach([fLaG], [$1], [
 
-  m4_foreach([tYpe], [$1], [
-    AX_CHECK_COMPILE_FLAG(
-      [tYpe],
-      AX_APPEND_FLAG([tYpe], [CFLAGS]),
-      ERR([Your compiler does not understand the above cflag])
-    )
+    AX_APPEND_FLAG([fLaG], [CFLAGS])
 
+    AC_MSG_CHECKING([whether fLaG will compile flawlessly])
     AC_COMPILE_IFELSE([
       AC_LANG_PROGRAM([[  ]], [[ return 0; ]])
     ],[cflagz_ok=yes],[cflagz_ok=no])
 
+    AC_LINK_IFELSE([
+      AC_LANG_SOURCE([[
+        int main(void) { return 0; }
+      ]])
+    ],[],[
+        AC_MSG_RESULT([no])
+        ERR([Failed to compile a simple test with the above fLaG CFLAG.])
+      ]
+    ) 
+
+    AC_MSG_RESULT([$cflagz_ok])
+
     AS_IF([test "x$cflagz_ok" = "xno"], [
-        ERR([Failed to compile a simple test with the above CFLAG.])
+        ERR([Failed to compile a simple test with the above fLaG CFLAG.])
       ]
     )
+
   ])dnl
 
 ])
@@ -73,6 +83,7 @@ dnl and bail out with pre-defined error msg
 dnl when some FLAG is unsupported.
 AC_DEFUN([TEST_CFLAGZ],[
 
+  AC_MSG_NOTICE([checking all CFLAGS])
   CHECK_CFLAGZ([
     -O2,
     -pipe,
