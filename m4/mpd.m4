@@ -38,9 +38,35 @@ AC_DEFUN([TEST_MPD],[
       ],[
         ERR_MUST_INSTALL([libmpdclient])
       ])
-    ]
-  )
+
+    m4_foreach([LiB], [
+        mpd_connection_new          ,
+        mpd_send_command            ,
+        mpd_recv_song               ,
+        mpd_connection_get_error    ,
+        mpd_connection_free         ,
+        mpd_song_get_uri
+      ],[
+        AC_CHECK_LIB(mpdclient,LiB,[],[
+          ERR([Missing core mpd function.])
+        ])
+    ])
+  ])
 
   AC_SUBST(MPD_LIBS)
+
+  AC_LINK_IFELSE([
+    AC_LANG_SOURCE([[
+      #include <mpd/client.h>
+      int main(void) {
+        struct mpd_connection *conn = NULL;
+        struct mpd_song *song;
+        return 0;
+      }
+    ]])
+  ],[],[
+    ERR([Failed to compile and link the mpd test.])
+    ]
+  )
 
 ])

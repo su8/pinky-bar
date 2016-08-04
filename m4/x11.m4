@@ -38,6 +38,17 @@ AC_DEFUN([TEST_X11],[
       ],[
         ERR_MUST_INSTALL([xorg and libx11])
       ])
+
+    m4_foreach([LiB], [
+        XOpenDisplay,
+        XStoreName,
+        XSync,
+        XCloseDisplay
+      ],[
+        AC_CHECK_LIB(X11,LiB,[],[
+          ERR([Missing core X11 function.])
+        ])
+    ])dnl
   ])
 
   dnl dwm/terminal multiplexer
@@ -63,5 +74,22 @@ AC_DEFUN([TEST_X11],[
   fi
 
   AC_SUBST(X_LIBS)
+
+  AS_IF([test "x$with_x11" = "xyes"], [
+    AC_LINK_IFELSE([
+      AC_LANG_SOURCE([[
+        #include <X11/Xlib.h>
+        int main(void) {
+          Display *display;
+          Window window;
+          XEvent evt;
+          return 0;
+        }
+      ]])
+    ],[],[
+      ERR([Failed to compile and link the X11 test.])
+      ]
+    )
+  ])
 
 ])
