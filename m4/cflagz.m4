@@ -26,23 +26,20 @@ AC_DEFUN([CHECK_CFLAGZ],[
 
     AC_MSG_CHECKING([whether fLaG will compile flawlessly])
     AC_COMPILE_IFELSE([
-      AC_LANG_PROGRAM([[  ]], [[ return 0; ]])
+      AC_LANG_SOURCE([[ int main(void) { return 0; } ]])
     ],[cflagz_ok=yes],[cflagz_ok=no])
-
-    AC_LINK_IFELSE([
-      AC_LANG_SOURCE([[
-        int main(void) { return 0; }
-      ]])
-    ],[],[
-        AC_MSG_RESULT([no])
-        ERR([Failed to compile a simple test with the above fLaG CFLAG.])
-      ]
-    ) 
 
     AC_MSG_RESULT([$cflagz_ok])
 
     AS_IF([test "x$cflagz_ok" = "xno"], [
         ERR([Failed to compile a simple test with the above fLaG CFLAG.])
+      ]
+    )
+
+    AC_LINK_IFELSE([
+      AC_LANG_SOURCE([[ int main(void) { return 0; } ]])
+    ],[],[
+        ERR([Failed to compile and link a simple test with the above fLaG CFLAG.])
       ]
     )
 
