@@ -51,7 +51,6 @@ AC_DEFUN([TEST_X11],[
     ])dnl
   ])
 
-  dnl dwm/terminal multiplexer
   WITH_COLOURS=0
   AC_ARG_WITH([colours],
     AS_HELP_STRING([--with-colours],
@@ -87,7 +86,7 @@ AC_DEFUN([TEST_X11],[
         }
       ]])
     ],[],[
-      ERR([Failed to compile and link the X11 test.])
+        LINK_FAILED([X11])
       ]
     )
   ])

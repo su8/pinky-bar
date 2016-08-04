@@ -17,19 +17,21 @@ dnl Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
 dnl MA 02110-1301, USA.
 
 
+dnl Internal function to let the user know
+dnl when some of the compile tests is about to begin
+AC_DEFUN([NOTIFY],[
+  AC_MSG_NOTICE([performing $1 compile test.])
+])
+
+
 dnl TEST_SOME_FUNCS() function in configure.ac
 dnl
 dnl The tests are simple enough, just to
-dnl see whether the compiler will fail to
-dnl compile them and show to the user 
-dnl which of those tests have failed.
-dnl The used library functions should not fail
-dnl to compile such simple tests, but you
-dnl never know which C library the user might
-dnl have installed (musl, uclibc) etc..
+dnl catch misbehaving compiler and/or
+dnl installed C libraries.
 AC_DEFUN([TEST_SOME_FUNCS],[
 
-  AC_MSG_NOTICE([performing strftime compile test])
+  NOTIFY([strftime])
   AC_COMPILE_IFELSE([
     AC_LANG_SOURCE([[
       #include <time.h>
@@ -41,12 +43,12 @@ AC_DEFUN([TEST_SOME_FUNCS],[
       }
     ]])
   ],[],[
-    ERR([Failed to compile the strftime test.])
+    COMPILE_FAILED([strftime])
     ]
   )
 
 
-  AC_MSG_NOTICE([performing statvfs compile test])
+  NOTIFY([statvfs])
   AC_COMPILE_IFELSE([
     AC_LANG_SOURCE([[
       #include <stdlib.h>
@@ -58,12 +60,12 @@ AC_DEFUN([TEST_SOME_FUNCS],[
       }
     ]])
   ],[],[
-    ERR([Failed to compile the statvfs storage test.])
+    COMPILE_FAILED([statvfs storage])
     ]
   )
 
 
-  AC_MSG_NOTICE([performing uname compile test])
+  NOTIFY([uname])
   AC_COMPILE_IFELSE([
     AC_LANG_SOURCE([[
       #include <sys/utsname.h>
@@ -74,12 +76,12 @@ AC_DEFUN([TEST_SOME_FUNCS],[
       }
     ]])
   ],[],[
-    ERR([Failed to compile the uname Kernel test.])
+    COMPILE_FAILED([uname Kernel])
     ]
   )
 
 
-  AC_MSG_NOTICE([performing sysinfo compile test])
+  NOTIFY([sysinfo])
   AC_COMPILE_IFELSE([
     AC_LANG_SOURCE([[
       #include <sys/sysinfo.h>
@@ -90,12 +92,12 @@ AC_DEFUN([TEST_SOME_FUNCS],[
       }
     ]])
   ],[],[
-    ERR([Failed to compile the sysinfo RAM test.])
+    COMPILE_FAILED([sysinfo RAM])
     ]
   )
 
 
-  AC_MSG_NOTICE([performing openNreadFile compile test])
+  NOTIFY([openNreadFile])
   AC_COMPILE_IFELSE([
     AC_LANG_SOURCE([[
       #include <stdio.h>
@@ -109,12 +111,12 @@ AC_DEFUN([TEST_SOME_FUNCS],[
       }
     ]])
   ],[],[
-    ERR([Failed to compile the openNreadFile test.])
+    COMPILE_FAILED([openNreadFile])
     ]
   )
 
 
-  AC_MSG_NOTICE([performing memset compile test])
+  NOTIFY([memset])
   AC_COMPILE_IFELSE([
     AC_LANG_SOURCE([[
       #include <string.h>
@@ -126,12 +128,12 @@ AC_DEFUN([TEST_SOME_FUNCS],[
       }
     ]])
   ],[],[
-    ERR([Failed to compile the memset test.])
+    COMPILE_FAILED([memset])
     ]
   )
 
 
-  AC_MSG_NOTICE([performing glob compile test])
+  NOTIFY([glob])
   AC_COMPILE_IFELSE([
     AC_LANG_SOURCE([[
       #include <glob.h>
@@ -141,12 +143,12 @@ AC_DEFUN([TEST_SOME_FUNCS],[
       }
     ]])
   ],[],[
-    ERR([Failed to compile the glob test.])
+    COMPILE_FAILED([glob])
     ]
   )
 
 
-  AC_MSG_NOTICE([performing getifaddrs compile test])
+  NOTIFY([getifaddrs])
   AC_COMPILE_IFELSE([
     AC_LANG_SOURCE([[
       #include <ifaddrs.h>
@@ -160,12 +162,12 @@ AC_DEFUN([TEST_SOME_FUNCS],[
       }
     ]])
   ],[],[
-    ERR([Failed to compile the getifaddrs test.])
+    COMPILE_FAILED([getifaddrs])
     ]
   )
 
 
-  AC_MSG_NOTICE([performing sysconf compile test])
+  NOTIFY([sysconf])
   AC_COMPILE_IFELSE([
     AC_LANG_SOURCE([[
       #include <time.h>
@@ -178,12 +180,12 @@ AC_DEFUN([TEST_SOME_FUNCS],[
       }
     ]])
   ],[],[
-    ERR([Failed to compile the sysconf test.])
+    COMPILE_FAILED([sysconf])
     ]
   )
 
 
-  AC_MSG_NOTICE([performing snprintf compile test])
+  NOTIFY([snprintf])
   AC_COMPILE_IFELSE([
     AC_LANG_SOURCE([[
       #include <stdio.h>
@@ -194,12 +196,12 @@ AC_DEFUN([TEST_SOME_FUNCS],[
       }
     ]])
   ],[],[
-    ERR([Failed to compile the snprintf test.])
+    COMPILE_FAILED([snprintf])
     ]
   )
 
 
-  AC_MSG_NOTICE([performing getopt compile test])
+  NOTIFY([getopt])
   AC_COMPILE_IFELSE([
     AC_LANG_SOURCE([[
       #include <getopt.h>
@@ -215,12 +217,12 @@ AC_DEFUN([TEST_SOME_FUNCS],[
       }
     ]])
   ],[],[
-    ERR([Failed to compile the getopt test.])
+    COMPILE_FAILED([getopt])
     ]
   )
 
 
-  AC_MSG_NOTICE([performing timespec compile test])
+  NOTIFY([timespec])
   AC_COMPILE_IFELSE([
     AC_LANG_SOURCE([[
       #include <time.h>
@@ -231,7 +233,41 @@ AC_DEFUN([TEST_SOME_FUNCS],[
       }
     ]])
   ],[],[
-    ERR([Failed to compile the timespec test.])
+    COMPILE_FAILED([timespec])
+    ]
+  )
+
+
+  NOTIFY([popen])
+  AC_COMPILE_IFELSE([
+    AC_LANG_SOURCE([[
+      #include <stdio.h>
+      int main(void) {
+        char hi[30];
+        FILE *test = popen("echo elo", "r");
+        fscanf(test, "%s", hi);
+        pclose(test);
+        return 0;
+      }
+    ]])
+  ],[],[
+    COMPILE_FAILED([popen])
+    ]
+  )
+
+
+  NOTIFY([clock_gettime])
+  AC_COMPILE_IFELSE([
+    AC_LANG_SOURCE([[
+      #include <time.h>
+      int main(void) {
+        struct timespec tc = {0};
+        clock_gettime(CLOCK_MONOTONIC, &tc);
+        return 0;
+      }
+    ]])
+  ],[],[
+    COMPILE_FAILED([clock_gettime])
     ]
   )
 

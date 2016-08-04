@@ -60,9 +60,15 @@ _gen_files() {
   AM_INIT_AUTOMAKE([1.11 -Wall no-define foreign subdir-objects dist-xz no-dist-gzip std-options])
 
   AM_SILENT_RULES([yes])
-  # Favour clang and fallback to gcc
-  #AC_PROG_CC([clang llvm-gcc gcc]) # first attemp to find compiler
-  AC_PROG_CC_C99 # second and last attempt to find compiler
+
+  # With the addition of more runtime compile and
+  # link tests, this option is no more necessary.
+  # Any compiler and C library succeeding to pass the
+  # tests will be able to compile and run the
+  # program flawlessly.
+  #AC_PROG_CC([clang llvm-gcc gcc])
+
+  AC_PROG_CC_C99
   AC_C_CONST
   AC_HEADER_STDC
   AM_PROG_CC_C_O

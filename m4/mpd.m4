@@ -70,7 +70,7 @@ AC_DEFUN([TEST_MPD],[
         }
       ]])
     ],[],[
-      ERR([Failed to compile and link the mpd test.])
+        LINK_FAILED([mpd])
       ]
     )
   ])

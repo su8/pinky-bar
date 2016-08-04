@@ -72,7 +72,7 @@ AC_DEFUN([TEST_ALSA],[
         }
       ]])
     ],[],[
-      ERR([Failed to compile and link the alsa test.])
+      LINK_FAILED([alsa])
       ]
     )
   ])

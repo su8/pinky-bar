@@ -23,8 +23,20 @@ AC_DEFUN([ERR],[
   AC_MSG_ERROR($1)
 ])
 
-dnl Internal function to show what must to
+dnl Internal function to show what have to
 dnl be installed in order to compile the program.
 AC_DEFUN([ERR_MUST_INSTALL],[
   ERR([Install $1 in order to compile the program.])
+])
+
+dnl Internal function to show error msg when
+dnl compiling and linking some of tests failed
+AC_DEFUN([LINK_FAILED], [
+  ERR([Failed to compile and link the $1 test.])
+])
+
+dnl Internal function to show error msg when
+dnl compiling some of tests failed
+AC_DEFUN([COMPILE_FAILED], [
+  ERR([Failed to compile the $1 test.])
 ])
