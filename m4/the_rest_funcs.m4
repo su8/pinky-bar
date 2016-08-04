@@ -164,4 +164,75 @@ AC_DEFUN([TEST_SOME_FUNCS],[
     ]
   )
 
+
+  AC_MSG_NOTICE([performing sysconf compile test])
+  AC_COMPILE_IFELSE([
+    AC_LANG_SOURCE([[
+      #include <time.h>
+      #include <unistd.h>
+      int main(void) {
+        if (-1 == (sysconf(_SC_CLK_TCK))) {
+          return 0;
+        }
+        return 0;
+      }
+    ]])
+  ],[],[
+    ERR([Failed to compile the sysconf test.])
+    ]
+  )
+
+
+  AC_MSG_NOTICE([performing snprintf compile test])
+  AC_COMPILE_IFELSE([
+    AC_LANG_SOURCE([[
+      #include <stdio.h>
+      int main(void) {
+        char test[10];
+        snprintf(test, 8, "%s", "hi");
+        return 0;
+      }
+    ]])
+  ],[],[
+    ERR([Failed to compile the snprintf test.])
+    ]
+  )
+
+
+  AC_MSG_NOTICE([performing getopt compile test])
+  AC_COMPILE_IFELSE([
+    AC_LANG_SOURCE([[
+      #include <getopt.h>
+      #define NULL ((void *)0)
+      int main(void) {
+        const struct option options[] = {
+          { "mpd",          no_argument,       NULL, 'M' },
+          { "statio",       required_argument, NULL, 'S' },
+          { NULL,           0,                 NULL,  0  }
+        };
+
+        return 0;
+      }
+    ]])
+  ],[],[
+    ERR([Failed to compile the getopt test.])
+    ]
+  )
+
+
+  AC_MSG_NOTICE([performing timespec compile test])
+  AC_COMPILE_IFELSE([
+    AC_LANG_SOURCE([[
+      #include <time.h>
+      int main(void) {
+        struct timespec tc = {0};
+        tc.tv_nsec = 85000L;
+        return 0;
+      }
+    ]])
+  ],[],[
+    ERR([Failed to compile the timespec test.])
+    ]
+  )
+
 ])

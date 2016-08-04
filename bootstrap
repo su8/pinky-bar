@@ -61,7 +61,7 @@ _gen_files() {
 
   AM_SILENT_RULES([yes])
   # Favour clang and fallback to gcc
-  AC_PROG_CC([clang llvm-gcc gcc]) # first attemp to find compiler
+  #AC_PROG_CC([clang llvm-gcc gcc]) # first attemp to find compiler
   AC_PROG_CC_C99 # second and last attempt to find compiler
   AC_C_CONST
   AC_HEADER_STDC
