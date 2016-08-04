@@ -68,6 +68,7 @@ _gen_files() {
   AM_PROG_CC_C_O
 
   # The linker flags tests in m4 dir
+  TEST_SOME_FUNCS
   TEST_X11
   TEST_ALSA
   TEST_MPD
