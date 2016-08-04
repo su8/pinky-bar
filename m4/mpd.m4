@@ -62,6 +62,10 @@ AC_DEFUN([TEST_MPD],[
         int main(void) {
           struct mpd_connection *conn = NULL;
           struct mpd_song *song;
+          if (NULL == (conn = mpd_connection_new(NULL, 0, 0))) {
+            return 0;
+          }
+          mpd_connection_free(conn);
           return 0;
         }
       ]])

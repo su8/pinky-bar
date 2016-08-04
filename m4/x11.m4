@@ -37,7 +37,7 @@ AC_DEFUN([TEST_X11],[
       X_LIBS="-lX11"
       ],[
         ERR_MUST_INSTALL([xorg and libx11])
-      ])
+    ])
 
     m4_foreach([LiB], [
         XOpenDisplay,
