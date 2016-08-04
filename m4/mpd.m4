@@ -55,18 +55,20 @@ AC_DEFUN([TEST_MPD],[
 
   AC_SUBST(MPD_LIBS)
 
-  AC_LINK_IFELSE([
-    AC_LANG_SOURCE([[
-      #include <mpd/client.h>
-      int main(void) {
-        struct mpd_connection *conn = NULL;
-        struct mpd_song *song;
-        return 0;
-      }
-    ]])
-  ],[],[
-    ERR([Failed to compile and link the mpd test.])
-    ]
-  )
+  AS_IF([test "x$with_mpd" = "xyes"], [
+    AC_LINK_IFELSE([
+      AC_LANG_SOURCE([[
+        #include <mpd/client.h>
+        int main(void) {
+          struct mpd_connection *conn = NULL;
+          struct mpd_song *song;
+          return 0;
+        }
+      ]])
+    ],[],[
+      ERR([Failed to compile and link the mpd test.])
+      ]
+    )
+  ])
 
 ])

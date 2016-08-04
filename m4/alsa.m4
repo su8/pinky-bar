@@ -60,19 +60,21 @@ AC_DEFUN([TEST_ALSA],[
 
   AC_SUBST(ALSA_LIBS)
 
-  AC_LINK_IFELSE([
-    AC_LANG_SOURCE([[
-      #include <alsa/asoundlib.h>
-      int main(void) {
-        snd_mixer_t *handle = NULL;
-        snd_mixer_elem_t *elem = NULL;
-        snd_mixer_selem_id_t *s_elem = NULL;
-        return 0;
-      }
-    ]])
-  ],[],[
-    ERR([Failed to compile and link the alsa test.])
-    ]
-  )
+  AS_IF([test "x$with_alsa" = "xyes"], [
+    AC_LINK_IFELSE([
+      AC_LANG_SOURCE([[
+        #include <alsa/asoundlib.h>
+        int main(void) {
+          snd_mixer_t *handle = NULL;
+          snd_mixer_elem_t *elem = NULL;
+          snd_mixer_selem_id_t *s_elem = NULL;
+          return 0;
+        }
+      ]])
+    ],[],[
+      ERR([Failed to compile and link the alsa test.])
+      ]
+    )
+  ])
 
 ])
