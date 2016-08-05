@@ -80,4 +80,9 @@
 #define InteL  0x756e6547
 
 
+/* --coresload related constant to determine
+ * how many cpu cores/threads to try for detection */
+#define MAX_CORES 65
+
+
 #endif /* CONSTANTS2_H_ */

@@ -22,6 +22,7 @@
 #define FUNCTIONS_H_
 
 void get_cpu(char *, char *);
+void get_cores_load(char *, char *);
 void get_ram(char *);
 void get_ssd(char *);
 void get_packs(char *);

@@ -55,12 +55,14 @@ int main(int argc, char *argv[]) {
   char combined[WHOLE_MAIN_ARR_LEN] = "";
   char *all = combined;
   char packs[VLA], mobo[VLA], cpu[VLA], ram[VLA], ssd[VLA], net_speed[VLA];
-  char kernel[VLA], volume[VLA], taim[VLA], fans[VLA], statio[VLA], cpu_info[VLA];
-  char voltage[VLA], cpu_temp[VLA], mobo_temp[VLA], net[VLA], cpu_clock_speed[VLA];
+  char kernel[VLA], volume[VLA], taim[VLA], fans[VLA], statio[VLA];
+  char voltage[VLA], cpu_temp[VLA], mobo_temp[VLA], net[VLA];
+  char cpu_cores[VLA], cpu_clock_speed[VLA], cpu_info[VLA];
 
   const struct option options[] = {
     { "mpd",          no_argument,       NULL, 'M' },
     { "cpu",          no_argument,       NULL, 'c' },
+    { "coresload",    no_argument,       NULL, 'L' },
     { "cpuspeed",     no_argument,       NULL, 'C' },
     { "cpuinfo",      no_argument,       NULL, 'I' },
     { "ram",          no_argument,       NULL, 'r' },
@@ -80,7 +82,7 @@ int main(int argc, char *argv[]) {
   };
 
   int ch = 0;
-  while (0 < (ch = getopt_long(argc, argv, "McCIrspkvfmVthi:S:b:", options, NULL))) {
+  while (0 < (ch = getopt_long(argc, argv, "McCLIrspkvfmVthi:S:b:", options, NULL))) {
     switch (ch) {
       case 'M':
 #if defined (HAVE_MPD_CLIENT_H)
@@ -95,11 +97,22 @@ int main(int argc, char *argv[]) {
         get_cpu(cpu, cpu_temp);
         tc.tv_nsec = sysconf(_SC_CLK_TCK) * 1000000L;
         if (-1 == (nanosleep(&tc, NULL))) {
-          printf("%s\n", "Error: nanosleep() failed");
+          printf("%s\n", NANOSLEEP_FAILED);
           return EXIT_FAILURE;
         }
         get_cpu(cpu, cpu_temp);
         GLUE(all, FMT_CPU, CPU_STR, cpu, cpu_temp);
+        break;
+
+      case 'L':
+        get_cores_load(cpu_cores, cpu_temp);
+        tc.tv_nsec = sysconf(_SC_CLK_TCK) * 1000000L;
+        if (-1 == (nanosleep(&tc, NULL))) {
+          printf("%s\n", NANOSLEEP_FAILED);
+          return EXIT_FAILURE;
+        }
+        get_cores_load(cpu_cores, cpu_temp);
+        GLUE(all, FMT_CORES, CPU_STR, cpu_cores, cpu_temp);
         break;
 
       case 'r':
@@ -153,7 +166,7 @@ int main(int argc, char *argv[]) {
         get_net(net_speed, optarg, true);
         tc.tv_nsec = 850000000L;
         if (-1 == (nanosleep(&tc, NULL))) {
-          printf("%s\n", "Error: nanosleep() failed");
+          printf("%s\n", NANOSLEEP_FAILED);
           return EXIT_FAILURE;
         }
         get_net(net_speed, optarg, true);
@@ -210,6 +223,7 @@ void help_msg(void) {
       "Available options:\n"
       "  -M, --mpd\t The currently played song name (if any).\n"
       "  -c, --cpu\t The current cpu load and temperature.\n"
+      "  -L, --coresload Show per core load and overall cpu temperature (dont mix with -c).\n"
       "  -C, --cpuspeed Show your maximum cpu clock speed in MHz.\n"
       "  -I, --cpuinfo\t Detect your CPU vendor, stepping, family.\n"
       "  -r, --ram\t The used ram.\n"

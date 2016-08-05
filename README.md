@@ -31,6 +31,7 @@ The order of supplied options will dictate how, where and what system informatio
 |--------------|-------------|--------------------------------------------------------------------|
 | -M           | --mpd       | The currently played song name (if any)                            |
 | -c           | --cpu       | The current cpu load and temperature                               |
+| -L           | --coresload | Show per core load and overall cpu temperature (dont mix with -c)  |
 | -C           | --cpuspeed  | Show your maximum cpu clock speed in MHz, regardless of the used governor |
 | -I           | --cpuinfo   | Detect your CPU vendor, stepping and family from low level assembly access |
 | -r           | --ram       | The used ram                                                       |

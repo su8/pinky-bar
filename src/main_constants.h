@@ -22,7 +22,7 @@
 #define CONSTANTS_H_
 
 #define VLA 200
-#define WHOLE_MAIN_ARR_LEN VLA*15
+#define WHOLE_MAIN_ARR_LEN VLA*16
 #define GLUE(x, z, ...) (x+=snprintf(x, WHOLE_MAIN_ARR_LEN, z, __VA_ARGS__))
 #define GET_N_FMT(func, ...) \
   get_##func(func); \
@@ -66,6 +66,7 @@
 #define FMT_TIME      NAME_VAL                            /* Time 10:00 PM        */
 #define FMT_MOBO      FMT_TIME" "TEMP                     /* VEND NAME 32C        */
 #define FMT_CPU       FMT_TIME"%% "TEMP                   /* CPU 10% 32C          */
+#define FMT_CORES     FMT_TIME TEMP                       /* CPU varying 32C      */
 #define FMT_RAM       FMT                                 /* RAM 10%              */
 #define FMT_SSD       FMT                                 /* SSD 10%              */
 #define FMT_PKGS      FMT_TIME" "                         /* Pkgs 123             */
@@ -75,5 +76,8 @@
 #define FMT_NET       FMT_PKGS                            /* Down 123 Up 123      */
 #define FMT_STATIO    FMT_NET                             /* Read 123 Written 123 */
 #define FMT_CPUSPEED  PINK STR_SPEC " "                   /* 1234 MHz             */
+
+
+#define NANOSLEEP_FAILED "Error: nanosleep() failed"
 
 #endif /* CONSTANTS_H_ */

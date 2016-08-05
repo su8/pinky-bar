@@ -125,6 +125,72 @@ get_cpu(char *str1, char *str2) {
 }
 
 
+void
+get_cores_load(char *str1, char *str2) {
+
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wmissing-field-initializers"
+  static uintmax_t previous_total[MAX_CORES] = {0}, previous_idle[MAX_CORES] = {0};
+  uintmax_t percent[MAX_CORES] = {0}, diff_total[MAX_CORES] = {0};
+  uintmax_t diff_idle[MAX_CORES] = {0}, total[MAX_CORES] = {0};
+#pragma GCC diagnostic pop
+
+  uintmax_t x = 0, y = 0, z = 0;
+  uintmax_t core_active[MAX_CORES][10];
+  char buf[VLA], temp[VLA];
+  char *all = temp;
+
+  FILE *fp = fopen("/proc/stat", "r");
+  if (NULL == fp) {
+    exit_with_err(CANNOT_OPEN, "/proc/stat");
+  }
+
+  if (NULL == fgets(buf, VLA, fp)) {
+    exit_with_err(ERR, "reached /proc/stat EOF");
+  }
+
+  for (x = 0; x < MAX_CORES; x++) {
+    if (NULL == fgets(buf, VLA, fp)) {
+      exit_with_err(ERR, "reached /proc/stat EOF");
+    }
+
+    if (buf[0] != 'c' && buf[1] != 'p' && buf[2] != 'u') {
+      break;
+    }
+
+    if (sscanf(buf, "%*s " FMT_UINT FMT_UINT FMT_UINT FMT_UINT FMT_UINT FMT_UINT FMT_UINT FMT_UINT FMT_UINT FMT_UINT,
+      &core_active[x][0], &core_active[x][1], &core_active[x][2], &core_active[x][3],
+      &core_active[x][4], &core_active[x][5], &core_active[x][6], &core_active[x][7],
+      &core_active[x][8], &core_active[x][9]) == EOF) {
+        fclose(fp);
+        exit_with_err(ERR,"Upgrade to a newer kernel");
+    }
+  }
+  fclose(fp);
+
+  z = x;
+  for (x = 0; x < z; x++) {
+    for (y = 0; y < 10; y++) {
+      total[x] += core_active[x][y];
+    }
+
+    diff_total[x]     = total[x] - previous_total[x];
+    diff_idle[x]      = core_active[x][3] - previous_idle[x];
+
+    previous_total[x] = total[x];
+    previous_idle[x]  = core_active[x][3];
+
+    percent[x]        = (uintmax_t)sysconf(_SC_CLK_TCK) *
+                      (diff_total[x] - diff_idle[x]) / diff_total[x];
+
+    all += snprintf(all, VLA, FMT_UINT"%% ", percent[x]);
+  }
+
+  get_temp(CPU_TEMP_FILE, str2);
+  FILL_STR_ARR(1, str1, temp);
+}
+
+
 void 
 get_ram(char *str1) {
   uintmax_t used = 0, total = 0, percent = 0;
