@@ -532,7 +532,13 @@ rdtsc(void) {
 void
 get_cpu_clock_speed(char *str1) {
   uintmax_t x, y, z[2];
+
+/* Mute the clang snafus - https://llvm.org/bugs/show_bug.cgi?id=21689  */
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wmissing-field-initializers"
   struct timespec start = {0}, stop = {0}, tc = {0};
+#pragma GCC diagnostic pop
+
   tc.tv_nsec = sysconf(_SC_CLK_TCK) * 1000000L;
 
   x = rdtsc();
@@ -563,7 +569,13 @@ rdtsc(void) {
 void
 get_cpu_clock_speed(char *str1) {
   uintmax_t x, z;
+
+/* Mute the clang snafus - https://llvm.org/bugs/show_bug.cgi?id=21689  */
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wmissing-field-initializers"
   struct timespec tc = {0};
+#pragma GCC diagnostic pop
+
   tc.tv_nsec = sysconf(_SC_CLK_TCK) * 1000000L;
 
   x = rdtsc();

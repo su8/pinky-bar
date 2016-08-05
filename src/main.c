@@ -45,7 +45,12 @@ int main(int argc, char *argv[]) {
     return EXIT_FAILURE;
   }
 
+/* They should rename clang to C++ Lang */
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wmissing-field-initializers"
   struct timespec tc = {0};
+#pragma GCC diagnostic pop
+
   char song[VLA] = "";
   char combined[WHOLE_MAIN_ARR_LEN] = "";
   char *all = combined;

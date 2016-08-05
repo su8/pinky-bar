@@ -80,8 +80,15 @@ dnl and bail out with pre-defined error msg
 dnl when some FLAG is unsupported.
 AC_DEFUN([TEST_CFLAGZ],[
 
-
   dnl -Wdeclaration-after-statement,
+
+  dnl Shame on you c++lang, err clang
+  dnl Keeping this flag for historical
+  dnl reasons just to remind myself and
+  dnl anyone reading this file about the
+  dnl clangs inabillity to distinguish
+  dnl C from C++
+  dnl -Wno-missing-field-initializers
 
   AC_MSG_NOTICE([checking all CFLAGS])
   CHECK_CFLAGZ([
@@ -107,10 +114,9 @@ AC_DEFUN([TEST_CFLAGZ],[
     -Wmissing-prototypes,
     -Wno-unused-result,
     -Wno-unused-function,
-    -Wno-unused-variable,
-    -Wno-missing-field-initializers
+    -Wno-unused-variable
   ])
-
+ 
   TEST_ASSEMBLY()
 
 ])
