@@ -127,18 +127,24 @@ get_cpu(char *str1, char *str2) {
 
 void
 get_cores_load(char *str1, char *str2) {
-
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wmissing-field-initializers"
-  static uintmax_t previous_total[MAX_CORES] = {0}, previous_idle[MAX_CORES] = {0};
-  uintmax_t percent[MAX_CORES] = {0}, diff_total[MAX_CORES] = {0};
-  uintmax_t diff_idle[MAX_CORES] = {0}, total[MAX_CORES] = {0};
-#pragma GCC diagnostic pop
-
+  static uintmax_t previous_total[MAX_CORES], previous_idle[MAX_CORES];
+  static uintmax_t test_flag = 0;
   uintmax_t x = 0, y = 0, z = 0;
-  uintmax_t core_active[MAX_CORES][10];
+  uintmax_t percent[MAX_CORES], diff_total[MAX_CORES], core_active[MAX_CORES][10];
+  uintmax_t diff_idle[MAX_CORES], total[MAX_CORES];
   char buf[VLA], temp[VLA];
   char *all = temp;
+
+  memset(percent, 0, sizeof(percent));
+  memset(diff_total, 0, sizeof(diff_total));
+  memset(diff_idle, 0, sizeof(diff_idle));
+  memset(total, 0, sizeof(total));
+  memset(core_active, 0, sizeof(core_active));
+
+  if (0 == test_flag) {
+    memset(previous_idle, 0, sizeof(previous_idle));
+    memset(previous_total, 0, sizeof(previous_total));
+  }
 
   FILE *fp = fopen("/proc/stat", "r");
   if (NULL == fp) {
@@ -187,6 +193,8 @@ get_cores_load(char *str1, char *str2) {
 
     all += snprintf(all, VLA, FMT_UINT"%% ", percent[x]);
   }
+
+  test_flag = 1;
 
   get_temp(CPU_TEMP_FILE, str2);
   FILL_STR_ARR(1, str1, temp);
