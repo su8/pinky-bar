@@ -146,11 +146,13 @@ get_cores_load(char *str1, char *str2) {
   }
 
   if (NULL == fgets(buf, VLA, fp)) {
+    fclose(fp);
     exit_with_err(ERR, "reached /proc/stat EOF");
   }
 
   for (x = 0; x < MAX_CORES; x++) {
     if (NULL == fgets(buf, VLA, fp)) {
+      fclose(fp);
       exit_with_err(ERR, "reached /proc/stat EOF");
     }
 
