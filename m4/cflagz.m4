@@ -80,6 +80,9 @@ dnl and bail out with pre-defined error msg
 dnl when some FLAG is unsupported.
 AC_DEFUN([TEST_CFLAGZ],[
 
+
+  dnl -Wdeclaration-after-statement,
+
   AC_MSG_NOTICE([checking all CFLAGS])
   CHECK_CFLAGZ([
     -O2,
@@ -90,7 +93,7 @@ AC_DEFUN([TEST_CFLAGZ],[
     -pedantic,
     -Wundef,
     -Wshadow,
-    -w,
+    -W,
     -Wwrite-strings,
     -Wcast-align,
     -Wstrict-overflow=5,
@@ -99,12 +102,12 @@ AC_DEFUN([TEST_CFLAGZ],[
     -Wstrict-prototypes,
     -Wformat=0,
     -Wsign-compare,
-    -Wdeclaration-after-statement,
     -Wendif-labels,
     -Wredundant-decls,
     -Wmissing-prototypes,
     -Wno-unused-result,
     -Wno-unused-function,
+    -Wno-unused-variable,
     -Wno-missing-field-initializers
   ])
 

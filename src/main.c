@@ -74,7 +74,7 @@ int main(int argc, char *argv[]) {
     { NULL,           0,                 NULL,  0  }
   };
 
-  short int ch = 0;
+  int ch = 0;
   while (0 < (ch = getopt_long(argc, argv, "McCIrspkvfmVthi:S:b:", options, NULL))) {
     switch (ch) {
       case 'M':

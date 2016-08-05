@@ -59,7 +59,7 @@
  * llvm Host.cpp */
 #define CPU_VENDOR(x, z) __asm__("cpuid": "=b" (z) : "a" (x))
 #define CPU_FEATURE(x, z) __asm__("cpuid": "=a" (z) : "a" (x))
-#define CPU_STR(regizter, a, b, c, d) __asm__( \
+#define CPU_STR2(regizter, a, b, c, d) __asm__( \
   "cpuid": \
     "=a" (a), \
     "=b" (b), \

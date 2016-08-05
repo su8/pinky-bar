@@ -611,7 +611,7 @@ get_cpu_info(char *str1) {
     if (0 != vend_str) {
 
       for (x = 0x80000002; x <= 0x80000004; x++) {    /* movl $0x80000002, %esi */
-        CPU_STR(x, eax, ebx, ecx, edx);               /* cmpl $0x80000004, %eax */
+        CPU_STR2(x, eax, ebx, ecx, edx);              /* cmpl $0x80000004, %eax */
         char vend_chars[17]; /* 12 + 4 */
 
         for (z = 0; z < 4; z++) {
