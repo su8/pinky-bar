@@ -48,7 +48,12 @@ The order of supplied options will dictate how, where and what system informatio
 | -a           | --ipaddr    | The local ip address [argument - eth0]                             |
 | -b           | --bandwitdh | The consumed internet bandwidth so far [argument - eth0]           |
 | -i           | --iface     | The current download and upload speed [argument - eth0]            |
+| -A           | --ipmac     | The NIC mac address [argument - eth0]                              |
+| -B           | --ipmask    | The NIC subnet mask [argument - eth0]                              |
+| -D           | --ipcast    | The NIC broadcast address [argument - eth0]                        |
 | -S           | --statio    | Read and written MBs to the drive so far [argument - sda]          |
+
+Before I start browsing the wild west called Internet with Tor, I always generate [random local ip](https://github.com/wifiextender/dotfiles/blob/master/gentoo/home/frost/.config/zsh/functions/network.zsh) and [mac address](https://github.com/wifiextender/dotfiles/blob/master/gentoo/home/frost/.config/zsh/functions/not-interactive-funcs.zsh#L24). So those functions in pinky-bar are used extensively by me at least to monitor the current fake addresses.
 
 ---
 

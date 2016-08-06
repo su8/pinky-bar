@@ -50,9 +50,10 @@ int main(int argc, char *argv[]) {
   char combined[WHOLE_MAIN_ARR_LEN] = "";
   char *all = combined;
   char packs[VLA], mobo[VLA], cpu[VLA], ram[VLA], ssd[VLA], net_speed[VLA];
-  char kernel[VLA], volume[VLA], taim[VLA], fans[VLA], statio[VLA];
-  char voltage[VLA], cpu_temp[VLA], mobo_temp[VLA], net[VLA];
+  char kernel[VLA], volume[VLA], taim[VLA], fans[VLA], statio[VLA], mask[VLA];
+  char voltage[VLA], cpu_temp[VLA], mobo_temp[VLA], net[VLA], mac[VLA];
   char cores_load[VLA], cpu_clock_speed[VLA], cpu_info[VLA], net_addr[VLA];
+  char net_cast[VLA];
 
   const struct option options[] = {
     { "mpd",          no_argument,       NULL, 'M' },
@@ -75,12 +76,15 @@ int main(int argc, char *argv[]) {
     { "ipaddr",       required_argument, NULL, 'a' },
     { "iface",        required_argument, NULL, 'i' },
     { "bandwidth",    required_argument, NULL, 'b' },
+    { "ipmac",        required_argument, NULL, 'A' },
+    { "ipmask",       required_argument, NULL, 'B' },
+    { "ipcast",       required_argument, NULL, 'D' },
     { "statio",       required_argument, NULL, 'S' },
     { NULL,           0,                 NULL,  0  }
   };
 
   int ch = 0;
-  while (0 < (ch = getopt_long(argc, argv, "McCLTIrspkvfmdVtha:i:S:b:", options, NULL))) {
+  while (0 < (ch = getopt_long(argc, argv, "McCLTIrspkvfmdVtha:A:B:D:i:S:b:", options, NULL))) {
     switch (ch) {
       case 'M':
 #if defined (HAVE_MPD_CLIENT_H)
@@ -160,6 +164,18 @@ int main(int argc, char *argv[]) {
         GET_NET_N_FMT(net_addr, optarg, 3, all, FMT_KERN, net_addr);
         break;
 
+      case 'A':
+        GET_NET_N_FMT(mac, optarg, 4, all, FMT_KERN, mac);
+        break;
+
+      case 'B':
+        GET_NET_N_FMT(mask, optarg, 5, all, FMT_KERN, mask);
+        break;
+
+      case 'D':
+        GET_NET_N_FMT(net_cast, optarg, 6, all, FMT_KERN, net_cast);
+        break;
+
       case 'S':
         get_statio(statio, optarg);
         GLUE(all, FMT_STATIO, STATIO_STR, statio);
@@ -227,6 +243,9 @@ void help_msg(void) {
       "  -a, --ipaddr\t The local ip address [argument - eth0].\n"
       "  -b, --bandwidth The consumed internet bandwidth so far [argument - eth0].\n"
       "  -i, --iface\t The current download and upload speed [argument - eth0].\n"
+      "  -A, --ipmac\t The NIC mac address [argument - eth0].\n"
+      "  -B, --ipmask\t The NIC subnet mask [argument - eth0].\n"
+      "  -D, --ipcast\t The NIC broadcast address [argument - eth0].\n"
       "  -S, --statio\t Read and written MBs to the drive so far [argument - sda].\n"
   );
 }
