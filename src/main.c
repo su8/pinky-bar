@@ -73,6 +73,7 @@ int main(int argc, char *argv[]) {
     { "voltage",      no_argument,       NULL, 'v' },
     { "fans",         no_argument,       NULL, 'f' },
     { "mobo",         no_argument,       NULL, 'm' },
+    { "mobotemp",     no_argument,       NULL, 'd' },
     { "volume",       no_argument,       NULL, 'V' },
     { "time",         no_argument,       NULL, 't' },
     { "help",         no_argument,       NULL, 'h' },
