@@ -24,6 +24,7 @@
 #include "include/headers.h"
 #include "cpu.h"
 #include "sound.h"
+#include "net.h"
 
 void help_msg(void);
 
@@ -51,7 +52,7 @@ int main(int argc, char *argv[]) {
   char packs[VLA], mobo[VLA], cpu[VLA], ram[VLA], ssd[VLA], net_speed[VLA];
   char kernel[VLA], volume[VLA], taim[VLA], fans[VLA], statio[VLA];
   char voltage[VLA], cpu_temp[VLA], mobo_temp[VLA], net[VLA];
-  char cores_load[VLA], cpu_clock_speed[VLA], cpu_info[VLA];
+  char cores_load[VLA], cpu_clock_speed[VLA], cpu_info[VLA], net_addr[VLA];
 
   const struct option options[] = {
     { "mpd",          no_argument,       NULL, 'M' },
@@ -71,6 +72,7 @@ int main(int argc, char *argv[]) {
     { "volume",       no_argument,       NULL, 'V' },
     { "time",         no_argument,       NULL, 't' },
     { "help",         no_argument,       NULL, 'h' },
+    { "ipaddr",       required_argument, NULL, 'a' },
     { "iface",        required_argument, NULL, 'i' },
     { "bandwidth",    required_argument, NULL, 'b' },
     { "statio",       required_argument, NULL, 'S' },
@@ -78,7 +80,7 @@ int main(int argc, char *argv[]) {
   };
 
   int ch = 0;
-  while (0 < (ch = getopt_long(argc, argv, "McCLTIrspkvfmdVthi:S:b:", options, NULL))) {
+  while (0 < (ch = getopt_long(argc, argv, "McCLTIrspkvfmdVtha:i:S:b:", options, NULL))) {
     switch (ch) {
       case 'M':
 #if defined (HAVE_MPD_CLIENT_H)
@@ -147,11 +149,15 @@ int main(int argc, char *argv[]) {
         break;
 
       case 'b':
-        GET_NET_N_FMT(net, optarg, false, all, FMT_NET, NET_STR, net);
+        GET_NET_N_FMT(net, optarg, 1, all, FMT_NET, NET_STR, net);
         break;
 
       case 'i':
-        GET_NET_N_FMT(net_speed, optarg, true, all, FMT_NET, SPEED_STR, net_speed);
+        GET_NET_N_FMT(net_speed, optarg, 2, all, FMT_NET, SPEED_STR, net_speed);
+        break;
+
+      case 'a':
+        GET_NET_N_FMT(net_addr, optarg, 3, all, FMT_KERN, net_addr);
         break;
 
       case 'S':
@@ -218,6 +224,7 @@ void help_msg(void) {
       "  -d, --mobotemp The motherboard temperature.\n"
       "  -V, --volume\t The volume.\n"
       "  -t, --time\t The current time.\n"
+      "  -a, --ipaddr\t The local ip address [argument - eth0].\n"
       "  -b, --bandwidth The consumed internet bandwidth so far [argument - eth0].\n"
       "  -i, --iface\t The current download and upload speed [argument - eth0].\n"
       "  -S, --statio\t Read and written MBs to the drive so far [argument - sda].\n"

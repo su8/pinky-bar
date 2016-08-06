@@ -40,7 +40,7 @@
 
 #define GET_NET_N_FMT(arg1, arg2, arg3, ...) \
   get_net(arg1, arg2, arg3); \
-  if (true == arg3)  { \
+  if (2 == arg3)  { \
     SLEEP_SLEEP_BABY(850000000L); \
     get_net(arg1, arg2, arg3); \
   } \

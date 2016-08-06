@@ -1,5 +1,5 @@
 /*
-   Copyright 07/06/2015, 07/18/2016
+   Copyright 08/06/2016
    Aaron Caffrey https://github.com/wifiextender
 
    This program is free software; you can redistribute it and/or modify
@@ -18,22 +18,9 @@
    MA 02110-1301, USA.
 */
 
-#ifndef FUNCTIONS_H_
-#define FUNCTIONS_H_
+#ifndef NET_H_
+#define NET_H_
 
-void get_ram(char *);
-void get_ssd(char *);
-void get_packs(char *);
-void get_kernel(char *);
-void get_voltage(char *);
-void get_fans(char *);
-void get_mobo(char *);
-void get_mobo_temp(char *);
-void get_taim(char *);
-void get_statio(char *, char *);
+void get_net(char *, char *, unsigned char num);
 
-#if defined (HAVE_X11_XLIB_H)
-void set_status(const char *);
-#endif
-
-#endif /* FUNCTIONS_H_ */
+#endif /* NET_H_ */

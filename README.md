@@ -45,6 +45,7 @@ The order of supplied options will dictate how, where and what system informatio
 | -d           | --mobotemp  | The motherboard temperature                                        |
 | -V           | --volume    | The volume                                                         |
 | -t           | --time      | The current time                                                   |
+| -a           | --ipaddr    | The local ip address [argument - eth0]                             |
 | -b           | --bandwitdh | The consumed internet bandwidth so far [argument - eth0]           |
 | -i           | --iface     | The current download and upload speed [argument - eth0]            |
 | -S           | --statio    | Read and written MBs to the drive so far [argument - sda]          |
@@ -252,6 +253,8 @@ At least on any AMD model that I tested the program, the maximum clock speed wit
 
 Compare the voltage usage in both snapshots.
 
+Before you ask, [this](https://raw.githubusercontent.com/wifiextender/dotfiles/master/gentoo/home/frost/.config/misc/pinky.jpg) is the used background image in above two snapshots.
+
 ---
 
 ## Wish list
@@ -305,6 +308,10 @@ Show the idle time in seconds/minutes: easy to be added via [XScreenSaverQueryIn
 Show the CapsLock/NumLock/ScrollLock indicator status for keyboard without LEDs: easy to be added via [XkbGetIndicatorState](http://linux.die.net/man/3/xkbgetindicatorstate), but will discriminate the users that have compiled the program **--without-x11**.
 
 ---
+
+## But can it run Crysis ?
+
+I think you are on the wrong page.
 
 ## Want xinitrc template ?
 
