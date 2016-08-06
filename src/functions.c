@@ -27,7 +27,7 @@
  * https://gcc.gnu.org/bugzilla/show_bug.cgi?id=66425
  * https://gcc.gnu.org/bugzilla/show_bug.cgi?id=25509
  *
- * Do add any -Wno cflags just to mute the compilers snafus
+ * Do not add any -Wno cflags just to mute the compilers snafus
  * */
 
 #include <time.h>
