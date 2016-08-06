@@ -57,7 +57,7 @@ int main(int argc, char *argv[]) {
   char packs[VLA], mobo[VLA], cpu[VLA], ram[VLA], ssd[VLA], net_speed[VLA];
   char kernel[VLA], volume[VLA], taim[VLA], fans[VLA], statio[VLA];
   char voltage[VLA], cpu_temp[VLA], mobo_temp[VLA], net[VLA];
-  char cpu_cores[VLA], cpu_clock_speed[VLA], cpu_info[VLA];
+  char cores_load[VLA], cpu_clock_speed[VLA], cpu_info[VLA];
 
   const struct option options[] = {
     { "mpd",          no_argument,       NULL, 'M' },
@@ -65,6 +65,7 @@ int main(int argc, char *argv[]) {
     { "coresload",    no_argument,       NULL, 'L' },
     { "cpuspeed",     no_argument,       NULL, 'C' },
     { "cpuinfo",      no_argument,       NULL, 'I' },
+    { "cputemp",      no_argument,       NULL, 'T' },
     { "ram",          no_argument,       NULL, 'r' },
     { "storage",      no_argument,       NULL, 's' },
     { "packages",     no_argument,       NULL, 'p' },
@@ -82,7 +83,7 @@ int main(int argc, char *argv[]) {
   };
 
   int ch = 0;
-  while (0 < (ch = getopt_long(argc, argv, "McCLIrspkvfmVthi:S:b:", options, NULL))) {
+  while (0 < (ch = getopt_long(argc, argv, "McCLTIrspkvfmdVthi:S:b:", options, NULL))) {
     switch (ch) {
       case 'M':
 #if defined (HAVE_MPD_CLIENT_H)
@@ -94,25 +95,19 @@ int main(int argc, char *argv[]) {
 #endif
 
       case 'c':
-        get_cpu(cpu, cpu_temp);
-        tc.tv_nsec = sysconf(_SC_CLK_TCK) * 1000000L;
-        if (-1 == (nanosleep(&tc, NULL))) {
-          printf("%s\n", NANOSLEEP_FAILED);
-          return EXIT_FAILURE;
-        }
-        get_cpu(cpu, cpu_temp);
-        GLUE(all, FMT_CPU, CPU_STR, cpu, cpu_temp);
+        get_cpu(cpu);
+        SLEEP_SLEEP_BABY(sysconf(_SC_CLK_TCK) * 1000000L);
+        GET_N_FMT(cpu, all, FMT_CPU, CPU_STR, cpu);
         break;
 
       case 'L':
-        get_cores_load(cpu_cores, cpu_temp);
-        tc.tv_nsec = sysconf(_SC_CLK_TCK) * 1000000L;
-        if (-1 == (nanosleep(&tc, NULL))) {
-          printf("%s\n", NANOSLEEP_FAILED);
-          return EXIT_FAILURE;
-        }
-        get_cores_load(cpu_cores, cpu_temp);
-        GLUE(all, FMT_CORES, CPU_STR, cpu_cores, cpu_temp);
+        get_cores_load(cores_load);
+        SLEEP_SLEEP_BABY(sysconf(_SC_CLK_TCK) * 1000000L);
+        GET_N_FMT(cores_load, all, FMT_CORES, CPU_STR, cores_load);
+        break;
+
+      case 'T':
+        GET_N_FMT(cpu_temp, all, FMT_TEMP, cpu_temp);
         break;
 
       case 'r':
@@ -140,8 +135,11 @@ int main(int argc, char *argv[]) {
         break;
 
       case 'm':
-        get_mobo(mobo, mobo_temp);
-        GLUE(all, FMT_MOBO, MOBO_STR, mobo, mobo_temp);
+        GET_N_FMT(mobo, all, FMT_MOBO, MOBO_STR, mobo);
+        break;
+
+      case 'd':
+        GET_N_FMT(mobo_temp, all, FMT_TEMP, mobo_temp);
         break;
 
       case 'V':
@@ -164,11 +162,7 @@ int main(int argc, char *argv[]) {
 
       case 'i':
         get_net(net_speed, optarg, true);
-        tc.tv_nsec = 850000000L;
-        if (-1 == (nanosleep(&tc, NULL))) {
-          printf("%s\n", NANOSLEEP_FAILED);
-          return EXIT_FAILURE;
-        }
+        SLEEP_SLEEP_BABY(850000000L);
         get_net(net_speed, optarg, true);
         GLUE(all, FMT_NET, SPEED_STR, net_speed);
         break;
@@ -222,8 +216,9 @@ void help_msg(void) {
   printf("%s\n",
       "Available options:\n"
       "  -M, --mpd\t The currently played song name (if any).\n"
-      "  -c, --cpu\t The current cpu load and temperature.\n"
-      "  -L, --coresload Show per core load and overall cpu temperature (dont mix with -c).\n"
+      "  -c, --cpu\t The current cpu load (summed up all cores/threads).\n"
+      "  -L, --coresload Show the load regarding each individual cpu core/thread.\n"
+      "  -T, --cputemp\t The current cpu temperature.\n"
       "  -C, --cpuspeed Show your maximum cpu clock speed in MHz.\n"
       "  -I, --cpuinfo\t Detect your CPU vendor, stepping, family.\n"
       "  -r, --ram\t The used ram.\n"
@@ -232,7 +227,8 @@ void help_msg(void) {
       "  -k, --kernel\t The kernel version.\n"
       "  -v, --voltage\t The system voltage.\n"
       "  -f, --fans\t All system fans and their speed in RPM.\n"
-      "  -m, --mobo\t Show the motherboard name, vendor and temperature.\n"
+      "  -m, --mobo\t Show the motherboard name and vendor.\n"
+      "  -m, --mobotemp The motherboard temperature.\n"
       "  -V, --volume\t The volume.\n"
       "  -t, --time\t The current time.\n"
       "  -b, --bandwidth The consumed internet bandwidth so far [argument - eth0].\n"

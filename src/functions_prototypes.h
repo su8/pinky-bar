@@ -21,15 +21,17 @@
 #ifndef FUNCTIONS_H_
 #define FUNCTIONS_H_
 
-void get_cpu(char *, char *);
-void get_cores_load(char *, char *);
+void get_cpu(char *);
+void get_cores_load(char *);
+void get_cpu_temp(char *);
 void get_ram(char *);
 void get_ssd(char *);
 void get_packs(char *);
 void get_kernel(char *);
 void get_voltage(char *);
 void get_fans(char *);
-void get_mobo(char *, char *);
+void get_mobo(char *);
+void get_mobo_temp(char *);
 void get_taim(char *);
 void get_net(char *, char *, bool measure_speed);
 void get_statio(char *, char *);

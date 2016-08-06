@@ -30,8 +30,9 @@ The order of supplied options will dictate how, where and what system informatio
 | short option | long option | Descrtiption                                                       |
 |--------------|-------------|--------------------------------------------------------------------|
 | -M           | --mpd       | The currently played song name (if any)                            |
-| -c           | --cpu       | The current cpu load and temperature                               |
-| -L           | --coresload | Show per core load and overall cpu temperature (dont mix with -c)  |
+| -c           | --cpu       | The current cpu load (summed up all cores/threads)                 |
+| -L           | --coresload | Show the load regarding each individual cpu core/thread            |
+| -T           | --cputemp   | The current cpu temperature                                        |
 | -C           | --cpuspeed  | Show your maximum cpu clock speed in MHz, regardless of the used governor |
 | -I           | --cpuinfo   | Detect your CPU vendor, stepping and family from low level assembly access |
 | -r           | --ram       | The used ram                                                       |
@@ -40,7 +41,8 @@ The order of supplied options will dictate how, where and what system informatio
 | -k           | --kernel    | The kernel version                                                 |
 | -v           | --voltage   | The system voltage                                                 |
 | -f           | --fans      | All system fans and their speed in RPM                             |
-| -m           | --mobo      | Show the motherboard name, vendor and temperature                  |
+| -m           | --mobo      | Show the motherboard name and vendor                               |
+| -d           | --mobotemp  | The motherboard temperature                                        |
 | -V           | --volume    | The volume                                                         |
 | -t           | --time      | The current time                                                   |
 | -b           | --bandwitdh | The consumed internet bandwidth so far [argument - eth0]           |
@@ -77,7 +79,7 @@ By default, if **no** options are passed, the program will be compiled with/with
 
 ```bash
 bash bootstrap distro
-./configure --prefix=$HOME/.cache --with-x11
+./configure --prefix=$HOME/.cache --with-x11 --with-alsa
 make -j$(grep -c '^processor' /proc/cpuinfo)
 make install
 ```
@@ -92,7 +94,7 @@ Put the following in your **xinitrc** or the script used to start dwm.
 # Execute the "statusbar" program every 5 secs
 while true; do
   # scroll a few lines up to see the rest options
-  "$HOME/.cache/bin/dwmbar" --cpu --ram --storage --packages --kernel --voltage --fans --mobo --volume --time
+  "$HOME/.cache/bin/dwmbar" -LTrspkvfmdVt
   sleep 5
 done &
 ```
@@ -110,7 +112,7 @@ sed -i 's/dwmbar/xmonadbar/g' bootstrap
 bash bootstrap distro
 
 # disable X11, point the location to the icons
-./configure --prefix=$HOME/.cache --without-x11 icons=$HOME/.xmonad/icons
+./configure --prefix=$HOME/.cache --without-x11 --with-alsa icons=$HOME/.xmonad/icons
 
 # compile 'n install
 make -j$(grep -c '^processor' /proc/cpuinfo)
@@ -125,7 +127,7 @@ Put the following in your **xinitrc** or the script used to start xmonad.
 # Execute the "statusbar" program every 2 secs
 while true; do
   # scroll a few lines up to see the rest options
-  "$HOME/.cache/bin/xmonadbar" --cpu --ram --storage --packages --kernel --voltage --fans --mobo --volume --time
+  "$HOME/.cache/bin/xmonadbar" -LTrspkvfmdVt
   sleep 2
 done | dzen2 -w 1800 -x 130 -ta r -fn '-*-dejavusans-*-r-*-*-11-*-*-*-*-*-*-*' &
 ```
@@ -196,8 +198,8 @@ db_file "/tmp/mpddb"
 log_file "/tmp/mpdlog"
 state_file "/tmp/mpdstate"
 pid_file "/tmp/mpdpid"
-user "mpd"
 log_level "default"
+user "mpd"
 
 
 audio_output {

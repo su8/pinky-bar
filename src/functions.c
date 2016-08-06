@@ -84,7 +84,7 @@ get_temp(const char *str1, char *str2) {
 
 
 void 
-get_cpu(char *str1, char *str2) {
+get_cpu(char *str1) {
   static uintmax_t previous_total = 0, previous_idle = 0;
   uintmax_t x, percent, diff_total, diff_idle, cpu_active[10];
   uintmax_t total = 0;
@@ -119,14 +119,12 @@ get_cpu(char *str1, char *str2) {
   percent        = (uintmax_t)sysconf(_SC_CLK_TCK) *
                     (diff_total - diff_idle) / diff_total;
 
-  get_temp(CPU_TEMP_FILE, str2);
-
   FILL_UINT_ARR(str1, percent);
 }
 
 
 void
-get_cores_load(char *str1, char *str2) {
+get_cores_load(char *str1) {
   static uintmax_t previous_total[MAX_CORES], previous_idle[MAX_CORES];
   static uintmax_t test_flag = 0;
   uintmax_t x = 0, y = 0, z = 0;
@@ -196,8 +194,13 @@ get_cores_load(char *str1, char *str2) {
 
   test_flag = 1;
 
-  get_temp(CPU_TEMP_FILE, str2);
   FILL_STR_ARR(1, str1, temp);
+}
+
+
+void
+get_cpu_temp(char *str1) {
+  get_temp(CPU_TEMP_FILE, str1);
 }
 
 
@@ -366,7 +369,7 @@ get_fans(char *str1) {
 
 
 void 
-get_mobo(char *str1, char *str2) {
+get_mobo(char *str1) {
   char vendor[VLA], name[VLA];
 
   FILE *fp = fopen(MOBO_VENDOR, "r");
@@ -384,9 +387,13 @@ get_mobo(char *str1, char *str2) {
   fscanf(fp, "%s", name);
   fclose(fp);
 
-  get_temp(MOBO_TEMP_FILE, str2);
-
   FILL_STR_ARR(2, str1, vendor, name);
+}
+
+
+void
+get_mobo_temp(char *str1) {
+  get_temp(MOBO_TEMP_FILE, str1);
 }
 
 
