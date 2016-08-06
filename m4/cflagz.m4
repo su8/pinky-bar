@@ -80,7 +80,10 @@ dnl and bail out with pre-defined error msg
 dnl when some FLAG is unsupported.
 AC_DEFUN([TEST_CFLAGZ],[
 
+  dnl Only useful when developing
+  dnl pinky-bar
   dnl -Wdeclaration-after-statement,
+  dnl -Wno-unused-function,
 
   dnl Shame on you c++lang, err clang
   dnl Keeping this flag for historical
@@ -88,7 +91,15 @@ AC_DEFUN([TEST_CFLAGZ],[
   dnl anyone reading this file about the
   dnl clangs inabillity to distinguish
   dnl C from C++
+  dnl  https://llvm.org/bugs/show_bug.cgi?id=21689
   dnl -Wno-missing-field-initializers
+
+  dnl The twisted gcc vision
+  dnl  https://gcc.gnu.org/bugzilla/show_bug.cgi?id=66425
+  dnl They say its "glibc" fault
+  dnl  https://gcc.gnu.org/bugzilla/show_bug.cgi?id=25509
+  dnl -Wno-unused-result,
+
 
   AC_MSG_NOTICE([checking all CFLAGS])
   CHECK_CFLAGZ([
@@ -112,8 +123,6 @@ AC_DEFUN([TEST_CFLAGZ],[
     -Wendif-labels,
     -Wredundant-decls,
     -Wmissing-prototypes,
-    -Wno-unused-result,
-    -Wno-unused-function,
     -Wno-unused-variable
   ])
  

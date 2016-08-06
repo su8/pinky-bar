@@ -83,7 +83,7 @@
 
 /* --coresload related constant to determine
  * how many cpu cores/threads to try for detection */
-#define MAX_CORES 65
+#define MAX_CORES 40
 
 
 #endif /* CONSTANTS2_H_ */

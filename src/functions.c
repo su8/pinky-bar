@@ -18,6 +18,18 @@
    MA 02110-1301, USA.
 */
 
+/* The pragma directives are here
+ * to mute the gcc twisted vision,
+ * and clangs inabillity to distinguish
+ * C from C++
+ *
+ * https://llvm.org/bugs/show_bug.cgi?id=21689 
+ * https://gcc.gnu.org/bugzilla/show_bug.cgi?id=66425
+ * https://gcc.gnu.org/bugzilla/show_bug.cgi?id=25509
+ *
+ * Do add any -Wno cflags just to mute the compilers snafus
+ * */
+
 #include <time.h>
 #include <stdio.h>
 #include <stdbool.h>
@@ -74,7 +86,10 @@ get_temp(const char *str1, char *str2) {
   if (NULL == fp) {
     exit_with_err(CANNOT_OPEN, str1);
   }
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wunused-result"
   fscanf(fp, FMT_UINT, &temp);
+#pragma GCC diagnostic pop
   fclose(fp);
 
   temp /= (uintmax_t)1000;
@@ -98,6 +113,8 @@ get_cpu(char *str1) {
 
   /* Some kernels will produce 7, 8 and 9 columns
    * We rely on 10, refer to `man proc' for more details */
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wunused-result"
   if (fscanf(fp, "%*s " FMT_UINT FMT_UINT FMT_UINT FMT_UINT FMT_UINT FMT_UINT FMT_UINT FMT_UINT FMT_UINT FMT_UINT,
     &cpu_active[0], &cpu_active[1], &cpu_active[2], &cpu_active[3],
     &cpu_active[4], &cpu_active[5], &cpu_active[6], &cpu_active[7],
@@ -105,6 +122,7 @@ get_cpu(char *str1) {
       fclose(fp);
       exit_with_err(ERR,"Upgrade to a newer kernel");
   }
+#pragma GCC diagnostic pop
   fclose(fp);
 
   for (x = 0; x < 10; x++)
@@ -268,7 +286,12 @@ get_packs(char *str1) {
 
 #elif DISTRO == FRUGALWARE
   FILE *pkgs_file = popen("pacman-g2 -Q 2> /dev/null | wc -l", "r");
+
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wunused-result"
   fscanf(pkgs_file, "%"SCNuFAST16, &packages);
+#pragma GCC diagnostic pop
+
   pclose(pkgs_file);
 
 #elif DISTRO == DEBIAN
@@ -282,12 +305,22 @@ get_packs(char *str1) {
 
 #elif DISTRO == RHEL
   FILE *pkgs_file = popen("rpm -qa 2> /dev/null | wc -l", "r");
+
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wunused-result"
   fscanf(pkgs_file, "%"SCNuFAST16, &packages);
+#pragma GCC diagnostic pop
+
   pclose(pkgs_file);
 
 #elif DISTRO == ANGSTROM
   FILE *pkgs_file = popen("opkg list-installed 2> /dev/null | wc -l", "r");
+
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wunused-result"
   fscanf(pkgs_file, "%"SCNuFAST16, &packages);
+#pragma GCC diagnostic pop
+
   pclose(pkgs_file);
 
 #endif
@@ -299,7 +332,6 @@ get_packs(char *str1) {
 void 
 get_kernel(char *str1) {
   struct utsname KerneL;
-
   if (-1 == (uname(&KerneL))) {
     exit_with_err(ERR, "uname() failed");
   }
@@ -324,7 +356,10 @@ get_voltage(char *str1) {
     if (NULL == (fp = fopen(voltage_files[x], "r"))) {
       exit_with_err(CANNOT_OPEN, voltage_files[x]);
     }
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wunused-result"
     fscanf(fp, "%f", &voltage[x]);
+#pragma GCC diagnostic pop
     fclose(fp);
 
     voltage[x] /= (float)1000.0;
@@ -352,7 +387,10 @@ get_fans(char *str1) {
       found_fans = false;
       break;
     }
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wunused-result"
     fscanf(fp, UFINT, &rpm[z]);
+#pragma GCC diagnostic pop
     fclose(fp);
   }
 
@@ -377,14 +415,20 @@ get_mobo(char *str1) {
     exit_with_err(CANNOT_OPEN, MOBO_VENDOR);
   }
   /* use %[^\n] to get the whole line */
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wunused-result"
   fscanf(fp, "%s", vendor);
+#pragma GCC diagnostic pop
   fclose(fp);
 
   if (NULL == (fp = fopen(MOBO_NAME, "r"))) {
     exit_with_err(CANNOT_OPEN, MOBO_NAME);
   }
   /* use %[^\n] to get the whole line */
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wunused-result"
   fscanf(fp, "%s", name);
+#pragma GCC diagnostic pop
   fclose(fp);
 
   FILL_STR_ARR(2, str1, vendor, name);
@@ -582,12 +626,15 @@ get_statio(char *str1, char *str2) {
     exit_with_err(CANNOT_OPEN, stat_file);
   }
 
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wunused-result"
   if (fscanf(fp, FMT_UINT FMT_UINT FMT_UINT FMT_UINT FMT_UINT FMT_UINT FMT_UINT,
     &statio[0], &statio[1], &statio[2], &statio[3],
     &statio[4], &statio[5], &statio[6]) == EOF) {
       fclose(fp);
       exit_with_err(ERR, "reading the stat file failed");
   }
+#pragma GCC diagnostic pop
   fclose(fp);
 
   FILL_ARR(str1, "Read " FMT_UINT " MB, Written " FMT_UINT " MB",
@@ -616,7 +663,6 @@ void
 get_cpu_clock_speed(char *str1) {
   uintmax_t x, y, z[2];
 
-/* Mute the clang snafus - https://llvm.org/bugs/show_bug.cgi?id=21689  */
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wmissing-field-initializers"
   struct timespec start = {0}, stop = {0}, tc = {0};
@@ -653,7 +699,6 @@ void
 get_cpu_clock_speed(char *str1) {
   uintmax_t x, z;
 
-/* Mute the clang snafus - https://llvm.org/bugs/show_bug.cgi?id=21689  */
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wmissing-field-initializers"
   struct timespec tc = {0};
