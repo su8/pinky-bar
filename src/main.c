@@ -18,18 +18,12 @@
    MA 02110-1301, USA.
 */
 
-#include <time.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <stdbool.h>
-#include <string.h>
 #include <getopt.h>
 
-#include <unistd.h>
-
 #include "config.h" /* auto-generated */
-#include "main_constants.h"
-#include "functions_prototypes.h"
+#include "include/headers.h"
+#include "cpu.h"
+#include "sound.h"
 
 void help_msg(void);
 
@@ -221,7 +215,7 @@ void help_msg(void) {
       "  -v, --voltage\t The system voltage.\n"
       "  -f, --fans\t All system fans and their speed in RPM.\n"
       "  -m, --mobo\t Show the motherboard name and vendor.\n"
-      "  -m, --mobotemp The motherboard temperature.\n"
+      "  -d, --mobotemp The motherboard temperature.\n"
       "  -V, --volume\t The volume.\n"
       "  -t, --time\t The current time.\n"
       "  -b, --bandwidth The consumed internet bandwidth so far [argument - eth0].\n"

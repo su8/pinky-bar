@@ -1,5 +1,5 @@
 /*
-   Copyright 07/06/2015, 07/18/2016
+   Copyright 08/06/2016
    Aaron Caffrey https://github.com/wifiextender
 
    This program is free software; you can redistribute it and/or modify
@@ -18,39 +18,15 @@
    MA 02110-1301, USA.
 */
 
-#ifndef FUNCTIONS_H_
-#define FUNCTIONS_H_
-
-void get_cpu(char *);
-void get_cores_load(char *);
-void get_cpu_temp(char *);
-void get_ram(char *);
-void get_ssd(char *);
-void get_packs(char *);
-void get_kernel(char *);
-void get_voltage(char *);
-void get_fans(char *);
-void get_mobo(char *);
-void get_mobo_temp(char *);
-void get_taim(char *);
-void get_net(char *, char *, bool measure_speed);
-void get_statio(char *, char *);
+#ifndef SOUND_H_
+#define SOUND_H_
 
 #if defined (HAVE_ALSA_ASOUNDLIB_H)
 void get_volume(char *);
-#endif
-
-#if defined (HAVE_X11_XLIB_H)
-void set_status(const char *);
 #endif
 
 #if defined (HAVE_MPD_CLIENT_H)
 void get_song(char *);
 #endif
 
-#if defined(__i386__) || defined(__i686__) || defined(__x86_64__)
-void get_cpu_clock_speed(char *);
-void get_cpu_info(char *);
-#endif
-
-#endif /* FUNCTIONS_H_ */
+#endif /* SOUND_H_ */

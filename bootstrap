@@ -107,9 +107,18 @@ _gen_files() {
   src_files=(
     'main.c'
     'functions.c'
-    'functions_prototypes.h'
-    'main_constants.h'
-    'functions_constants.h'
+    'cpu.c'
+    'common.c'
+    'sound.c'
+    'cpu.h'
+    'common.h'
+    'sound.h'
+    'functions.h'
+    'include/headers.h'
+    'include/main_constants.h'
+    'include/functions_constants.h'
+    'include/non_x11_colours.h'
+    'include/x11_colours.h'
   )
 
   # Do not pass more definitions to AM_CFLAGS
@@ -128,8 +137,14 @@ _gen_files() {
       ../bootstrap \
       ../README.md \
       ../.gitignore \
-      non_x11_colours.h \
-      x11_colours.h
+      ../m4/1errs.m4 \
+      ../m4/alsa.m4 \
+      ../m4/ax_append_flag.m4 \
+      ../m4/cflagz.m4 \
+      ../m4/mpd.m4 \
+      ../m4/the_rest_funcs.m4 \
+      ../m4/typez.m4 \
+      ../m4/x11.m4
   ')
 
 
