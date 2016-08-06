@@ -189,7 +189,7 @@ get_cores_load(char *str1) {
     percent[x]        = (uintmax_t)sysconf(_SC_CLK_TCK) *
                       (diff_total[x] - diff_idle[x]) / diff_total[x];
 
-    all += snprintf(all, VLA, FMT_UINT"%% ", percent[x]);
+    GLUE2(all, FMT_UINT"%% ", percent[x]);
   }
 
   test_flag = 1;
@@ -359,7 +359,7 @@ get_fans(char *str1) {
   if (found_fans) {
     for (x = 0; x < z; x++) {
       if (0 < rpm[x])
-        all_fans += snprintf(all_fans, VLA, UFINT" ", rpm[x]);
+        GLUE2(all_fans, UFINT" ", rpm[x]);
       else
         ++y; /* non-spinning | removed | failed fan */
     }
@@ -716,7 +716,7 @@ get_cpu_info(char *str1) {
           vend_chars[z+12] = (char)(edx >> (z * 8));  /* movl %edx, 12 */
         }
         vend_chars[16] = '\0';
-        all += snprintf(all, VLA, "%s", vend_chars);
+        GLUE2(all, "%s", vend_chars);
       }
 
       CPU_ID_STR(0, ebx, ecx, edx);                   /* mov $0, %eax */

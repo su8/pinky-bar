@@ -96,15 +96,11 @@ int main(int argc, char *argv[]) {
 #endif
 
       case 'c':
-        get_cpu(cpu);
-        SLEEP_SLEEP_BABY(sysconf(_SC_CLK_TCK) * 1000000L);
-        GET_N_FMT(cpu, all, FMT_CPU, CPU_STR, cpu);
+        GET_CPU_N_FMT(cpu, all, FMT_CPU, CPU_STR, cpu);
         break;
 
       case 'L':
-        get_cores_load(cores_load);
-        SLEEP_SLEEP_BABY(sysconf(_SC_CLK_TCK) * 1000000L);
-        GET_N_FMT(cores_load, all, FMT_CORES, CPU_STR, cores_load);
+        GET_CPU_N_FMT(cores_load, all, FMT_CORES, CPU_STR, cores_load);
         break;
 
       case 'T':
@@ -157,15 +153,11 @@ int main(int argc, char *argv[]) {
         break;
 
       case 'b':
-        get_net(net, optarg, false);
-        GLUE(all, FMT_NET, NET_STR, net);
+        GET_NET_N_FMT(net, optarg, false, all, FMT_NET, NET_STR, net);
         break;
 
       case 'i':
-        get_net(net_speed, optarg, true);
-        SLEEP_SLEEP_BABY(850000000L);
-        get_net(net_speed, optarg, true);
-        GLUE(all, FMT_NET, SPEED_STR, net_speed);
+        GET_NET_N_FMT(net_speed, optarg, true, all, FMT_NET, SPEED_STR, net_speed);
         break;
 
       case 'S':

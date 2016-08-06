@@ -24,19 +24,34 @@
 #define VLA 200
 #define WHOLE_MAIN_ARR_LEN VLA*16
 #define GLUE(x, z, ...) (x+=snprintf(x, WHOLE_MAIN_ARR_LEN, z, __VA_ARGS__))
+
+/* Employ the preprocessor */
 #define GET_N_FMT(func, ...) \
   get_##func(func); \
   GLUE(__VA_ARGS__);
 
 /* Remember vanilla ice ? */
-#define NANOSLEEP_FAILED "Error: nanosleep() failed"
 #define SLEEP_SLEEP_BABY(x) \
   tc.tv_nsec = x; \
   if (-1 == (nanosleep(&tc, NULL))) { \
-    printf("%s\n", NANOSLEEP_FAILED); \
+    printf("%s\n", "Error: nanosleep() failed"); \
     return EXIT_FAILURE; \
   }
 
+#define GET_NET_N_FMT(arg1, arg2, arg3, ...) \
+  get_net(arg1, arg2, arg3); \
+  if (true == arg3)  { \
+    SLEEP_SLEEP_BABY(850000000L); \
+    get_net(arg1, arg2, arg3); \
+  } \
+  GLUE(__VA_ARGS__);
+
+#define GET_CPU_N_FMT(func, ...) \
+    get_##func(func); \
+    SLEEP_SLEEP_BABY(sysconf(_SC_CLK_TCK) * 1000000L); \
+    GET_N_FMT(func, __VA_ARGS__);
+
+/* Fire the preprocessor */
 
 #define STR_SPEC "%s"
 #define SONG_ORIG STR_SPEC " "
