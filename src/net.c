@@ -18,6 +18,10 @@
    MA 02110-1301, USA.
 */
 
+#include "config.h"
+
+#if WITH_NET == 1
+
 #include <arpa/inet.h>
 /* #include <netdb.h> */
 #include <sys/socket.h>
@@ -25,19 +29,22 @@
 #include <linux/if_link.h>
 #include <netpacket/packet.h>
 
-#include "config.h"
+#endif
+
 #include "include/headers.h"
 #include "net.h"
 
 /* Thanks to http://www.matisse.net/bitcalc/?source=print */
 void
 get_net(char *str1, char *str2, unsigned char num) {
+#if WITH_NET == 1
+
   struct ifaddrs *ifaddr = NULL, *ifa = NULL;
   struct rtnl_link_stats *stats;
   struct sockaddr_ll *mac;
   static uintmax_t prev_recv = 0, prev_sent = 0;
   uintmax_t cur_recv, cur_sent;
-  void *temp_void;
+  void *temp_void = NULL;
   char temp[VLA];
 
   if (-1 == getifaddrs(&ifaddr)) {
@@ -107,4 +114,8 @@ get_net(char *str1, char *str2, unsigned char num) {
   if (NULL != ifaddr) {
     freeifaddrs(ifaddr);
   }
+
+#else
+  exit_with_err(ERR, "recompile the program --with-net");
+#endif
 }

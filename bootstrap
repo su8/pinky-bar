@@ -75,6 +75,7 @@ _gen_files() {
 
   # The linker flags tests in m4 dir
   TEST_SOME_FUNCS
+  TEST_NET
   TEST_X11
   TEST_ALSA
   TEST_MPD

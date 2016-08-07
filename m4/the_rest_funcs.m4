@@ -24,6 +24,64 @@ AC_DEFUN([NOTIFY],[
 ])
 
 
+dnl Allow the user to compile the program
+dnl without net related functions, thus
+dnl decreasing the required dependencies
+AC_DEFUN([TEST_NET],[
+  WITH_NET=1
+  AC_ARG_WITH([net],
+    AS_HELP_STRING([--with-net],
+      [Net funcs]),
+    [],
+    [with_net=yes]
+  )
+
+  AS_IF([test "x$with_net" = "xno"], [
+    WITH_NET=0
+  ])
+
+  AS_IF([test "x$with_net" = "xyes"], [
+
+    AC_CHECK_HEADERS([    \
+      linux/if_link.h     \
+      ifaddrs.h           \
+      arpa/inet.h         \
+      netpacket/packet.h  \
+      sys/socket.h        \
+    ],[],[
+      ERR([Missing core header files.])
+    ])
+
+    AC_CHECK_FUNCS([ \
+      getifaddrs     \
+      freeifaddrs    \
+    ],[],[
+      ERR([Missing core library functions.])
+    ])
+
+    NOTIFY([getifaddrs])
+    AC_COMPILE_IFELSE([
+      AC_LANG_SOURCE([[
+        #include <ifaddrs.h>
+        int main(void) {
+          struct ifaddrs *ifaddr;
+          if (-1 == getifaddrs(&ifaddr)) {
+            return 0;
+          }
+          freeifaddrs(ifaddr);
+          return 0;
+        }
+      ]])
+    ],[],[
+      COMPILE_FAILED([getifaddrs])
+      ]
+    )
+  ])
+  AC_DEFINE_UNQUOTED([WITH_NET],[$WITH_NET],[Net funcs])
+
+])
+
+
 dnl TEST_SOME_FUNCS() function in configure.ac
 dnl
 dnl The tests are simple enough, just to
@@ -144,25 +202,6 @@ AC_DEFUN([TEST_SOME_FUNCS],[
     ]])
   ],[],[
     COMPILE_FAILED([glob])
-    ]
-  )
-
-
-  NOTIFY([getifaddrs])
-  AC_COMPILE_IFELSE([
-    AC_LANG_SOURCE([[
-      #include <ifaddrs.h>
-      int main(void) {
-        struct ifaddrs *ifaddr;
-        if (-1 == getifaddrs(&ifaddr)) {
-          return 0;
-        }
-        freeifaddrs(ifaddr);
-        return 0;
-      }
-    ]])
-  ],[],[
-    COMPILE_FAILED([getifaddrs])
     ]
   )
 

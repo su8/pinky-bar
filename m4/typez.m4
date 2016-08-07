@@ -87,8 +87,6 @@ AC_DEFUN([TEST_TYPEZ],[
     unistd.h         \
     getopt.h         \
     sys/socket.h     \
-    linux/if_link.h  \
-    ifaddrs.h        \
   ],[],[
     ERR([Missing core header files.])
   ])
@@ -114,8 +112,6 @@ AC_DEFUN([TEST_TYPEZ],[
     exit            \
     getopt          \
     getopt_long     \
-    getifaddrs      \
-    freeifaddrs     \
   ],[],[
     ERR([Missing core library functions.])
   ])

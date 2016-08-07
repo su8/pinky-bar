@@ -68,6 +68,7 @@ It's up to you to decide which features suit you best.
 |----------------|---------------------|--------------------------------------------------------------------------------------------|
 | --with-x11     | --without-x11       | Enable it if you are using Window Manager (dwm) to be more specific.                       |
 | --with-alsa    | --without-alsa      | To get the sound volume level.                                                             |
+| --with-net     | --without-net       | Enable the internet related options.                                                       |
 | --with-colours | --without-colours   | Colorize the output data.                                                                  |
 | icons=/tmp     |                     | Use xbm icons that can be used by dzen2 for example. Discarded when **--with-x11** is used |
 | --with-mpd     | --without-mpd       | To see the currently played song name (if any).                                            |
@@ -76,7 +77,7 @@ It's up to you to decide which features suit you best.
 By default, if **no** options are passed, the program will be compiled with/without:
 
 ```bash
---without-alsa --without-x11 --without-mpd --with-colours
+--without-alsa --without-x11 --without-mpd --with-colours --with-net
 ```
 
 ---
@@ -182,6 +183,12 @@ GNU Build System
 * gawk
 
 ## Opt-in requirements
+
+The internet related options rely on headers provided iproute2.
+By default the program will try to compile with those headers included.
+If for any reason you would like to compile the program without internet related options, then pass **--without-net** to configure.
+
+* iproute2    # Net headers
 
 To see the currently played song name:
 
