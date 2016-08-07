@@ -53,7 +53,7 @@ int main(int argc, char *argv[]) {
   char kernel[VLA], volume[VLA], taim[VLA], fans[VLA], statio[VLA], mask[VLA];
   char voltage[VLA], cpu_temp[VLA], mobo_temp[VLA], net[VLA], mac[VLA];
   char cores_load[VLA], cpu_clock_speed[VLA], cpu_info[VLA], net_addr[VLA];
-  char net_cast[VLA];
+  char net_cast[VLA], link_speed[VLA];
 
   const struct option options[] = {
     { "mpd",          no_argument,       NULL, 'M' },
@@ -79,12 +79,13 @@ int main(int argc, char *argv[]) {
     { "ipmac",        required_argument, NULL, 'A' },
     { "ipmask",       required_argument, NULL, 'B' },
     { "ipcast",       required_argument, NULL, 'D' },
+    { "iplink",       required_argument, NULL, 'e' },
     { "statio",       required_argument, NULL, 'S' },
     { NULL,           0,                 NULL,  0  }
   };
 
   int ch = 0;
-  while (0 < (ch = getopt_long(argc, argv, "McCLTIrspkvfmdVtha:A:B:D:i:S:b:", options, NULL))) {
+  while (0 < (ch = getopt_long(argc, argv, "McCLTIrspkvfmdVtha:A:e:B:D:i:S:b:", options, NULL))) {
     switch (ch) {
       case 'M':
 #if defined (HAVE_MPD_CLIENT_H)
@@ -176,6 +177,10 @@ int main(int argc, char *argv[]) {
         GET_NET_N_FMT(net_cast, optarg, 6, all, FMT_KERN, net_cast);
         break;
 
+      case 'e':
+        GET_NET_N_FMT(link_speed, optarg, 7, all, FMT_KERN, link_speed);
+        break;
+
       case 'S':
         get_statio(statio, optarg);
         GLUE(all, FMT_STATIO, STATIO_STR, statio);
@@ -246,6 +251,7 @@ void help_msg(void) {
       "  -A, --ipmac\t The NIC mac address [argument - eth0].\n"
       "  -B, --ipmask\t The NIC subnet mask [argument - eth0].\n"
       "  -D, --ipcast\t The NIC broadcast address [argument - eth0].\n"
+      "  -e, --iplink\t The NIC link speed (useful for wireless/wifi) [argument - eth0].\n"
       "  -S, --statio\t Read and written MBs to the drive so far [argument - sda].\n"
   );
 }

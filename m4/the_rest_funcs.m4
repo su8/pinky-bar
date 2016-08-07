@@ -48,6 +48,10 @@ AC_DEFUN([TEST_NET],[
       arpa/inet.h         \
       netpacket/packet.h  \
       sys/socket.h        \
+      net/if.h            \
+      sys/ioctl.h         \
+      linux/sockios.h     \
+      linux/ethtool.h     \
     ],[],[
       ERR([Missing core header files.])
     ])
@@ -55,6 +59,8 @@ AC_DEFUN([TEST_NET],[
     AC_CHECK_FUNCS([ \
       getifaddrs     \
       freeifaddrs    \
+      socket         \
+      ioctl          \
     ],[],[
       ERR([Missing core library functions.])
     ])

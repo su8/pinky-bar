@@ -24,10 +24,16 @@
 
 #include <arpa/inet.h>
 /* #include <netdb.h> */
+/* #include <sys/types.h> */
 #include <sys/socket.h>
 #include <ifaddrs.h>
 #include <linux/if_link.h>
 #include <netpacket/packet.h>
+#include <net/if.h>
+#include <sys/ioctl.h>
+#include <linux/sockios.h>
+#include <linux/ethtool.h>
+#include <linux/if.h>
 
 #endif
 
@@ -106,6 +112,9 @@ get_net(char *str1, char *str2, unsigned char num) {
                 mac->sll_addr[0], mac->sll_addr[1],
                 mac->sll_addr[2], mac->sll_addr[3],
                 mac->sll_addr[4], mac->sll_addr[5]);
+          } else if (7 == num) { /* link speed */
+
+            get_link_speed(str1, str2);
           }
           break;
         }
@@ -114,6 +123,34 @@ get_net(char *str1, char *str2, unsigned char num) {
   if (NULL != ifaddr) {
     freeifaddrs(ifaddr);
   }
+
+#else
+  exit_with_err(ERR, "recompile the program --with-net");
+#endif
+}
+
+
+void get_link_speed(char *str1, char *str2) {
+#if WITH_NET == 1
+
+  struct ethtool_cmd ecmd;
+  struct ifreq ifr;
+  int sock = 0;
+
+  sock = socket(AF_INET, SOCK_DGRAM, 0);
+  if (-1 == sock) {
+    exit_with_err(ERR, "socket() failed");
+  }
+
+  ecmd.cmd = ETHTOOL_GSET;
+  ifr.ifr_data = (char *)&ecmd;
+  snprintf(ifr.ifr_name, IF_NAMESIZE, "%s", str2);
+
+  if (0 < (ioctl(sock, SIOCETHTOOL, &ifr))) {
+    exit_with_err(ERR, "ioctl() failed");
+  }
+
+  FILL_ARR(str1, "%d%s", ecmd.speed, (999 > ecmd.speed ? "Mbps" : "Gbps"));
 
 #else
   exit_with_err(ERR, "recompile the program --with-net");

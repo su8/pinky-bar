@@ -22,5 +22,6 @@
 #define NET_H_
 
 void get_net(char *, char *, unsigned char num);
+void get_link_speed(char *, char *);
 
 #endif /* NET_H_ */
