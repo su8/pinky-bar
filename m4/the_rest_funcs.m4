@@ -52,6 +52,7 @@ AC_DEFUN([TEST_NET],[
       sys/ioctl.h         \
       linux/sockios.h     \
       linux/ethtool.h     \
+      netdb.h             \
     ],[],[
       ERR([Missing core header files.])
     ])
@@ -59,6 +60,8 @@ AC_DEFUN([TEST_NET],[
     AC_CHECK_FUNCS([ \
       getifaddrs     \
       freeifaddrs    \
+      getaddrinfo    \
+      freeaddrinfo   \
       socket         \
       ioctl          \
     ],[],[

@@ -52,6 +52,7 @@ The order of supplied options will dictate how, where and what system informatio
 | -B           | --ipmask    | The NIC subnet mask [argument - eth0]                              |
 | -D           | --ipcast    | The NIC broadcast address [argument - eth0]                        |
 | -e           | --iplink    | The NIC link speed (useful for wireless/wifi) [argument - eth0]    |
+| -E           | --iplookup  | Mini website IP lookup [website argument - google.com]             |
 | -S           | --statio    | Read and written MBs to the drive so far [argument - sda]          |
 
 Before I start browsing the wild west called Internet with Tor, I always generate [random local ip](https://github.com/wifiextender/dotfiles/blob/master/gentoo/home/frost/.config/zsh/functions/network.zsh) and [mac address](https://github.com/wifiextender/dotfiles/blob/master/gentoo/home/frost/.config/zsh/functions/not-interactive-funcs.zsh#L24). So those functions in pinky-bar are used extensively by me at least to monitor the current fake addresses.

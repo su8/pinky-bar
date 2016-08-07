@@ -23,7 +23,7 @@
 #if WITH_NET == 1
 
 #include <arpa/inet.h>
-/* #include <netdb.h> */
+#include <netdb.h>
 /* #include <sys/types.h> */
 #include <sys/socket.h>
 #include <ifaddrs.h>
@@ -76,7 +76,7 @@ get_net(char *str1, char *str2, unsigned char num) {
               break;
           }
           inet_ntop(AF_INET, &(((struct sockaddr_in *)temp_void)->sin_addr),
-              temp, INET_ADDRSTRLEN); 
+              temp, INET_ADDRSTRLEN);
           FILL_STR_ARR(1, str1, temp);
           break;
         }
@@ -86,7 +86,7 @@ get_net(char *str1, char *str2, unsigned char num) {
         if (0 == (strcmp(str2, ifa->ifa_name))) {
           stats = ifa->ifa_data;
 
-          if (2 == num) { /* upload | download speeds */
+          if (2 == num) { /* upload and download speeds */
             cur_recv = (uintmax_t)stats->rx_bytes - prev_recv;
             cur_sent = (uintmax_t)stats->tx_bytes - prev_sent;
 
@@ -115,6 +115,9 @@ get_net(char *str1, char *str2, unsigned char num) {
           } else if (7 == num) { /* link speed */
 
             get_link_speed(str1, str2);
+            if ('\0' == str1[0]) {
+              FILL_STR_ARR(1, str1, "Null");
+            }
           }
           break;
         }
@@ -139,7 +142,7 @@ void get_link_speed(char *str1, char *str2) {
 
   sock = socket(AF_INET, SOCK_DGRAM, 0);
   if (-1 == sock) {
-    exit_with_err(ERR, "socket() failed");
+    return;
   }
 
   ecmd.cmd = ETHTOOL_GSET;
@@ -147,10 +150,56 @@ void get_link_speed(char *str1, char *str2) {
   snprintf(ifr.ifr_name, IF_NAMESIZE, "%s", str2);
 
   if (0 < (ioctl(sock, SIOCETHTOOL, &ifr))) {
-    exit_with_err(ERR, "ioctl() failed");
+    return;
   }
 
-  FILL_ARR(str1, "%d%s", ecmd.speed, (999 > ecmd.speed ? "Mbps" : "Gbps"));
+  FILL_ARR(str1, "%d%s", ecmd.speed, "Mbps");
+
+#else
+  exit_with_err(ERR, "recompile the program --with-net");
+#endif
+}
+
+
+void get_ip_lookup(char *str1, char *str2) {
+#if WITH_NET == 1
+
+  struct addrinfo *rp = NULL, *result = NULL;
+  struct addrinfo hints;
+  void *temp_void = NULL;
+  char temp[VLA];
+  int err = 0;
+
+  memset(&hints, 0, sizeof(hints));
+
+  hints.ai_family = AF_INET;
+  hints.ai_socktype = SOCK_DGRAM;
+  hints.ai_flags = 0;
+  hints.ai_protocol = 0; /* udp | tcp */
+
+  err = getaddrinfo(str2, NULL, &hints, &result);
+  if (0 != err) {
+    exit_with_err(ERR, "getaddrinfo() failed");
+  }
+
+  for (rp = result; NULL != rp; rp = rp->ai_next) {
+    if (NULL == rp->ai_addr) {
+      continue;
+    }
+    /* check ipv4 again, despite the "hints" */
+    if (rp->ai_family == AF_INET) {
+      temp_void = rp->ai_addr;
+      inet_ntop(AF_INET, &(((struct sockaddr_in *)temp_void)->sin_addr),
+        temp, INET_ADDRSTRLEN);
+
+      FILL_STR_ARR(1, str1, temp);
+      break;
+    }
+  }
+
+  if (NULL != result) {
+    freeaddrinfo(result);
+  }
 
 #else
   exit_with_err(ERR, "recompile the program --with-net");

@@ -23,5 +23,6 @@
 
 void get_net(char *, char *, unsigned char num);
 void get_link_speed(char *, char *);
+void get_ip_lookup(char *, char *);
 
 #endif /* NET_H_ */
