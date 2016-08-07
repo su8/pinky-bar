@@ -133,7 +133,9 @@ get_net(char *str1, char *str2, unsigned char num) {
 }
 
 
-void get_link_speed(char *str1, char *str2) {
+/* Not using exit_with_err to freeifaddrs */
+void
+get_link_speed(char *str1, char *str2) {
 #if WITH_NET == 1
 
   struct ethtool_cmd ecmd;
@@ -161,7 +163,8 @@ void get_link_speed(char *str1, char *str2) {
 }
 
 
-void get_ip_lookup(char *str1, char *str2) {
+void
+get_ip_lookup(char *str1, char *str2) {
 #if WITH_NET == 1
 
   struct addrinfo *rp = NULL, *result = NULL;
@@ -195,6 +198,10 @@ void get_ip_lookup(char *str1, char *str2) {
       FILL_STR_ARR(1, str1, temp);
       break;
     }
+  }
+
+  if ('\0' == str1[0]) {
+    FILL_STR_ARR(1, str1, "Null");
   }
 
   if (NULL != result) {
