@@ -179,7 +179,7 @@ get_cpu_clock_speed(char *str1) {
   z[0] = (uintmax_t)(start.tv_nsec - start.tv_sec);
 
   if (-1 == (nanosleep(&tc, NULL))) {
-    exit_with_err(ERR, "nanosleep() failed");
+    FUNC_FAILED("nanosleep()");
   }
 
   y = rdtsc();
@@ -212,7 +212,7 @@ get_cpu_clock_speed(char *str1) {
 
   x = rdtsc();
   if (-1 == (nanosleep(&tc, NULL))) {
-    exit_with_err(ERR, "nanosleep() failed");
+    FUNC_FAILED("nanosleep()");
   }
   z = rdtsc();
 

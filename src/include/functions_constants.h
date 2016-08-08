@@ -54,5 +54,6 @@
 #define CANNOT_OPEN "Could not open"
 #define ERR "Error:"
 #define NOT_FOUND "Not found, "
+#define FUNC_FAILED(x) (exit_with_err(ERR, x " failed"))
 
 #endif /* CONSTANTS2_H_ */

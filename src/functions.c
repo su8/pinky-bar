@@ -51,7 +51,7 @@ get_ram(char *str1) {
   struct sysinfo mem;
 
   if (-1 == (sysinfo(&mem))) {
-    exit_with_err(ERR, "sysinfo() failed");
+    FUNC_FAILED("sysinfo()");
   }
 
   total   = (uintmax_t) mem.totalram / MB;
@@ -69,7 +69,7 @@ get_ssd(char *str1) {
   struct statvfs ssd;
 
   if (-1 == (statvfs(getenv("HOME"), &ssd))) {
-    exit_with_err(ERR, "statvfs() failed");
+    FUNC_FAILED("statvfs()");
   }
   percent = ((ssd.f_blocks - ssd.f_bfree) * ssd.f_bsize) / GB;
 
@@ -156,7 +156,7 @@ void
 get_kernel(char *str1) {
   struct utsname KerneL;
   if (-1 == (uname(&KerneL))) {
-    exit_with_err(ERR, "uname() failed");
+    FUNC_FAILED("uname()");
   }
   FILL_STR_ARR(2, str1, KerneL.sysname, KerneL.release);
 }

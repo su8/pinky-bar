@@ -43,7 +43,7 @@ get_volume(char *str1) {
   long int vol, max, min, percent;
 
   if (0 < (snd_mixer_open(&handle, 0))) {
-    exit_with_err(ERR, "alsa failed");
+    FUNC_FAILED("alsa");
   }
 
   if (0 < (snd_mixer_attach(handle, "default"))) {
@@ -90,7 +90,7 @@ error:
     snd_mixer_close(handle);
     handle = NULL;
   }
-  exit_with_err(ERR, "alsa failed");
+  FUNC_FAILED("alsa");
 }
 #endif
 

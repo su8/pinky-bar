@@ -24,9 +24,17 @@ AC_DEFUN([NOTIFY],[
 ])
 
 
+dnl TEST_NET() function in configure.ac
+dnl
 dnl Allow the user to compile the program
 dnl without net related functions, thus
-dnl decreasing the required dependencies
+dnl decreasing the required dependencies.
+dnl
+dnl Did not included tests for some of the Net
+dnl headers as they fail to compile just by including
+dnl them in gcc, but pass the tests in clang. Is there
+dnl are any _POSIX_SOURCE m4 alternative to compile a
+dnl test case on the fly ?
 AC_DEFUN([TEST_NET],[
   WITH_NET=1
   AC_ARG_WITH([net],
@@ -64,6 +72,7 @@ AC_DEFUN([TEST_NET],[
       freeaddrinfo   \
       socket         \
       ioctl          \
+      inet_ntop      \
     ],[],[
       ERR([Missing core library functions.])
     ])
@@ -85,6 +94,7 @@ AC_DEFUN([TEST_NET],[
       COMPILE_FAILED([getifaddrs])
       ]
     )
+
   ])
   AC_DEFINE_UNQUOTED([WITH_NET],[$WITH_NET],[Net funcs])
 

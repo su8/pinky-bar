@@ -35,7 +35,7 @@
 #include <linux/ethtool.h>
 #include <linux/if.h>
 
-#endif
+#endif /* WITH_NET */
 
 #include "include/headers.h"
 #include "net.h"
@@ -54,7 +54,7 @@ get_net(char *str1, char *str2, unsigned char num) {
   char temp[VLA];
 
   if (-1 == getifaddrs(&ifaddr)) {
-    exit_with_err(ERR, "getifaddrs() failed");
+    FUNC_FAILED("getifaddrs()");
   }
 
   for (ifa = ifaddr; NULL != ifa; ifa = ifa->ifa_next) {
@@ -128,8 +128,8 @@ get_net(char *str1, char *str2, unsigned char num) {
   }
 
 #else
-  exit_with_err(ERR, "recompile the program --with-net");
-#endif
+  RECOMPILE_WITH("net");
+#endif /* WITH_NET */
 }
 
 
@@ -154,12 +154,11 @@ get_link_speed(char *str1, char *str2) {
   if (0 < (ioctl(sock, SIOCETHTOOL, &ifr))) {
     return;
   }
-
   FILL_ARR(str1, "%d%s", ecmd.speed, "Mbps");
 
 #else
-  exit_with_err(ERR, "recompile the program --with-net");
-#endif
+  RECOMPILE_WITH("net");
+#endif /* WITH_NET */
 }
 
 
@@ -182,7 +181,7 @@ get_ip_lookup(char *str1, char *str2) {
 
   err = getaddrinfo(str2, NULL, &hints, &result);
   if (0 != err) {
-    exit_with_err(ERR, "getaddrinfo() failed");
+    FUNC_FAILED("getaddrinfo()");
   }
 
   for (rp = result; NULL != rp; rp = rp->ai_next) {
@@ -192,23 +191,22 @@ get_ip_lookup(char *str1, char *str2) {
     /* check ipv4 again, despite the "hints" */
     if (rp->ai_family == AF_INET) {
       temp_void = rp->ai_addr;
+
       inet_ntop(AF_INET, &(((struct sockaddr_in *)temp_void)->sin_addr),
         temp, INET_ADDRSTRLEN);
-
       FILL_STR_ARR(1, str1, temp);
+
       break;
     }
   }
-
   if ('\0' == str1[0]) {
     FILL_STR_ARR(1, str1, "Null");
   }
-
   if (NULL != result) {
     freeaddrinfo(result);
   }
 
 #else
-  exit_with_err(ERR, "recompile the program --with-net");
-#endif
+  RECOMPILE_WITH("net");
+#endif /* WITH_NET */
 }
