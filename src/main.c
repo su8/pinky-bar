@@ -53,7 +53,7 @@ int main(int argc, char *argv[]) {
   char kernel[VLA], volume[VLA], taim[VLA], fans[VLA], statio[VLA], mask[VLA];
   char voltage[VLA], cpu_temp[VLA], mobo_temp[VLA], net[VLA], mac[VLA];
   char cores_load[VLA], cpu_clock_speed[VLA], cpu_info[VLA], net_addr[VLA];
-  char net_cast[VLA], link_speed[VLA], ip_lookup[VLA];
+  char net_cast[VLA], link_speed[VLA], ip_lookup[VLA], ssd_model[VLA];
 
   const struct option options[] = {
     { "mpd",          no_argument,       NULL, 'M' },
@@ -64,6 +64,7 @@ int main(int argc, char *argv[]) {
     { "cputemp",      no_argument,       NULL, 'T' },
     { "ram",          no_argument,       NULL, 'r' },
     { "storage",      no_argument,       NULL, 's' },
+    { "drivemodel",   required_argument, NULL, 'F' },
     { "packages",     no_argument,       NULL, 'p' },
     { "kernel",       no_argument,       NULL, 'k' },
     { "voltage",      no_argument,       NULL, 'v' },
@@ -86,7 +87,7 @@ int main(int argc, char *argv[]) {
   };
 
   int ch = 0;
-  while (0 < (ch = getopt_long(argc, argv, "McCLTIrspkvfmdVtha:A:e:B:D:i:S:b:E:", options, NULL))) {
+  while (0 < (ch = getopt_long(argc, argv, "McCLTIrspkvfmdVtha:A:e:B:D:i:S:b:E:F:", options, NULL))) {
     switch (ch) {
       case 'M':
 #if defined (HAVE_MPD_CLIENT_H)
@@ -115,6 +116,11 @@ int main(int argc, char *argv[]) {
 
       case 's':
         GET_N_FMT(ssd, all, FMT_SSD, SSD_STR, ssd);
+        break;
+
+      case 'F':
+        get_ssd_model(ssd_model, optarg);
+        GLUE(all, FMT_KERN, ssd_model);
         break;
 
       case 'p':
@@ -243,6 +249,7 @@ void help_msg(void) {
       "  -I, --cpuinfo\t Detect your CPU vendor, stepping, family.\n"
       "  -r, --ram\t The used ram.\n"
       "  -s, --storage\t The used drive storage.\n"
+      "  -F, --drivemodel The vendor name of your drive [argument - sda].\n"
       "  -p, --packages The number of installed packages.\n"
       "  -k, --kernel\t The kernel version.\n"
       "  -v, --voltage\t The system voltage.\n"

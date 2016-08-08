@@ -37,6 +37,7 @@ The order of supplied options will dictate how, where and what system informatio
 | -I           | --cpuinfo   | Detect your CPU vendor, stepping and family from low level assembly access |
 | -r           | --ram       | The used ram                                                       |
 | -s           | --storage   | The used drive storage                                             |
+| -F           | --drivemodel| The vendor name of your drive [argument sda]                       |
 | -p           | --packages  | The number of installed packages                                   |
 | -k           | --kernel    | The kernel version                                                 |
 | -v           | --voltage   | The system voltage                                                 |

@@ -104,6 +104,10 @@ get_net(char *str1, char *str2, unsigned char num) {
 
             temp_void = ifa->ifa_addr;
             mac = (struct sockaddr_ll *)temp_void;
+            /*
+              6 == ether
+              20 == infiniband
+            */
             if (6 != mac->sll_halen) {
               FILL_STR_ARR(1, str1, "Null");
               break;

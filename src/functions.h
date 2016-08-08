@@ -23,6 +23,7 @@
 
 void get_ram(char *);
 void get_ssd(char *);
+void get_ssd_model(char *, char *);
 void get_packs(char *);
 void get_kernel(char *);
 void get_voltage(char *);

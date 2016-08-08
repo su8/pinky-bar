@@ -77,6 +77,27 @@ get_ssd(char *str1) {
 }
 
 
+void
+get_ssd_model(char *str1, char *str2) {
+  char model[VLA];
+  FILL_ARR(model, "%s%s%s", "/sys/block/", str2, "/device/model");
+
+  FILE *fp = fopen(model, "r");
+  if (NULL == fp) {
+    exit_with_err(CANNOT_OPEN, model);
+  }
+
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wunused-result"
+  fscanf(fp, "%[^\n]", model);
+#pragma GCC diagnostic pop
+  fclose(fp);
+
+  FILL_STR_ARR(1, str1, model);
+
+}
+
+
 /* Source (my improved screenfetch-c fork):
  * https://github.com/wifiextender/screenfetch-c/blob/master/src/plat/linux/detect.c */
 static uint_fast16_t 
