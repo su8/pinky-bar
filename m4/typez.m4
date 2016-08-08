@@ -75,6 +75,7 @@ AC_DEFUN([TEST_TYPEZ],[
   ])
 
   AC_CHECK_HEADERS([ \
+    argp.h           \
     time.h           \
     stdio.h          \
     stdbool.h        \
@@ -112,6 +113,8 @@ AC_DEFUN([TEST_TYPEZ],[
     exit            \
     getopt          \
     getopt_long     \
+    argp_parse      \
+    argp_usage      \
   ],[],[
     ERR([Missing core library functions.])
   ])
