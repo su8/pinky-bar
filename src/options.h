@@ -1,5 +1,5 @@
 /*
-   Copyright 02/22/2015, 07/18/2016
+   Copyright 08/08/2016
    Aaron Caffrey https://github.com/wifiextender
 
    This program is free software; you can redistribute it and/or modify
@@ -18,30 +18,9 @@
    MA 02110-1301, USA.
 */
 
-#include "config.h" /* auto-generated */
-#include "include/headers.h"
-#include "options.h"
+#ifndef OPTIONS_H_
+#define OPTIONS_H_
 
-int main(int argc, char *argv[]) {
+void parse_opts(int argc, char *argv[], char *combined);
 
-  if (1 == argc) {
-    printf("%s\n", "Try --help or --usage for more information.");
-    return EXIT_FAILURE;
-  }
-  if (-1 == (sysconf(_SC_CLK_TCK))) {
-    printf("%s\n", "Error: sysconf() failed");
-    return EXIT_FAILURE;
-  }
-
-  char combined[WHOLE_MAIN_ARR_LEN];
-  char *all = combined;
-  parse_opts(argc, argv, all);
-
-#if defined (HAVE_X11_XLIB_H)
-  set_status(combined);
-#else
-  printf("%s\n", combined);
-#endif
-
-  return EXIT_SUCCESS;
-}
+#endif /* OPTIONS_H_ */
