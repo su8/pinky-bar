@@ -32,6 +32,7 @@ void get_mobo(char *);
 void get_mobo_temp(char *);
 void get_taim(char *);
 void get_statio(char *, char *);
+void get_battery(char *);
 
 #if defined (HAVE_X11_XLIB_H)
 void set_status(const char *);

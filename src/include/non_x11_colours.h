@@ -46,6 +46,7 @@
 #define NET_STR    XBM_ICON("net.xbm")
 #define SPEED_STR  XBM_ICON("net.xbm")
 #define STATIO_STR XBM_ICON("statio.xbm")
+#define BATT_STR   XBM_ICON("bat.xbm")
 
 /* tmux or other program that can spice
  * the output on it's own */

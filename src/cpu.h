@@ -21,16 +21,6 @@
 #ifndef CPU_H_
 #define CPU_H_
 
-void get_cpu(char *);
-void get_cores_load(char *);
-void get_cpu_temp(char *);
-
-#if defined(__i386__) || defined(__i686__) || defined(__x86_64__)
-void get_cpu_clock_speed(char *);
-void get_cpu_info(char *);
-#endif
-
-
 /* Inspired from  https://en.wikipedia.org/wiki/CPUID and
  * llvm Host.cpp */
 #define CPU_VENDOR(x, z) __asm__("cpuid": "=b" (z) : "a" (x))
@@ -59,6 +49,16 @@ void get_cpu_info(char *);
 /* --coresload related constant to determine
  * how many cpu cores/threads to try for detection */
 #define MAX_CORES 40
+
+
+void get_cpu(char *);
+void get_cores_load(char *);
+void get_cpu_temp(char *);
+
+#if defined(__i386__) || defined(__i686__) || defined(__x86_64__)
+void get_cpu_clock_speed(char *);
+void get_cpu_info(char *);
+#endif
 
 
 #endif /* CPU_H_ */

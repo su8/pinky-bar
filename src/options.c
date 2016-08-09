@@ -40,7 +40,8 @@ static const struct argp_option options[] = {
   { .name = "cputemp",      .key = 'T',                .doc = "Detect your CPU vendor, stepping, family."                },
   { .name = "ram",          .key = 'r',                .doc = "The used ram."                                            },
   { .name = "storage",      .key = 's',                .doc = "The used drive storage."                                  },
-  { .name = "drivemodel",   .key = 'F',  .arg = "sda", .doc = "The vendor name of your drive."                           },
+  { .name = "battery",      .key = 'g',                .doc = "The remaining battery charge."                            },
+  { .name = "drivemodel",   .key = 'F', .arg = "sda",  .doc = "The vendor name of your drive."                           },
   { .name = "packages",     .key = 'p',                .doc = "The number of installed packages."                        },
   { .name = "kernel",       .key = 'k',                .doc = "The kernel version."                                      },
   { .name = "voltage",      .key = 'v',                .doc = "The system voltage"                                       },
@@ -118,6 +119,13 @@ parse_opt(int key, char *arg, struct argp_state *state) {
       {
         char ssd[VLA];
         GET_N_FMT(ssd, arguments->all, FMT_SSD, SSD_STR, ssd);
+      }
+      break;
+
+    case 'g':
+      {
+        char battery[VLA];
+        GET_N_FMT(battery, arguments->all, FMT_BATT, BATT_STR, battery);
       }
       break;
 

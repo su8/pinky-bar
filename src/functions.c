@@ -58,7 +58,6 @@ get_ram(char *str1) {
   used    = (uintmax_t) (mem.totalram - mem.freeram -
                    mem.bufferram - mem.sharedram) / MB;
   percent = (used * 100) / total;
-
   FILL_UINT_ARR(str1, percent);
 }
 
@@ -72,7 +71,6 @@ get_ssd(char *str1) {
     FUNC_FAILED("statvfs()");
   }
   percent = ((ssd.f_blocks - ssd.f_bfree) * ssd.f_bsize) / GB;
-
   FILL_UINT_ARR(str1, percent);
 }
 
@@ -344,4 +342,43 @@ get_statio(char *str1, char *str2) {
 
   FILL_ARR(str1, "Read " FMT_UINT " MB, Written " FMT_UINT " MB",
     BYTES_TO_MB(statio[2]), BYTES_TO_MB(statio[6]));
+}
+
+
+/* Thanks to https://bugzilla.kernel.org/show_bug.cgi?id=83411 */
+void
+get_battery(char *str1) {
+  uintmax_t used = 0, total = 0, percent = 0, num = 0;
+  char temp[VLA];
+  BATTERY_TOTAL(temp, num);
+
+  FILE *fp = fopen(temp, "r");
+  if (NULL == fp) {
+    num = 1;
+    BATTERY_TOTAL(temp, num);
+
+    if (NULL == (fp = fopen(temp, "r"))) {
+      exit_with_err(CANNOT_OPEN, "BAT0 and BAT1");
+    }
+  }
+
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wunused-result"
+  fscanf(fp, FMT_UINT, &total);
+#pragma GCC diagnostic pop
+  fclose(fp);
+
+  BATTERY_USED(temp, num);
+  if (NULL == (fp = fopen(temp, "r"))) {
+    exit_with_err(CANNOT_OPEN, temp);
+  }
+
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wunused-result"
+  fscanf(fp, FMT_UINT, &used);
+#pragma GCC diagnostic pop
+  fclose(fp);
+
+  percent = (used * 100) / total;
+  FILL_UINT_ARR(str1, percent);
 }

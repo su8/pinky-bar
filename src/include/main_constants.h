@@ -72,6 +72,7 @@
 #define NET_STR    "Used Net"
 #define STATIO_STR "Statio"
 #define SPEED_STR  "Speed"
+#define BATT_STR   "BATT"
 
 #endif /* HAVE_X11_XLIB_H || WITH_COLOURS */
 
@@ -101,6 +102,7 @@
 #define FMT_STATIO    FMT_NET                             /* Read 123 Written 123 */
 #define FMT_CPUSPEED  PINK STR_SPEC " "                   /* 1234 MHz             */
 #define FMT_TEMP      TEMP                                /* 32C                  */
+#define FMT_BATT      FMT                                 /* BATT 10%             */
 
 
 #endif /* CONSTANTS_H_ */

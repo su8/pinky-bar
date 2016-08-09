@@ -50,6 +50,12 @@
 #define VOLTAGE_FILE(x) (HWMON_DIR"/in"x"_input")
 #define FAN_FILE HWMON_DIR"/fan"UFINT"_input"
 
+/* battery reports */
+#define BATTERY_NUM(x, y, z) (FILL_ARR(x, "%s"FMT_UINT"%s%s", \
+  "/sys/class/power_supply/BAT", y, "/charge_", z))
+#define BATTERY_USED(x, z)  (BATTERY_NUM(x, z, "now"))
+#define BATTERY_TOTAL(x, z) (BATTERY_NUM(x, z, "full"))
+
 /* exit with error */
 #define CANNOT_OPEN "Could not open"
 #define ERR "Error:"
