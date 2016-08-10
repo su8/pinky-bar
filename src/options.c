@@ -59,9 +59,9 @@ static const struct argp_option options[] = {
   { .name = "iplink",       .key = 'e', .arg = "eth0", .doc = "The NIC link speed (useful for wireless/wifi)."           },
   { .name = "iplookup",     .key = 'E', .arg = "site", .doc = "Mini website IP lookup."                                  },
   { .name = "nicinfo",      .key = 'G', .arg = "eth0", .doc = "The NIC vendor and model."                                },
-  { .name = "nicdrv",       .key = 'h', .arg = "eth0", .doc = "The NIC vendor and model."                                },
-  { .name = "nicver",       .key = 'H', .arg = "eth0", .doc = "The NIC vendor and model."                                },
-  { .name = "nicfw",        .key = 'j', .arg = "eth0", .doc = "The NIC vendor and model."                                },
+  { .name = "nicdrv",       .key = 'h', .arg = "eth0", .doc = "The NIC driver."                                          },
+  { .name = "nicver",       .key = 'H', .arg = "eth0", .doc = "The NIC version."                                         },
+  { .name = "nicfw",        .key = 'j', .arg = "eth0", .doc = "The NIC firmware."                                        },
   { .name = "statio",       .key = 'S', .arg = "sda",  .doc = "Read and written MBs to the drive so far."                },
   { .doc = NULL }
 };
