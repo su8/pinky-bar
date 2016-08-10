@@ -35,9 +35,9 @@
 #include <linux/ethtool.h>
 #include <linux/if.h>
 
-/* #if WITH_PCI == 1 */
-/* #include <pci/pci.h> */
-/* #endif /1* WITH_PCI *1/ */
+#if WITH_PCI == 1
+#include <pci/pci.h>
+#endif /* WITH_PCI */
 
 #endif /* WITH_NET */
 
@@ -217,71 +217,89 @@ get_ip_lookup(char *str1, char *str2) {
 }
 
 
-/* void */
-/* get_nic_info(char *str1, char *str2) { */
-/* #if WITH_PCI == 1 */
+/* 
+ Quick spot the bug game.
 
-/*   uintmax_t vendor = 0, model = 0; */
-/*   char temp[VLA]; */
-/*   struct pci_access *pacc = NULL; */
-/*   struct pci_dev *dev; */
+ code begin:
+  struct pci_access *pacc= NULL;
+  pacc = pci_alloc();
+  pci_init(pacc);
+  pci_cleanup(pacc);
+ code end;
 
-/*   NIC_VEND(temp, str2); */
-/*   FILE *fp = fopen(temp, "r"); */
-/*   if (NULL == fp) { */
-/*     exit_with_err(CANNOT_OPEN, temp); */
-/*   } */
+  Spotted the bug - no ? Well,
+  GCC -O2 hangs on pci_init,
+  while -O0 executes flawlessly.
 
-/* #pragma GCC diagnostic push */
-/* #pragma GCC diagnostic ignored "-Wunused-result" */
-/*   fscanf(fp, FMT_UINTX, &vendor); /1* hex *1/ */
-/* #pragma GCC diagnostic pop */
-/*   fclose(fp); */
+  Disclaimer: the code is perfectly valid.
+*/
+void
+get_nic_info(char *str1, char *str2) {
+#if WITH_PCI == 1
 
-/*   NIC_MODEL(temp, str2); */
-/*   if (NULL == (fp = fopen(temp, "r"))) { */
-/*     exit_with_err(CANNOT_OPEN, temp); */
-/*   } */
+  uintmax_t vendor = 0, model = 0;
+  char temp[VLA];
+  struct pci_access *pacc = NULL;
+  struct pci_dev *dev = NULL;
 
-/* #pragma GCC diagnostic push */
-/* #pragma GCC diagnostic ignored "-Wunused-result" */
-/*   fscanf(fp, FMT_UINTX, &model); /1* hex *1/ */
-/* #pragma GCC diagnostic pop */
-/*   fclose(fp); */
+  FILL_STR_ARR(1, str1, "Null");
+  NIC_VEND(temp, str2);
 
-/*   pacc = pci_alloc(); */
-/*   if (NULL == pacc) { */
-/*     goto error; */
-/*   } */
+  FILE *fp = fopen(temp, "r");
+  if (NULL == fp) {
+    exit_with_err(CANNOT_OPEN, temp);
+  }
 
-/*   pci_init(pacc); */
-/*   if (NULL == pacc) { */
-/*     goto error; */
-/*   } */
-/*   pci_scan_bus(pacc); */
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wunused-result"
+  fscanf(fp, FMT_UINTX, &vendor); /* hex */
+#pragma GCC diagnostic pop
+  fclose(fp);
 
-/*   for (dev = pacc->devices; NULL != dev; dev = dev->next) { */
-/*     pci_fill_info(dev, PCI_FILL_IDENT | PCI_FILL_BASES | PCI_FILL_CLASS); */
+  NIC_MODEL(temp, str2);
+  if (NULL == (fp = fopen(temp, "r"))) {
+    exit_with_err(CANNOT_OPEN, temp);
+  }
 
-/*     if ((uintmax_t)vendor == (uintmax_t)dev->vendor_id && */
-/*         (uintmax_t)model == (uintmax_t)dev->device_id) { */
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wunused-result"
+  fscanf(fp, FMT_UINTX, &model); /* hex */
+#pragma GCC diagnostic pop
+  fclose(fp);
 
-/*       pci_lookup_name(pacc, temp, VLA, */
-/*         PCI_LOOKUP_VENDOR | PCI_LOOKUP_DEVICE, */
-/*         (uintmax_t)vendor, (uintmax_t)model); */
+  pacc = pci_alloc();
+  if (NULL == pacc) {
+    goto error;
+  }
 
-/*       FILL_STR_ARR(1, str1, temp); */
-/*       break; */
-/*     } */
-/*   } */
+  pci_init(pacc);
+  if (NULL == pacc) {
+    goto error;
+  }
+  pci_scan_bus(pacc);
 
-/* error: */
-/*   if (NULL != pacc) { */
-/*     pci_cleanup(pacc); */
-/*   } */
-/*   return; */
+  for (dev = pacc->devices; NULL != dev; dev = dev->next) {
+    pci_fill_info(dev, PCI_FILL_IDENT | PCI_FILL_BASES | PCI_FILL_CLASS);
 
-/* #else */
-/*   RECOMPILE_WITH("pci"); */
-/* #endif /1* WITH_PCI *1/ */
-/* } */
+    if ((uintmax_t)vendor == (uintmax_t)dev->vendor_id &&
+        (uintmax_t)model == (uintmax_t)dev->device_id) {
+
+      pci_lookup_name(pacc, temp, VLA,
+        PCI_LOOKUP_VENDOR | PCI_LOOKUP_DEVICE,
+        (uintmax_t)vendor, (uintmax_t)model);
+
+      FILL_STR_ARR(1, str1, temp);
+      break;
+    }
+  }
+
+error:
+  if (NULL != pacc) {
+    pci_cleanup(pacc);
+  }
+  return;
+
+#else
+  RECOMPILE_WITH("pci");
+#endif /* WITH_PCI */
+}

@@ -28,10 +28,18 @@ dnl headers as they fail to compile just by including
 dnl them in gcc, but pass the tests in clang. Is there
 dnl are any _POSIX_SOURCE m4 alternative to compile a
 dnl test case on the fly ?
+dnl
+dnl --with-pci will check for the presence of pci headers and
+dnl substitue the linker flags -lpci to the variable PCI_LIBS
+dnl as well to mitigate the GCC -O2 bug.
+dnl
+dnl --with-net will check for the presence of iproute2 headers
+dnl used in the net functions and substitute appropriate macro
+dnl so the program to be compiled with/out net functions support.
 AC_DEFUN([TEST_NET],[
   WITH_NET=1
-  dnl WITH_PCI=1
-  dnl PCI_LIBS=""
+  WITH_PCI=1
+  PCI_LIBS=""
 
   AC_ARG_WITH([net],
     AS_HELP_STRING([--with-net],
@@ -93,31 +101,35 @@ AC_DEFUN([TEST_NET],[
 
   ])
 
-  dnl AC_ARG_WITH([pci],
-  dnl   AS_HELP_STRING([--with-pci],
-  dnl     [PCI funcs]),
-  dnl   [],
-  dnl   [with_pci=yes]
-  dnl )
+  AC_ARG_WITH([pci],
+    AS_HELP_STRING([--with-pci],
+      [PCI funcs]),
+    [],
+    [with_pci=yes]
+  )
 
-  dnl AS_IF([test "x$with_pci" = "xno"], [
-  dnl   WITH_PCI=0
-  dnl AC_SUBST(PCI_LIBS)
-  dnl ])
+  AS_IF([test "x$with_pci" = "xno"], [
+    WITH_PCI=0
+    CHECK_CFLAGZ([-O2])
+  ])
 
-  dnl AS_IF([test "x$with_pci" = "xyes"], [
-  dnl   PCI_LIBS="-lpci"
+  AS_IF([test "x$with_pci" = "xyes"], [
+    PCI_LIBS="-lpci"
 
-  dnl   AC_CHECK_HEADERS([    \
-  dnl     pci/pci.h           \
-  dnl   ],[],[
-  dnl     ERR([Missing core header files.])
-  dnl   ])
+    dnl For very first time I stumble upon GCC -O2 bug.
+    dnl It hangs on pci_init with -O2
+    CHECK_CFLAGZ([-O0])
 
-  dnl ])
+    AC_CHECK_HEADERS([ \
+      pci/pci.h        \
+    ],[],[
+      ERR([Missing core header files.])
+    ])
 
-  dnl AC_SUBST(PCI_LIBS)
+  ])
+
+  AC_SUBST(PCI_LIBS)
   AC_DEFINE_UNQUOTED([WITH_NET],[$WITH_NET],[Net funcs])
-  dnl AC_DEFINE_UNQUOTED([WITH_PCI],[$WITH_PCI],[PCI funcs])
+  AC_DEFINE_UNQUOTED([WITH_PCI],[$WITH_PCI],[PCI funcs])
 
 ])

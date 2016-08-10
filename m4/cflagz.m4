@@ -100,10 +100,13 @@ AC_DEFUN([TEST_CFLAGZ],[
   dnl  https://gcc.gnu.org/bugzilla/show_bug.cgi?id=25509
   dnl -Wno-unused-result,
 
+  dnl For very first time I stumble upon GCC -O2 bug.
+  dnl It hangs on pci_init with -O2
+  dnl net.m4 will append -O2 or -O0
+  dnl according whether --with-pci is used or not
 
   AC_MSG_NOTICE([checking all CFLAGS])
   CHECK_CFLAGZ([
-    -O2,
     -pipe,
     -std=c99,
     -Wextra,

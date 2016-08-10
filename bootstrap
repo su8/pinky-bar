@@ -133,7 +133,7 @@ _gen_files() {
 
     bin_PROGRAMS = '${prog_name}'
 
-    '${prog_name}'_LDADD = $(X_LIBS) $(ALSA_LIBS) $(MPD_LIBS)
+    '${prog_name}'_LDADD = $(X_LIBS) $(ALSA_LIBS) $(MPD_LIBS) $(PCI_LIBS)
 
     '${prog_name}'_SOURCES = '${src_files[@]}'
 

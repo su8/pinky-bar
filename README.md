@@ -55,6 +55,7 @@ The order of supplied options will dictate how, where and what system informatio
 | -D           | --ipcast    | The NIC broadcast address [argument - eth0]                        |
 | -e           | --iplink    | The NIC link speed (useful for wireless/wifi) [argument - eth0]    |
 | -E           | --iplookup  | Mini website IP lookup [website argument - google.com]             |
+| -G           | --nicinfo   | The NIC vendor and model                                           |
 | -S           | --statio    | Read and written MBs to the drive so far [argument - sda]          |
 
 Before I start browsing the wild west called Internet with Tor, I always generate [random local ip](https://github.com/wifiextender/dotfiles/blob/master/gentoo/home/frost/.config/zsh/functions/network.zsh) and [mac address](https://github.com/wifiextender/dotfiles/blob/master/gentoo/home/frost/.config/zsh/functions/not-interactive-funcs.zsh#L24). So those functions in pinky-bar are used extensively by me at least to monitor the current fake addresses.
@@ -73,6 +74,7 @@ It's up to you to decide which features suit you best.
 | --with-x11     | --without-x11       | Enable it if you are using Window Manager (dwm) to be more specific.                       |
 | --with-alsa    | --without-alsa      | To get the sound volume level.                                                             |
 | --with-net     | --without-net       | Enable the internet related options.                                                       |
+| --with-pci     | --without-pci       | To get the NIC vendor and model                                                            |
 | --with-colours | --without-colours   | Colorize the output data.                                                                  |
 | icons=/tmp     |                     | Use xbm icons that can be used by dzen2 for example. Discarded when **--with-x11** is used |
 | --with-mpd     | --without-mpd       | To see the currently played song name (if any).                                            |
@@ -81,7 +83,7 @@ It's up to you to decide which features suit you best.
 By default, if **no** options are passed, the program will be compiled with/without:
 
 ```bash
---without-alsa --without-x11 --without-mpd --with-colours --with-net
+--without-alsa --without-x11 --without-mpd --with-colours --with-net --with-pci
 ```
 
 ---
@@ -194,10 +196,9 @@ If for any reason you would like to compile the program without internet related
 
 * iproute2    # Net headers
 
-To see the currently played song name:
+The get the NIC vendor and model:
 
-* libmpdclient
-* mpd (with properly configured config)
+* pciutils
 
 To get the sound volume level:
 
@@ -205,6 +206,11 @@ To get the sound volume level:
 * alsa-lib
 
 Then pass **--with-alsa** to configure.
+
+To see the currently played song name:
+
+* libmpdclient
+* mpd (with properly configured config)
 
 Here's an example of my **/etc/mpd.conf**
 

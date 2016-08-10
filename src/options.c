@@ -58,7 +58,7 @@ static const struct argp_option options[] = {
   { .name = "ipcast",       .key = 'D', .arg = "eth0", .doc = "The NIC broadcast address."                               },
   { .name = "iplink",       .key = 'e', .arg = "eth0", .doc = "The NIC link speed (useful for wireless/wifi)."           },
   { .name = "iplookup",     .key = 'E', .arg = "site", .doc = "Mini website IP lookup."                                  },
-  /* { .name = "nicinfo",      .key = 'G', .arg = "eth0", .doc = "The NIC vendor and model."                                }, */
+  { .name = "nicinfo",      .key = 'G', .arg = "eth0", .doc = "The NIC vendor and model."                                },
   { .name = "statio",       .key = 'S', .arg = "sda",  .doc = "Read and written MBs to the drive so far."                },
   { .doc = NULL }
 };
@@ -248,13 +248,13 @@ parse_opt(int key, char *arg, struct argp_state *state) {
       }
       break;
 
-    /* case 'G': */
-    /*   { */
-    /*     char nic_info[VLA]; */
-    /*     get_nic_info(nic_info, arg); */
-    /*     GLUE(arguments->all, FMT_KERN, nic_info); */
-    /*   } */
-    /*   break; */
+    case 'G':
+      {
+        char nic_info[VLA];
+        get_nic_info(nic_info, arg);
+        GLUE(arguments->all, FMT_KERN, nic_info);
+      }
+      break;
 
     case 'E':
       {
