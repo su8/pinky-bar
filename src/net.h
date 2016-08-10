@@ -24,7 +24,7 @@
 #define RECOMPILE_WITH(x) (exit_with_err(ERR, "recompile the program --with-" x))
 
 void get_net(char *, char *, unsigned char num);
-void get_link_speed(char *, char *);
+void get_nic_info2(char *, char *, unsigned char num);
 void get_ip_lookup(char *, char *);
 void get_nic_info(char *, char *);
 

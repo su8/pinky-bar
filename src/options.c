@@ -59,6 +59,9 @@ static const struct argp_option options[] = {
   { .name = "iplink",       .key = 'e', .arg = "eth0", .doc = "The NIC link speed (useful for wireless/wifi)."           },
   { .name = "iplookup",     .key = 'E', .arg = "site", .doc = "Mini website IP lookup."                                  },
   { .name = "nicinfo",      .key = 'G', .arg = "eth0", .doc = "The NIC vendor and model."                                },
+  { .name = "nicdrv",       .key = 'h', .arg = "eth0", .doc = "The NIC vendor and model."                                },
+  { .name = "nicver",       .key = 'H', .arg = "eth0", .doc = "The NIC vendor and model."                                },
+  { .name = "nicfw",        .key = 'j', .arg = "eth0", .doc = "The NIC vendor and model."                                },
   { .name = "statio",       .key = 'S', .arg = "sda",  .doc = "Read and written MBs to the drive so far."                },
   { .doc = NULL }
 };
@@ -245,6 +248,27 @@ parse_opt(int key, char *arg, struct argp_state *state) {
       {
         char link_speed[VLA];
         GET_NET_N_FMT(link_speed, arg, 7, arguments->all, FMT_KERN, link_speed);
+      }
+      break;
+
+    case 'h':
+      {
+        char nic_drv[VLA];
+        GET_NET_N_FMT(nic_drv, arg, 8, arguments->all, FMT_KERN, nic_drv);
+      }
+      break;
+
+    case 'H':
+      {
+        char nic_ver[VLA];
+        GET_NET_N_FMT(nic_ver, arg, 9, arguments->all, FMT_KERN, nic_ver);
+      }
+      break;
+
+    case 'j':
+      {
+        char nic_fw[VLA];
+        GET_NET_N_FMT(nic_fw, arg, 10, arguments->all, FMT_KERN, nic_fw);
       }
       break;
 

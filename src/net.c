@@ -120,9 +120,10 @@ get_net(char *str1, char *str2, unsigned char num) {
                 mac->sll_addr[0], mac->sll_addr[1],
                 mac->sll_addr[2], mac->sll_addr[3],
                 mac->sll_addr[4], mac->sll_addr[5]);
-          } else if (7 == num) { /* link speed */
+          } else if (7 == num || 8 == num || 9 == num ||
+              10 == num) { /* link speed | driver | version | firmware */
 
-            get_link_speed(str1, str2);
+            get_nic_info2(str1, str2, (unsigned char)(num - 6));
           }
           break;
         }
@@ -140,10 +141,11 @@ get_net(char *str1, char *str2, unsigned char num) {
 
 /* Not using exit_with_err to freeifaddrs */
 void
-get_link_speed(char *str1, char *str2) {
+get_nic_info2(char *str1, char *str2, unsigned char num) {
 #if WITH_NET == 1
 
   struct ethtool_cmd ecmd;
+  struct ethtool_drvinfo drvinfo;
   struct ifreq ifr;
   int sock = 0;
 
@@ -152,14 +154,38 @@ get_link_speed(char *str1, char *str2) {
     return;
   }
 
-  ecmd.cmd = ETHTOOL_GSET;
-  ifr.ifr_data = (char *)&ecmd;
+  switch(num) {
+    case 1:
+      ecmd.cmd = ETHTOOL_GSET;
+      ifr.ifr_data = (char *)&ecmd;
+      break;
+    case 2:
+    case 3:
+    case 4:
+      drvinfo.cmd = ETHTOOL_GDRVINFO;
+      ifr.ifr_data = (char *)&drvinfo;
+      break;
+  }
   snprintf(ifr.ifr_name, IF_NAMESIZE, "%s", str2);
 
   if (0 < (ioctl(sock, SIOCETHTOOL, &ifr))) {
     return;
   }
-  FILL_ARR(str1, "%d%s", ecmd.speed, "Mbps");
+
+  switch(num) {
+    case 1:
+      FILL_ARR(str1, "%d%s", ecmd.speed, "Mbps");
+      break;
+    case 2:
+      FILL_STR_ARR(1, str1, drvinfo.driver);
+      break;
+    case 3:
+      FILL_STR_ARR(1, str1, drvinfo.version);
+      break;
+    case 4:
+      FILL_STR_ARR(1, str1, drvinfo.fw_version);
+      break;
+  }
 
 #else
   RECOMPILE_WITH("net");

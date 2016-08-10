@@ -38,7 +38,7 @@ The order of supplied options will dictate how, where and what system informatio
 | -r           | --ram       | The used ram                                                       |
 | -s           | --storage   | The used drive storage                                             |
 | -g           | --battery   | The remaining battery charge                                       |
-| -F           | --drivemodel| The vendor name of your drive [argument sda]                       |
+| -F           | --drivemodel| The vendor name of your drive [argument - sda]                     |
 | -p           | --packages  | The number of installed packages                                   |
 | -k           | --kernel    | The kernel version                                                 |
 | -v           | --voltage   | The system voltage                                                 |
@@ -55,7 +55,10 @@ The order of supplied options will dictate how, where and what system informatio
 | -D           | --ipcast    | The NIC broadcast address [argument - eth0]                        |
 | -e           | --iplink    | The NIC link speed (useful for wireless/wifi) [argument - eth0]    |
 | -E           | --iplookup  | Mini website IP lookup [website argument - google.com]             |
-| -G           | --nicinfo   | The NIC vendor and model                                           |
+| -G           | --nicinfo   | The NIC vendor and model [argument - eth0]                         |
+| -G           | --nicdrv    | The NIC driver [argument - eth0]                                   |
+| -G           | --nicver    | The NIC version [argument - eth0]                                  |
+| -G           | --nicfw     | The NIC firmware [argument - eth0]                                 |
 | -S           | --statio    | Read and written MBs to the drive so far [argument - sda]          |
 
 Before I start browsing the wild west called Internet with Tor, I always generate [random local ip](https://github.com/wifiextender/dotfiles/blob/master/gentoo/home/frost/.config/zsh/functions/network.zsh) and [mac address](https://github.com/wifiextender/dotfiles/blob/master/gentoo/home/frost/.config/zsh/functions/not-interactive-funcs.zsh#L24). So those functions in pinky-bar are used extensively by me at least to monitor the current fake addresses.
