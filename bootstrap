@@ -59,7 +59,7 @@ _gen_files() {
   AC_CONFIG_HEADER([src/config.h])
   AM_INIT_AUTOMAKE([1.11 -Wall no-define foreign subdir-objects dist-xz no-dist-gzip std-options])
 
-  AM_SILENT_RULES([yes])
+  m4_ifdef([AM_SILENT_RULES], [AM_SILENT_RULES([yes])])
 
   # With the addition of more runtime compile and
   # link tests, this option is no more necessary.
@@ -76,6 +76,7 @@ _gen_files() {
   # The linker flags tests in m4 dir
   TEST_SOME_FUNCS
   TEST_NET
+  TEST_PCI
   TEST_X11
   TEST_ALSA
   TEST_MPD
