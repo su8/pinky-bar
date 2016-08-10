@@ -27,6 +27,7 @@
 #define BYTES_TO_MB(x) (x/2/1024) /* block bytes */
 
 #define FMT_UINT "%"PRIuMAX
+#define FMT_UINTX "%"PRIxMAX
 #define UFINT "%"PRIuFAST16
 
 /* stay away from va_list */
@@ -55,6 +56,12 @@
   "/sys/class/power_supply/BAT", y, "/charge_", z))
 #define BATTERY_USED(x, z)  (BATTERY_NUM(x, z, "now"))
 #define BATTERY_TOTAL(x, z) (BATTERY_NUM(x, z, "full"))
+
+/* NIC model and vendor */
+#define NIC_NUM(x, y, z) (FILL_ARR(x, "%s%s%s%s", \
+  "/sys/class/net/", y, "/device/", z))
+#define NIC_VEND(x, z)  (NIC_NUM(x, z, "vendor"))
+#define NIC_MODEL(x, z) (NIC_NUM(x, z, "device"))
 
 /* exit with error */
 #define CANNOT_OPEN "Could not open"

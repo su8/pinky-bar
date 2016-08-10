@@ -22,18 +22,22 @@
 
 #if WITH_NET == 1
 
-#include <arpa/inet.h>
 #include <netdb.h>
 /* #include <sys/types.h> */
 #include <sys/socket.h>
+#include <sys/ioctl.h>
+#include <arpa/inet.h>
 #include <ifaddrs.h>
 #include <linux/if_link.h>
 #include <netpacket/packet.h>
 #include <net/if.h>
-#include <sys/ioctl.h>
 #include <linux/sockios.h>
 #include <linux/ethtool.h>
 #include <linux/if.h>
+
+/* #if WITH_PCI == 1 */
+/* #include <pci/pci.h> */
+/* #endif /1* WITH_PCI *1/ */
 
 #endif /* WITH_NET */
 
@@ -56,6 +60,7 @@ get_net(char *str1, char *str2, unsigned char num) {
   if (-1 == getifaddrs(&ifaddr)) {
     FUNC_FAILED("getifaddrs()");
   }
+  FILL_STR_ARR(1, str1, "Null");
 
   for (ifa = ifaddr; NULL != ifa; ifa = ifa->ifa_next) {
     if (NULL == ifa->ifa_addr) {
@@ -109,7 +114,6 @@ get_net(char *str1, char *str2, unsigned char num) {
               20 == infiniband
             */
             if (6 != mac->sll_halen) {
-              FILL_STR_ARR(1, str1, "Null");
               break;
             }
             FILL_ARR(str1, "%02x:%02x:%02x:%02x:%02x:%02x",
@@ -119,9 +123,6 @@ get_net(char *str1, char *str2, unsigned char num) {
           } else if (7 == num) { /* link speed */
 
             get_link_speed(str1, str2);
-            if ('\0' == str1[0]) {
-              FILL_STR_ARR(1, str1, "Null");
-            }
           }
           break;
         }
@@ -214,3 +215,73 @@ get_ip_lookup(char *str1, char *str2) {
   RECOMPILE_WITH("net");
 #endif /* WITH_NET */
 }
+
+
+/* void */
+/* get_nic_info(char *str1, char *str2) { */
+/* #if WITH_PCI == 1 */
+
+/*   uintmax_t vendor = 0, model = 0; */
+/*   char temp[VLA]; */
+/*   struct pci_access *pacc = NULL; */
+/*   struct pci_dev *dev; */
+
+/*   NIC_VEND(temp, str2); */
+/*   FILE *fp = fopen(temp, "r"); */
+/*   if (NULL == fp) { */
+/*     exit_with_err(CANNOT_OPEN, temp); */
+/*   } */
+
+/* #pragma GCC diagnostic push */
+/* #pragma GCC diagnostic ignored "-Wunused-result" */
+/*   fscanf(fp, FMT_UINTX, &vendor); /1* hex *1/ */
+/* #pragma GCC diagnostic pop */
+/*   fclose(fp); */
+
+/*   NIC_MODEL(temp, str2); */
+/*   if (NULL == (fp = fopen(temp, "r"))) { */
+/*     exit_with_err(CANNOT_OPEN, temp); */
+/*   } */
+
+/* #pragma GCC diagnostic push */
+/* #pragma GCC diagnostic ignored "-Wunused-result" */
+/*   fscanf(fp, FMT_UINTX, &model); /1* hex *1/ */
+/* #pragma GCC diagnostic pop */
+/*   fclose(fp); */
+
+/*   pacc = pci_alloc(); */
+/*   if (NULL == pacc) { */
+/*     goto error; */
+/*   } */
+
+/*   pci_init(pacc); */
+/*   if (NULL == pacc) { */
+/*     goto error; */
+/*   } */
+/*   pci_scan_bus(pacc); */
+
+/*   for (dev = pacc->devices; NULL != dev; dev = dev->next) { */
+/*     pci_fill_info(dev, PCI_FILL_IDENT | PCI_FILL_BASES | PCI_FILL_CLASS); */
+
+/*     if ((uintmax_t)vendor == (uintmax_t)dev->vendor_id && */
+/*         (uintmax_t)model == (uintmax_t)dev->device_id) { */
+
+/*       pci_lookup_name(pacc, temp, VLA, */
+/*         PCI_LOOKUP_VENDOR | PCI_LOOKUP_DEVICE, */
+/*         (uintmax_t)vendor, (uintmax_t)model); */
+
+/*       FILL_STR_ARR(1, str1, temp); */
+/*       break; */
+/*     } */
+/*   } */
+
+/* error: */
+/*   if (NULL != pacc) { */
+/*     pci_cleanup(pacc); */
+/*   } */
+/*   return; */
+
+/* #else */
+/*   RECOMPILE_WITH("pci"); */
+/* #endif /1* WITH_PCI *1/ */
+/* } */

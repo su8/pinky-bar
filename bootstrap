@@ -149,7 +149,8 @@ _gen_files() {
       ../m4/mpd.m4 \
       ../m4/the_rest_funcs.m4 \
       ../m4/typez.m4 \
-      ../m4/x11.m4
+      ../m4/x11.m4 \
+      ../m4/net.m4
   ')
 
 
