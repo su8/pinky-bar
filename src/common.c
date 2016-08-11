@@ -31,16 +31,12 @@ exit_with_err(const char *str1, const char *str2) {
 void
 get_temp(const char *str1, char *str2) {
   uintmax_t temp;
+  FILE *fp;
 
-  FILE *fp = fopen(str1, "r");
-  if (NULL == fp) {
-    exit_with_err(CANNOT_OPEN, str1);
-  }
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wunused-result"
-  fscanf(fp, FMT_UINT, &temp);
+  OPEN_X(fp, str1, FMT_UINT, &temp);
 #pragma GCC diagnostic pop
-  fclose(fp);
 
   temp /= (uintmax_t)1000;
 

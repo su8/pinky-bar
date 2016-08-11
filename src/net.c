@@ -172,6 +172,15 @@ get_nic_info2(char *str1, char *str2, unsigned char num) {
     return;
   }
 
+  /* The `ethtool_cmd_speed' negotiation concept
+   * is great, but the `SPEED_X' macros are not.
+   * They are constants representing the link speed
+   * from 10 Mbps up to 100 Gbps, but as we know,
+   * the wifi/wireless "things" suffer from various
+   * degradations, thus those macros are only reliable
+   * to detect wired NIC that doesn't tend to change
+   * it's link speed from various real-life factors.
+  */
   switch(num) {
     case 1:
       FILL_ARR(str1, "%d%s", ecmd.speed, "Mbps");
@@ -267,31 +276,22 @@ get_nic_info(char *str1, char *str2) {
   char temp[VLA];
   struct pci_access *pacc = NULL;
   struct pci_dev *dev = NULL;
+  FILE *fp;
 
   FILL_STR_ARR(1, str1, "Null");
   NIC_VEND(temp, str2);
 
-  FILE *fp = fopen(temp, "r");
-  if (NULL == fp) {
-    exit_with_err(CANNOT_OPEN, temp);
-  }
-
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wunused-result"
-  fscanf(fp, FMT_UINTX, &vendor); /* hex */
+  OPEN_X(fp, temp, FMT_UINTX, &vendor); /* hex */
 #pragma GCC diagnostic pop
-  fclose(fp);
 
   NIC_MODEL(temp, str2);
-  if (NULL == (fp = fopen(temp, "r"))) {
-    exit_with_err(CANNOT_OPEN, temp);
-  }
 
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wunused-result"
-  fscanf(fp, FMT_UINTX, &model); /* hex */
+  OPEN_X(fp, temp, FMT_UINTX, &model); /* hex */
 #pragma GCC diagnostic pop
-  fclose(fp);
 
   pacc = pci_alloc();
   if (NULL == pacc) {

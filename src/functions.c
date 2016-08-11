@@ -77,19 +77,14 @@ get_ssd(char *str1) {
 
 void
 get_ssd_model(char *str1, char *str2) {
+  FILE *fp;
   char model[VLA];
   FILL_ARR(model, "%s%s%s", "/sys/block/", str2, "/device/model");
 
-  FILE *fp = fopen(model, "r");
-  if (NULL == fp) {
-    exit_with_err(CANNOT_OPEN, model);
-  }
-
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wunused-result"
-  fscanf(fp, "%[^\n]", model);
+  OPEN_X(fp, model, "%[^\n]", model);
 #pragma GCC diagnostic pop
-  fclose(fp);
 
   FILL_STR_ARR(1, str1, model);
 
@@ -250,28 +245,18 @@ get_fans(char *str1) {
 
 void 
 get_mobo(char *str1) {
+  FILE *fp;
   char vendor[VLA], name[VLA];
 
-  FILE *fp = fopen(MOBO_VENDOR, "r");
-  if (NULL == fp) {
-    exit_with_err(CANNOT_OPEN, MOBO_VENDOR);
-  }
-  /* use %[^\n] to get the whole line */
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wunused-result"
-  fscanf(fp, "%s", vendor);
+  OPEN_X(fp, MOBO_VENDOR, "%s", vendor);
 #pragma GCC diagnostic pop
-  fclose(fp);
 
-  if (NULL == (fp = fopen(MOBO_NAME, "r"))) {
-    exit_with_err(CANNOT_OPEN, MOBO_NAME);
-  }
-  /* use %[^\n] to get the whole line */
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wunused-result"
-  fscanf(fp, "%s", name);
+  OPEN_X(fp, MOBO_NAME, "%s", name);
 #pragma GCC diagnostic pop
-  fclose(fp);
 
   FILL_STR_ARR(2, str1, vendor, name);
 }
@@ -369,15 +354,11 @@ get_battery(char *str1) {
   fclose(fp);
 
   BATTERY_USED(temp, num);
-  if (NULL == (fp = fopen(temp, "r"))) {
-    exit_with_err(CANNOT_OPEN, temp);
-  }
 
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wunused-result"
-  fscanf(fp, FMT_UINT, &used);
+  OPEN_X(fp, temp, FMT_UINT, &used);
 #pragma GCC diagnostic pop
-  fclose(fp);
 
   percent = (used * 100) / total;
   FILL_UINT_ARR(str1, percent);

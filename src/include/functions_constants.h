@@ -69,4 +69,12 @@
 #define NOT_FOUND "Not found, "
 #define FUNC_FAILED(x) (exit_with_err(ERR, x " failed"))
 
+/* Let the preprocessor Do Repeat Myself */
+#define OPEN_X(fp, x, y, z) \
+  if (NULL == (fp = fopen(x, "r"))) { \
+    exit_with_err(CANNOT_OPEN, x); \
+  } \
+  fscanf(fp, y, z); \
+  fclose(fp);
+
 #endif /* CONSTANTS2_H_ */
