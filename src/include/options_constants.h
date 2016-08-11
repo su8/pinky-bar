@@ -51,6 +51,31 @@
     SLEEP_SLEEP_BABY(sysconf(_SC_CLK_TCK) * 1000000L); \
     GET_N_FMT(func, __VA_ARGS__);
 
+#define NEW_LABEL(lbl, declareVar, useVar, ...) \
+  case lbl: \
+  { \
+    declareVar; \
+    GET_N_FMT(useVar, arguments->all, __VA_ARGS__, useVar); \
+  } \
+  break;
+
+#define NEW_NET_LABEL(lbl, declareVar, useVar, num, ...) \
+  case lbl: \
+  { \
+    declareVar; \
+    GET_NET_N_FMT(useVar, arg, num, arguments->all, __VA_ARGS__, useVar); \
+  } \
+  break;
+
+#define NEW_ARG_LABEL(lbl, declareVar, useVar, ...) \
+  case lbl: \
+  { \
+    declareVar; \
+    get_##useVar(useVar, arg); \
+    GLUE(arguments->all, __VA_ARGS__, useVar); \
+  } \
+  break;
+
 /* Fire the preprocessor */
 
 #define STR_SPEC "%s"

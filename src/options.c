@@ -91,6 +91,7 @@ parse_opt(int key, char *arg, struct argp_state *state) {
       return ARGP_KEY_ERROR;
 #endif
 
+
     case 'c':
       {
         char cpu[VLA];
@@ -105,83 +106,27 @@ parse_opt(int key, char *arg, struct argp_state *state) {
       }
       break;
 
-    case 'T':
-      {
-        char cpu_temp[VLA];
-        GET_N_FMT(cpu_temp, arguments->all, FMT_TEMP, cpu_temp);
-      }
-      break;
+    NEW_LABEL('T', char cpu_temp[VLA], cpu_temp, FMT_TEMP);
 
-    case 'r':
-      {
-        char ram[VLA];
-        GET_N_FMT(ram, arguments->all, FMT_RAM, RAM_STR, ram);
-      }
-      break;
+    NEW_LABEL('r', char ram[VLA], ram, FMT_RAM, RAM_STR);
 
-    case 's':
-      {
-        char ssd[VLA];
-        GET_N_FMT(ssd, arguments->all, FMT_SSD, SSD_STR, ssd);
-      }
-      break;
+    NEW_LABEL('s', char ssd[VLA], ssd, FMT_SSD, SSD_STR);
 
-    case 'g':
-      {
-        char battery[VLA];
-        GET_N_FMT(battery, arguments->all, FMT_BATT, BATT_STR, battery);
-      }
-      break;
+    NEW_LABEL('g', char battery[VLA], battery, FMT_BATT, BATT_STR);
 
-    case 'F':
-      {
-        char ssd_model[VLA];
-        get_ssd_model(ssd_model, arg);
-        GLUE(arguments->all, FMT_KERN, ssd_model);
-      }
-      break;
+    NEW_ARG_LABEL('F', char ssd_model[VLA], ssd_model, FMT_KERN);
 
-    case 'p':
-      {
-        char packs[VLA];
-        GET_N_FMT(packs, arguments->all, FMT_PKGS, PKG_STR, packs);
-      }
-      break;
+    NEW_LABEL('p', char packs[VLA], packs, FMT_PKGS, PKG_STR);
 
-    case 'k':
-      {
-        char kernel[VLA];
-        GET_N_FMT(kernel, arguments->all, FMT_KERN, kernel);
-      }
-      break;
+    NEW_LABEL('k', char kernel[VLA], kernel, FMT_KERN);
 
-    case 'v':
-      {
-        char voltage[VLA];
-        GET_N_FMT(voltage, arguments->all, FMT_VOLT, VOLT_STR, voltage);
-      }
-      break;
+    NEW_LABEL('v', char voltage[VLA], voltage, FMT_VOLT, VOLT_STR);
 
-    case 'f':
-      {
-        char fans[VLA];
-        GET_N_FMT(fans, arguments->all, FMT_FANS, FANS_STR, fans);
-      }
-      break;
+    NEW_LABEL('f', char fans[VLA], fans, FMT_FANS, FANS_STR);
 
-    case 'm':
-      {
-        char mobo[VLA];
-        GET_N_FMT(mobo, arguments->all, FMT_MOBO, MOBO_STR, mobo);
-      }
-      break;
+    NEW_LABEL('m', char mobo[VLA], mobo, FMT_MOBO, MOBO_STR);
 
-    case 'd':
-      {
-        char mobo_temp[VLA];
-        GET_N_FMT(mobo_temp, arguments->all, FMT_TEMP, mobo_temp);
-      }
-      break;
+    NEW_LABEL('d', char mobo_temp[VLA], mobo_temp, FMT_TEMP);
 
     case 'V':
 #if defined (HAVE_ALSA_ASOUNDLIB_H)
@@ -195,106 +140,33 @@ parse_opt(int key, char *arg, struct argp_state *state) {
       return ARGP_KEY_ERROR;
 #endif
 
-    case 't':
-      {
-        char taim[VLA];
-        GET_N_FMT(taim, arguments->all, FMT_TIME" ", TIME_STR, taim);
-      }
-      break;
+    NEW_LABEL('t', char taim[VLA], taim, FMT_TIME" ", TIME_STR);
 
-    case 'b':
-      {
-        char net[VLA];
-        GET_NET_N_FMT(net, arg, 1, arguments->all, FMT_NET, NET_STR, net);
-      }
-      break;
+    NEW_NET_LABEL('b', char net[VLA], net, 1, FMT_NET, NET_STR);
 
-    case 'i':
-      {
-        char net_speed[VLA];
-        GET_NET_N_FMT(net_speed, arg, 2, arguments->all, FMT_NET, SPEED_STR, net_speed);
-      }
-      break;
+    NEW_NET_LABEL('i', char net_speed[VLA], net_speed, 2, FMT_NET, SPEED_STR);
 
-    case 'a':
-      {
-        char net_addr[VLA];
-        GET_NET_N_FMT(net_addr, arg, 3, arguments->all, FMT_KERN, net_addr);
-      }
-      break;
+    NEW_NET_LABEL('a', char net_addr[VLA], net_addr, 3, FMT_KERN);
 
-    case 'A':
-      {
-        char mac[VLA];
-        GET_NET_N_FMT(mac, arg, 4, arguments->all, FMT_KERN, mac);
-      }
-      break;
+    NEW_NET_LABEL('A', char mac[VLA], mac, 4, FMT_KERN);
 
-    case 'B':
-      {
-        char mask[VLA];
-        GET_NET_N_FMT(mask, arg, 5, arguments->all, FMT_KERN, mask);
-      }
-      break;
+    NEW_NET_LABEL('B', char mask[VLA], mask, 5, FMT_KERN);
 
-    case 'D':
-      {
-        char net_cast[VLA];
-        GET_NET_N_FMT(net_cast, arg, 6, arguments->all, FMT_KERN, net_cast);
-      }
-      break;
+    NEW_NET_LABEL('D', char net_cast[VLA], net_cast, 6, FMT_KERN);
 
-    case 'e':
-      {
-        char link_speed[VLA];
-        GET_NET_N_FMT(link_speed, arg, 7, arguments->all, FMT_KERN, link_speed);
-      }
-      break;
+    NEW_NET_LABEL('e', char link_speed[VLA], link_speed, 7, FMT_KERN);
 
-    case 'h':
-      {
-        char nic_drv[VLA];
-        GET_NET_N_FMT(nic_drv, arg, 8, arguments->all, FMT_KERN, nic_drv);
-      }
-      break;
+    NEW_NET_LABEL('h', char nic_drv[VLA], nic_drv, 8, FMT_KERN);
 
-    case 'H':
-      {
-        char nic_ver[VLA];
-        GET_NET_N_FMT(nic_ver, arg, 9, arguments->all, FMT_KERN, nic_ver);
-      }
-      break;
+    NEW_NET_LABEL('H', char nic_ver[VLA], nic_ver, 9, FMT_KERN);
 
-    case 'j':
-      {
-        char nic_fw[VLA];
-        GET_NET_N_FMT(nic_fw, arg, 10, arguments->all, FMT_KERN, nic_fw);
-      }
-      break;
+    NEW_NET_LABEL('j', char nic_info[VLA], nic_info, 10, FMT_KERN);
 
-    case 'G':
-      {
-        char nic_info[VLA];
-        get_nic_info(nic_info, arg);
-        GLUE(arguments->all, FMT_KERN, nic_info);
-      }
-      break;
+    NEW_ARG_LABEL('G', char nic_info[VLA], nic_info, FMT_KERN);
 
-    case 'E':
-      {
-        char ip_lookup[VLA];
-        get_ip_lookup(ip_lookup, arg);
-        GLUE(arguments->all, FMT_KERN, ip_lookup);
-      }
-      break;
+    NEW_ARG_LABEL('E', char ip_lookup[VLA], ip_lookup, FMT_KERN);
 
-    case 'S':
-      {
-        char statio[VLA];
-        get_statio(statio, arg);
-        GLUE(arguments->all, FMT_STATIO, STATIO_STR, statio);
-      }
-      break;
+    NEW_ARG_LABEL('S', char statio[VLA], statio, FMT_STATIO, STATIO_STR);
 
     case 'C':
 #if defined(__i386__) || defined(__i686__) || defined(__x86_64__)
