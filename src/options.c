@@ -91,20 +91,9 @@ parse_opt(int key, char *arg, struct argp_state *state) {
       return ARGP_KEY_ERROR;
 #endif
 
+    NEW_CPU_LABEL('c', char cpu[VLA], cpu, FMT_CPU, CPU_STR);
 
-    case 'c':
-      {
-        char cpu[VLA];
-        GET_CPU_N_FMT(cpu, arguments->all, FMT_CPU, CPU_STR, cpu);
-      }
-      break;
-
-    case 'L':
-      {
-        char cores_load[VLA];
-        GET_CPU_N_FMT(cores_load, arguments->all, FMT_CORES, CPU_STR, cores_load);
-      }
-      break;
+    NEW_CPU_LABEL('L', char cores_load[VLA], cores_load, FMT_CORES, CPU_STR);
 
     NEW_LABEL('T', char cpu_temp[VLA], cpu_temp, FMT_TEMP);
 

@@ -46,10 +46,15 @@
   } \
   GLUE(__VA_ARGS__);
 
-#define GET_CPU_N_FMT(func, ...) \
-    get_##func(func); \
+#define NEW_CPU_LABEL(lbl, declareVar, useVar, ...) \
+  case lbl: \
+  { \
+    declareVar; \
+    get_##useVar(useVar); \
     SLEEP_SLEEP_BABY(sysconf(_SC_CLK_TCK) * 1000000L); \
-    GET_N_FMT(func, __VA_ARGS__);
+    GET_N_FMT(useVar, arguments->all, __VA_ARGS__, useVar); \
+  } \
+  break;
 
 #define NEW_LABEL(lbl, declareVar, useVar, ...) \
   case lbl: \
