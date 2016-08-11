@@ -20,7 +20,7 @@
 
 #include "config.h" /* auto-generated */
 #include "include/headers.h"
-#include "options.h"
+#include "prototypes/options.h"
 
 int main(int argc, char *argv[]) {
 

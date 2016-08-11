@@ -86,7 +86,7 @@
 #endif /* HAVE_X11_XLIB_H */
 
 
-/* main.c constants */
+/* options.c format constants */
 #define FMT           NAME_VAL"%% "                       /* STR1 10%             */
 #define FMT_TIME      NAME_VAL                            /* Time 10:00 PM        */
 #define FMT_MOBO      FMT_TIME" "                         /* VEND NAME            */

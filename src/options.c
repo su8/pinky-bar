@@ -22,10 +22,10 @@
 
 #include "config.h" /* auto-generated */
 #include "include/headers.h"
-#include "cpu.h"
-#include "sound.h"
-#include "net.h"
-#include "options.h"
+#include "prototypes/cpu.h"
+#include "prototypes/sound.h"
+#include "prototypes/net.h"
+#include "prototypes/options.h"
 
 const char *argp_program_version = PACKAGE_STRING;
 const char *argp_program_bug_address = "https://github.com/wifiextender/pinky-bar ";

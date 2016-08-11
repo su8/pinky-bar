@@ -29,7 +29,7 @@
 #endif
 
 #include "include/headers.h"
-#include "sound.h"
+#include "prototypes/sound.h"
 
 #if defined (HAVE_ALSA_ASOUNDLIB_H)
 /* http://www.alsa-project.org/alsa-doc/alsa-lib/group___mixer.html 

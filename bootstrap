@@ -114,14 +114,16 @@ _gen_files() {
     'sound.c'
     'net.c'
     'options.c'
-    'cpu.h'
-    'common.h'
-    'sound.h'
-    'net.h'
-    'functions.h'
-    'options.h'
+
+    'prototypes/cpu.h'
+    'prototypes/common.h'
+    'prototypes/sound.h'
+    'prototypes/net.h'
+    'prototypes/functions.h'
+    'prototypes/options.h'
+
     'include/headers.h'
-    'include/main_constants.h'
+    'include/options_constants.h'
     'include/functions_constants.h'
     'include/non_x11_colours.h'
     'include/x11_colours.h'
@@ -139,19 +141,12 @@ _gen_files() {
     '${prog_name}'_SOURCES = '${src_files[@]}'
 
     # To satisfy make dist
-    EXTRA_DIST = \
-      ../bootstrap \
-      ../README.md \
-      ../.gitignore \
-      ../m4/1errs.m4 \
-      ../m4/alsa.m4 \
-      ../m4/ax_append_flag.m4 \
-      ../m4/cflagz.m4 \
-      ../m4/mpd.m4 \
-      ../m4/the_rest_funcs.m4 \
-      ../m4/typez.m4 \
-      ../m4/x11.m4 \
-      ../m4/net.m4
+    EXTRA_DIST =     \
+      ../bootstrap   \
+      ../README.md   \
+      ../.gitignore  \
+      ../m4          \
+      ../xbm_icons
   ')
 
 

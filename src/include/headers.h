@@ -30,9 +30,9 @@
 
 #include <unistd.h>
 
-#include "main_constants.h"
+#include "options_constants.h"
 #include "functions_constants.h"
-#include "../functions.h"
-#include "../common.h"
+#include "../prototypes/functions.h"
+#include "../prototypes/common.h"
 
 #endif /* INCLUDE_HEADERZ_H_ */

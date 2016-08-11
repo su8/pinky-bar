@@ -42,7 +42,7 @@
 #endif /* WITH_NET */
 
 #include "include/headers.h"
-#include "net.h"
+#include "prototypes/net.h"
 
 /* Thanks to http://www.matisse.net/bitcalc/?source=print */
 void

@@ -20,7 +20,7 @@
 
 #include "config.h"
 #include "include/headers.h"
-#include "cpu.h"
+#include "prototypes/cpu.h"
 
 void 
 get_cpu(char *str1) {
