@@ -35,8 +35,15 @@ The order of supplied options will dictate how, where and what system informatio
 | -T           | --cputemp   | The current cpu temperature                                        |
 | -C           | --cpuspeed  | Show your maximum cpu clock speed in MHz, regardless of the used governor |
 | -I           | --cpuinfo   | Detect your CPU vendor, stepping and family from low level assembly access |
-| -r           | --ram       | The used ram                                                       |
-| -s           | --storage   | The used drive storage                                             |
+| -r           | --ramperc   | The used ram in percentage                                         |
+| -J           | --ramtotal  | The total ram                                                      |
+| -K           | --ramfree   | The free ram                                                       |
+| -l           | --ramshared | The shared ram                                                     |
+| -o           | --rambuffer | The buffer ram                                                     |
+| -s           | --driveperc | The used drive storage in percentage                               |
+| -n           | --drivetotal| The total drive storage                                            |
+| -N           | --drivefree | The free drive storage                                             |
+| -O           | --driveavail| The available drive storage                                        |
 | -g           | --battery   | The remaining battery charge                                       |
 | -F           | --drivemodel| The vendor name of your drive [argument - sda]                     |
 | -p           | --packages  | The number of installed packages                                   |

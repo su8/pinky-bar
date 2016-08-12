@@ -21,8 +21,8 @@
 #ifndef FUNCTIONS_H_
 #define FUNCTIONS_H_
 
-void get_ram(char *);
-void get_ssd(char *);
+void get_ram(char *, unsigned char num);
+void get_ssd(char *, unsigned char num);
 void get_ssd_model(char *, char *);
 void get_packs(char *);
 void get_kernel(char *);

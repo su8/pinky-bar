@@ -38,8 +38,15 @@ static const struct argp_option options[] = {
   { .name = "cpuspeed",     .key = 'C',                .doc = "The current cpu temperature."                             },
   { .name = "cpuinfo",      .key = 'I',                .doc = "Show your maximum cpu clock speed in MHz."                },
   { .name = "cputemp",      .key = 'T',                .doc = "Detect your CPU vendor, stepping, family."                },
-  { .name = "ram",          .key = 'r',                .doc = "The used ram."                                            },
-  { .name = "storage",      .key = 's',                .doc = "The used drive storage."                                  },
+  { .name = "ramperc",      .key = 'r',                .doc = "The used ram in percentage."                              },
+  { .name = "ramtotal",     .key = 'J',                .doc = "The total ram."                                           },
+  { .name = "ramfree",      .key = 'K',                .doc = "The free ram."                                            },
+  { .name = "ramshared",    .key = 'l',                .doc = "The shared ram."                                          },
+  { .name = "rambuffer",    .key = 'o',                .doc = "The buffered ram."                                        },
+  { .name = "driveperc",    .key = 's',                .doc = "The used drive storage in percentage."                    },
+  { .name = "drivetotal",   .key = 'n',                .doc = "The total drive storage."                                 },
+  { .name = "drivefree",    .key = 'N',                .doc = "The free drive storage."                                  },
+  { .name = "driveavail",   .key = 'O',                .doc = "The available drive storage."                             },
   { .name = "battery",      .key = 'g',                .doc = "The remaining battery charge."                            },
   { .name = "drivemodel",   .key = 'F', .arg = "sda",  .doc = "The vendor name of your drive."                           },
   { .name = "packages",     .key = 'p',                .doc = "The number of installed packages."                        },
@@ -97,9 +104,20 @@ parse_opt(int key, char *arg, struct argp_state *state) {
 
     NEW_LABEL('T', char cpu_temp[VLA], cpu_temp, FMT_TEMP);
 
-    NEW_LABEL('r', char ram[VLA], ram, FMT_RAM, RAM_STR);
+    NEW_RAM_LABEL('J', char ram_total[VLA], ram_total, 1, FMT_RAM2, RAM_STR);
 
-    NEW_LABEL('s', char ssd[VLA], ssd, FMT_SSD, SSD_STR);
+    NEW_RAM_LABEL('K', char ram_free[VLA], ram_free, 2, FMT_RAM2, RAM_STR);
+
+    NEW_RAM_LABEL('l', char ram_shared[VLA], ram_shared, 3, FMT_RAM2, RAM_STR);
+
+    NEW_RAM_LABEL('o', char ram_buffer[VLA], ram_buffer, 4, FMT_RAM2, RAM_STR);
+
+    NEW_RAM_LABEL('r', char ram_perc[VLA], ram_perc, 5, FMT_RAM, RAM_STR);
+
+    NEW_SSD_LABEL('n', char ssd_total[VLA], ssd_total, 1, FMT_SSD2, SSD_STR);
+    NEW_SSD_LABEL('N', char ssd_free[VLA], ssd_free, 2, FMT_SSD2, SSD_STR);
+    NEW_SSD_LABEL('O', char ssd_avail[VLA], ssd_avail, 3, FMT_SSD2, SSD_STR);
+    NEW_SSD_LABEL('s', char ssd_perc[VLA], ssd_perc, 4, FMT_SSD, SSD_STR);
 
     NEW_LABEL('g', char battery[VLA], battery, FMT_BATT, BATT_STR);
 

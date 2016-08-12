@@ -46,32 +46,75 @@
 static uint_fast16_t glob_packages(const char *);
 
 void 
-get_ram(char *str1) {
-  uintmax_t used = 0, total = 0, percent = 0;
+get_ram(char *str1, unsigned char num) {
+  uintmax_t used = 0, total = 0;
   struct sysinfo mem;
 
   if (-1 == (sysinfo(&mem))) {
     FUNC_FAILED("sysinfo()");
   }
 
-  total   = (uintmax_t) mem.totalram / MB;
-  used    = (uintmax_t) (mem.totalram - mem.freeram -
-                   mem.bufferram - mem.sharedram) / MB;
-  percent = (used * 100) / total;
-  FILL_UINT_ARR(str1, percent);
+  switch(num) {
+    case 1:
+      FILL_ARR(str1, FMT_UINT "%s",
+        (uintmax_t)mem.totalram / MB, "MB");
+      break;
+    case 2:
+      FILL_ARR(str1, FMT_UINT "%s",
+        (uintmax_t)mem.freeram / MB, "MB");
+      break;
+    case 3:
+      FILL_ARR(str1, FMT_UINT "%s",
+        (uintmax_t)mem.sharedram / MB, "MB");
+      break;
+    case 4:
+      FILL_ARR(str1, FMT_UINT "%s",
+        (uintmax_t)mem.bufferram / MB, "MB");
+      break;
+    case 5:
+      {
+        total   = (uintmax_t) mem.totalram / MB;
+        used    = (uintmax_t) (mem.totalram - mem.freeram -
+                         mem.bufferram - mem.sharedram) / MB;
+        FILL_UINT_ARR(str1, (used * 100) / total);
+      }
+      break;
+  }
+
 }
 
 
 void 
-get_ssd(char *str1) {
-  uintmax_t percent = 0;
+get_ssd(char *str1, unsigned char num) {
+  uintmax_t val = 0;
   struct statvfs ssd;
 
   if (-1 == (statvfs(getenv("HOME"), &ssd))) {
     FUNC_FAILED("statvfs()");
   }
-  percent = ((ssd.f_blocks - ssd.f_bfree) * ssd.f_bsize) / GB;
-  FILL_UINT_ARR(str1, percent);
+
+  switch(num) {
+    case 1:
+      FILL_ARR(str1, FMT_UINT "%s",
+        (uintmax_t)(ssd.f_blocks * ssd.f_bsize) / GB, "GB");
+      break;
+    case 2:
+      FILL_ARR(str1, FMT_UINT "%s",
+        (uintmax_t)(ssd.f_bfree * ssd.f_bsize) / GB, "GB");
+      break;
+    case 3:
+      FILL_ARR(str1, FMT_UINT "%s",
+        (uintmax_t)(ssd.f_bavail * ssd.f_bsize) / GB, "GB");
+      break;
+    case 4:
+      {
+        val = (uintmax_t)((
+          ssd.f_blocks - ssd.f_bfree) * ssd.f_bsize) / GB;
+        FILL_UINT_ARR(str1, val);
+      }
+      break;
+  }
+
 }
 
 

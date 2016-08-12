@@ -81,6 +81,21 @@
   } \
   break;
 
+#define RAM_SSD_GENERATOR(func, lbl, declareVar, useVar, num, ...) \
+  case lbl: \
+  { \
+    declareVar; \
+    get_##func(useVar, num); \
+    GLUE(arguments->all, __VA_ARGS__, useVar); \
+  } \
+  break;
+
+#define NEW_RAM_LABEL(lbl, declareVar, useVar, num, ...) \
+  RAM_SSD_GENERATOR(ram, lbl, declareVar, useVar, num, __VA_ARGS__);
+
+#define NEW_SSD_LABEL(lbl, declareVar, useVar, num, ...) \
+  RAM_SSD_GENERATOR(ssd, lbl, declareVar, useVar, num, __VA_ARGS__);
+
 /* Fire the preprocessor */
 
 #define STR_SPEC "%s"
@@ -123,7 +138,9 @@
 #define FMT_CPU       FMT_TIME"%% "                       /* CPU 10%              */
 #define FMT_CORES     FMT_TIME                            /* CPU varying          */
 #define FMT_RAM       FMT                                 /* RAM 10%              */
+#define FMT_RAM2      FMT_TIME" "                         /* RAM 10MB             */
 #define FMT_SSD       FMT                                 /* SSD 10%              */
+#define FMT_SSD2      FMT_RAM2                            /* SSD 10MB             */
 #define FMT_PKGS      FMT_TIME" "                         /* Pkgs 123             */
 #define FMT_VOLT      FMT_PKGS                            /* Voltage 1 2 3 4      */
 #define FMT_FANS      FMT_TIME                            /* Fans varying         */
