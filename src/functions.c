@@ -210,12 +210,32 @@ get_packs(char *str1) {
 
 
 void 
-get_kernel(char *str1) {
+get_kernel(char *str1, unsigned char num) {
   struct utsname KerneL;
   if (-1 == (uname(&KerneL))) {
     FUNC_FAILED("uname()");
   }
-  FILL_STR_ARR(2, str1, KerneL.sysname, KerneL.release);
+  switch(num) {
+    case 1:
+      FILL_STR_ARR(1, str1, KerneL.sysname);
+      break;
+    case 2:
+      FILL_STR_ARR(1, str1, KerneL.nodename);
+      break;
+    case 3:
+      FILL_STR_ARR(1, str1, KerneL.release);
+      break;
+    case 4:
+      FILL_STR_ARR(1, str1, KerneL.version);
+      break;
+    case 5:
+      FILL_STR_ARR(1, str1, KerneL.machine);
+      break;
+    case 6:
+      FILL_STR_ARR(2, str1, KerneL.sysname, KerneL.release);
+      break;
+  }
+
 }
 
 

@@ -77,7 +77,7 @@
   } \
   break;
 
-#define RAM_SSD_GENERATOR(func, lbl, declareVar, useVar, num, ...) \
+#define LABEL_WITH_NUM_GENERATOR(func, lbl, declareVar, useVar, num, ...) \
   case lbl: \
   { \
     declareVar; \
@@ -87,10 +87,13 @@
   break;
 
 #define NEW_RAM_LABEL(lbl, declareVar, useVar, num, ...) \
-  RAM_SSD_GENERATOR(ram, lbl, declareVar, useVar, num, __VA_ARGS__);
+  LABEL_WITH_NUM_GENERATOR(ram, lbl, declareVar, useVar, num, __VA_ARGS__);
 
 #define NEW_SSD_LABEL(lbl, declareVar, useVar, num, ...) \
-  RAM_SSD_GENERATOR(ssd, lbl, declareVar, useVar, num, __VA_ARGS__);
+  LABEL_WITH_NUM_GENERATOR(ssd, lbl, declareVar, useVar, num, __VA_ARGS__);
+
+#define NEW_KERNEL_LABEL(lbl, declareVar, useVar, num, ...) \
+  LABEL_WITH_NUM_GENERATOR(kernel, lbl, declareVar, useVar, num, __VA_ARGS__);
 
 /* Fire the preprocessor */
 

@@ -50,7 +50,12 @@ static const struct argp_option options[] = {
   { .name = "battery",      .key = 'g',                .doc = "The remaining battery charge."                            },
   { .name = "drivemodel",   .key = 'F', .arg = "sda",  .doc = "The vendor name of your drive."                           },
   { .name = "packages",     .key = 'p',                .doc = "The number of installed packages."                        },
-  { .name = "kernel",       .key = 'k',                .doc = "The kernel version."                                      },
+  { .name = "kernsys",      .key = 'P',                .doc = "The kernel name."                                         },
+  { .name = "kernode",      .key = 'q',                .doc = "The network node hostname."                               },
+  { .name = "kernrel",      .key = 'Q',                .doc = "The kernel release."                                      },
+  { .name = "kernver",      .key = 'R',                .doc = "The kernel version."                                      },
+  { .name = "kernarch",     .key = 'u',                .doc = "The machine architecture."                                },
+  { .name = "kernel",       .key = 'k',                .doc = "Combined kernel name and version."                        },
   { .name = "voltage",      .key = 'v',                .doc = "The system voltage"                                       },
   { .name = "fans",         .key = 'f',                .doc = "All system fans and their speed in RPM."                  },
   { .name = "mobo",         .key = 'm',                .doc = "The motherboard vendor and model names."                  },
@@ -128,7 +133,17 @@ parse_opt(int key, char *arg, struct argp_state *state) {
 
     NEW_LABEL('p', char packs[VLA], packs, FMT_PKGS, PKG_STR);
 
-    NEW_LABEL('k', char kernel[VLA], kernel, FMT_KERN);
+    NEW_KERNEL_LABEL('P', char kernel_sys[VLA], kernel_sys, 1, FMT_KERN);
+
+    NEW_KERNEL_LABEL('q', char kernel_node[VLA], kernel_node, 2, FMT_KERN);
+
+    NEW_KERNEL_LABEL('Q', char kernel_rel[VLA], kernel_rel, 3, FMT_KERN);
+
+    NEW_KERNEL_LABEL('R', char kernel_ver[VLA], kernel_ver, 4, FMT_KERN);
+
+    NEW_KERNEL_LABEL('u', char kernel_arch[VLA], kernel_arch, 5, FMT_KERN);
+
+    NEW_KERNEL_LABEL('k', char kernel[VLA], kernel, 6, FMT_KERN);
 
     NEW_LABEL('v', char voltage[VLA], voltage, FMT_VOLT, VOLT_STR);
 

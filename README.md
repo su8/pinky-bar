@@ -47,7 +47,12 @@ The order of supplied options will dictate how, where and what system informatio
 | -g           | --battery   | The remaining battery charge                                       |
 | -F           | --drivemodel| The vendor name of your drive [argument - sda]                     |
 | -p           | --packages  | The number of installed packages                                   |
-| -k           | --kernel    | The kernel version                                                 |
+| -P           | --kernsys   | The kernel name                                                    |
+| -q           | --kernode   | The network node hostname                                          |
+| -Q           | --kernrel   | The kernel release                                                 |
+| -R           | --kernver   | The kernel version                                                 |
+| -u           | --kernarch  | The machine architecture                                           |
+| -k           | --kernel    | Combined kernel name and version                                   |
 | -v           | --voltage   | The system voltage                                                 |
 | -f           | --fans      | All system fans and their speed in RPM                             |
 | -m           | --mobo      | Show the motherboard name and vendor                               |
