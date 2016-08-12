@@ -68,6 +68,7 @@
 #define ERR "Error:"
 #define NOT_FOUND "Not found, "
 #define FUNC_FAILED(x) (exit_with_err(ERR, x " failed"))
+#define RECOMPILE_WITH(x) (exit_with_err(ERR, "recompile the program --with-" x))
 
 /* Let the preprocessor Do Repeat Myself */
 #define OPEN_X(fp, x, y, z) \

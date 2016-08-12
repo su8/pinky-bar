@@ -95,9 +95,10 @@ error:
 #endif
 
 
-#if defined (HAVE_MPD_CLIENT_H)
 void
-get_song(char *str1) {
+get_song(char *str1, unsigned char num) {
+#if defined (HAVE_MPD_CLIENT_H)
+
   struct mpd_connection *conn = NULL;
   struct mpd_song *song;
 
@@ -113,7 +114,29 @@ get_song(char *str1) {
   }
   mpd_connection_free(conn);
 
-  FILL_STR_ARR(1, str1, mpd_song_get_uri(song));
+  /* You can add more TAGs to be obtained,
+   * look at /usr/include/mpd/tag.h
+   */
+  switch(num) {
+    case 1:
+      FILL_STR_ARR(1, str1, mpd_song_get_tag(song, MPD_TAG_TRACK, 0));
+      break;
+    case 2:
+      FILL_STR_ARR(1, str1, mpd_song_get_tag(song, MPD_TAG_ARTIST, 0));
+      break;
+    case 3:
+      FILL_STR_ARR(1, str1, mpd_song_get_tag(song, MPD_TAG_TITLE, 0));
+      break;
+    case 4:
+      FILL_STR_ARR(1, str1, mpd_song_get_tag(song, MPD_TAG_ALBUM, 0));
+      break;
+    case 5:
+      FILL_STR_ARR(1, str1, mpd_song_get_tag(song, MPD_TAG_DATE, 0));
+      break;
+    case 6:
+      FILL_STR_ARR(1, str1, mpd_song_get_uri(song));
+      break;
+  }
   return;
 
 error:
@@ -122,5 +145,7 @@ error:
     conn = NULL;
   }
   return;
-}
+#else
+  RECOMPILE_WITH("mpd");
 #endif
+}

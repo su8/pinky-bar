@@ -25,8 +25,6 @@
 void get_volume(char *);
 #endif
 
-#if defined (HAVE_MPD_CLIENT_H)
-void get_song(char *);
-#endif
+void get_song(char *, unsigned char num);
 
 #endif /* SOUND_H_ */

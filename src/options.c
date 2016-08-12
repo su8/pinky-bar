@@ -32,7 +32,12 @@ const char *argp_program_bug_address = "https://github.com/wifiextender/pinky-ba
 static const char doc[] = "Statusbar program for anything (Window Manager, terminal multiplexer, etc..)";
 static const struct argp_option options[] = {
   { .doc = "Available options:" },
-  { .name = "mpd",          .key = 'M',                .doc = "The currently played song name (if any)."                 },
+  { .name = "mpd",          .key = 'M',                .doc = "The song filename."                                       },
+  { .name = "mpdtrack",     .key = 'W',                .doc = "The song track name."                                      },
+  { .name = "mpdartist",    .key = 'x',                .doc = "The song artist(s) name(s)."                              },
+  { .name = "mpdtitle",     .key = 'X',                .doc = "The song title."                                     },
+  { .name = "mpdalbum",     .key = 'y',                .doc = "The song album name."                                     },
+  { .name = "mpddate",      .key = 'Y',                .doc = "The song date."                                           },
   { .name = "cpu",          .key = 'c',                .doc = "The current cpu load (summed up all cores/threads)."      },
   { .name = "coresload",    .key = 'L',                .doc = "Show the load regarding each individual cpu core/thread." },
   { .name = "cpuspeed",     .key = 'C',                .doc = "The current cpu temperature."                             },
@@ -93,17 +98,18 @@ parse_opt(int key, char *arg, struct argp_state *state) {
 
   struct arguments *arguments = state->input;
   switch(key) {
-    case 'M':
-#if defined (HAVE_MPD_CLIENT_H)
-      {
-        char song[VLA] = "";
-        GET_N_FMT(song, arguments->all, FMT_SONG, song);
-      }
-      break;
-#else
-      printf("%s\n", "recompile the program --with-mpd");
-      return ARGP_KEY_ERROR;
-#endif
+
+    NEW_MPD_LABEL('W', char song_track[VLA], song_track, 1);
+
+    NEW_MPD_LABEL('x', char song_artist[VLA], song_artist, 2);
+
+    NEW_MPD_LABEL('X', char song_title[VLA], song_title, 3);
+
+    NEW_MPD_LABEL('y', char song_album[VLA], song_album, 4);
+
+    NEW_MPD_LABEL('Y', char song_date[VLA], song_date, 5);
+
+    NEW_MPD_LABEL('M', char song[VLA], song, 6);
 
     NEW_CPU_LABEL('c', char cpu[VLA], cpu, FMT_CPU, CPU_STR);
 

@@ -77,6 +77,15 @@
   } \
   break;
 
+#define NEW_MPD_LABEL(lbl, declareVar, useVar, num) \
+  case lbl: \
+  { \
+    declareVar = ""; \
+    get_song(useVar, num); \
+    GLUE(arguments->all, FMT_SONG, useVar); \
+  } \
+  break;
+
 #define LABEL_WITH_NUM_GENERATOR(func, lbl, declareVar, useVar, num, ...) \
   case lbl: \
   { \

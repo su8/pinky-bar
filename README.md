@@ -29,7 +29,12 @@ The order of supplied options will dictate how, where and what system informatio
 
 | short option | long option | Descrtiption                                                       |
 |--------------|-------------|--------------------------------------------------------------------|
-| -M           | --mpd       | The currently played song name (if any)                            |
+| -M           | --mpd       | The song filename                                                  |
+| -W           | --mpdtrack  | The song track name                                                |
+| -x           | --mpdartist | The song artist(s) name(s)                                         |
+| -X           | --mpdtitle  | The song title                                                     |
+| -y           | --mpdalbum  | The song album name                                                |
+| -Y           | --mpddate   | The song date                                                      |
 | -c           | --cpu       | The current cpu load (summed up all cores/threads)                 |
 | -L           | --coresload | Show the load regarding each individual cpu core/thread            |
 | -T           | --cputemp   | The current cpu temperature                                        |
