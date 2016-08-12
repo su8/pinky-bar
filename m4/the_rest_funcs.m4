@@ -56,6 +56,10 @@ AC_DEFUN([TEST_SOME_FUNCS],[
       int main(void) {
         struct statvfs ssd;
         statvfs(getenv("HOME"), &ssd);
+        ssd.f_blocks;
+        ssd.f_bsize;
+        ssd.f_bavail;
+        ssd.f_bfree;
         return 0;
       }
     ]])
@@ -72,6 +76,11 @@ AC_DEFUN([TEST_SOME_FUNCS],[
       int main(void) {
         struct utsname KerneL;
         uname(&KerneL);
+        KerneL.sysname;
+        KerneL.nodename;
+        KerneL.release;
+        KerneL.version;
+        KerneL.machine;
         return 0;
       }
     ]])
@@ -86,13 +95,20 @@ AC_DEFUN([TEST_SOME_FUNCS],[
     AC_LANG_SOURCE([[
       #include <sys/sysinfo.h>
       int main(void) {
-        struct sysinfo mem;
-        sysinfo(&mem);
+        struct sysinfo inf;
+        sysinfo(&inf);
+        inf.totalram;
+        inf.freeram;
+        inf.sharedram;
+        inf.bufferram;
+        inf.loads[0];
+        inf.loads[1];
+        inf.loads[2];
         return 0;
       }
     ]])
   ],[],[
-    COMPILE_FAILED([sysinfo RAM])
+    COMPILE_FAILED([sysinfo RAM and average load])
     ]
   )
 
@@ -242,8 +258,9 @@ AC_DEFUN([TEST_SOME_FUNCS],[
     AC_LANG_SOURCE([[
       #include <time.h>
       int main(void) {
-        struct timespec tc = {0};
-        clock_gettime(CLOCK_MONOTONIC, &tc);
+        struct timespec tc1 = {0}, tc2 = {0};
+        clock_gettime(CLOCK_MONOTONIC, &tc1);
+        clock_gettime(CLOCK_BOOTTIME, &tc2);
         return 0;
       }
     ]])

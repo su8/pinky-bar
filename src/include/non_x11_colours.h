@@ -47,6 +47,8 @@
 #define SPEED_STR  XBM_ICON("net.xbm")
 #define STATIO_STR XBM_ICON("statio.xbm")
 #define BATT_STR   XBM_ICON("bat.xbm")
+#define LOAD_STR   CPU_STR
+#define UP_STR     XBM_ICON("uptime.xbm")
 
 /* tmux or other program that can spice
  * the output on it's own */

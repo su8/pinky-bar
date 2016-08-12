@@ -47,6 +47,8 @@
 #define STATIO_STR "Statio"
 #define SPEED_STR  "Speed"
 #define BATT_STR   "BATT"
+#define UP_STR     "Up"
+#define LOAD_STR   "Load/avg"
 
 #endif /* HAVE_X11_XLIB_H || WITH_COLOURS */
 
@@ -79,6 +81,8 @@
 #define FMT_CPUSPEED  PINK STR_SPEC " "                   /* 1234 MHz             */
 #define FMT_TEMP      TEMP                                /* 32C                  */
 #define FMT_BATT      FMT                                 /* BATT 10%             */
+#define FMT_UP        FMT_TIME" "                         /* Up 10 min            */
+#define FMT_LOAD      FMT_TIME" "                         /* Load/avg 0.01 0.01 0.01       */
 
 
 #endif /* CONSTANTS_H_ */

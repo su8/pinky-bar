@@ -56,6 +56,8 @@ static const struct argp_option options[] = {
   { .name = "kernver",      .key = 'R',                .doc = "The kernel version."                                      },
   { .name = "kernarch",     .key = 'u',                .doc = "The machine architecture."                                },
   { .name = "kernel",       .key = 'k',                .doc = "Combined kernel name and version."                        },
+  { .name = "uptime",       .key = 'U',                .doc = "The system uptime in minutes"                             },
+  { .name = "loadavg",      .key = 'w',                .doc = "The system average load for past 1, 5 and 15 minutes"     },
   { .name = "voltage",      .key = 'v',                .doc = "The system voltage"                                       },
   { .name = "fans",         .key = 'f',                .doc = "All system fans and their speed in RPM."                  },
   { .name = "mobo",         .key = 'm',                .doc = "The motherboard vendor and model names."                  },
@@ -144,6 +146,10 @@ parse_opt(int key, char *arg, struct argp_state *state) {
     NEW_KERNEL_LABEL('u', char kernel_arch[VLA], kernel_arch, 5, FMT_KERN);
 
     NEW_KERNEL_LABEL('k', char kernel[VLA], kernel, 6, FMT_KERN);
+
+    NEW_LABEL('U', char uptime[VLA], uptime, FMT_UP, UP_STR);
+
+    NEW_LABEL('w', char loadavg[VLA], loadavg, FMT_LOAD, LOAD_STR);
 
     NEW_LABEL('v', char voltage[VLA], voltage, FMT_VOLT, VOLT_STR);
 

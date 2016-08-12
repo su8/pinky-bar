@@ -215,6 +215,7 @@ get_kernel(char *str1, unsigned char num) {
   if (-1 == (uname(&KerneL))) {
     FUNC_FAILED("uname()");
   }
+
   switch(num) {
     case 1:
       FILL_STR_ARR(1, str1, KerneL.sysname);
@@ -236,6 +237,35 @@ get_kernel(char *str1, unsigned char num) {
       break;
   }
 
+}
+
+
+void
+get_loadavg(char *str1) {
+  struct sysinfo up;
+  if (-1 == (sysinfo(&up))) {
+    FUNC_FAILED("sysinfo()");
+  }
+  FILL_ARR(str1, "%.2f %.2f %.2f",
+    (float)up.loads[0] / 65535.0,
+    (float)up.loads[1] / 65535.0,
+    (float)up.loads[2] / 65535.0);
+}
+
+
+void
+get_uptime(char *str1) {
+
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wmissing-field-initializers"
+  struct timespec tc = {0};
+#pragma GCC diagnostic pop
+
+  if (-1 == (clock_gettime(CLOCK_BOOTTIME, &tc))) {
+    FUNC_FAILED("clock_gettime()");
+  }
+  FILL_ARR(str1, FMT_UINT " %s",
+    (uintmax_t)(tc.tv_sec / 60), "min");
 }
 
 

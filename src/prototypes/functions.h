@@ -26,6 +26,8 @@ void get_ssd(char *, unsigned char num);
 void get_ssd_model(char *, char *);
 void get_packs(char *);
 void get_kernel(char *, unsigned char num);
+void get_loadavg(char *);
+void get_uptime(char *);
 void get_voltage(char *);
 void get_fans(char *);
 void get_mobo(char *);

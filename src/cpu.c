@@ -175,7 +175,9 @@ get_cpu_clock_speed(char *str1) {
   tc.tv_nsec = sysconf(_SC_CLK_TCK) * 1000000L;
 
   x = rdtsc();
-  clock_gettime(CLOCK_MONOTONIC, &start);
+  if (-1 == (clock_gettime(CLOCK_MONOTONIC, &start))) {
+    FUNC_FAILED("clock_gettime()");
+  }
   z[0] = (uintmax_t)(start.tv_nsec - start.tv_sec);
 
   if (-1 == (nanosleep(&tc, NULL))) {
@@ -183,7 +185,9 @@ get_cpu_clock_speed(char *str1) {
   }
 
   y = rdtsc();
-  clock_gettime(CLOCK_MONOTONIC, &stop);
+  if (-1 == (clock_gettime(CLOCK_MONOTONIC, &stop))) {
+    FUNC_FAILED("clock_gettime()");
+  }
   z[1] = (uintmax_t)(stop.tv_nsec - stop.tv_sec);
 
   FILL_ARR(str1, FMT_UINT " MHz",
