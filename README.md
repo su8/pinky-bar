@@ -56,9 +56,9 @@ The order of supplied options will dictate how, where and what system informatio
 | -e           | --iplink    | The NIC link speed (useful for wireless/wifi) [argument - eth0]    |
 | -E           | --iplookup  | Mini website IP lookup [website argument - google.com]             |
 | -G           | --nicinfo   | The NIC vendor and model [argument - eth0]                         |
-| -G           | --nicdrv    | The NIC driver [argument - eth0]                                   |
-| -G           | --nicver    | The NIC version [argument - eth0]                                  |
-| -G           | --nicfw     | The NIC firmware [argument - eth0]                                 |
+| -h           | --nicdrv    | The NIC driver [argument - eth0]                                   |
+| -H           | --nicver    | The NIC version [argument - eth0]                                  |
+| -j           | --nicfw     | The NIC firmware [argument - eth0]                                 |
 | -S           | --statio    | Read and written MBs to the drive so far [argument - sda]          |
 
 Before I start browsing the wild west called Internet with Tor, I always generate [random local ip](https://github.com/wifiextender/dotfiles/blob/master/gentoo/home/frost/.config/zsh/functions/network.zsh) and [mac address](https://github.com/wifiextender/dotfiles/blob/master/gentoo/home/frost/.config/zsh/functions/not-interactive-funcs.zsh#L24). So those functions in pinky-bar are used extensively by me at least to monitor the current fake addresses.
