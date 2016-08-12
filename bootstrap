@@ -127,6 +127,7 @@ _gen_files() {
     'include/functions_constants.h'
     'include/non_x11_colours.h'
     'include/x11_colours.h'
+    'include/options_generator.h'
   )
 
   # Do not pass more definitions to AM_CFLAGS

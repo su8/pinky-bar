@@ -115,8 +115,11 @@ parse_opt(int key, char *arg, struct argp_state *state) {
     NEW_RAM_LABEL('r', char ram_perc[VLA], ram_perc, 5, FMT_RAM, RAM_STR);
 
     NEW_SSD_LABEL('n', char ssd_total[VLA], ssd_total, 1, FMT_SSD2, SSD_STR);
+
     NEW_SSD_LABEL('N', char ssd_free[VLA], ssd_free, 2, FMT_SSD2, SSD_STR);
+
     NEW_SSD_LABEL('O', char ssd_avail[VLA], ssd_avail, 3, FMT_SSD2, SSD_STR);
+
     NEW_SSD_LABEL('s', char ssd_perc[VLA], ssd_perc, 4, FMT_SSD, SSD_STR);
 
     NEW_LABEL('g', char battery[VLA], battery, FMT_BATT, BATT_STR);
