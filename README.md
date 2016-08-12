@@ -53,7 +53,7 @@ The order of supplied options will dictate how, where and what system informatio
 | -R           | --kernver   | The kernel version                                                 |
 | -u           | --kernarch  | The machine architecture                                           |
 | -k           | --kernel    | Combined kernel name and version                                   |
-| -U           | --uptime    | The system uptime in minutes                                       |
+| -U           | --uptime    | The system uptime                                                  |
 | -w           | --loadavg   | The system average load for past 1, 5 and 15 minutes               |
 | -v           | --voltage   | The system voltage                                                 |
 | -f           | --fans      | All system fans and their speed in RPM                             |

@@ -56,7 +56,7 @@ static const struct argp_option options[] = {
   { .name = "kernver",      .key = 'R',                .doc = "The kernel version."                                      },
   { .name = "kernarch",     .key = 'u',                .doc = "The machine architecture."                                },
   { .name = "kernel",       .key = 'k',                .doc = "Combined kernel name and version."                        },
-  { .name = "uptime",       .key = 'U',                .doc = "The system uptime in minutes"                             },
+  { .name = "uptime",       .key = 'U',                .doc = "The system uptime"                                        },
   { .name = "loadavg",      .key = 'w',                .doc = "The system average load for past 1, 5 and 15 minutes"     },
   { .name = "voltage",      .key = 'v',                .doc = "The system voltage"                                       },
   { .name = "fans",         .key = 'f',                .doc = "All system fans and their speed in RPM."                  },

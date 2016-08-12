@@ -261,11 +261,27 @@ get_uptime(char *str1) {
   struct timespec tc = {0};
 #pragma GCC diagnostic pop
 
+  uintmax_t now = 0;
   if (-1 == (clock_gettime(CLOCK_BOOTTIME, &tc))) {
     FUNC_FAILED("clock_gettime()");
   }
-  FILL_ARR(str1, FMT_UINT " %s",
-    (uintmax_t)(tc.tv_sec / 60), "min");
+
+  now = (uintmax_t)tc.tv_sec;
+  if ((0 != (now / 86400))) { /* days */
+    FILL_ARR(str1, FMT_UINT "d " FMT_UINT "h " FMT_UINT "m",
+      (now / 86400),
+      ((now / 3600) % 24),
+      ((now / 60) % 60));
+    return;
+  }
+  if (59 < (now / 60)) { /* hours */
+    FILL_ARR(str1, FMT_UINT "h " FMT_UINT "m",
+      ((now / 3600) % 24),
+      ((now / 60) % 60));
+    return;
+  }
+
+  FILL_ARR(str1, FMT_UINT "m", ((now / 60) % 60));
 }
 
 
