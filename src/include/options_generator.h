@@ -86,14 +86,14 @@
   } \
   break;
 
-#define NEW_RAM_LABEL(lbl, declareVar, useVar, num, ...) \
-  LABEL_WITH_NUM_GENERATOR(ram, lbl, declareVar, useVar, num, __VA_ARGS__);
+#define NEW_RAM_LABEL(...) \
+  LABEL_WITH_NUM_GENERATOR(ram, __VA_ARGS__);
 
-#define NEW_SSD_LABEL(lbl, declareVar, useVar, num, ...) \
-  LABEL_WITH_NUM_GENERATOR(ssd, lbl, declareVar, useVar, num, __VA_ARGS__);
+#define NEW_SSD_LABEL(...) \
+  LABEL_WITH_NUM_GENERATOR(ssd, __VA_ARGS__);
 
-#define NEW_KERNEL_LABEL(lbl, declareVar, useVar, num, ...) \
-  LABEL_WITH_NUM_GENERATOR(kernel, lbl, declareVar, useVar, num, __VA_ARGS__);
+#define NEW_KERNEL_LABEL(...) \
+  LABEL_WITH_NUM_GENERATOR(kernel, __VA_ARGS__);
 
 /* Fire the preprocessor */
 
