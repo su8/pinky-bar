@@ -33,9 +33,9 @@ static const char doc[] = "Statusbar program for anything (Window Manager, termi
 static const struct argp_option options[] = {
   { .doc = "Available options:" },
   { .name = "mpd",          .key = 'M',                .doc = "The song filename."                                       },
-  { .name = "mpdtrack",     .key = 'W',                .doc = "The song track name."                                      },
+  { .name = "mpdtrack",     .key = 'W',                .doc = "The song track name."                                     },
   { .name = "mpdartist",    .key = 'x',                .doc = "The song artist(s) name(s)."                              },
-  { .name = "mpdtitle",     .key = 'X',                .doc = "The song title."                                     },
+  { .name = "mpdtitle",     .key = 'X',                .doc = "The song title."                                          },
   { .name = "mpdalbum",     .key = 'y',                .doc = "The song album name."                                     },
   { .name = "mpddate",      .key = 'Y',                .doc = "The song date."                                           },
   { .name = "cpu",          .key = 'c',                .doc = "The current cpu load (summed up all cores/threads)."      },

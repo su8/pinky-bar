@@ -1,0 +1,18 @@
+FreeBSD support (mostly done):
+* ported most of the net functions
+* the alsa sound func is ok, and mpd was not tested yet
+* The cpu clock speed mitigates the 133 ticks in FreeBSD with hard-coded 100 ticks macro
+* the cores_load, overall cpu load, cpu_temp and the assembly get_cpu_info are ok
+* in order cpu_temp to work, appropriate module have to be loaded, which limits the user choice down to intel core series and amd
+* ported get_ram, get_packs, get_loadavg, get_uptime
+* get_time, set_status, get_kernel, get_ssd work out-of-da-box
+
+The following information contains weir values:
+
+* motherboard info # smbus access denied (lower the security policy ?)
+* voltage info # always negative values
+* fans info # unreal 10k ~ 60k RPM values
+
+Not sure about:
+* disk io
+* laptop battery support
