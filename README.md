@@ -226,7 +226,9 @@ GNU Build System
 * automake
 * autoconf-wrapper
 * automake-wrapper
+* autoconf-archive
 * argp-standalone
+* libtool
 * m4
 * gawk
 

@@ -30,20 +30,10 @@
  * Do not add any -Wno flags just to mute the compilers snafus
  * */
 
-#include <sys/statvfs.h>
 #include <sys/sysinfo.h>
-#include <sys/utsname.h>
-#include <glob.h>
 
 #include "config.h" /* Auto-generated */
-
-#if defined (HAVE_X11_XLIB_H)
-#include <X11/Xlib.h>
-#endif
-
 #include "include/headers.h"
-
-static uint_fast16_t glob_packages(const char *);
 
 void 
 get_ram(char *str1, unsigned char num) {
@@ -84,40 +74,6 @@ get_ram(char *str1, unsigned char num) {
 }
 
 
-void 
-get_ssd(char *str1, unsigned char num) {
-  uintmax_t val = 0;
-  struct statvfs ssd;
-
-  if (-1 == (statvfs(getenv("HOME"), &ssd))) {
-    FUNC_FAILED("statvfs()");
-  }
-
-  switch(num) {
-    case 1:
-      FILL_ARR(str1, FMT_UINT "%s",
-        (uintmax_t)(ssd.f_blocks * ssd.f_bsize) / GB, "GB");
-      break;
-    case 2:
-      FILL_ARR(str1, FMT_UINT "%s",
-        (uintmax_t)(ssd.f_bfree * ssd.f_bsize) / GB, "GB");
-      break;
-    case 3:
-      FILL_ARR(str1, FMT_UINT "%s",
-        (uintmax_t)(ssd.f_bavail * ssd.f_bsize) / GB, "GB");
-      break;
-    case 4:
-      {
-        val = (uintmax_t)((
-          ssd.f_blocks - ssd.f_bfree) * ssd.f_bsize) / GB;
-        FILL_UINT_ARR(str1, val);
-      }
-      break;
-  }
-
-}
-
-
 void
 get_ssd_model(char *str1, char *str2) {
   FILE *fp;
@@ -134,112 +90,6 @@ get_ssd_model(char *str1, char *str2) {
 }
 
 
-/* Source (my improved screenfetch-c fork):
- * https://github.com/wifiextender/screenfetch-c/blob/master/src/plat/linux/detect.c */
-static uint_fast16_t 
-glob_packages(const char *str1) {
-  uint_fast16_t packs_num = 0;
-  glob_t gl;
-
-  if (0 == (glob(str1, GLOB_NOSORT, NULL, &gl)))
-    packs_num = gl.gl_pathc;
-
-  else {
-    exit_with_err("Could not traverse", str1);
-  }
-
-  globfree(&gl);
-
-  return packs_num;
-}
-
-
-/* Let the compiler strip the code
- * instead conditionally checking 
- * each time the program is executed */
-void 
-get_packs(char *str1) {
-  uint_fast16_t packages = 0;
-
-#if DISTRO == ARCHLINUX
-  packages = glob_packages("/var/lib/pacman/local/*");
-
-#elif DISTRO == FRUGALWARE
-  FILE *pkgs_file = popen("pacman-g2 -Q 2> /dev/null | wc -l", "r");
-
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wunused-result"
-  fscanf(pkgs_file, "%"SCNuFAST16, &packages);
-#pragma GCC diagnostic pop
-
-  pclose(pkgs_file);
-
-#elif DISTRO == DEBIAN
-  packages = glob_packages("/var/lib/dpkg/info/*.list");
-
-#elif DISTRO == SLACKWARE
-  packages = glob_packages("/var/log/packages/*");
-
-#elif DISTRO == GENTOO
-  packages = glob_packages("/var/db/pkg/*/*");
-
-#elif DISTRO == RHEL
-  FILE *pkgs_file = popen("rpm -qa 2> /dev/null | wc -l", "r");
-
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wunused-result"
-  fscanf(pkgs_file, "%"SCNuFAST16, &packages);
-#pragma GCC diagnostic pop
-
-  pclose(pkgs_file);
-
-#elif DISTRO == ANGSTROM
-  FILE *pkgs_file = popen("opkg list-installed 2> /dev/null | wc -l", "r");
-
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wunused-result"
-  fscanf(pkgs_file, "%"SCNuFAST16, &packages);
-#pragma GCC diagnostic pop
-
-  pclose(pkgs_file);
-
-#endif
-
-  FILL_ARR(str1, "%"PRIuFAST16, packages);
-}
-
-
-void 
-get_kernel(char *str1, unsigned char num) {
-  struct utsname KerneL;
-  if (-1 == (uname(&KerneL))) {
-    FUNC_FAILED("uname()");
-  }
-
-  switch(num) {
-    case 1:
-      FILL_STR_ARR(1, str1, KerneL.sysname);
-      break;
-    case 2:
-      FILL_STR_ARR(1, str1, KerneL.nodename);
-      break;
-    case 3:
-      FILL_STR_ARR(1, str1, KerneL.release);
-      break;
-    case 4:
-      FILL_STR_ARR(1, str1, KerneL.version);
-      break;
-    case 5:
-      FILL_STR_ARR(1, str1, KerneL.machine);
-      break;
-    case 6:
-      FILL_STR_ARR(2, str1, KerneL.sysname, KerneL.release);
-      break;
-  }
-
-}
-
-
 void
 get_loadavg(char *str1) {
   struct sysinfo up;
@@ -250,38 +100,6 @@ get_loadavg(char *str1) {
     (float)up.loads[0] / 65535.0,
     (float)up.loads[1] / 65535.0,
     (float)up.loads[2] / 65535.0);
-}
-
-
-void
-get_uptime(char *str1) {
-
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wmissing-field-initializers"
-  struct timespec tc = {0};
-#pragma GCC diagnostic pop
-
-  uintmax_t now = 0;
-  if (-1 == (clock_gettime(CLOCK_BOOTTIME, &tc))) {
-    FUNC_FAILED("clock_gettime()");
-  }
-
-  now = (uintmax_t)tc.tv_sec;
-  if ((0 != (now / 86400))) { /* days */
-    FILL_ARR(str1, FMT_UINT "d " FMT_UINT "h " FMT_UINT "m",
-      (now / 86400),
-      ((now / 3600) % 24),
-      ((now / 60) % 60));
-    return;
-  }
-  if (59 < (now / 60)) { /* hours */
-    FILL_ARR(str1, FMT_UINT "h " FMT_UINT "m",
-      ((now / 3600) % 24),
-      ((now / 60) % 60));
-    return;
-  }
-
-  FILL_ARR(str1, FMT_UINT "m", ((now / 60) % 60));
 }
 
 
@@ -375,39 +193,6 @@ void
 get_mobo_temp(char *str1) {
   get_temp(MOBO_TEMP_FILE, str1);
 }
-
-
-/* The `strftime' man page showed potential bugs */
-void 
-get_taim(char *str1) {
-  char time_str[VLA];
-  time_t t;
-  struct tm *taim;
-
-  if (-1 == (t = time(NULL)) || 
-      NULL == (taim = localtime(&t)) ||
-      0 == (strftime(time_str, VLA, "%I:%M %p", taim))) {
-    exit_with_err(ERR, "time() or localtime() or strftime() failed");
-  }
-  FILL_STR_ARR(1, str1, time_str);
-}
-
-
-#if defined (HAVE_X11_XLIB_H)
-void 
-set_status(const char *str1) {
-  Display *display = XOpenDisplay(NULL);
-
-  if (display) {
-    XStoreName(display, DefaultRootWindow(display), str1);
-    XSync(display, 0);
-    XCloseDisplay(display);
-
-  } else {
-    exit_with_err(CANNOT_OPEN, "X server");
-  }
-}
-#endif
 
 
 void 

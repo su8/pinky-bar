@@ -22,12 +22,7 @@
 #define FUNCTIONS_H_
 
 void get_ram(char *, unsigned char num);
-void get_ssd(char *, unsigned char num);
-void get_packs(char *);
-void get_kernel(char *, unsigned char num);
 void get_loadavg(char *);
-void get_uptime(char *);
-void get_taim(char *);
 void get_voltage(char *);
 void get_mobo(char *);
 void get_mobo_temp(char *);
@@ -37,10 +32,6 @@ void get_ssd_model(char *, char *);
 void get_fans(char *);
 void get_statio(char *, char *);
 void get_battery(char *);
-#endif
-
-#if defined (HAVE_X11_XLIB_H)
-void set_status(const char *);
 #endif
 
 #endif /* FUNCTIONS_H_ */

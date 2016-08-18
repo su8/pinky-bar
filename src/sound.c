@@ -18,7 +18,7 @@
    MA 02110-1301, USA.
 */
 
-#include "config.h"
+#include "config.h" /* Auto-generated */
 
 #if defined (HAVE_MPD_CLIENT_H)
 #include <mpd/client.h>

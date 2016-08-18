@@ -25,8 +25,8 @@
 #include <sys/sysctl.h>
 
 #define SYSCTLVAL(x, y) \
-if (0 != sysctlbyname(x, y, &len, NULL, 0)) { \
-  exit(EXIT_FAILURE); \
-}
+  if (0 != sysctlbyname(x, y, &len, NULL, 0)) { \
+    FUNC_FAILED("sysctlbyname()"); \
+  }
 
 #endif /* INCLUDE_FREEBZD_HEADERZ_H_ */

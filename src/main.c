@@ -18,7 +18,7 @@
    MA 02110-1301, USA.
 */
 
-#include "config.h" /* auto-generated */
+#include "config.h" /* Auto-generated */
 #include "include/headers.h"
 #include "prototypes/options.h"
 

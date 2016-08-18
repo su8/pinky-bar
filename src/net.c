@@ -15,7 +15,7 @@
    MA 02110-1301, USA.
 */
 
-#include "config.h"
+#include "config.h" /* Auto-generated */
 
 #if WITH_NET == 1
 

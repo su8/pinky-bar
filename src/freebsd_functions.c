@@ -32,17 +32,10 @@
 
 #include "config.h" /* Auto-generated */
 
-#if defined (HAVE_X11_XLIB_H)
-#include <X11/Xlib.h>
-#endif
-
-#include "include/headers.h"
-
-#include <sys/statvfs.h>
-#include <sys/utsname.h>
 #include <sys/stat.h>
 #include <sys/time.h>
 
+#include "include/headers.h"
 #include "include/freebzd.h"
 
 void 
@@ -89,87 +82,6 @@ get_ram(char *str1, unsigned char num) {
 }
 
 
-void 
-get_ssd(char *str1, unsigned char num) {
-  uintmax_t val = 0;
-  struct statvfs ssd;
-
-  if (-1 == (statvfs(getenv("HOME"), &ssd))) {
-    FUNC_FAILED("statvfs()");
-  }
-
-  switch(num) {
-    case 1:
-      FILL_ARR(str1, FMT_UINT "%s",
-        (uintmax_t)(ssd.f_blocks * ssd.f_bsize) / GB, "GB");
-      break;
-    case 2:
-      FILL_ARR(str1, FMT_UINT "%s",
-        (uintmax_t)(ssd.f_bfree * ssd.f_bsize) / GB, "GB");
-      break;
-    case 3:
-      FILL_ARR(str1, FMT_UINT "%s",
-        (uintmax_t)(ssd.f_bavail * ssd.f_bsize) / GB, "GB");
-      break;
-    case 4:
-      {
-        val = (uintmax_t)((
-          ssd.f_blocks - ssd.f_bfree) * ssd.f_bsize) / GB;
-        FILL_UINT_ARR(str1, val);
-      }
-      break;
-  }
-
-}
-
-
-void 
-get_packs(char *str1) {
-  uint_fast16_t packages = 0;
-  FILE *pkgs_file = popen("pkg info | wc -l", "r");
-
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wunused-result"
-  fscanf(pkgs_file, "%"SCNuFAST16, &packages);
-#pragma GCC diagnostic pop
-
-  pclose(pkgs_file);
-
-  FILL_ARR(str1, "%"PRIuFAST16, packages);
-}
-
-
-void 
-get_kernel(char *str1, unsigned char num) {
-  struct utsname KerneL;
-  if (-1 == (uname(&KerneL))) {
-    FUNC_FAILED("uname()");
-  }
-
-  switch(num) {
-    case 1:
-      FILL_STR_ARR(1, str1, KerneL.sysname);
-      break;
-    case 2:
-      FILL_STR_ARR(1, str1, KerneL.nodename);
-      break;
-    case 3:
-      FILL_STR_ARR(1, str1, KerneL.release);
-      break;
-    case 4:
-      FILL_STR_ARR(1, str1, KerneL.version);
-      break;
-    case 5:
-      FILL_STR_ARR(1, str1, KerneL.machine);
-      break;
-    case 6:
-      FILL_STR_ARR(2, str1, KerneL.sysname, KerneL.release);
-      break;
-  }
-
-}
-
-
 void
 get_loadavg(char *str1) {
   double up[3];
@@ -179,79 +91,6 @@ get_loadavg(char *str1) {
   FILL_ARR(str1, "%.2f %.2f %.2f",
     (float)up[0], (float)up[1], (float)up[2]);
 }
-
-
-void
-get_uptime(char *str1) {
-
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wmissing-field-initializers"
-  struct timespec tc = {0};
-#pragma GCC diagnostic pop
-
-  int mib[2] = { CTL_KERN, KERN_BOOTTIME };
-  time_t t;
-  uintmax_t now = 0;
-  size_t len = sizeof(tc);
-
-  if (0 != sysctl(mib, 2, &tc, &len, NULL, 0)) {
-    FUNC_FAILED("sysctl()");
-  }
-
-  if (-1 == (t = time(NULL))) {
-    FUNC_FAILED("time()");
-  }
-
-  now = (uintmax_t)t - (uintmax_t)tc.tv_sec;
-  if ((0 != (now / 86400))) { /* days */
-    FILL_ARR(str1, FMT_UINT "d " FMT_UINT "h " FMT_UINT "m",
-      (now / 86400),
-      ((now / 3600) % 24),
-      ((now / 60) % 60));
-    return;
-  }
-  if (59 < (now / 60)) { /* hours */
-    FILL_ARR(str1, FMT_UINT "h " FMT_UINT "m",
-      ((now / 3600) % 24),
-      ((now / 60) % 60));
-    return;
-  }
-
-  FILL_ARR(str1, FMT_UINT "m", ((now / 60) % 60));
-}
-
-
-/* The `strftime' man page showed potential bugs */
-void 
-get_taim(char *str1) {
-  char time_str[VLA];
-  time_t t;
-  struct tm *taim;
-
-  if (-1 == (t = time(NULL)) || 
-      NULL == (taim = localtime(&t)) ||
-      0 == (strftime(time_str, VLA, "%I:%M %p", taim))) {
-    exit_with_err(ERR, "time() or localtime() or strftime() failed");
-  }
-  FILL_STR_ARR(1, str1, time_str);
-}
-
-
-#if defined (HAVE_X11_XLIB_H)
-void 
-set_status(const char *str1) {
-  Display *display = XOpenDisplay(NULL);
-
-  if (display) {
-    XStoreName(display, DefaultRootWindow(display), str1);
-    XSync(display, 0);
-    XCloseDisplay(display);
-
-  } else {
-    exit_with_err(CANNOT_OPEN, "X server");
-  }
-}
-#endif
 
 
 /* 

@@ -20,7 +20,7 @@
 
 #include <argp.h>
 
-#include "config.h" /* auto-generated */
+#include "config.h" /* Auto-generated */
 #include "include/headers.h"
 #include "prototypes/cpu.h"
 #include "prototypes/sound.h"
