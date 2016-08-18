@@ -75,21 +75,37 @@ AC_DEFUN([TEST_TYPEZ],[
   ])
 
   AC_CHECK_HEADERS([ \
-    argp.h           \
     time.h           \
     stdio.h          \
     stdbool.h        \
     string.h         \
     inttypes.h       \
-    glob.h           \
     sys/statvfs.h    \
-    sys/sysinfo.h    \
     sys/utsname.h    \
     unistd.h         \
     getopt.h         \
     sys/socket.h     \
   ],[],[
     ERR([Missing core header files.])
+  ])
+  
+  ifdef([ITS_BSD], [
+    AC_CHECK_HEADERS([ \
+      sys/types.h      \
+      sys/sysctl.h     \
+    ],[],[
+      ERR([Missing core header files.])
+    ])
+
+  ], [
+    AC_CHECK_HEADERS([ \
+      argp.h           \
+      sys/sysinfo.h    \
+      glob.h           \
+    ],[],[
+      ERR([Missing core header files.])
+    ])
+
   ])
 
   AC_CHECK_FUNCS([  \
@@ -98,25 +114,43 @@ AC_DEFUN([TEST_TYPEZ],[
     snprintf        \
     nanosleep       \
     sysconf         \
-    sysinfo         \
     strcmp          \
     fscanf          \
     fclose          \
     fopen           \
     statvfs         \
     getenv          \
-    glob            \
-    globfree        \
     popen           \
     uname           \
     strftime        \
     exit            \
     getopt          \
     getopt_long     \
-    argp_parse      \
-    argp_usage      \
+
   ],[],[
     ERR([Missing core library functions.])
+  ])
+
+  ifdef([ITS_BSD], [
+    AC_CHECK_FUNCS([  \
+      sysctl          \
+      sysctlbyname    \
+      getloadavg      \
+    ],[],[
+      ERR([Missing core header files.])
+    ])
+
+  ], [
+    AC_CHECK_FUNCS([  \
+      sysinfo         \
+      glob            \
+      globfree        \
+      argp_parse      \
+      argp_usage      \
+    ],[],[
+      ERR([Missing core header files.])
+    ])
+
   ])
 
 ])

@@ -49,18 +49,36 @@ AC_DEFUN([TEST_NET],[
   AS_IF([test "x$with_net" = "xyes"], [
 
     AC_CHECK_HEADERS([    \
-      linux/if_link.h     \
       ifaddrs.h           \
       arpa/inet.h         \
-      netpacket/packet.h  \
       sys/socket.h        \
       net/if.h            \
       sys/ioctl.h         \
-      linux/sockios.h     \
-      linux/ethtool.h     \
       netdb.h             \
     ],[],[
       ERR([Missing core header files.])
+    ])
+    
+    ifdef([ITS_BSD], [
+      AC_CHECK_HEADERS([    \
+        arpa/nameser.h      \
+        net/if.h            \
+        net/if_dl.h         \
+        netinet/in.h        \
+      ],[],[
+        ERR([Missing core header files.])
+      ])
+
+    ],[
+      AC_CHECK_HEADERS([    \
+        linux/if_link.h     \
+        netpacket/packet.h  \
+        linux/sockios.h     \
+        linux/ethtool.h     \
+      ],[],[
+        ERR([Missing core header files.])
+      ])
+
     ])
 
     AC_CHECK_FUNCS([ \
@@ -74,6 +92,14 @@ AC_DEFUN([TEST_NET],[
     ],[],[
       ERR([Missing core library functions.])
     ])
+    
+    dnl ifdef([ITS_BSD],[
+      dnl AC_CHECK_FUNCS([ \
+        dnl LLADDR         \
+      dnl ],[],[
+        dnl ERR([Missing core library functions.])
+      dnl ])
+    dnl ],[])
 
     NOTIFY([getifaddrs])
     AC_COMPILE_IFELSE([
@@ -124,55 +150,58 @@ AC_DEFUN([TEST_PCI],[
     CHECK_CFLAGZ([-O2])
   ])
 
-  AS_IF([test "x$with_pci" = "xyes"], [
+  ifdef([ITS_BSD],[],[
+    AS_IF([test "x$with_pci" = "xyes"], [
 
-    dnl For very first time I stumble upon GCC -O2 bug.
-    dnl It hangs on pci_init with -O2
-    CHECK_CFLAGZ([-O0])
+      dnl For very first time I stumble upon GCC -O2 bug.
+      dnl It hangs on pci_init with -O2
+      CHECK_CFLAGZ([-O0])
 
-    AC_CHECK_HEADERS([pci/pci.h], [
-        PCI_LIBS="-lpci"
-      ],[
-        ERR_MUST_INSTALL([pciutils])
+      AC_CHECK_HEADERS([pci/pci.h], [
+          PCI_LIBS="-lpci"
+        ],[
+          ERR_MUST_INSTALL([pciutils])
+        ])
+
+      m4_foreach([LiB], [
+          pci_alloc        ,
+          pci_init         ,
+          pci_scan_bus     ,
+          pci_fill_info    ,
+          pci_lookup_name  ,
+          pci_cleanup
+        ],[
+          AC_CHECK_LIB(pci,LiB,[],[
+            ERR([Missing core pci function.])
+          ])
       ])
 
-    m4_foreach([LiB], [
-        pci_alloc        ,
-        pci_init         ,
-        pci_scan_bus     ,
-        pci_fill_info    ,
-        pci_lookup_name  ,
-        pci_cleanup
-      ],[
-        AC_CHECK_LIB(pci,LiB,[],[
-          ERR([Missing core pci function.])
-        ])
     ])
 
-  ])
+    AC_SUBST(PCI_LIBS)
 
-  AC_SUBST(PCI_LIBS)
-
-  AS_IF([test "x$with_pci" = "xyes"], [
-    AC_LINK_IFELSE([
-      AC_LANG_SOURCE([[
-        #include <stdio.h>
-        #include <pci/pci.h>
-        int main(void) {
-          struct pci_access *pacc= NULL;
-          pacc = pci_alloc();
-          pci_init(pacc);
-          pci_scan_bus(pacc);
-          if (NULL != pacc) {
-            pci_cleanup(pacc);
+    AS_IF([test "x$with_pci" = "xyes"], [
+      AC_LINK_IFELSE([
+        AC_LANG_SOURCE([[
+          #include <stdio.h>
+          #include <pci/pci.h>
+          int main(void) {
+            struct pci_access *pacc= NULL;
+            pacc = pci_alloc();
+            pci_init(pacc);
+            pci_scan_bus(pacc);
+            if (NULL != pacc) {
+              pci_cleanup(pacc);
+            }
+            return 0;
           }
-          return 0;
-        }
-      ]])
-    ],[],[
-        LINK_FAILED([pci])
-      ]
-    )
+        ]])
+      ],[],[
+          LINK_FAILED([pci])
+        ]
+      )
+    ])
+
   ])
 
   AC_DEFINE_UNQUOTED([WITH_PCI],[$WITH_PCI],[PCI funcs])

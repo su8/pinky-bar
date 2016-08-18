@@ -19,17 +19,37 @@
 */
 
 #include "config.h"
+
 #include "include/headers.h"
 #include "prototypes/cpu.h"
+
+#if defined(__FreeBSD__)
+#include "include/freebzd.h"
+#endif /* __FreeBSD__ */
+
+#if defined(__linux__)
+#define IDLE_NUM 3
+#define LOOP_ITERZ 10
+
+#else /* FreeBSD */
+#define IDLE_NUM 4
+#define LOOP_ITERZ 5
+#endif /* __linux__ */
 
 void 
 get_cpu(char *str1) {
   static uintmax_t previous_total = 0, previous_idle = 0;
-  uintmax_t x, percent, diff_total, diff_idle, cpu_active[10];
+  uintmax_t x, percent, diff_total, diff_idle, cpu_active[LOOP_ITERZ];
   uintmax_t total = 0;
 
   memset(cpu_active, 0, sizeof(cpu_active));
 
+#if defined(__FreeBSD__)
+  size_t len = sizeof(cpu_active);
+  SYSCTLVAL("kern.cp_time", &cpu_active);
+#endif /* __FreeBSD__ */
+
+#if defined(__linux__)
   FILE *fp = fopen("/proc/stat", "r");
   if (NULL == fp) {
     exit_with_err(CANNOT_OPEN, "/proc/stat");
@@ -48,18 +68,19 @@ get_cpu(char *str1) {
   }
 #pragma GCC diagnostic pop
   fclose(fp);
+#endif /* __linux__ */
 
-  for (x = 0; x < 10; x++)
+  for (x = 0; x < LOOP_ITERZ; x++) {
     total += cpu_active[x];
+  }
 
   diff_total     = total - previous_total;
-  diff_idle      = cpu_active[3] - previous_idle;
+  diff_idle      = cpu_active[IDLE_NUM] - previous_idle;
 
   previous_total = total;
-  previous_idle  = cpu_active[3];
+  previous_idle  = cpu_active[IDLE_NUM];
 
-  percent        = (uintmax_t)sysconf(_SC_CLK_TCK) *
-                    (diff_total - diff_idle) / diff_total;
+  percent        = ((uintmax_t)TICKZ * (diff_total - diff_idle)) / diff_total;
 
   FILL_UINT_ARR(str1, percent);
 }
@@ -70,7 +91,7 @@ get_cores_load(char *str1) {
   static uintmax_t previous_total[MAX_CORES], previous_idle[MAX_CORES];
   static uintmax_t test_flag = 0;
   uintmax_t x = 0, y = 0, z = 0;
-  uintmax_t percent[MAX_CORES], diff_total[MAX_CORES], core_active[MAX_CORES][10];
+  uintmax_t percent[MAX_CORES], diff_total[MAX_CORES], core_active[MAX_CORES][LOOP_ITERZ];
   uintmax_t diff_idle[MAX_CORES], total[MAX_CORES];
   char buf[VLA], temp[VLA];
   char *all = temp;
@@ -86,6 +107,12 @@ get_cores_load(char *str1) {
     memset(previous_total, 0, sizeof(previous_total));
   }
 
+#if defined(__FreeBSD__)
+  size_t len = sizeof(core_active);
+  SYSCTLVAL("kern.cp_times", &core_active);
+#endif /* __FreeBSD__ */
+
+#if defined(__linux__)
   FILE *fp = fopen("/proc/stat", "r");
   if (NULL == fp) {
     exit_with_err(CANNOT_OPEN, "/proc/stat");
@@ -118,18 +145,28 @@ get_cores_load(char *str1) {
 
   z = x;
   for (x = 0; x < z; x++) {
-    for (y = 0; y < 10; y++) {
+
+#else /* FreeBSD */
+  for (x = 0; x < MAX_CORES; x++) {
+    if (0 == core_active[x][0] && 0 ==
+      core_active[x][1] && 0 ==
+      core_active[x][2]) {
+	    break;
+    }
+#endif /* __linux__ */
+
+    for (y = 0; y < LOOP_ITERZ; y++) {
       total[x] += core_active[x][y];
     }
 
     diff_total[x]     = total[x] - previous_total[x];
-    diff_idle[x]      = core_active[x][3] - previous_idle[x];
+    diff_idle[x]      = core_active[x][IDLE_NUM] - previous_idle[x];
 
     previous_total[x] = total[x];
-    previous_idle[x]  = core_active[x][3];
+    previous_idle[x]  = core_active[x][IDLE_NUM];
 
-    percent[x]        = (uintmax_t)sysconf(_SC_CLK_TCK) *
-                      (diff_total[x] - diff_idle[x]) / diff_total[x];
+    percent[x]        = ((uintmax_t)TICKZ * (diff_total[x] - diff_idle[x]))
+                            / diff_total[x];
 
     GLUE2(all, FMT_UINT"%% ", percent[x]);
   }
@@ -140,10 +177,45 @@ get_cores_load(char *str1) {
 }
 
 
+#if defined(__linux__)
 void
 get_cpu_temp(char *str1) {
   get_temp(CPU_TEMP_FILE, str1);
 }
+
+#else /* FreeBSD */
+
+
+/*
+  Go figure which one to blame.
+
+  the "aibs" module temps:
+  dev.aibs.0.temp.0: 39.0C
+
+  the "amdtemp" module temps:
+  dev.cpu.0.temperature: 28.5C
+
+  In linux the "aibs" temps are matching
+  my idle temps.
+*/
+void
+get_cpu_temp(char *str1) {
+  u_int temp = 0;
+  uintmax_t temp2 = 0;
+  size_t len = sizeof(temp);
+
+  SYSCTLVAL("dev.cpu.0.temperature", &temp);
+  temp2 = (uintmax_t)temp;
+
+  if (9999 < temp2) { /* > 99C */
+    FILL_UINT_ARR(str1, temp2 / 1000);
+  } else {
+    FILL_UINT_ARR(str1, ((999 < temp2) ?
+      temp2 / 100 : temp2/10)); /* > 9C || < 9C */
+  }
+}
+
+#endif /* __linux__ */
 
 
 /*  Taken from the gcc documentation
@@ -172,7 +244,7 @@ get_cpu_clock_speed(char *str1) {
   struct timespec start = {0}, stop = {0}, tc = {0};
 #pragma GCC diagnostic pop
 
-  tc.tv_nsec = sysconf(_SC_CLK_TCK) * 1000000L;
+  tc.tv_nsec = TICKZ * 1000000L;
 
   x = rdtsc();
   if (-1 == (clock_gettime(CLOCK_MONOTONIC, &start))) {
@@ -212,7 +284,7 @@ get_cpu_clock_speed(char *str1) {
   struct timespec tc = {0};
 #pragma GCC diagnostic pop
 
-  tc.tv_nsec = sysconf(_SC_CLK_TCK) * 1000000L;
+  tc.tv_nsec = TICKZ * 1000000L;
 
   x = rdtsc();
   if (-1 == (nanosleep(&tc, NULL))) {

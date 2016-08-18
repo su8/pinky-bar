@@ -25,6 +25,13 @@
 #define WHOLE_MAIN_ARR_LEN VLA*16
 #define GLUE(x, z, ...) (x+=snprintf(x, WHOLE_MAIN_ARR_LEN, z, __VA_ARGS__))
 
+#if defined(__FreeBSD__)
+/* The clock ticks in FreeBSD are 133 */
+#define TICKZ 100
+#else
+#define TICKZ sysconf(_SC_CLK_TCK)
+#endif
+
 #include "options_generator.h"
 
 #define STR_SPEC "%s"

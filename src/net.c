@@ -1,17 +1,14 @@
 /*
    Copyright 08/06/2016
    Aaron Caffrey https://github.com/wifiextender
-
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
    the Free Software Foundation; either version 2 of the License, or
    (at your option) any later version.
-
    This program is distributed in the hope that it will be useful,
    but WITHOUT ANY WARRANTY; without even the implied warranty of
    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
    GNU General Public License for more details.
-
    You should have received a copy of the GNU General Public License
    along with this program; if not, write to the Free Software
    Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
@@ -22,6 +19,7 @@
 
 #if WITH_NET == 1
 
+#if defined(__linux__)
 #include <netdb.h>
 /* #include <sys/types.h> */
 #include <sys/socket.h>
@@ -39,21 +37,50 @@
 #include <pci/pci.h>
 #endif /* WITH_PCI */
 
+#endif /* __linux__ */
+
+#if defined(__FreeBSD__)
+#include <netdb.h>
+/* #include <sys/types.h> */
+#include <sys/socket.h>
+#include <sys/ioctl.h>
+#include <arpa/inet.h>
+#include <arpa/nameser.h>
+#include <ifaddrs.h>
+
+#include <net/if.h>
+#include <net/if_dl.h>
+#include <net/route.h>
+#include <netinet/in.h>
+#endif /* __FreeBSD__ */
+
 #endif /* WITH_NET */
 
 #include "include/headers.h"
 #include "prototypes/net.h"
+
+#if defined(__FreeBSD__)
+#include "include/freebzd.h"
+#endif /* __FreeBSD__ */
 
 /* Thanks to http://www.matisse.net/bitcalc/?source=print */
 void
 get_net(char *str1, char *str2, unsigned char num) {
 #if WITH_NET == 1
 
+#if defined(__linux)
   struct ifaddrs *ifaddr = NULL, *ifa = NULL;
-  struct rtnl_link_stats *stats;
-  struct sockaddr_ll *mac;
+  struct rtnl_link_stats *stats = NULL;
+  struct sockaddr_ll *mac = NULL;
+#else
+  struct ifaddrs *ifaddr = NULL, *ifa = NULL;
+  struct if_data *stats = NULL;
+  struct sockaddr_dl *mac = NULL;
+#endif /* __linux__ */
+
   static uintmax_t prev_recv = 0, prev_sent = 0;
-  uintmax_t cur_recv, cur_sent;
+  uintmax_t cur_recv = 0, cur_sent = 0;
+  unsigned char *umac = NULL;
   void *temp_void = NULL;
   char temp[VLA];
 
@@ -86,25 +113,47 @@ get_net(char *str1, char *str2, unsigned char num) {
           break;
         }
       }
+#if defined(__linux__)
     } else if (ifa->ifa_addr->sa_family == AF_PACKET &&
         NULL != ifa->ifa_data) {
+#else
+    } else if (ifa->ifa_addr->sa_family == AF_LINK &&
+        NULL != ifa->ifa_data) {
+#endif /* __linux__ */
         if (0 == (strcmp(str2, ifa->ifa_name))) {
+
+#if defined(__linux__)
           stats = ifa->ifa_data;
+#else
+          stats = (struct if_data *)ifa->ifa_data;
+#endif /* __linux__ */
 
           if (2 == num) { /* upload and download speeds */
+#if defined(__linux__)
             cur_recv = (uintmax_t)stats->rx_bytes - prev_recv;
             cur_sent = (uintmax_t)stats->tx_bytes - prev_sent;
-
+#else
+            cur_recv = (uintmax_t)stats->ifi_ibytes - prev_recv;
+            cur_sent = (uintmax_t)stats->ifi_obytes - prev_sent;
+#endif /* __linux__ */
             FILL_ARR(str1, "Down " FMT_UINT " KB, Up " FMT_UINT " KB",
               (cur_recv / KB), (cur_sent / KB));
 
             prev_recv = cur_recv;
             prev_sent = cur_sent;
-          } else if (1 == num){ /* consumed internet so far */
-    
+          } else if (1 == num) { /* consumed internet so far */
+
+#if defined(__linux__)
             FILL_ARR(str1, "Down " FMT_UINT " MB, Up " FMT_UINT " MB",
               ((uintmax_t)stats->rx_bytes / MB),
               ((uintmax_t)stats->tx_bytes / MB));
+#else
+            FILL_ARR(str1, "Down " FMT_UINT " MB, Up " FMT_UINT " MB",
+              ((uintmax_t)stats->ifi_ibytes / MB),
+              ((uintmax_t)stats->ifi_obytes / MB));
+#endif /* __linux__ */
+
+#if defined(__linux__)
           } else if (4 == num) { /* mac address */
 
             temp_void = ifa->ifa_addr;
@@ -125,6 +174,23 @@ get_net(char *str1, char *str2, unsigned char num) {
 
             get_nic_info2(str1, str2, (unsigned char)(num - 6));
           }
+#else
+          } else if (4 == num) { /* mac address */
+            temp_void = ifa->ifa_addr;
+            mac = (struct sockaddr_dl *)temp_void;
+            /*
+              6 == ether
+              20 == infiniband
+            */
+            if (6 != mac->sdl_alen) {
+              break;
+            }
+            umac = (unsigned char *)LLADDR(mac);
+            FILL_ARR(str1, "%02x:%02x:%02x:%02x:%02x:%02x",
+                *umac, *(umac + 1), *(umac + 2),
+                *(umac + 3), *(umac + 4), *(umac + 5));
+          }
+#endif /* __linux__ */
           break;
         }
     }
@@ -139,6 +205,73 @@ get_net(char *str1, char *str2, unsigned char num) {
 }
 
 
+void
+get_ip_lookup(char *str1, char *str2) {
+#if WITH_NET == 1
+
+  struct addrinfo *rp = NULL, *result = NULL;
+  struct addrinfo hints;
+  void *temp_void = NULL;
+  char temp[VLA];
+  int err = 0;
+
+  memset(&hints, 0, sizeof(hints));
+
+  hints.ai_family = AF_INET;
+  hints.ai_socktype = SOCK_DGRAM;
+  hints.ai_flags = 0;
+  hints.ai_protocol = 0; /* udp | tcp */
+
+  err = getaddrinfo(str2, NULL, &hints, &result);
+  if (0 != err) {
+    FUNC_FAILED("getaddrinfo()");
+  }
+
+  for (rp = result; NULL != rp; rp = rp->ai_next) {
+    if (NULL == rp->ai_addr) {
+      continue;
+    }
+    /* check ipv4 again, despite the "hints" */
+    if (rp->ai_family == AF_INET) {
+      temp_void = rp->ai_addr;
+
+      inet_ntop(AF_INET, &(((struct sockaddr_in *)temp_void)->sin_addr),
+        temp, INET_ADDRSTRLEN);
+      FILL_STR_ARR(1, str1, temp);
+
+      break;
+    }
+  }
+  if ('\0' == str1[0]) {
+    FILL_STR_ARR(1, str1, "Null");
+  }
+  if (NULL != result) {
+    freeaddrinfo(result);
+  }
+
+#else
+  RECOMPILE_WITH("net");
+#endif /* WITH_NET */
+}
+
+
+/* It's so nice that the FreeBSD kernel
+   does all the heavy lifting for us.
+   In Linux you get only the hex numbers.
+
+sysctl -a | grep 'dev.re.0'
+
+dev.re.0.wake: 0
+dev.re.0.int_rx_mod: 65
+dev.re.0.stats: -1
+dev.re.0.%parent: pci2
+dev.re.0.%pnpinfo: vendor=0x10ec device=0x8168 subvendor=0x1043 subdevice=0x8432 class=0x020000
+dev.re.0.%location: pci0:2:0:0 handle=\_SB_.PCI0.PCE4.RLAN
+dev.re.0.%driver: re
+dev.re.0.%desc: RealTek 8168/8111 B/C/CP/D/DP/E/F/G PCIe Gigabit Ethernet */
+
+
+#if defined(__linux__)
 /* Not using exit_with_err to freeifaddrs */
 void
 get_nic_info2(char *str1, char *str2, unsigned char num) {
@@ -202,70 +335,17 @@ get_nic_info2(char *str1, char *str2, unsigned char num) {
 }
 
 
-void
-get_ip_lookup(char *str1, char *str2) {
-#if WITH_NET == 1
-
-  struct addrinfo *rp = NULL, *result = NULL;
-  struct addrinfo hints;
-  void *temp_void = NULL;
-  char temp[VLA];
-  int err = 0;
-
-  memset(&hints, 0, sizeof(hints));
-
-  hints.ai_family = AF_INET;
-  hints.ai_socktype = SOCK_DGRAM;
-  hints.ai_flags = 0;
-  hints.ai_protocol = 0; /* udp | tcp */
-
-  err = getaddrinfo(str2, NULL, &hints, &result);
-  if (0 != err) {
-    FUNC_FAILED("getaddrinfo()");
-  }
-
-  for (rp = result; NULL != rp; rp = rp->ai_next) {
-    if (NULL == rp->ai_addr) {
-      continue;
-    }
-    /* check ipv4 again, despite the "hints" */
-    if (rp->ai_family == AF_INET) {
-      temp_void = rp->ai_addr;
-
-      inet_ntop(AF_INET, &(((struct sockaddr_in *)temp_void)->sin_addr),
-        temp, INET_ADDRSTRLEN);
-      FILL_STR_ARR(1, str1, temp);
-
-      break;
-    }
-  }
-  if ('\0' == str1[0]) {
-    FILL_STR_ARR(1, str1, "Null");
-  }
-  if (NULL != result) {
-    freeaddrinfo(result);
-  }
-
-#else
-  RECOMPILE_WITH("net");
-#endif /* WITH_NET */
-}
-
-
 /* 
  Quick spot the bug game.
-
  code begin:
   struct pci_access *pacc= NULL;
   pacc = pci_alloc();
   pci_init(pacc);
   pci_cleanup(pacc);
  code end;
-
   Spotted the bug - no ? Well,
   GCC -O2 hangs on pci_init,
   while -O0 executes flawlessly.
-
   Disclaimer: the code is perfectly valid.
 */
 void
@@ -329,3 +409,5 @@ error:
   RECOMPILE_WITH("pci");
 #endif /* WITH_PCI */
 }
+
+#endif /* __linux__ */

@@ -135,10 +135,6 @@ parse_opt(int key, char *arg, struct argp_state *state) {
 
     NEW_SSD_LABEL('s', char ssd_perc[VLA], ssd_perc, 4, FMT_SSD, SSD_STR);
 
-    NEW_LABEL('g', char battery[VLA], battery, FMT_BATT, BATT_STR);
-
-    NEW_ARG_LABEL('F', char ssd_model[VLA], ssd_model, FMT_KERN);
-
     NEW_LABEL('p', char packs[VLA], packs, FMT_PKGS, PKG_STR);
 
     NEW_KERNEL_LABEL('P', char kernel_sys[VLA], kernel_sys, 1, FMT_KERN);
@@ -159,23 +155,9 @@ parse_opt(int key, char *arg, struct argp_state *state) {
 
     NEW_LABEL('v', char voltage[VLA], voltage, FMT_VOLT, VOLT_STR);
 
-    NEW_LABEL('f', char fans[VLA], fans, FMT_FANS, FANS_STR);
-
     NEW_LABEL('m', char mobo[VLA], mobo, FMT_MOBO, MOBO_STR);
 
     NEW_LABEL('d', char mobo_temp[VLA], mobo_temp, FMT_TEMP);
-
-    case 'V':
-#if defined (HAVE_ALSA_ASOUNDLIB_H)
-      {
-        char volume[VLA];
-        GET_N_FMT(volume, arguments->all, FMT_VOL, VOL_STR, volume);
-      }
-      break;
-#else
-      printf("%s\n", "recompile the program --with-alsa");
-      return ARGP_KEY_ERROR;
-#endif
 
     NEW_LABEL('t', char taim[VLA], taim, FMT_TIME" ", TIME_STR);
 
@@ -191,7 +173,15 @@ parse_opt(int key, char *arg, struct argp_state *state) {
 
     NEW_NET_LABEL('D', char net_cast[VLA], net_cast, 6, FMT_KERN);
 
-    NEW_NET_LABEL('e', char link_speed[VLA], link_speed, 7, FMT_KERN);
+    NEW_ARG_LABEL('E', char ip_lookup[VLA], ip_lookup, FMT_KERN);
+
+
+#if defined(__linux__)
+    NEW_LABEL('g', char battery[VLA], battery, FMT_BATT, BATT_STR);
+
+    NEW_ARG_LABEL('F', char ssd_model[VLA], ssd_model, FMT_KERN);
+
+    NEW_LABEL('f', char fans[VLA], fans, FMT_FANS, FANS_STR);
 
     NEW_NET_LABEL('h', char nic_drv[VLA], nic_drv, 8, FMT_KERN);
 
@@ -201,9 +191,22 @@ parse_opt(int key, char *arg, struct argp_state *state) {
 
     NEW_ARG_LABEL('G', char nic_info[VLA], nic_info, FMT_KERN);
 
-    NEW_ARG_LABEL('E', char ip_lookup[VLA], ip_lookup, FMT_KERN);
+    NEW_NET_LABEL('e', char link_speed[VLA], link_speed, 7, FMT_KERN);
 
     NEW_ARG_LABEL('S', char statio[VLA], statio, FMT_STATIO, STATIO_STR);
+#endif
+
+    case 'V':
+#if defined (HAVE_ALSA_ASOUNDLIB_H)
+      {
+        char volume[VLA];
+        GET_N_FMT(volume, arguments->all, FMT_VOL, VOL_STR, volume);
+      }
+      break;
+#else
+      printf("%s\n", "recompile the program --with-alsa");
+      return ARGP_KEY_ERROR;
+#endif
 
     case 'C':
 #if defined(__i386__) || defined(__i686__) || defined(__x86_64__)

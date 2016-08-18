@@ -14,6 +14,8 @@ The program is smart enough to detect whether some of your fan(s) blades are spi
 
 If you compile your kernel from source code make sure to include your cpu and motherboard sensors as **modules** and not inlined.
 
+Just an example if you use FreeBSD - acpi/aibs, coretemp/amdtemp.
+
 ![](img/cpu-temp.png)
 ![](img/mobo-temp.png)
 
@@ -198,7 +200,7 @@ Replace **distro** with archlinux, debian, gentoo, slackware, rhel, frugalware, 
 - [x] frugalware
 - [x] angstrom
 
-## Mandatory requirements
+## Linux Mandatory requirements
 
 * gcc/clang   # Compiler
 * glibc       # Standard C libraries
@@ -207,6 +209,18 @@ GNU Build System
 
 * autoconf
 * automake
+* m4
+* gawk
+
+## FreeBSD Mandatory requirements
+
+* gcc/clang/llvm
+* bash
+* autoconf
+* automake
+* autoconf-wrapper
+* automake-wrapper
+* argp-standalone
 * m4
 * gawk
 
@@ -234,7 +248,9 @@ To see the currently played song name:
 * libmpdclient
 * mpd (with properly configured config)
 
-Here's an example of my **/etc/mpd.conf**
+The FreeBSD users will notice that "mpd" is named "musicpd".
+
+Here's an example of my **/etc/mpd.conf** (linux)
 
 ```nginx
 music_directory "/home/frost/music"
@@ -262,6 +278,28 @@ audio_output {
   format "44100:16:1"
 }
 
+bind_to_address "127.0.0.1"
+```
+
+
+FreeBSD conf, you'll have to add the "musicpd" daemon user on your own:
+
+```nginx
+music_directory "/tmp/music"
+playlist_directory "/tmp/music"
+db_file "/tmp/mpddb"
+log_file "/tmp/mpdlog"
+state_file "/tmp/mpdstate"
+pid_file "/tmp/mpdpid"
+log_level "default"
+user "musicpd"
+
+audio_output {
+  type "oss"
+  name "My sound card"
+}
+
+port "6600"
 bind_to_address "127.0.0.1"
 ```
 

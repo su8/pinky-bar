@@ -90,28 +90,30 @@ AC_DEFUN([TEST_SOME_FUNCS],[
   )
 
 
-  NOTIFY([sysinfo])
-  AC_COMPILE_IFELSE([
-    AC_LANG_SOURCE([[
-      #include <sys/sysinfo.h>
-      int main(void) {
-        struct sysinfo inf;
-        sysinfo(&inf);
-        inf.totalram;
-        inf.freeram;
-        inf.sharedram;
-        inf.bufferram;
-        inf.loads[0];
-        inf.loads[1];
-        inf.loads[2];
-        return 0;
-      }
-    ]])
-  ],[],[
-    COMPILE_FAILED([sysinfo RAM and average load])
-    ]
-  )
+  ifdef([ITS_BSD],[],[
+    NOTIFY([sysinfo])
+    AC_COMPILE_IFELSE([
+      AC_LANG_SOURCE([[
+        #include <sys/sysinfo.h>
+        int main(void) {
+          struct sysinfo inf;
+          sysinfo(&inf);
+          inf.totalram;
+          inf.freeram;
+          inf.sharedram;
+          inf.bufferram;
+          inf.loads[0];
+          inf.loads[1];
+          inf.loads[2];
+          return 0;
+        }
+      ]])
+    ],[],[
+      COMPILE_FAILED([sysinfo RAM and average load])
+      ]
+    )
 
+  ])
 
   NOTIFY([openNreadFile])
   AC_COMPILE_IFELSE([
@@ -148,21 +150,22 @@ AC_DEFUN([TEST_SOME_FUNCS],[
     ]
   )
 
+  ifdef([ITS_BSD],[],[
+    NOTIFY([glob])
+    AC_COMPILE_IFELSE([
+      AC_LANG_SOURCE([[
+        #include <glob.h>
+        int main(void) {
+          glob_t gl;
+          return 0;
+        }
+      ]])
+    ],[],[
+      COMPILE_FAILED([glob])
+      ]
+    )
 
-  NOTIFY([glob])
-  AC_COMPILE_IFELSE([
-    AC_LANG_SOURCE([[
-      #include <glob.h>
-      int main(void) {
-        glob_t gl;
-        return 0;
-      }
-    ]])
-  ],[],[
-    COMPILE_FAILED([glob])
-    ]
-  )
-
+  ])
 
   NOTIFY([sysconf])
   AC_COMPILE_IFELSE([
@@ -260,7 +263,11 @@ AC_DEFUN([TEST_SOME_FUNCS],[
       int main(void) {
         struct timespec tc1 = {0}, tc2 = {0};
         clock_gettime(CLOCK_MONOTONIC, &tc1);
+        
+      #if defined(__linux__)
         clock_gettime(CLOCK_BOOTTIME, &tc2);
+      #endif
+
         return 0;
       }
     ]])
@@ -268,5 +275,49 @@ AC_DEFUN([TEST_SOME_FUNCS],[
     COMPILE_FAILED([clock_gettime])
     ]
   )
+  
+  
+  ifdef([ITS_BSD],[
+    NOTIFY([getloadavg])
+    AC_COMPILE_IFELSE([
+      AC_LANG_SOURCE([[
+        #include <stdlib.h>
+        int main(void) {
+          double up[3];
+          getloadavg(up, 3);
+          return 0;
+        }
+      ]])
+    ],[],[
+      COMPILE_FAILED([getloadavg])
+      ]
+    )
+
+
+    NOTIFY([sysctl])
+    AC_COMPILE_IFELSE([
+      AC_LANG_SOURCE([[
+        #include <stdio.h>
+        #include <stdlib.h>
+        #include <sys/types.h>
+        #include <sys/sysctl.h>
+        #define SYSCTLVAL(x, y, z) \
+        if (0 != sysctlbyname(x, y, z, NULL, 0)) { \
+          return 0; \
+        }
+        int main(void) {
+          u_int dummy = 0;
+          size_t len = sizeof(dummy);
+          SYSCTLVAL("vm.stats.vm.v_page_size", &dummy, &len);
+          return 0;
+        }
+      ]])
+    ],[],[
+      COMPILE_FAILED([sysctl])
+      ]
+    )
+
+  ],
+  [])
 
 ])

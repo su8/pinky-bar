@@ -1,5 +1,5 @@
 /*
-   Copyright 08/06/2016
+   Copyright 08/17/2016
    Aaron Caffrey https://github.com/wifiextender
 
    This program is free software; you can redistribute it and/or modify
@@ -18,15 +18,15 @@
    MA 02110-1301, USA.
 */
 
-#ifndef NET_H_
-#define NET_H_
+#ifndef INCLUDE_FREEBZD_HEADERZ_H_
+#define INCLUDE_FREEBZD_HEADERZ_H_
 
-void get_net(char *, char *, unsigned char num);
-void get_nic_info2(char *, char *, unsigned char num);
-void get_ip_lookup(char *, char *);
+#include <sys/types.h>
+#include <sys/sysctl.h>
 
-#if defined(__linux__)
-void get_nic_info(char *, char *);
-#endif
+#define SYSCTLVAL(x, y) \
+if (0 != sysctlbyname(x, y, &len, NULL, 0)) { \
+  exit(EXIT_FAILURE); \
+}
 
-#endif /* NET_H_ */
+#endif /* INCLUDE_FREEBZD_HEADERZ_H_ */
