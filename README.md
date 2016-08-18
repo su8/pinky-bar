@@ -200,6 +200,12 @@ Replace **distro** with archlinux, debian, gentoo, slackware, rhel, frugalware, 
 - [x] frugalware
 - [x] angstrom
 
+Cannot list FreeBSD as "distro", so it deserve it's own option:
+
+- [x] freebsd
+
+---
+
 ## Linux Mandatory requirements
 
 * gcc/clang   # Compiler
