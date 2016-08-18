@@ -38,7 +38,6 @@ _printf_err() {
 _gen_files() {
   progName='dwmbar'
   progVer='1.0.0'
-  defTits=''
   argpLib=''
   defTits=''
   osEntered="${1,,}"
@@ -85,7 +84,7 @@ _gen_files() {
   '${defTits}'
 
   # With the addition of more runtime compile and
-  # link tests, this option is no more necessary.
+  # link tests, this option is no longer necessary.
   # Any compiler and C library succeeding to pass the
   # tests will be able to compile and run the
   # program flawlessly.
