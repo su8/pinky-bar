@@ -347,6 +347,13 @@ Before you ask, [this](https://raw.githubusercontent.com/wifiextender/dotfiles/m
 
 ## Wish list
 
+As top priority:
+
+* FreeBSD disk io
+* FreeBSD laptop battery support
+
+---
+
 With the help from the gcc documentation, this wish list option has been solved.
 
 ~~Per core/thread CPU frequency detection: Can add it at any time if there is enough demand, but needs some consideration first.~~
