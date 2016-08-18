@@ -137,7 +137,7 @@ AC_DEFUN([TEST_TYPEZ],[
       sysctlbyname    \
       getloadavg      \
     ],[],[
-      ERR([Missing core header files.])
+      ERR([Missing core library functions.])
     ])
 
   ], [
@@ -148,7 +148,7 @@ AC_DEFUN([TEST_TYPEZ],[
       argp_parse      \
       argp_usage      \
     ],[],[
-      ERR([Missing core header files.])
+      ERR([Missing core library functions.])
     ])
 
   ])
