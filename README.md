@@ -6,6 +6,10 @@ xmonad
 
 ![](img/pic2.png)
 
+FreeBSD
+
+![](img/pic5.png)
+
 Gather some system information and show it in this statusbar program, not tied to any Window Manager, terminal multiplexer, etc.
 
 Please note that the program won't detect fans connected via molex connetor(s) or external fan controller. Also I have not tested it with fan splitter(s) either.
@@ -14,7 +18,7 @@ The program is smart enough to detect whether some of your fan(s) blades are spi
 
 If you compile your kernel from source code make sure to include your cpu and motherboard sensors as **modules** and not inlined.
 
-Just an example if you use FreeBSD - acpi/aibs, coretemp/amdtemp.
+**Just an example if you use FreeBSD - acpi/aibs, coretemp/amdtemp.**
 
 ![](img/cpu-temp.png)
 ![](img/mobo-temp.png)

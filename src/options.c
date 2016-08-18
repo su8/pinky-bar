@@ -159,6 +159,8 @@ parse_opt(int key, char *arg, struct argp_state *state) {
 
     NEW_LABEL('d', char mobo_temp[VLA], mobo_temp, FMT_TEMP);
 
+    NEW_LABEL('f', char fans[VLA], fans, FMT_FANS, FANS_STR);
+
     NEW_LABEL('t', char taim[VLA], taim, FMT_TIME" ", TIME_STR);
 
     NEW_NET_LABEL('b', char net[VLA], net, 1, FMT_NET, NET_STR);
@@ -180,8 +182,6 @@ parse_opt(int key, char *arg, struct argp_state *state) {
     NEW_LABEL('g', char battery[VLA], battery, FMT_BATT, BATT_STR);
 
     NEW_ARG_LABEL('F', char ssd_model[VLA], ssd_model, FMT_KERN);
-
-    NEW_LABEL('f', char fans[VLA], fans, FMT_FANS, FANS_STR);
 
     NEW_NET_LABEL('h', char nic_drv[VLA], nic_drv, 8, FMT_KERN);
 

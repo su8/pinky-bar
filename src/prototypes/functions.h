@@ -26,10 +26,10 @@ void get_loadavg(char *);
 void get_voltage(char *);
 void get_mobo(char *);
 void get_mobo_temp(char *);
+void get_fans(char *);
 
 #if defined(__linux__)
 void get_ssd_model(char *, char *);
-void get_fans(char *);
 void get_statio(char *, char *);
 void get_battery(char *);
 #endif
