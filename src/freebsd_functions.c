@@ -161,39 +161,3 @@ get_mobo_temp(char *str1) {
       temp2 / 100 : temp2 / 10)); /* > 9C || < 9C */
   }
 }
-
-
-void
-get_fans(char *str1) {
-  u_int fan[3];
-  char tempstr[VLA], buffer[VLA];
-  char *all_fans = buffer;
-  uint_fast16_t x = 0, y = 0, z = 0, rpm[21];
-
-  memset(fan, 0, sizeof(fan));
-  memset(rpm, 0, sizeof(rpm));
-  size_t len = sizeof(fan);
-
-  for (x = 0; x < 20; x++) {
-    FILL_ARR(tempstr, "%s"UFINT, "dev.aibs.0.fan.", x);
-    memset(fan, 0, sizeof(fan));
-    if (0 != sysctlbyname(tempstr, &fan, &len, NULL, 0)) {
-      break;
-    }
-    rpm[x] = (uint_fast16_t)fan[0];
-  }
-
-  if (0 == rpm[0]) { /* no system fans at all */
-    FILL_STR_ARR(1, str1, NOT_FOUND);
-    return;
-  }
-
-  z = x;
-  for (x = 0; x < z; x++) {
-    if (0 < rpm[x])
-      GLUE2(all_fans, UFINT" ", rpm[x]);
-    else
-      ++y; /* non-spinning | removed | failed fan */
-  }
-  FILL_STR_ARR(1, str1, (y != x ? buffer : NOT_FOUND));
-}

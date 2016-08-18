@@ -134,43 +134,6 @@ get_voltage(char *str1) {
 
 
 void 
-get_fans(char *str1) {
-  FILE *fp;
-  bool found_fans = true;
-  char tempstr[VLA], buffer[VLA];
-  char *all_fans = buffer;
-  uint_fast16_t x = 0, y = 0, z = 0, rpm[21];
-
-  for (x = 1; x < 20; x++, z++) {
-    FILL_ARR(tempstr, FAN_FILE, x);
-
-    if (NULL == (fp = fopen(tempstr, "r")) && x > 1)
-      break;
-    else if (NULL == fp) { /* no system fans */
-      FILL_STR_ARR(1, str1, NOT_FOUND);
-      found_fans = false;
-      break;
-    }
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wunused-result"
-    fscanf(fp, UFINT, &rpm[z]);
-#pragma GCC diagnostic pop
-    fclose(fp);
-  }
-
-  if (found_fans) {
-    for (x = 0; x < z; x++) {
-      if (0 < rpm[x])
-        GLUE2(all_fans, UFINT" ", rpm[x]);
-      else
-        ++y; /* non-spinning | removed | failed fan */
-    }
-    FILL_STR_ARR(1, str1, (y != x ? buffer : NOT_FOUND));
-  }
-}
-
-
-void 
 get_mobo(char *str1) {
   FILE *fp;
   char vendor[VLA], name[VLA];

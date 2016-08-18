@@ -28,6 +28,7 @@ void get_kernel(char *, unsigned char num);
 void get_packs(char *);
 void get_taim(char *);
 void get_uptime(char *);
+void get_fans(char *);
 
 #if defined (HAVE_X11_XLIB_H)
 void set_status(const char *);
