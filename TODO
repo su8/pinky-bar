@@ -1,0 +1,3 @@
+* Merge the repeating functions in another module that can be shared between linux and freebsd.
+* Test other C library than the default shipped in FreeBSD.
+* If necessary, write more freebsd m4 tests to catch the new misbehaving non-default FreeBSD C library.
