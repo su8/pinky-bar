@@ -190,7 +190,7 @@ get_statio(char *str1, char *str2) {
   memset(&stats, 0, sizeof(stats));
   stats.dinfo = (struct devinfo *)malloc(sizeof(struct devinfo));
   if (NULL == stats.dinfo) {
-    goto error;
+    return;
   }
 
   if(-1 == devstat_getdevs(NULL, &stats)) {
