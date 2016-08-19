@@ -34,6 +34,7 @@
 
 #include <sys/stat.h>
 #include <sys/time.h>
+#include <devstat.h>
 
 #include "include/headers.h"
 #include "include/freebzd.h"
@@ -160,4 +161,75 @@ get_mobo_temp(char *str1) {
     FILL_UINT_ARR(str1, ((999 < temp2) ?
       temp2 / 100 : temp2 / 10)); /* > 9C || < 9C */
   }
+}
+
+
+/*
+  Couldn't add this option on my own.
+  Used the following resources to make this function happen:
+    http://ftp.stu.edu.tw/FreeBSD/branches/3.0-stable/src/libexec/rpc.rstatd/rstat_proc.c
+    https://github.com/giampaolo/psutil/blob/master/psutil/arch/bsd/freebsd.c
+    http://opensource.apple.com/source/net_snmp/net_snmp-16/net-snmp/agent/mibgroup/ucd-snmp/diskio.c
+    https://searchcode.com/codesearch/view/29835031/
+    http://fossies.org/linux/pcp/src/pmdas/freebsd/disk.c
+  Had to use Valgrind since we allocate memory with malloc.
+*/
+void
+get_statio(char *str1, char *str2) {
+  struct statinfo stats;
+  struct device_selection *dev_select = NULL;
+  struct devstat *d = NULL;
+  long select_generation = 0;
+  int x = 0, num_devices = 0, num_selected = 0, num_selections = 0;
+
+  FILL_STR_ARR(1, str1, "Null");
+  if(0 != devstat_checkversion(NULL)) {
+    return;
+  }
+
+  memset(&stats, 0, sizeof(stats));
+  stats.dinfo = (struct devinfo *)malloc(sizeof(struct devinfo));
+  if (NULL == stats.dinfo) {
+    goto error;
+  }
+
+  if(-1 == devstat_getdevs(NULL, &stats)) {
+    goto error;
+  }
+
+  num_devices = stats.dinfo->numdevs;
+  if (-1 == devstat_selectdevs(&dev_select, &num_selected, &num_selections,
+    &select_generation, stats.dinfo->generation, stats.dinfo->devices, num_devices,
+    NULL, 0, NULL, 0, DS_SELECT_ADD, 16, 0)) {
+    goto error;
+  }
+
+  for (x = 0; x < 16; x++) {
+    d = &stats.dinfo->devices[x];
+    if (!(strcmp(str2, d->device_name))) {
+
+      if (d->device_type != DEVSTAT_TYPE_DIRECT &&
+        d->device_type != DEVSTAT_TYPE_IF_SCSI &&
+        d->device_type != DEVSTAT_TYPE_IF_IDE) {
+        break;
+      }
+
+      FILL_ARR(str1, "Read " FMT_UINT " MB, Written " FMT_UINT " MB",
+        (uintmax_t)d->bytes[DEVSTAT_READ] / MB,
+        (uintmax_t)d->bytes[DEVSTAT_WRITE] / MB);
+      break;
+    }
+  }
+
+error:
+  if (NULL != dev_select) {
+    free(dev_select);
+  }
+  if (stats.dinfo->mem_ptr) {
+    free(stats.dinfo->mem_ptr);
+  }
+  if (NULL != stats.dinfo) {
+    free(stats.dinfo);
+  }
+  return;
 }

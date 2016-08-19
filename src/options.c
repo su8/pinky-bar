@@ -177,6 +177,8 @@ parse_opt(int key, char *arg, struct argp_state *state) {
 
     NEW_ARG_LABEL('E', char ip_lookup[VLA], ip_lookup, FMT_KERN);
 
+    NEW_ARG_LABEL('S', char statio[VLA], statio, FMT_STATIO, STATIO_STR);
+
 
 #if defined(__linux__)
     NEW_LABEL('g', char battery[VLA], battery, FMT_BATT, BATT_STR);
@@ -192,8 +194,6 @@ parse_opt(int key, char *arg, struct argp_state *state) {
     NEW_ARG_LABEL('G', char nic_info[VLA], nic_info, FMT_KERN);
 
     NEW_NET_LABEL('e', char link_speed[VLA], link_speed, 7, FMT_KERN);
-
-    NEW_ARG_LABEL('S', char statio[VLA], statio, FMT_STATIO, STATIO_STR);
 #endif
 
     case 'V':

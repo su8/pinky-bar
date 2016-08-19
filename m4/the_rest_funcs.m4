@@ -317,7 +317,29 @@ AC_DEFUN([TEST_SOME_FUNCS],[
       ]
     )
 
+
+    NOTIFY([malloc])
+    AC_COMPILE_IFELSE([
+      AC_LANG_SOURCE([[
+        #include <stdio.h>
+        #include <stdlib.h>
+        int main(void) {
+          char *a = (char *)malloc(10);
+          if (NULL == a) {
+            return 0;
+          }
+          free(a);
+          return 0;
+        }
+      ]])
+    ],[],[
+      COMPILE_FAILED([malloc])
+      ]
+    )
+
   ],
   [])
+
+
 
 ])
