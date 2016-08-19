@@ -101,7 +101,30 @@ AC_DEFUN([TEST_NET],[
       dnl ])
     dnl ],[])
 
-    NOTIFY([getifaddrs])
+    NOTIFY([addrinfo])
+    AC_COMPILE_IFELSE([
+      AC_LANG_SOURCE([[
+        #include <stdio.h>
+        #include <string.h>
+        #include <netdb.h>
+        #include <sys/socket.h>
+        int main(void) {
+          struct addrinfo *rp = NULL, *result = NULL;
+          struct addrinfo hints;
+          memset(&hints, 0, sizeof(hints));
+          hints.ai_family = AF_INET;
+          hints.ai_socktype = SOCK_DGRAM;
+          hints.ai_flags = 0;
+          hints.ai_protocol = 0;
+          return 0;
+        }
+      ]])
+    ],[],[
+      COMPILE_FAILED([addrinfo])
+      ]
+    )
+
+    NOTIFY([getifaddrs-lite])
     AC_COMPILE_IFELSE([
       AC_LANG_SOURCE([[
         #include <ifaddrs.h>
@@ -115,9 +138,36 @@ AC_DEFUN([TEST_NET],[
         }
       ]])
     ],[],[
-      COMPILE_FAILED([getifaddrs])
+      COMPILE_FAILED([getifaddrs-lite])
       ]
     )
+
+    ifdef([ITS_BSD],[
+      NOTIFY([getifaddrs-heavy])
+      AC_COMPILE_IFELSE([
+        AC_LANG_SOURCE([[
+          #include <arpa/inet.h>
+          #include <arpa/nameser.h>
+          #include <ifaddrs.h>
+          #include <net/if.h>
+          #include <net/if_dl.h>
+          int main(void) {
+            struct ifaddrs *ifaddr = NULL, *ifa = NULL;
+            struct if_data *stats = NULL;
+            struct sockaddr_dl *mac = NULL;
+            if (-1 == getifaddrs(&ifaddr)) {
+              return 0;
+            }
+            freeifaddrs(ifaddr);
+            return 0;
+          }
+        ]])
+      ],[],[
+        COMPILE_FAILED([getifaddrs-heavy])
+        ]
+      )
+    ],[])
+
 
   ])
 

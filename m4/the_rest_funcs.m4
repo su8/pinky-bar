@@ -337,9 +337,47 @@ AC_DEFUN([TEST_SOME_FUNCS],[
       ]
     )
 
+    m4_foreach([LiB], [
+        devstat_checkversion        ,
+        devstat_getdevs             ,
+        devstat_selectdevs
+      ],[
+        AC_CHECK_LIB(devstat,LiB,[],[
+          ERR([Missing core devstat function.])
+        ])
+    ])
+
+    NOTIFY([devstat])
+    AC_COMPILE_IFELSE([
+      AC_LANG_SOURCE([[
+        #include <stdio.h>
+        #include <stdlib.h>
+        #include <devstat.h>
+        int main(void) {
+          struct statinfo stats;
+          struct device_selection *dev_select = NULL;
+          struct devstat *d = NULL;
+          devstat_checkversion(NULL);
+          return 0;
+        }
+      ]])
+    ],[],[
+      COMPILE_FAILED([devstat])
+      ]
+    )
+
+    m4_foreach([LiB], [
+        argp_parse                  ,
+        argp_usage
+      ],[
+        AC_CHECK_LIB(argp,LiB,[],[
+          ERR([Missing core argp function.])
+        ])
+    ])
+
+
   ],
   [])
-
 
 
 ])
