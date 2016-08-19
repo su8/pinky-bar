@@ -332,8 +332,8 @@ get_fans(char *str1) {
   memset(rpm, 0, sizeof(rpm));
   size_t len = sizeof(fan);
 
-  for (x = 0; x < 20; x++) {
-    FILL_ARR(tempstr, "%s"UFINT, "dev.aibs.0.fan.", x);
+  for (x = 0; x < 20; x++, z++) {
+    FAN_STR(tempstr, x);
     memset(fan, 0, sizeof(fan));
 
     if (0 != sysctlbyname(tempstr, &fan, &len, NULL, 0)) {
@@ -348,11 +348,6 @@ get_fans(char *str1) {
 #endif /* __linux__ */
 
   if (found_fans) {
-
-#if defined(__FreeBSD__)
-    z = x;
-#endif /* __FreeBSD__ */
-
     for (x = 0; x < z; x++) {
       if (0 < rpm[x])
         GLUE2(all_fans, UFINT" ", rpm[x]);

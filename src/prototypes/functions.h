@@ -27,10 +27,10 @@ void get_voltage(char *);
 void get_mobo(char *);
 void get_mobo_temp(char *);
 void get_statio(char *, char *);
+void get_battery(char *);
 
 #if defined(__linux__)
 void get_ssd_model(char *, char *);
-void get_battery(char *);
 #endif
 
 #endif /* FUNCTIONS_H_ */

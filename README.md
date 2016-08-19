@@ -86,7 +86,7 @@ The order of supplied options will dictate how, where and what system informatio
 | -j           | --nicfw     | The NIC firmware [argument - eth0]                                 |
 | -S           | --statio    | Read and written MBs to the drive so far [argument - sda]          |
 
-The following options are available only in Linux: `-gFhHjGe`.
+The following options are available only in Linux: `-FhHjGe`.
 
 ---
 
@@ -353,10 +353,10 @@ Before you ask, [this](https://raw.githubusercontent.com/wifiextender/dotfiles/m
 
 ## Wish list
 
-As top priority:
+~~As top priority:~~
 
-~~* FreeBSD disk io~~
-* FreeBSD laptop battery support
+~~ FreeBSD disk io~~
+~~ FreeBSD laptop battery support ~~
 
 ---
 

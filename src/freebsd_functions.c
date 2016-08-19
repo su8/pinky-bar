@@ -233,3 +233,25 @@ error:
   }
   return;
 }
+
+
+
+/*
+ Looks like acpi is the only way
+ in FreeBSD to obtain battery information.
+  hw.acpi.acline: 1
+  hw.acpi.battery.life: 100
+  hw.acpi.battery.time: -1
+  hw.acpi.battery.state: 0
+  hw.acpi.battery.units: 1
+*/
+void 
+get_battery(char *str1) {
+  u_int dummy = 0;
+  uintmax_t perc = 0;
+  size_t len = sizeof(dummy);
+  SYSCTLVAL("hw.acpi.battery.life", &dummy);
+
+  perc = (uintmax_t)dummy;
+  FILL_UINT_ARR(str1, (101 < perc ? 0 : perc));
+}

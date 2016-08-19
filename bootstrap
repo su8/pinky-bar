@@ -38,13 +38,13 @@ _printf_err() {
 _gen_files() {
   progName='dwmbar'
   progVer='1.0.0'
-  addLibs=''
+  bsdLibs=''
   defTits=''
   osEntered="${1,,}"
   declare -a srcToAppend
 
   [[ "${osEntered}" == 'freebsd' ]] && {
-    addLibs='-largp -ldevstat'
+    bsdLibs='-largp -ldevstat'
     amCF='-I/usr/local/include -L/usr/local/lib'
     # FreeBSD specific m4 tits
     defTits='m4_define([ITS_BSD], [tits])'
@@ -163,7 +163,7 @@ _gen_files() {
       $(X_LIBS) \
       $(ALSA_LIBS) \
       $(MPD_LIBS) \
-      $(PCI_LIBS) '${addLibs}'
+      $(PCI_LIBS) '${bsdLibs}'
 
     '${progName}'_SOURCES = '${src_files[@]}'
 

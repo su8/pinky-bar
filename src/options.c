@@ -179,10 +179,10 @@ parse_opt(int key, char *arg, struct argp_state *state) {
 
     NEW_ARG_LABEL('S', char statio[VLA], statio, FMT_STATIO, STATIO_STR);
 
-
-#if defined(__linux__)
     NEW_LABEL('g', char battery[VLA], battery, FMT_BATT, BATT_STR);
 
+
+#if defined(__linux__)
     NEW_ARG_LABEL('F', char ssd_model[VLA], ssd_model, FMT_KERN);
 
     NEW_NET_LABEL('h', char nic_drv[VLA], nic_drv, 8, FMT_KERN);

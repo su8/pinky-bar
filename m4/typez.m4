@@ -137,6 +137,7 @@ AC_DEFUN([TEST_TYPEZ],[
       sysctlbyname    \
       getloadavg      \
       malloc          \
+      free            \
     ],[],[
       ERR([Missing core library functions.])
     ])
