@@ -92,6 +92,24 @@ AC_DEFUN([TEST_ALSA],[
           ],[
             ERR([Homie, where is sys/soundcard.h ?])
         ])
+
+        NOTIFY([fcntl])
+        AC_COMPILE_IFELSE([
+          AC_LANG_SOURCE([[
+            #include <fcntl.h>
+            int main(void) {
+              int fd = 0;
+              if (-1 == (fd = open("elo", O_RDONLY))) {
+                return 0;
+              }
+              return 0;
+            }
+          ]])
+        ],[],[
+          COMPILE_FAILED([fcntl])
+          ]
+        )
+
       ])
     ])
   ],[
