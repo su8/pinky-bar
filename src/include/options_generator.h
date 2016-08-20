@@ -42,12 +42,15 @@
   } \
   GLUE(__VA_ARGS__);
 
+/* Let the platform ticks decide how much
+ * time is needed to sleep
+ * 100 in linux and 133 in freebsd */
 #define NEW_CPU_LABEL(lbl, declareVar, useVar, ...) \
   case lbl: \
   { \
     declareVar; \
     get_##useVar(useVar); \
-    SLEEP_SLEEP_BABY(TICKZ * 1000000L); \
+    SLEEP_SLEEP_BABY(sysconf(_SC_CLK_TCK) * 1000000L); \
     GET_N_FMT(useVar, arguments->all, __VA_ARGS__, useVar); \
   } \
   break;
