@@ -21,7 +21,7 @@
 #ifndef SOUND_H_
 #define SOUND_H_
 
-#if defined (HAVE_ALSA_ASOUNDLIB_H)
+#if defined (HAVE_ALSA_ASOUNDLIB_H) || defined(HAVE_SYS_SOUNDCARD_H)
 void get_volume(char *);
 #endif
 

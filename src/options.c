@@ -197,7 +197,7 @@ parse_opt(int key, char *arg, struct argp_state *state) {
 #endif
 
     case 'V':
-#if defined (HAVE_ALSA_ASOUNDLIB_H)
+#if defined(HAVE_ALSA_ASOUNDLIB_H) || defined(HAVE_SYS_SOUNDCARD_H)
       {
         char volume[VLA];
         GET_N_FMT(volume, arguments->all, FMT_VOL, VOL_STR, volume);

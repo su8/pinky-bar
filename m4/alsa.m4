@@ -32,6 +32,13 @@ AC_DEFUN([TEST_ALSA],[
     [with_alsa=no]
   )
 
+  AC_ARG_WITH([oss],
+    AS_HELP_STRING([--with-oss],
+      [FreeBSD OSS flag for sound support]),
+    [],
+    [with_oss=no]
+  )
+
   AS_IF([test "x$with_alsa" = "xyes"], [
     AC_CHECK_HEADERS([alsa/asoundlib.h], [
       ALSA_LIBS="-lasound"
@@ -76,5 +83,19 @@ AC_DEFUN([TEST_ALSA],[
       ]
     )
   ])
+
+
+  ifdef([ITS_BSD],[
+    AS_IF([test "x$with_alsa" = "xno"], [
+      AS_IF([test "x$with_oss" = "xyes"], [
+        AC_CHECK_HEADERS([sys/soundcard.h], [
+          ],[
+            ERR([Homie, where is sys/soundcard.h ?])
+        ])
+      ])
+    ])
+  ],[
+  ])
+
 
 ])

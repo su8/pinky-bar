@@ -101,6 +101,7 @@ It's up to you to decide which features suit you best.
 |----------------|---------------------|--------------------------------------------------------------------------------------------|
 | --with-x11     | --without-x11       | Enable it if you are using Window Manager (dwm) to be more specific.                       |
 | --with-alsa    | --without-alsa      | To get the sound volume level.                                                             |
+| --with-oss     | --without-oss       | To get the sound volume level in FreeBSD.                                                  |
 | --with-net     | --without-net       | Enable the internet related options.                                                       |
 | --with-pci     | --without-pci       | To get the NIC vendor and model                                                            |
 | --with-colours | --without-colours   | Colorize the output data.                                                                  |
@@ -242,9 +243,9 @@ The internet related options rely on headers provided iproute2.
 By default the program will try to compile with those headers included.
 If for any reason you would like to compile the program without internet related options, then pass **--without-net** to configure.
 
-* iproute2    # Net headers
+* iproute2    # Linux Net headers
 
-The get the NIC vendor and model:
+The get the NIC vendor and model (linux):
 
 * pciutils
 
@@ -253,7 +254,7 @@ To get the sound volume level:
 * alsa-utils
 * alsa-lib
 
-Then pass **--with-alsa** to configure.
+Then pass **--with-alsa** to configure. FreeBSD users can use the baked OSS instead, pass **--without-alsa --with-oss** instead.
 
 To see the currently played song name:
 

@@ -22,11 +22,17 @@
 
 #if defined (HAVE_MPD_CLIENT_H)
 #include <mpd/client.h>
-#endif
+#endif /* HAVE_MPD_CLIENT_H */
 
 #if defined (HAVE_ALSA_ASOUNDLIB_H)
 #include <alsa/asoundlib.h>
-#endif
+#endif /* HAVE_ALSA_ASOUNDLIB_H */
+
+#if defined(HAVE_SYS_SOUNDCARD_H)
+#include <fcntl.h>
+#include <sys/ioctl.h>
+#include <sys/soundcard.h>
+#endif /* HAVE_SYS_SOUNDCARD_H */
 
 #include "include/headers.h"
 #include "prototypes/sound.h"
@@ -87,15 +93,36 @@ get_volume(char *str1) {
 error:
   if (NULL != s_elem) {
     snd_mixer_selem_id_free(s_elem);
-    s_elem = NULL;
   }
   if (NULL != handle) {
     snd_mixer_close(handle);
-    handle = NULL;
   }
   FUNC_FAILED("alsa");
 }
-#endif
+#endif /* HAVE_ALSA_ASOUNDLIB_H */
+
+
+#if defined(HAVE_SYS_SOUNDCARD_H)
+/* Used the following resource:
+    sources.freebsd.org/RELENG_9/src/usr.sbin/mixer/mixer.c
+*/
+void 
+get_volume(char *str1) {
+  int devmask = 0, volume = 0, fd = 0;
+
+  if (-1 == (fd = open("/dev/mixer", O_RDONLY))) {
+    exit_with_err(CANNOT_OPEN, "/dev/mixer");
+  }
+  if (-1 == (ioctl(fd, SOUND_MIXER_READ_DEVMASK, &devmask))) {
+    exit_with_err(ERR, "SOUND_MIXER_READ_DEVMASK");
+  }
+  if (-1 == (ioctl(fd, MIXER_READ(0), &volume))) {
+    exit_with_err(ERR, "MIXER_READ()");
+  }
+
+  FILL_ARR(str1, "%d", ((volume >> 8) & 0x7f));
+}
+#endif /* HAVE_SYS_SOUNDCARD_H */
 
 
 void
@@ -145,9 +172,9 @@ get_song(char *str1, unsigned char num) {
 error:
   if (NULL != conn) {
     mpd_connection_free(conn);
-    conn = NULL;
   }
   return;
+
 #else
   RECOMPILE_WITH("mpd");
 #endif
