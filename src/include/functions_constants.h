@@ -81,4 +81,7 @@
   fscanf(fp, y, z); \
   fclose(fp);
 
+/* How many fans to try for detection */
+#define MAX_FANS 20
+
 #endif /* CONSTANTS2_H_ */

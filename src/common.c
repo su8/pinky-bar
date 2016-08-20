@@ -309,7 +309,7 @@ get_fans(char *str1) {
 
 #if defined(__linux__)
   FILE *fp;
-  for (x = 1; x < 20; x++, z++) {
+  for (x = 1; x < MAX_FANS; x++, z++) {
     FILL_ARR(tempstr, FAN_FILE, x);
 
     if (NULL == (fp = fopen(tempstr, "r")) && x > 1)
@@ -332,7 +332,7 @@ get_fans(char *str1) {
   memset(rpm, 0, sizeof(rpm));
   size_t len = sizeof(fan);
 
-  for (x = 0; x < 20; x++, z++) {
+  for (x = 0; x < MAX_FANS; x++, z++) {
     FAN_STR(tempstr, x);
     memset(fan, 0, sizeof(fan));
 

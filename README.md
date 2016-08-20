@@ -355,8 +355,9 @@ Before you ask, [this](https://raw.githubusercontent.com/wifiextender/dotfiles/m
 
 ~~As top priority:~~
 
-~~ FreeBSD disk io~~
-~~ FreeBSD laptop battery support ~~
+~~FreeBSD disk io~~
+
+~~FreeBSD laptop battery support~~
 
 ---
 

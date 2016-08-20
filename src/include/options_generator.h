@@ -47,7 +47,7 @@
   { \
     declareVar; \
     get_##useVar(useVar); \
-    SLEEP_SLEEP_BABY(sysconf(_SC_CLK_TCK) * 1000000L); \
+    SLEEP_SLEEP_BABY(TICKZ * 1000000L); \
     GET_N_FMT(useVar, arguments->all, __VA_ARGS__, useVar); \
   } \
   break;
