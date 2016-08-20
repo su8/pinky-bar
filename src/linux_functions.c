@@ -218,7 +218,7 @@ get_battery(char *str1) {
 #pragma GCC diagnostic pop
 
   percent = 0;
-  if (0 != total) {
+  if (0 != total && 0 != used) {
     percent = (used * 100) / total;
   }
   FILL_UINT_ARR(str1, percent);
