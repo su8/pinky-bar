@@ -217,6 +217,9 @@ get_battery(char *str1) {
   OPEN_X(fp, temp, FMT_UINT, &used);
 #pragma GCC diagnostic pop
 
-  percent = (used * 100) / total;
+  percent = 0;
+  if (0 != total) {
+    percent = (used * 100) / total;
+  }
   FILL_UINT_ARR(str1, percent);
 }

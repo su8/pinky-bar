@@ -80,7 +80,10 @@ get_cpu(char *str1) {
   previous_total = total;
   previous_idle  = cpu_active[IDLE_NUM];
 
-  percent        = ((uintmax_t)TICKZ * (diff_total - diff_idle)) / diff_total;
+  percent        = 0;
+  if (0 != diff_total) {
+    percent      = ((uintmax_t)TICKZ * (diff_total - diff_idle)) / diff_total;
+  }
 
   FILL_UINT_ARR(str1, percent);
 }
@@ -165,8 +168,11 @@ get_cores_load(char *str1) {
     previous_total[x] = total[x];
     previous_idle[x]  = core_active[x][IDLE_NUM];
 
-    percent[x]        = ((uintmax_t)TICKZ * (diff_total[x] - diff_idle[x]))
+    percent[x]        = 0;
+    if (0 != diff_total[x]) {
+      percent[x]      = ((uintmax_t)TICKZ * (diff_total[x] - diff_idle[x]))
                             / diff_total[x];
+    }
 
     GLUE2(all, FMT_UINT"%% ", percent[x]);
   }
@@ -211,7 +217,7 @@ get_cpu_temp(char *str1) {
     FILL_UINT_ARR(str1, temp2 / 1000);
   } else {
     FILL_UINT_ARR(str1, ((999 < temp2) ?
-      temp2 / 100 : temp2/10)); /* > 9C || < 9C */
+      temp2 / 100 : temp2 / 10)); /* > 9C || < 9C */
   }
 }
 
