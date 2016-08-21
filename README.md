@@ -91,6 +91,7 @@ The following options are available only in Linux: `-FhHGe`.
 The following option is available only in FreeBSD:
 
 | short option | long option | Descrtiption                                                       |
+|--------------|-------------|--------------------------------------------------------------------|
 | -j           | --nicgw     | The NIC gateway [argument - re0]                                   |
 
 ---
