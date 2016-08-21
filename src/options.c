@@ -80,7 +80,11 @@ static const struct argp_option options[] = {
   { .name = "nicinfo",      .key = 'G', .arg = "eth0", .doc = "The NIC vendor and model."                                },
   { .name = "nicdrv",       .key = 'h', .arg = "eth0", .doc = "The NIC driver."                                          },
   { .name = "nicver",       .key = 'H', .arg = "eth0", .doc = "The NIC version."                                         },
+#if defined(__linux__)
   { .name = "nicfw",        .key = 'j', .arg = "eth0", .doc = "The NIC firmware."                                        },
+#else
+  { .name = "nicgw",        .key = 'j', .arg = "eth0", .doc = "The NIC gateway address."                                 },
+#endif /* __linux__ */
   { .name = "statio",       .key = 'S', .arg = "sda",  .doc = "Read and written MBs to the drive so far."                },
   { .doc = NULL }
 };
@@ -181,6 +185,12 @@ parse_opt(int key, char *arg, struct argp_state *state) {
 
     NEW_LABEL('g', char battery[VLA], battery, FMT_BATT, BATT_STR);
 
+#if defined(__linux__)
+    NEW_NET_LABEL('j', char nic_info[VLA], nic_info, 10, FMT_KERN);
+#else
+    NEW_NET_LABEL('j', char nic_info[VLA], nic_info, 7, FMT_KERN);
+#endif /* __linux__ */
+
 
 #if defined(__linux__)
     NEW_ARG_LABEL('F', char ssd_model[VLA], ssd_model, FMT_KERN);
@@ -189,12 +199,10 @@ parse_opt(int key, char *arg, struct argp_state *state) {
 
     NEW_NET_LABEL('H', char nic_ver[VLA], nic_ver, 9, FMT_KERN);
 
-    NEW_NET_LABEL('j', char nic_info[VLA], nic_info, 10, FMT_KERN);
-
     NEW_ARG_LABEL('G', char nic_info[VLA], nic_info, FMT_KERN);
 
     NEW_NET_LABEL('e', char link_speed[VLA], link_speed, 7, FMT_KERN);
-#endif
+#endif /* __linux__ */
 
     case 'V':
 #if defined(HAVE_ALSA_ASOUNDLIB_H) || defined(HAVE_SYS_SOUNDCARD_H)
@@ -206,7 +214,7 @@ parse_opt(int key, char *arg, struct argp_state *state) {
 #else
       printf("%s\n", "recompile the program --with-alsa");
       return ARGP_KEY_ERROR;
-#endif
+#endif /* HAVE_ALSA_ASOUNDLIB_H || HAVE_SYS_SOUNDCARD_H */
 
     case 'C':
 #if defined(__i386__) || defined(__i686__) || defined(__x86_64__)
@@ -219,7 +227,7 @@ parse_opt(int key, char *arg, struct argp_state *state) {
       printf("%s\n", "This option is not supported "
                 "by your CPU architecture");
       return ARGP_KEY_ERROR;
-#endif
+#endif /* __i386__ || __i686__ || __x86_64__ */
 
     case 'I':
 #if defined(__i386__) || defined(__i686__) || defined(__x86_64__)
@@ -232,7 +240,7 @@ parse_opt(int key, char *arg, struct argp_state *state) {
       printf("%s\n", "This option is not supported "
                 "by your CPU architecture");
       return ARGP_KEY_ERROR;
-#endif
+#endif /* __i386__ || __i686__ || __x86_64__ */
 
     default:
       return ARGP_ERR_UNKNOWN;

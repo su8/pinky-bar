@@ -86,7 +86,12 @@ The order of supplied options will dictate how, where and what system informatio
 | -j           | --nicfw     | The NIC firmware [argument - eth0]                                 |
 | -S           | --statio    | Read and written MBs to the drive so far [argument - sda]          |
 
-The following options are available only in Linux: `-FhHjGe`.
+The following options are available only in Linux: `-FhHGe`.
+
+The following option is available only in FreeBSD:
+
+| short option | long option | Descrtiption                                                       |
+| -j           | --nicgw     | The NIC gateway [argument - re0]                                   |
 
 ---
 

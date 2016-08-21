@@ -24,9 +24,6 @@
 void get_net(char *, char *, unsigned char num);
 void get_nic_info2(char *, char *, unsigned char num);
 void get_ip_lookup(char *, char *);
-
-#if defined(__linux__)
 void get_nic_info(char *, char *);
-#endif
 
 #endif /* NET_H_ */

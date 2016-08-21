@@ -48,19 +48,19 @@ get_volume(char *str1) {
   snd_mixer_selem_id_t *s_elem = NULL;
   long int vol, max, min, percent;
 
-  if (0 < (snd_mixer_open(&handle, 0))) {
+  if (0 != (snd_mixer_open(&handle, 0))) {
     FUNC_FAILED("alsa");
   }
 
-  if (0 < (snd_mixer_attach(handle, "default"))) {
+  if (0 != (snd_mixer_attach(handle, "default"))) {
     goto error;
   }
 
-  if (0 < (snd_mixer_selem_register(handle, NULL, NULL))) {
+  if (0 != (snd_mixer_selem_register(handle, NULL, NULL))) {
     goto error;
   }
 
-  if (0 < (snd_mixer_load(handle))) {
+  if (0 != (snd_mixer_load(handle))) {
     goto error;
   }
 
@@ -74,7 +74,7 @@ get_volume(char *str1) {
     goto error;
   }
 
-  if (0 < (snd_mixer_selem_get_playback_volume(elem, 0, &vol))) {
+  if (0 != (snd_mixer_selem_get_playback_volume(elem, 0, &vol))) {
     goto error;
   }
   snd_mixer_selem_get_playback_volume_range(elem, &min, &max);

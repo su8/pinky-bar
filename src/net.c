@@ -189,6 +189,8 @@ get_net(char *str1, char *str2, unsigned char num) {
             FILL_ARR(str1, "%02x:%02x:%02x:%02x:%02x:%02x",
                 *umac, *(umac + 1), *(umac + 2),
                 *(umac + 3), *(umac + 4), *(umac + 5));
+          } else if (7 == num) { /* gateway */
+            get_nic_info(str1, str2);
           }
 #endif /* __linux__ */
           break;
@@ -411,3 +413,76 @@ error:
 }
 
 #endif /* __linux__ */
+
+
+
+#if defined(__FreeBSD__)
+#define ROUNDUP(x) ((x) > 0 ? \
+  (1 + (((x) - 1) | (sizeof(long) - 1))) : sizeof(long))
+
+/* Based on:
+ http://fossies.org/linux/misc/old/mrt-2.2.2a-src.tar.gz/mrt-2.2.2a/src/lib/kernel/bsd.c
+ https://svn.nmap.org/nmap/libdnet-stripped/src/route-bsd.c
+*/
+void
+get_nic_info(char *str1, char *str2) {
+  struct rt_msghdr *rtm = NULL;
+  struct sockaddr *sa = NULL, *addrs[RTAX_MAX];
+  char *buf = NULL, *next = NULL, *lim = NULL;
+  char temp[VLA];
+  uint8_t x = 0;
+  size_t needed;
+  void *temp_void = NULL;
+
+  FILL_STR_ARR(1, str1, "Null");
+
+  /* No, it's not Men In Black acronym */
+  int mib[] = { CTL_NET, PF_ROUTE, 0, 0, NET_RT_DUMP, 0 };
+  if (0 != (sysctl(mib, 6, NULL, &needed, NULL, 0))) {
+    FUNC_FAILED("sysctl()");
+  }
+
+  buf = (char *)malloc(needed);
+  if (NULL == buf) {
+    FUNC_FAILED("malloc()");
+  }
+  if (0 != (sysctl(mib, 6, buf, &needed, NULL, 0))) {
+    goto error;
+  }
+
+  lim = buf + needed;
+  for (next = buf; next < lim; next += rtm->rtm_msglen) {
+    rtm = (struct rt_msghdr *)next;
+    sa = (struct sockaddr *)(rtm + 1);
+    if (NULL == sa) {
+      continue;
+    }
+    if (sa->sa_family == AF_INET) {
+      for (x = 0; x < RTAX_MAX; x++) {
+        if (rtm->rtm_addrs & (1 << x)) {
+          addrs[x] = sa;
+          sa = (struct sockaddr *)((char *)sa + ROUNDUP(sa->sa_len));
+        } else {
+          addrs[x] = NULL;
+        }
+      }
+      if( ((rtm->rtm_addrs & (RTA_DST|RTA_GATEWAY)) == (RTA_DST|RTA_GATEWAY))
+           && addrs[RTAX_DST]->sa_family == AF_INET
+           && addrs[RTAX_GATEWAY]->sa_family == AF_INET) {
+
+        temp_void = addrs[RTAX_GATEWAY];
+        inet_ntop(AF_INET, &(((struct sockaddr_in *)temp_void)->sin_addr),
+          temp, INET_ADDRSTRLEN);
+        FILL_STR_ARR(1, str1, temp);
+        break;
+      }
+    }
+  }
+
+error:
+  if (NULL != buf) {
+    free(buf);
+  }
+  return;
+}
+#endif /* __FreeBSD__ */
