@@ -426,6 +426,8 @@ error:
 */
 void
 get_nic_info(char *str1, char *str2) {
+#if WITH_NET == 1
+
   struct rt_msghdr *rtm = NULL;
   struct sockaddr *sa = NULL, *addrs[RTAX_MAX];
   char *buf = NULL, *next = NULL, *lim = NULL;
@@ -484,5 +486,9 @@ error:
     free(buf);
   }
   return;
+
+#else
+  RECOMPILE_WITH("net");
+#endif /* WITH_NET */
 }
 #endif /* __FreeBSD__ */
