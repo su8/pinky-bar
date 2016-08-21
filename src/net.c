@@ -439,12 +439,12 @@ get_nic_info(char *str1, char *str2) {
   /* No, it's not Men In Black acronym */
   int mib[] = { CTL_NET, PF_ROUTE, 0, 0, NET_RT_DUMP, 0 };
   if (0 != (sysctl(mib, 6, NULL, &needed, NULL, 0))) {
-    FUNC_FAILED("sysctl()");
+    return;
   }
 
   buf = (char *)malloc(needed);
   if (NULL == buf) {
-    FUNC_FAILED("malloc()");
+    return;
   }
   if (0 != (sysctl(mib, 6, buf, &needed, NULL, 0))) {
     goto error;
