@@ -122,10 +122,10 @@ get_voltage(char *str1) {
 
   size_t len = sizeof(vol0);
   
-  SYSCTLVAL("dev.aibs.0.volt.0", &vol0);
-  SYSCTLVAL("dev.aibs.0.volt.1", &vol1);
-  SYSCTLVAL("dev.aibs.0.volt.2", &vol2);
-  SYSCTLVAL("dev.aibs.0.volt.3", &vol3);
+  SYSCTLVAL(VOLTAGE_FILE("0"), &vol0);
+  SYSCTLVAL(VOLTAGE_FILE("1"), &vol1);
+  SYSCTLVAL(VOLTAGE_FILE("2"), &vol2);
+  SYSCTLVAL(VOLTAGE_FILE("3"), &vol3);
 
   FILL_ARR(str1, "%.2f %.2f %.2f %.2f",
     (float)vol0[0] / 1000.0,

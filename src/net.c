@@ -69,15 +69,14 @@ get_net(char *str1, char *str2, uint8_t num) {
 #if WITH_NET == 1
 
 #if defined(__linux)
-  struct ifaddrs *ifaddr = NULL, *ifa = NULL;
   struct rtnl_link_stats *stats = NULL;
   struct sockaddr_ll *mac = NULL;
 #else
-  struct ifaddrs *ifaddr = NULL, *ifa = NULL;
   struct if_data *stats = NULL;
   struct sockaddr_dl *mac = NULL;
 #endif /* __linux__ */
 
+  struct ifaddrs *ifaddr = NULL, *ifa = NULL;
   static uintmax_t prev_recv = 0, prev_sent = 0;
   uintmax_t cur_recv = 0, cur_sent = 0;
   unsigned char *umac = NULL;

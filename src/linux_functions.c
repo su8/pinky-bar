@@ -190,7 +190,8 @@ get_statio(char *str1, char *str2) {
 /* Thanks to https://bugzilla.kernel.org/show_bug.cgi?id=83411 */
 void
 get_battery(char *str1) {
-  uintmax_t used = 0, total = 0, percent = 0, num = 0;
+  uintmax_t used = 0, total = 0, percent = 0;
+  uint8_t num = 0;
   char temp[VLA];
   BATTERY_TOTAL(temp, num);
 

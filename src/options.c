@@ -83,7 +83,7 @@ static const struct argp_option options[] = {
 #if defined(__linux__)
   { .name = "nicfw",        .key = 'j', .arg = "eth0", .doc = "The NIC firmware."                                        },
 #else
-  { .name = "nicgw",        .key = 'j', .arg = "eth0", .doc = "The NIC gateway address."                                 },
+  { .name = "nicgw",        .key = 'j', .arg = "re0", .doc = "The NIC gateway address."                                  },
 #endif /* __linux__ */
   { .name = "statio",       .key = 'S', .arg = "sda",  .doc = "Read and written MBs to the drive so far."                },
   { .doc = NULL }

@@ -29,6 +29,7 @@
 #define FMT_UINT "%"PRIuMAX
 #define UFINT "%"PRIuFAST16
 #define ULINT "%"PRIuLEAST32
+#define USINT "%"PRIu8
 #define SCAN_UFINT "%"SCNuFAST16
 #define SCAN_ULINT "%"SCNuLEAST32
 #define SCAN_UINTX "%"PRIxMAX
@@ -51,14 +52,16 @@
 #define MOBO_VENDOR MOTHERBOARD("vendor")
 
 /* voltage and fans */
+#if defined(__linux__)
 #define VOLTAGE_FILE(x) (HWMON_DIR"/in"x"_input")
+#else
+#define VOLTAGE_FILE(x) "dev.aibs.0.volt."x
+#endif /* __linux__ */
 #define FAN_FILE HWMON_DIR"/fan"UFINT"_input"
-#if defined(__FreeBSD__)
 #define FAN_STR(x, z) (FILL_ARR(x, "%s"UFINT, "dev.aibs.0.fan.", z))
-#endif /* __FreeBSD__ */
 
 /* battery reports */
-#define BATTERY_NUM(x, y, z) (FILL_ARR(x, "%s"FMT_UINT"%s%s", \
+#define BATTERY_NUM(x, y, z) (FILL_ARR(x, "%s"USINT"%s%s", \
   "/sys/class/power_supply/BAT", y, "/charge_", z))
 #define BATTERY_USED(x, z)  (BATTERY_NUM(x, z, "now"))
 #define BATTERY_TOTAL(x, z) (BATTERY_NUM(x, z, "full"))
