@@ -148,17 +148,17 @@ get_mobo(char *str1) {
 void
 get_mobo_temp(char *str1) {
   u_int  temp[3];
-  uintmax_t temp2 = 0;
+  uint_least32_t temp2 = 0;
   memset(temp, 0, sizeof(temp));
   size_t len = sizeof(temp);
   
   SYSCTLVAL("dev.aibs.0.temp.1", &temp);
-  temp2 = (uintmax_t)temp[0];
+  temp2 = (uint_least32_t)temp[0];
 
   if (9999 < temp2) { /* > 99C */
-    FILL_UINT_ARR(str1, temp2 / 1000);
+    FILL_ARR(str1, ULINT, temp2 / 1000);
   } else {
-    FILL_UINT_ARR(str1, ((999 < temp2) ?
+    FILL_ARR(str1, ULINT, ((999 < temp2) ?
       temp2 / 100 : temp2 / 10)); /* > 9C || < 9C */
   }
 }
@@ -248,10 +248,10 @@ error:
 void 
 get_battery(char *str1) {
   u_int dummy = 0;
-  uintmax_t perc = 0;
+  uint_least32_t perc = 0;
   size_t len = sizeof(dummy);
   SYSCTLVAL("hw.acpi.battery.life", &dummy);
 
-  perc = (uintmax_t)dummy;
-  FILL_UINT_ARR(str1, (101 < perc ? 0 : perc));
+  perc = (uint_least32_t)dummy;
+  FILL_ARR(str1, ULINT, (101 < perc ? 0 : perc));
 }

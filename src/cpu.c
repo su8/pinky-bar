@@ -206,16 +206,16 @@ get_cpu_temp(char *str1) {
 void
 get_cpu_temp(char *str1) {
   u_int temp = 0;
-  uintmax_t temp2 = 0;
+  uint_least32_t temp2 = 0;
   size_t len = sizeof(temp);
 
   SYSCTLVAL("dev.cpu.0.temperature", &temp);
-  temp2 = (uintmax_t)temp;
+  temp2 = (uint_least32_t)temp;
 
   if (9999 < temp2) { /* > 99C */
-    FILL_UINT_ARR(str1, temp2 / 1000);
+    FILL_ARR(str1, ULINT, temp2 / 1000);
   } else {
-    FILL_UINT_ARR(str1, ((999 < temp2) ?
+    FILL_ARR(str1, ULINT, ((999 < temp2) ?
       temp2 / 100 : temp2 / 10)); /* > 9C || < 9C */
   }
 }
@@ -235,14 +235,14 @@ get_cpu_temp(char *str1) {
 #if defined(__i386__) || defined(__i686__)
 static __inline__ uintmax_t 
 rdtsc(void) {
-  uintmax_t x;
+  uintmax_t x = 0;
   __asm__ __volatile__ (".byte 0x0f, 0x31" : "=A" (x));
   return x;
 }
 
 void
 get_cpu_clock_speed(char *str1) {
-  uintmax_t x, y, z[2];
+  uintmax_t x = 0, y = 0, z[2];
 
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wmissing-field-initializers"

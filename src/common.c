@@ -52,17 +52,20 @@ exit_with_err(const char *str1, const char *str2) {
 
 void
 get_temp(const char *str1, char *str2) {
-  uintmax_t temp;
+  uint_least32_t temp = 0;
   FILE *fp;
 
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wunused-result"
-  OPEN_X(fp, str1, FMT_UINT, &temp);
+  OPEN_X(fp, str1, SCAN_ULINT, &temp);
 #pragma GCC diagnostic pop
 
-  temp /= (uintmax_t)1000;
-
-  FILL_UINT_ARR(str2, temp);
+  if (99999 < temp) { /* > 99C */
+    FILL_ARR(str2, ULINT, temp / 10000);
+  } else {
+    FILL_ARR(str2, ULINT, ((9999 < temp) ?
+      temp / 1000 : temp / 100)); /* > 9C || < 9C */
+  }
 }
 
 
@@ -167,7 +170,7 @@ get_packs(char *str1) {
 
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wunused-result"
-  fscanf(pkgs_file, "%"SCNuFAST16, &packages);
+  fscanf(pkgs_file, SCAN_UFINT, &packages);
 #pragma GCC diagnostic pop
 
   pclose(pkgs_file);
@@ -186,7 +189,7 @@ get_packs(char *str1) {
 
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wunused-result"
-  fscanf(pkgs_file, "%"SCNuFAST16, &packages);
+  fscanf(pkgs_file, SCAN_UFINT, &packages);
 #pragma GCC diagnostic pop
 
   pclose(pkgs_file);
@@ -196,7 +199,7 @@ get_packs(char *str1) {
 
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wunused-result"
-  fscanf(pkgs_file, "%"SCNuFAST16, &packages);
+  fscanf(pkgs_file, SCAN_UFINT, &packages);
 #pragma GCC diagnostic pop
 
   pclose(pkgs_file);
@@ -206,7 +209,7 @@ get_packs(char *str1) {
 
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wunused-result"
-  fscanf(pkgs_file, "%"SCNuFAST16, &packages);
+  fscanf(pkgs_file, SCAN_UFINT, &packages);
 #pragma GCC diagnostic pop
 
   pclose(pkgs_file);

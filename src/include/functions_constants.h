@@ -27,8 +27,11 @@
 #define BYTES_TO_MB(x) (x/2/1024) /* block bytes */
 
 #define FMT_UINT "%"PRIuMAX
-#define FMT_UINTX "%"PRIxMAX
 #define UFINT "%"PRIuFAST16
+#define ULINT "%"PRIuLEAST32
+#define SCAN_UFINT "%"SCNuFAST16
+#define SCAN_ULINT "%"SCNuLEAST32
+#define SCAN_UINTX "%"PRIxMAX
 
 /* stay away from va_list */
 #define FILL_ARR(x, z, ...) (snprintf(x, VLA, z, __VA_ARGS__))
