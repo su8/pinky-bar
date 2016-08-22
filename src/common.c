@@ -213,7 +213,7 @@ get_packs(char *str1) {
 
 #endif
 
-  FILL_ARR(str1, "%"PRIuFAST16, packages);
+  FILL_ARR(str1, UFINT, packages);
 }
 
 
@@ -305,7 +305,8 @@ get_fans(char *str1) {
   bool found_fans = true;
   char tempstr[VLA], buffer[VLA];
   char *all_fans = buffer;
-  uint_fast16_t x = 0, y = 0, z = 0, rpm[21];
+  uint8_t x = 0, y = 0, z = 0;
+  uint_fast16_t rpm[21];
 
 #if defined(__linux__)
   FILE *fp;

@@ -39,8 +39,9 @@
 void 
 get_cpu(char *str1) {
   static uintmax_t previous_total = 0, previous_idle = 0;
-  uintmax_t x, percent, diff_total, diff_idle, cpu_active[LOOP_ITERZ];
-  uintmax_t total = 0;
+  uintmax_t total = 0, percent = 0, diff_total = 0, diff_idle = 0;
+  uintmax_t cpu_active[LOOP_ITERZ];
+  uint8_t x = 0;
 
   memset(cpu_active, 0, sizeof(cpu_active));
 
@@ -92,8 +93,8 @@ get_cpu(char *str1) {
 void
 get_cores_load(char *str1) {
   static uintmax_t previous_total[MAX_CORES], previous_idle[MAX_CORES];
-  static uintmax_t test_flag = 0;
-  uintmax_t x = 0, y = 0, z = 0;
+  static uint8_t test_flag = 0;
+  uint8_t x = 0, y = 0, z = 0;
   uintmax_t percent[MAX_CORES], diff_total[MAX_CORES], core_active[MAX_CORES][LOOP_ITERZ];
   uintmax_t diff_idle[MAX_CORES], total[MAX_CORES];
   char buf[VLA], temp[VLA];
@@ -126,7 +127,7 @@ get_cores_load(char *str1) {
     exit_with_err(ERR, "reached /proc/stat EOF");
   }
 
-  for (x = 0; x < MAX_CORES; x++) {
+  for (x = 0; x < MAX_CORES; x++, z++) {
     if (NULL == fgets(buf, VLA, fp)) {
       fclose(fp);
       exit_with_err(ERR, "reached /proc/stat EOF");
@@ -146,7 +147,6 @@ get_cores_load(char *str1) {
   }
   fclose(fp);
 
-  z = x;
   for (x = 0; x < z; x++) {
 
 #else /* FreeBSD */
@@ -176,7 +176,6 @@ get_cores_load(char *str1) {
 
     GLUE2(all, FMT_UINT"%% ", percent[x]);
   }
-
   test_flag = 1;
 
   FILL_STR_ARR(1, str1, temp);

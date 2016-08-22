@@ -211,11 +211,9 @@ void
 get_ip_lookup(char *str1, char *str2) {
 #if WITH_NET == 1
 
-  struct addrinfo *rp = NULL, *result = NULL;
-  struct addrinfo hints;
+  struct addrinfo *rp = NULL, *result = NULL, hints;
   void *temp_void = NULL;
   char temp[VLA];
-  int err = 0;
 
   memset(&hints, 0, sizeof(hints));
 
@@ -224,8 +222,7 @@ get_ip_lookup(char *str1, char *str2) {
   hints.ai_flags = 0;
   hints.ai_protocol = 0; /* udp | tcp */
 
-  err = getaddrinfo(str2, NULL, &hints, &result);
-  if (0 != err) {
+  if (0 != (getaddrinfo(str2, NULL, &hints, &result))) {
     FUNC_FAILED("getaddrinfo()");
   }
 
@@ -303,7 +300,7 @@ get_nic_info2(char *str1, char *str2, unsigned char num) {
   }
   snprintf(ifr.ifr_name, IF_NAMESIZE, "%s", str2);
 
-  if (0 < (ioctl(sock, SIOCETHTOOL, &ifr))) {
+  if (0 != (ioctl(sock, SIOCETHTOOL, &ifr))) {
     return;
   }
 
@@ -430,13 +427,10 @@ get_nic_info(char *str1, char *str2) {
 
   struct rt_msghdr *rtm = NULL;
   struct sockaddr *sa = NULL, *addrs[RTAX_MAX];
-  char *buf = NULL, *next = NULL, *lim = NULL;
-  char temp[VLA];
+  char *buf = NULL, *next = NULL, *lim = NULL, temp[VLA];
   uint8_t x = 0;
   size_t needed;
   void *temp_void = NULL;
-
-  FILL_STR_ARR(1, str1, "Null");
 
   /* No, it's not Men In Black acronym */
   int mib[] = { CTL_NET, PF_ROUTE, 0, 0, NET_RT_DUMP, 0 };

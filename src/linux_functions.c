@@ -107,7 +107,7 @@ void
 get_voltage(char *str1) {
   float voltage[4];
   FILE *fp;
-  uint_fast16_t x = 0;
+  uint8_t x = 0;
 
   const char *voltage_files[] = {
     VOLTAGE_FILE("0"),

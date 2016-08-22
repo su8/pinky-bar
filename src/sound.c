@@ -46,7 +46,7 @@ get_volume(char *str1) {
   snd_mixer_t *handle = NULL;
   snd_mixer_elem_t *elem = NULL;
   snd_mixer_selem_id_t *s_elem = NULL;
-  long int vol, max, min, percent;
+  long int vol = 0L, max = 0L, min = 0L, percent = 0L;
 
   if (0 != (snd_mixer_open(&handle, 0))) {
     FUNC_FAILED("alsa");
@@ -130,7 +130,7 @@ get_song(char *str1, unsigned char num) {
 #if defined (HAVE_MPD_CLIENT_H)
 
   struct mpd_connection *conn = NULL;
-  struct mpd_song *song;
+  struct mpd_song *song = NULL;
 
   if (NULL == (conn = mpd_connection_new(NULL, 0, 0))) {
     return;

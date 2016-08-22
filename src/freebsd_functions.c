@@ -179,7 +179,7 @@ get_statio(char *str1, char *str2) {
   struct statinfo stats;
   struct device_selection *dev_select = NULL;
   struct devstat *d = NULL;
-  long select_generation = 0;
+  long int select_generation = 0;
   int x = 0, num_devices = 0, num_selected = 0, num_selections = 0;
 
   FILL_STR_ARR(1, str1, "Null");
