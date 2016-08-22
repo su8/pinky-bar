@@ -25,6 +25,6 @@
 void get_volume(char *);
 #endif
 
-void get_song(char *, unsigned char num);
+void get_song(char *, uint8_t num);
 
 #endif /* SOUND_H_ */

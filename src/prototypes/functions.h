@@ -21,7 +21,7 @@
 #ifndef FUNCTIONS_H_
 #define FUNCTIONS_H_
 
-void get_ram(char *, unsigned char num);
+void get_ram(char *, uint8_t num);
 void get_loadavg(char *);
 void get_voltage(char *);
 void get_mobo(char *);

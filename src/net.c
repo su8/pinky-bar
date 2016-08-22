@@ -65,7 +65,7 @@
 
 /* Thanks to http://www.matisse.net/bitcalc/?source=print */
 void
-get_net(char *str1, char *str2, unsigned char num) {
+get_net(char *str1, char *str2, uint8_t num) {
 #if WITH_NET == 1
 
 #if defined(__linux)
@@ -172,7 +172,7 @@ get_net(char *str1, char *str2, unsigned char num) {
           } else if (7 == num || 8 == num || 9 == num ||
               10 == num) { /* link speed | driver | version | firmware */
 
-            get_nic_info2(str1, str2, (unsigned char)(num - 6));
+            get_nic_info2(str1, str2, (uint8_t)(num - 6));
           }
 #else
           } else if (4 == num) { /* mac address */
@@ -273,7 +273,7 @@ dev.re.0.%desc: RealTek 8168/8111 B/C/CP/D/DP/E/F/G PCIe Gigabit Ethernet */
 #if defined(__linux__)
 /* Not using exit_with_err to freeifaddrs */
 void
-get_nic_info2(char *str1, char *str2, unsigned char num) {
+get_nic_info2(char *str1, char *str2, uint8_t num) {
 #if WITH_NET == 1
 
   struct ethtool_cmd ecmd;

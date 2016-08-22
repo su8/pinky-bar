@@ -126,7 +126,7 @@ get_volume(char *str1) {
 
 
 void
-get_song(char *str1, unsigned char num) {
+get_song(char *str1, uint8_t num) {
 #if defined (HAVE_MPD_CLIENT_H)
 
   struct mpd_connection *conn = NULL;

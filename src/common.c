@@ -70,7 +70,7 @@ get_temp(const char *str1, char *str2) {
 
 
 void 
-get_ssd(char *str1, unsigned char num) {
+get_ssd(char *str1, uint8_t num) {
   uintmax_t val = 0;
   struct statvfs ssd;
 
@@ -104,7 +104,7 @@ get_ssd(char *str1, unsigned char num) {
 
 
 void 
-get_kernel(char *str1, unsigned char num) {
+get_kernel(char *str1, uint8_t num) {
   struct utsname KerneL;
   if (-1 == (uname(&KerneL))) {
     FUNC_FAILED("uname()");

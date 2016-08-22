@@ -23,8 +23,8 @@
 
 void get_temp(const char *, char *);
 void exit_with_err(const char *, const char *);
-void get_ssd(char *, unsigned char num);
-void get_kernel(char *, unsigned char num);
+void get_ssd(char *, uint8_t num);
+void get_kernel(char *, uint8_t num);
 void get_packs(char *);
 void get_taim(char *);
 void get_uptime(char *);

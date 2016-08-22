@@ -36,7 +36,7 @@
 #include "include/headers.h"
 
 void 
-get_ram(char *str1, unsigned char num) {
+get_ram(char *str1, uint8_t num) {
   uintmax_t used = 0, total = 0;
   struct sysinfo mem;
 

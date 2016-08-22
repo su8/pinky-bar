@@ -21,8 +21,8 @@
 #ifndef NET_H_
 #define NET_H_
 
-void get_net(char *, char *, unsigned char num);
-void get_nic_info2(char *, char *, unsigned char num);
+void get_net(char *, char *, uint8_t num);
+void get_nic_info2(char *, char *, uint8_t num);
 void get_ip_lookup(char *, char *);
 void get_nic_info(char *, char *);
 

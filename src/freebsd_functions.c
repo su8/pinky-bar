@@ -40,7 +40,7 @@
 #include "include/freebzd.h"
 
 void 
-get_ram(char *str1, unsigned char num) {
+get_ram(char *str1, uint8_t num) {
   u_int total = 0, freeram = 0, inactive = 0, pagesize = 0;
   u_int cache = 0, bufferram = 0, dummy = 0;
   uintmax_t utotal = 0, used = 0, pz = 0;
