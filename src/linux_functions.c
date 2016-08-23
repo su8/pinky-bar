@@ -136,7 +136,7 @@ get_voltage(char *str1) {
 void 
 get_mobo(char *str1) {
   FILE *fp;
-  char vendor[VLA], name[VLA];
+  char vendor[100], name[100];
 
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wunused-result"

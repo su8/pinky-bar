@@ -57,6 +57,8 @@ The order of supplied options will dictate how, where and what system informatio
 | -O           | --driveavail| The available drive storage                                        |
 | -g           | --battery   | The remaining battery charge                                       |
 | -F           | --drivemodel| The vendor name of your drive [argument - sda]                     |
+| -z           | --dvdstr    | The vendor and model name of your cdrom/dvdrom                     |
+| -S           | --statio    | Read and written MBs to the drive so far [argument - sda]          |
 | -p           | --packages  | The number of installed packages                                   |
 | -P           | --kernsys   | The kernel name                                                    |
 | -q           | --kernode   | The network node hostname                                          |
@@ -84,7 +86,6 @@ The order of supplied options will dictate how, where and what system informatio
 | -h           | --nicdrv    | The NIC driver [argument - eth0]                                   |
 | -H           | --nicver    | The NIC version [argument - eth0]                                  |
 | -j           | --nicfw     | The NIC firmware [argument - eth0]                                 |
-| -S           | --statio    | Read and written MBs to the drive so far [argument - sda]          |
 
 The following options are available only in Linux: `-FhHGe`.
 
@@ -110,6 +111,7 @@ It's up to you to decide which features suit you best.
 | --with-oss     | --without-oss       | To get the sound volume level in FreeBSD.                                                  |
 | --with-net     | --without-net       | Enable the internet related options.                                                       |
 | --with-pci     | --without-pci       | To get the NIC vendor and model                                                            |
+| --with-dvd     | --without-dvd       | To get the cdrom/dvdrom vendor and model                                                   |
 | --with-colours | --without-colours   | Colorize the output data.                                                                  |
 | icons=/tmp     |                     | Use xbm icons that can be used by dzen2 for example. Discarded when **--with-x11** is used |
 | --with-mpd     | --without-mpd       | To see the currently played song name (if any).                                            |
@@ -118,7 +120,7 @@ It's up to you to decide which features suit you best.
 By default, if **no** options are passed, the program will be compiled with/without:
 
 ```bash
---without-alsa --without-x11 --without-mpd --with-colours --with-net --with-pci
+--without-alsa --without-x11 --without-mpd --with-colours --with-net --with-pci --without-dvd
 ```
 
 ---
@@ -260,7 +262,14 @@ To get the sound volume level:
 * alsa-utils
 * alsa-lib
 
-Then pass **--with-alsa** to configure. FreeBSD users can use the baked OSS instead, pass **--without-alsa --with-oss** instead.
+Then pass **--with-alsa** to configure. FreeBSD users can use the baked OSS instead, pass **--without-alsa --with-oss** to configure instead.
+
+To get the vendor and model name of your cdrom/dvdrom/blu-ray:
+
+* libcdio
+* libcddb
+
+In linux **--without-dvd** will still compile the program with dvd support. Except it will be limited only to dvd support, it will try to parse the sr0 vendor and model name detected by the kernel.
 
 To see the currently played song name:
 

@@ -32,7 +32,7 @@
 #define USINT "%"PRIu8
 #define SCAN_UFINT "%"SCNuFAST16
 #define SCAN_ULINT "%"SCNuLEAST32
-#define SCAN_UINTX "%"PRIxMAX
+#define SCAN_UINTX "%"PRIxMAX /* hex */
 
 /* stay away from va_list */
 #define FILL_ARR(x, z, ...) (snprintf(x, VLA, z, __VA_ARGS__))
@@ -71,6 +71,11 @@
   "/sys/class/net/", y, "/device/", z))
 #define NIC_VEND(x, z)  (NIC_NUM(x, z, "vendor"))
 #define NIC_MODEL(x, z) (NIC_NUM(x, z, "device"))
+
+/* The cdrom/dvdrom vendor and model */
+#define DVD_DIR(x) ("/sys/class/block/sr0/device/"x)
+#define DVD_VEND DVD_DIR("vendor")
+#define DVD_MODEL DVD_DIR("model")
 
 /* exit with error */
 #define CANNOT_OPEN "Could not open"

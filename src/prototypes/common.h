@@ -34,4 +34,8 @@ void get_fans(char *);
 void set_status(const char *);
 #endif
 
+#if defined(HAVE_CDIO_CDIO_H) || defined(__linux__)
+void get_dvd(char *);
+#endif /* HAVE_CDIO_CDIO_H || __linux__ */
+
 #endif /* COMMON_H_ */

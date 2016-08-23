@@ -39,6 +39,12 @@
 #include "include/freebzd.h"
 #endif /* __FreeBSD__ */
 
+#if defined(HAVE_CDIO_CDIO_H)
+#include <cdio/cdio.h>
+#include <cdio/mmc.h>
+#endif /* HAVE_CDIO_CDIO_H */
+
+
 #if defined(__linux__)
 static uint_fast16_t glob_packages(const char *);
 #endif /* __linux__ */
@@ -362,3 +368,67 @@ get_fans(char *str1) {
     FILL_STR_ARR(1, str1, (y != x ? buffer : NOT_FOUND));
   }
 }
+
+
+#if defined(HAVE_CDIO_CDIO_H)
+/*
+  CdIo_t *p_cdio = NULL;
+  cdio_hwinfo_t hwinfo;
+  driver_id_t driver_id = DRIVER_DEVICE;
+  char **device_list = cdio_get_devices_ret(&driver_id);
+  char **d = device_list;
+
+  if (NULL != d) {
+    for (; NULL != *d; d++) {
+      p_cdio = cdio_open(NULL, driver_id);
+      if (mmc_get_hwinfo(p_cdio, &hwinfo)) {
+        printf("%s %s\n", hwinfo.psz_vendor, hwinfo.psz_model);
+      }
+      if (NULL != p_cdio) {
+        cdio_destroy(p_cdio);
+      }
+    }
+  }
+  if (NULL != device_list) {
+    cdio_free_device_list(device_list);
+  }
+*/
+void
+get_dvd(char *str1) {
+  CdIo_t *p_cdio = cdio_open(NULL, DRIVER_DEVICE);
+  cdio_hwinfo_t hwinfo;
+
+  FILL_STR_ARR(1, str1, "Null");
+  if (NULL == p_cdio) {
+    FUNC_FAILED("cdio_open()");
+  }
+  if (mmc_get_hwinfo(p_cdio, &hwinfo)) {
+    FILL_STR_ARR(2, str1, hwinfo.psz_vendor, hwinfo.psz_model);
+  }
+  if (NULL != p_cdio) {
+    cdio_destroy(p_cdio);
+  }
+}
+#else
+
+#if defined(__linux__)
+void
+get_dvd(char *str1) {
+  FILE *fp;
+  char vendor[100], model[100];
+
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wunused-result"
+  OPEN_X(fp, DVD_VEND, "%s", vendor);
+#pragma GCC diagnostic pop
+
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wunused-result"
+  OPEN_X(fp, DVD_MODEL, "%s", model);
+#pragma GCC diagnostic pop
+
+  FILL_STR_ARR(2, str1, vendor, model);
+}
+#endif /* __linux__ */
+
+#endif /* HAVE_CDIO_CDIO_H */

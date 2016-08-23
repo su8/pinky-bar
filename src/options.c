@@ -52,8 +52,10 @@ static const struct argp_option options[] = {
   { .name = "drivetotal",   .key = 'n',                .doc = "The total drive storage."                                 },
   { .name = "drivefree",    .key = 'N',                .doc = "The free drive storage."                                  },
   { .name = "driveavail",   .key = 'O',                .doc = "The available drive storage."                             },
+  { .name = "dvdstr",       .key = 'z',                .doc = "The vendor and model name of your cdrom/dvdrom."          },
   { .name = "battery",      .key = 'g',                .doc = "The remaining battery charge."                            },
   { .name = "drivemodel",   .key = 'F', .arg = "sda",  .doc = "The vendor name of your drive."                           },
+  { .name = "statio",       .key = 'S', .arg = "sda",  .doc = "Read and written MBs to the drive so far."                },
   { .name = "packages",     .key = 'p',                .doc = "The number of installed packages."                        },
   { .name = "kernsys",      .key = 'P',                .doc = "The kernel name."                                         },
   { .name = "kernode",      .key = 'q',                .doc = "The network node hostname."                               },
@@ -85,7 +87,6 @@ static const struct argp_option options[] = {
 #else
   { .name = "nicgw",        .key = 'j', .arg = "re0", .doc = "The NIC gateway address."                                  },
 #endif /* __linux__ */
-  { .name = "statio",       .key = 'S', .arg = "sda",  .doc = "Read and written MBs to the drive so far."                },
   { .doc = NULL }
 };
 struct arguments {
@@ -120,6 +121,10 @@ parse_opt(int key, char *arg, struct argp_state *state) {
     NEW_CPU_LABEL('L', char cores_load[VLA], cores_load, FMT_CORES, CPU_STR);
 
     NEW_LABEL('T', char cpu_temp[VLA], cpu_temp, FMT_TEMP);
+
+#if defined(HAVE_CDIO_CDIO_H) || defined(__linux__)
+    NEW_LABEL('z', char dvd[VLA], dvd, FMT_KERN);
+#endif /* HAVE_CDIO_CDIO_H || __linux__ */
 
     NEW_RAM_LABEL('J', char ram_total[VLA], ram_total, 1, FMT_RAM2, RAM_STR);
 
