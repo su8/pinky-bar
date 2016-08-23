@@ -40,7 +40,7 @@ AC_DEFUN([TEST_DVD],[
       DVD_LIBS="-lcdio"
       ],[
         ERR_MUST_INSTALL([libcdio])
-      ])
+    ])
 
     m4_foreach([LiB], [
         cdio_open        ,

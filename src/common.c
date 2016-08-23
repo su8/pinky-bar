@@ -243,7 +243,7 @@ get_uptime(char *str1) {
 
   now = (uintmax_t)tc.tv_sec;
 #else
-  int mib[2] = { CTL_KERN, KERN_BOOTTIME };
+  int mib[] = { CTL_KERN, KERN_BOOTTIME };
   time_t t;
   size_t len = sizeof(tc);
 
@@ -371,28 +371,6 @@ get_fans(char *str1) {
 
 
 #if defined(HAVE_CDIO_CDIO_H)
-/*
-  CdIo_t *p_cdio = NULL;
-  cdio_hwinfo_t hwinfo;
-  driver_id_t driver_id = DRIVER_DEVICE;
-  char **device_list = cdio_get_devices_ret(&driver_id);
-  char **d = device_list;
-
-  if (NULL != d) {
-    for (; NULL != *d; d++) {
-      p_cdio = cdio_open(NULL, driver_id);
-      if (mmc_get_hwinfo(p_cdio, &hwinfo)) {
-        printf("%s %s\n", hwinfo.psz_vendor, hwinfo.psz_model);
-      }
-      if (NULL != p_cdio) {
-        cdio_destroy(p_cdio);
-      }
-    }
-  }
-  if (NULL != device_list) {
-    cdio_free_device_list(device_list);
-  }
-*/
 void
 get_dvd(char *str1) {
   CdIo_t *p_cdio = cdio_open(NULL, DRIVER_DEVICE);

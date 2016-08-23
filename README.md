@@ -110,7 +110,7 @@ It's up to you to decide which features suit you best.
 | --with-alsa    | --without-alsa      | To get the sound volume level.                                                             |
 | --with-oss     | --without-oss       | To get the sound volume level in FreeBSD.                                                  |
 | --with-net     | --without-net       | Enable the internet related options.                                                       |
-| --with-pci     | --without-pci       | To get the NIC vendor and model                                                            |
+| --with-pci     | --without-pci       | To get the NIC vendor and model in linux                                                   |
 | --with-dvd     | --without-dvd       | To get the cdrom/dvdrom vendor and model                                                   |
 | --with-colours | --without-colours   | Colorize the output data.                                                                  |
 | icons=/tmp     |                     | Use xbm icons that can be used by dzen2 for example. Discarded when **--with-x11** is used |
@@ -122,6 +122,8 @@ By default, if **no** options are passed, the program will be compiled with/with
 ```bash
 --without-alsa --without-x11 --without-mpd --with-colours --with-net --with-pci --without-dvd
 ```
+
+**--with-net** will substitute -O0 flag to mitigate a bug in GCC caused by -O2. -O0 will optimize the compiled binary for file size, while -O2 will optimize it for speed. So don't be shocked to find out that **--without-net** will cause the compiled binary to double it's size.
 
 ---
 

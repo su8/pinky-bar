@@ -139,7 +139,7 @@ void
 get_mobo(char *str1) {
   char temp[VLA];
   size_t len = sizeof(temp);
-  
+
   SYSCTLVAL("dev.aibs.0.%desc", &temp);
   FILL_STR_ARR(1, str1, temp);
 }
@@ -225,10 +225,10 @@ error:
   if (NULL != dev_select) {
     free(dev_select);
   }
-  if (stats.dinfo->mem_ptr) {
-    free(stats.dinfo->mem_ptr);
-  }
   if (NULL != stats.dinfo) {
+    if (stats.dinfo->mem_ptr) {
+      free(stats.dinfo->mem_ptr);
+    }
     free(stats.dinfo);
   }
   return;

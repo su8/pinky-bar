@@ -93,14 +93,6 @@ AC_DEFUN([TEST_NET],[
       ERR([Missing core library functions.])
     ])
     
-    dnl ifdef([ITS_BSD],[
-      dnl AC_CHECK_FUNCS([ \
-        dnl LLADDR         \
-      dnl ],[],[
-        dnl ERR([Missing core library functions.])
-      dnl ])
-    dnl ],[])
-
     NOTIFY([addrinfo])
     AC_COMPILE_IFELSE([
       AC_LANG_SOURCE([[
