@@ -33,12 +33,6 @@ AC_DEFUN([TEST_DVD],[
   )
 
   AS_IF([test "x$with_dvd" = "xyes"], [
-    AC_CHECK_HEADERS([cdio/cdio.h], [
-      DVD_LIBS="-lcdio"
-      ],[
-        ERR_MUST_INSTALL([libcdio])
-      ])
-
     AC_CHECK_HEADERS([ \
       cdio/cdio.h      \
       cdio/mmc.h       \
