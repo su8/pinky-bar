@@ -79,9 +79,9 @@ AC_DEFUN([TEST_SENSORS],[
 
             while (NULL != (chip = sensors_get_detected_chips(NULL, &nr))) {
               nr2 = 0;
-              while (NULL != (sensors_get_features(chip, &nr2))) {
+              while (NULL != (features = sensors_get_features(chip, &nr2))) {
                 nr3 = 0;
-                while (NULL != (subfeatures = sensors_get_all_subfeatures(chip, &features, &nr3))) {
+                while (NULL != (subfeatures = sensors_get_all_subfeatures(chip, features, &nr3))) {
                   switch(subfeatures->type) {
 
                     case SENSORS_SUBFEATURE_IN_INPUT:
