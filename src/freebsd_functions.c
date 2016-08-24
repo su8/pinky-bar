@@ -263,11 +263,12 @@ get_battery(char *str1) {
 }
 
 
+/* TODO: make the function 4 way */
 void
 get_swapp(char *str1) {
   struct xswdev xsw;
   u_int pagesize = 0, dummy = 0;
-  uintmax_t total = 0, used = 0, pz = 0;
+  uintmax_t used = 0, pz = 0;
   int mib[20];
   memset(mib, 0, sizeof(mib));
   size_t mibi = sizeof(mib) / sizeof(mib[0]);
@@ -280,17 +281,18 @@ get_swapp(char *str1) {
   if (0 != (sysctlnametomib("vm.swap_info", mib, &mibi))) {
     return;
   }
-  if (0 != (sysctl(mib, (u_int)mibi + 1, &xsw, &sisi, NULL, 0))) {
+  if (0 != (sysctl(mib, (u_int)(mibi + 1), &xsw, &sisi, NULL, 0))) {
     return;
   }
   if (xsw.xsw_version != XSWDEV_VERSION) {
     return;
   }
-  if (0 == (used = (uintmax_t)xsw.xsw_used)) {
-    return;
-  }
-  total = (uintmax_t)xsw.xsw_nblks;
+  used = (uintmax_t)xsw.xsw_used;
+  /* if (0 == (used = (uintmax_t)xsw.xsw_used)) { */
+  /*   return; */
+  /* } */
+  /* total = (uintmax_t)xsw.xsw_nblks; */
 
-  FILL_ARR(str1, FMT_UINT" %s",
-    ((total - used) * pz) / MB, "MB");
+  FILL_ARR(str1, FMT_UINT" %s", ((used * pz) / MB), "MB");
+    /* ((total - used) * pz) / MB, "MB"); */
 }
