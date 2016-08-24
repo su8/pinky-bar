@@ -206,18 +206,10 @@ get_cpu_temp(char *str1) {
 void
 get_cpu_temp(char *str1) {
   u_int temp = 0;
-  uint_least32_t temp2 = 0;
   size_t len = sizeof(temp);
 
   SYSCTLVAL("dev.cpu.0.temperature", &temp);
-  temp2 = (uint_least32_t)temp;
-
-  if (9999 < temp2) { /* > 99C */
-    FILL_ARR(str1, ULINT, temp2 / 1000);
-  } else {
-    FILL_ARR(str1, ULINT, ((999 < temp2) ?
-      temp2 / 100 : temp2 / 10)); /* > 9C || < 9C */
-  }
+  get_temp(str1, (uint_least32_t)temp);
 }
 
 #endif /* __linux__ */

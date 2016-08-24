@@ -148,19 +148,11 @@ get_mobo(char *str1) {
 void
 get_mobo_temp(char *str1) {
   u_int  temp[3];
-  uint_least32_t temp2 = 0;
   memset(temp, 0, sizeof(temp));
   size_t len = sizeof(temp);
-  
-  SYSCTLVAL("dev.aibs.0.temp.1", &temp);
-  temp2 = (uint_least32_t)temp[0];
 
-  if (9999 < temp2) { /* > 99C */
-    FILL_ARR(str1, ULINT, temp2 / 1000);
-  } else {
-    FILL_ARR(str1, ULINT, ((999 < temp2) ?
-      temp2 / 100 : temp2 / 10)); /* > 9C || < 9C */
-  }
+  SYSCTLVAL("dev.aibs.0.temp.1", &temp);
+  get_temp(str1, (uint_least32_t)temp[0]);
 }
 
 

@@ -21,7 +21,6 @@
 #ifndef COMMON_H_
 #define COMMON_H_
 
-void get_temp(const char *, char *);
 void exit_with_err(const char *, const char *);
 void get_ssd(char *, uint8_t num);
 void get_kernel(char *, uint8_t num);
@@ -29,6 +28,12 @@ void get_packs(char *);
 void get_taim(char *);
 void get_uptime(char *);
 void get_fans(char *);
+
+#if defined(__linux__)
+void get_temp(const char *, char *);
+#else
+void get_temp(char *, uint_least32_t temp);
+#endif /* __linux__ */
 
 #if defined (HAVE_X11_XLIB_H)
 void set_status(const char *);

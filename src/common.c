@@ -33,16 +33,16 @@
 #include <X11/Xlib.h>
 #endif
 
+#if defined(HAVE_CDIO_CDIO_H)
+#include <cdio/cdio.h>
+#include <cdio/mmc.h>
+#endif /* HAVE_CDIO_CDIO_H */
+
 #include "include/headers.h"
 
 #if defined(__FreeBSD__)
 #include "include/freebzd.h"
 #endif /* __FreeBSD__ */
-
-#if defined(HAVE_CDIO_CDIO_H)
-#include <cdio/cdio.h>
-#include <cdio/mmc.h>
-#endif /* HAVE_CDIO_CDIO_H */
 
 
 #if defined(__linux__)
@@ -56,6 +56,7 @@ exit_with_err(const char *str1, const char *str2) {
 }
 
 
+#if defined(__linux__)
 void
 get_temp(const char *str1, char *str2) {
   uint_least32_t temp = 0;
@@ -73,6 +74,18 @@ get_temp(const char *str1, char *str2) {
       temp / 1000 : temp / 100)); /* > 9C || < 9C */
   }
 }
+
+#else
+void
+get_temp(char *str1, uint_least32_t temp) {
+  if (9999 < temp) { /* > 99C */
+    FILL_ARR(str1, ULINT, temp / 1000);
+  } else {
+    FILL_ARR(str1, ULINT, ((999 < temp) ?
+      temp / 100 : temp / 10)); /* > 9C || < 9C */
+  }
+}
+#endif /* __linux__ */
 
 
 void 
