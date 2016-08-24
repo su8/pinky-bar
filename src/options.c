@@ -54,7 +54,6 @@ static const struct argp_option options[] = {
   { .name = "driveavail",   .key = 'O',                .doc = "The available drive storage."                             },
   { .name = "dvdstr",       .key = 'z',                .doc = "The vendor and model name of your cdrom/dvdrom."          },
   { .name = "battery",      .key = 'g',                .doc = "The remaining battery charge."                            },
-  { .name = "drivemodel",   .key = 'F', .arg = "sda",  .doc = "The vendor name of your drive."                           },
   { .name = "statio",       .key = 'S', .arg = "sda",  .doc = "Read and written MBs to the drive so far."                },
   { .name = "packages",     .key = 'p',                .doc = "The number of installed packages."                        },
   { .name = "kernsys",      .key = 'P',                .doc = "The kernel name."                                         },
@@ -77,14 +76,17 @@ static const struct argp_option options[] = {
   { .name = "ipmac",        .key = 'A', .arg = "eth0", .doc = "The NIC mac address."                                     },
   { .name = "ipmask",       .key = 'B', .arg = "eth0", .doc = "The NIC subnet mask address."                             },
   { .name = "ipcast",       .key = 'D', .arg = "eth0", .doc = "The NIC broadcast address."                               },
-  { .name = "iplink",       .key = 'e', .arg = "eth0", .doc = "The NIC link speed (useful for wireless/wifi)."           },
   { .name = "iplookup",     .key = 'E', .arg = "site", .doc = "Mini website IP lookup."                                  },
-  { .name = "nicinfo",      .key = 'G', .arg = "eth0", .doc = "The NIC vendor and model."                                },
-  { .name = "nicdrv",       .key = 'h', .arg = "eth0", .doc = "The NIC driver."                                          },
-  { .name = "nicver",       .key = 'H', .arg = "eth0", .doc = "The NIC version."                                         },
+
 #if defined(__linux__)
   { .name = "nicfw",        .key = 'j', .arg = "eth0", .doc = "The NIC firmware."                                        },
+  { .name = "drivemodel",   .key = 'F', .arg = "sda",  .doc = "The vendor name of your drive."                           },
+  { .name = "nicdrv",       .key = 'h', .arg = "eth0", .doc = "The NIC driver."                                          },
+  { .name = "nicver",       .key = 'H', .arg = "eth0", .doc = "The NIC version."                                         },
+  { .name = "iplink",       .key = 'e', .arg = "eth0", .doc = "The NIC link speed (useful for wireless/wifi)."           },
+  { .name = "nicinfo",      .key = 'G', .arg = "eth0", .doc = "The NIC vendor and model."                                },
 #else
+  { .name = "driveswap",    .key = 'Z',                .doc = "The used drive swap."                                     },
   { .name = "nicgw",        .key = 'j', .arg = "re0", .doc = "The NIC gateway address."                                  },
 #endif /* __linux__ */
   { .doc = NULL }
@@ -189,6 +191,10 @@ parse_opt(int key, char *arg, struct argp_state *state) {
     NEW_ARG_LABEL('S', char statio[VLA], statio, FMT_STATIO, STATIO_STR);
 
     NEW_LABEL('g', char battery[VLA], battery, FMT_BATT, BATT_STR);
+
+#if defined(__FreeBSD__)
+    NEW_LABEL('Z', char swapp[VLA], swapp, FMT_SSD2, SSD_STR);
+#endif /* __FreeBSD__ */
 
 #if defined(__linux__)
     NEW_NET_LABEL('j', char nic_info[VLA], nic_info, 10, FMT_KERN);

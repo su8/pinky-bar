@@ -34,6 +34,8 @@
 
 #include <sys/stat.h>
 #include <sys/time.h>
+#include <sys/param.h>
+#include <vm/vm_param.h>
 #include <devstat.h>
 
 #include "include/headers.h"
@@ -258,4 +260,37 @@ get_battery(char *str1) {
 
   perc = (uint_least32_t)dummy;
   FILL_ARR(str1, ULINT, (101 < perc ? 0 : perc));
+}
+
+
+void
+get_swapp(char *str1) {
+  struct xswdev xsw;
+  u_int pagesize = 0, dummy = 0;
+  uintmax_t total = 0, used = 0, pz = 0;
+  int mib[20];
+  memset(mib, 0, sizeof(mib));
+  size_t mibi = sizeof(mib) / sizeof(mib[0]);
+  size_t len = sizeof(dummy), sisi = sizeof(struct xswdev);
+
+  FILL_STR_ARR(1, str1, "Null");
+  SYSCTLVAL("vm.stats.vm.v_page_size", &pagesize);
+  pz = (uintmax_t)pagesize;
+
+  if (0 != (sysctlnametomib("vm.swap_info", mib, &mibi))) {
+    return;
+  }
+  if (0 != (sysctl(mib, (u_int)mibi + 1, &xsw, &sisi, NULL, 0))) {
+    return;
+  }
+  if (xsw.xsw_version != XSWDEV_VERSION) {
+    return;
+  }
+  if (0 == (used = (uintmax_t)xsw.xsw_used)) {
+    return;
+  }
+  total = (uintmax_t)xsw.xsw_nblks;
+
+  FILL_ARR(str1, FMT_UINT" %s",
+    ((total - used) * pz) / MB, "MB");
 }

@@ -27,7 +27,7 @@ AC_DEFUN([TEST_SENSORS],[
 
   AC_ARG_WITH([sensors],
     AS_HELP_STRING([--with-sensors],
-      [lm sensors linker flag for FreeBSD users to obtain voltage, mobo temp and fans]),
+      [lm sensors linker flag to obtain voltage, mobo temp and fans]),
     [],
     [with_sensors=no]
   )
@@ -68,9 +68,9 @@ AC_DEFUN([TEST_SENSORS],[
           #include <sensors/sensors.h>
           int main(void) {
             int nr = 0, nr2 = 0, nr3 = 0;
-            const sensors_chip_name *chip = NULL;
-            const sensors_feature *features = NULL;
-            const sensors_subfeature *subfeatures = NULL;
+            const sensors_chip_name *chip;
+            const sensors_feature *features;
+            const sensors_subfeature *subfeatures;
             double value = 0.0;
             char *label = NULL;
 
