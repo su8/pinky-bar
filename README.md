@@ -55,7 +55,6 @@ The order of supplied options will dictate how, where and what system informatio
 | -n           | --drivetotal| The total drive storage                                            |
 | -N           | --drivefree | The free drive storage                                             |
 | -O           | --driveavail| The available drive storage                                        |
-| -Z           | --driveswap | The used drive swap                                                |
 | -g           | --battery   | The remaining battery charge                                       |
 | -F           | --drivemodel| The vendor name of your drive [argument - sda]                     |
 | -z           | --dvdstr    | The vendor and model name of your cdrom/dvdrom                     |
@@ -90,7 +89,7 @@ The order of supplied options will dictate how, where and what system informatio
 
 The following options are available only in Linux: `-FhHGe`.
 
-The following option is available only in FreeBSD:
+The following options are available only in FreeBSD:
 
 | short option | long option | Descrtiption                                                       |
 |--------------|-------------|--------------------------------------------------------------------|
