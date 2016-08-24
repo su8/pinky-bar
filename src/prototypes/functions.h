@@ -33,4 +33,12 @@ void get_battery(char *);
 void get_ssd_model(char *, char *);
 #endif
 
+/* Restricted to Linux.
+ * If lm_sensors are ported to support
+ * BSD will update the code. */
+#if defined(HAVE_SENSORS_SENSORS_H)
+void get_fans(char *);
+void match_feature(char *, uint8_t num);
+#endif /* HAVE_SENSORS_SENSORS_H */
+
 #endif /* FUNCTIONS_H_ */

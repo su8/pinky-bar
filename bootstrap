@@ -103,6 +103,7 @@ _gen_files() {
   TEST_ALSA
   TEST_MPD
   TEST_DVD
+  TEST_SENSORS
   TEST_TYPEZ
   TEST_CFLAGZ
 
@@ -160,7 +161,9 @@ _gen_files() {
 
     bin_PROGRAMS = '${progName}'
 
-    '${progName}'_LDADD = $(X_LIBS) $(ALSA_LIBS) $(MPD_LIBS) $(PCI_LIBS) $(DVD_LIBS) '${bsdLibs}'
+    '${progName}'_LDADD = $(X_LIBS) $(ALSA_LIBS)
+    '${progName}'_LDADD += $(MPD_LIBS) $(PCI_LIBS)
+    '${progName}'_LDADD += $(DVD_LIBS) $(SENSORS_LIBS) '${bsdLibs}'
 
     '${progName}'_SOURCES = '${src_files[@]}'
 

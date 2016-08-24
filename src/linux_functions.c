@@ -30,9 +30,14 @@
  * Do not add any -Wno flags just to mute the compilers snafus
  * */
 
+#include "config.h" /* Auto-generated */
+
 #include <sys/sysinfo.h>
 
-#include "config.h" /* Auto-generated */
+#if defined(HAVE_SENSORS_SENSORS_H)
+#include <sensors/sensors.h>
+#endif /* HAVE_SENSORS_SENSORS_H */
+
 #include "include/headers.h"
 
 void 
@@ -102,7 +107,140 @@ get_loadavg(char *str1) {
     (float)up.loads[2] / 65535.0);
 }
 
+/* My inital attempt was to make this code FreeBSD exclusive as the
+ * sensors parsing there is much more difficult than it is in linux.
+ */
+#if defined(HAVE_SENSORS_SENSORS_H)
+void
+match_feature(char *str1, uint8_t num) {
+#if SENSORS_API_VERSION >= 0x400 && SENSORS_API_VERSION <= 0x499
+  const sensors_chip_name *chip;
+  const sensors_feature *features;
+  const sensors_subfeature *subfeatures;
+  char buffer[VLA];
+  char *label = NULL, *all = buffer;
+  double value = 0.0;
+  int nr = 0, nr2 = 0, nr3 = 0;
+  uint8_t x = 0, y = 0, z = 0;
+  uint_fast16_t rpm[21];
+  bool found_fans = false;
 
+  if (3 == num) {
+    memset(rpm, 0, sizeof(rpm));
+  }
+
+  /* In case I need to parse the rest
+   * min, max, input values */
+  /* struct stats_pwr_in *st_pwr_in_i; */
+  /* struct stats_pwr_temp *st_pwr_temp_i; */
+  /* struct stats_pwr_fan *st_pwr_fan_i; */
+
+  FILL_STR_ARR(1, str1, "Null");
+  if (0 != (sensors_init(NULL))) {
+    FUNC_FAILED("sensors_init()");
+  }
+
+  while (NULL != (chip = sensors_get_detected_chips(NULL, &nr))) {
+    nr2 = 0;
+    while (NULL != (features = sensors_get_features(chip, &nr2))) {
+      nr3 = 0;
+      while (NULL != (subfeatures = sensors_get_all_subfeatures(chip, features, &nr3))) {
+        switch(subfeatures->type) {
+
+          case SENSORS_SUBFEATURE_IN_INPUT:
+            {
+              if (1 == num) {
+                if (0 != (sensors_get_value(chip, subfeatures->number, &value))) {
+                  break;
+                }
+                GLUE2(all, "%.2f ", (float)value);
+              }
+              break;
+            }
+
+          case SENSORS_SUBFEATURE_TEMP_INPUT:
+            {
+              if (2 == num) {
+                if (0 != (sensors_get_value(chip, subfeatures->number, &value))) {
+                  break;
+                }
+                if (NULL == (label = sensors_get_label(chip, features))) {
+                  break;
+                }
+                if (0 == (strcmp("MB Temperature", label))) {
+                  FILL_ARR(str1, UFINT, (uint_fast16_t)value);
+                }
+                if (NULL != label) {
+                  free(label);
+                }
+              }
+              break;
+            }
+
+          case SENSORS_SUBFEATURE_FAN_INPUT:
+            {
+              if (3 == num) {
+                if (0 != (sensors_get_value(chip, subfeatures->number, &value))) {
+                  break;
+                }
+                rpm[x++] = (uint_fast16_t)value;
+                z++;
+                found_fans = true;
+              }
+              break;
+            }
+
+          default:
+            continue;
+        }
+      }
+    }
+  }
+  sensors_cleanup();
+
+  if (1 == num && '\0' != buffer[0]) {
+    size_t len = strlen(buffer);
+    buffer[len-1] = '\0';
+
+    FILL_STR_ARR(1, str1, buffer);
+    return;
+  }
+
+  if (found_fans) {
+    for (x = 0; x < z; x++) {
+      if (0 != rpm[x])
+        GLUE2(all, UFINT" ", rpm[x]);
+      else
+        ++y; /* non-spinning | removed | failed fan */
+    }
+    FILL_STR_ARR(1, str1, (y != x ? buffer : NOT_FOUND));
+  }
+
+#else
+  exit_with_err(ERR, "The sensors API version is >= 500. Not supported.");
+#endif /* SENSORS_API_VERSION >= 0x400 && SENSORS_API_VERSION <= 0x499 */
+}
+
+
+void
+get_voltage(char *str1) {
+  match_feature(str1, 1);
+}
+
+
+void
+get_mobo_temp(char *str1) {
+  match_feature(str1, 2);
+}
+
+
+void
+get_fans(char *str1) {
+  match_feature(str1, 3);
+}
+
+
+#else /* fall back */
 void 
 get_voltage(char *str1) {
   float voltage[4];
@@ -133,6 +271,13 @@ get_voltage(char *str1) {
 }
 
 
+void
+get_mobo_temp(char *str1) {
+  get_temp(MOBO_TEMP_FILE, str1);
+}
+#endif /* HAVE_SENSORS_SENSORS_H */
+
+
 void 
 get_mobo(char *str1) {
   FILE *fp;
@@ -150,13 +295,6 @@ get_mobo(char *str1) {
 
   FILL_STR_ARR(2, str1, vendor, name);
 }
-
-
-void
-get_mobo_temp(char *str1) {
-  get_temp(MOBO_TEMP_FILE, str1);
-}
-
 
 void 
 get_statio(char *str1, char *str2) {

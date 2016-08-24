@@ -112,6 +112,7 @@ It's up to you to decide which features suit you best.
 | --with-net     | --without-net       | Enable the internet related options.                                                       |
 | --with-pci     | --without-pci       | To get the NIC vendor and model in linux                                                   |
 | --with-dvd     | --without-dvd       | To get the cdrom/dvdrom vendor and model                                                   |
+| --with-sensors | --without-sensors   | Alternative way to get the sensors values (linux only)                                     |
 | --with-colours | --without-colours   | Colorize the output data.                                                                  |
 | icons=/tmp     |                     | Use xbm icons that can be used by dzen2 for example. Discarded when **--with-x11** is used |
 | --with-mpd     | --without-mpd       | To see the currently played song name (if any).                                            |
@@ -120,7 +121,7 @@ It's up to you to decide which features suit you best.
 By default, if **no** options are passed, the program will be compiled with/without:
 
 ```bash
---without-alsa --without-x11 --without-mpd --with-colours --with-net --with-pci --without-dvd
+--without-alsa --without-x11 --without-mpd --with-colours --with-net --with-pci --without-dvd --without-sensors
 ```
 
 **--with-net** will substitute -O0 flag to mitigate a bug in GCC caused by -O2. -O0 will optimize the compiled binary for file size, while -O2 will optimize it for speed. So don't be shocked to find out that **--without-net** will cause the compiled binary to double it's size.
@@ -272,6 +273,11 @@ To get the vendor and model name of your cdrom/dvdrom/blu-ray:
 * libcddb
 
 In linux **--without-dvd** will still compile the program with dvd support. Except it will be limited only to dvd support, it will try to parse the sr0 vendor and model name detected by the kernel.
+
+Alternative way to obtain sensors values in linux with:
+* lm\_sensors
+
+Jokes aside, but my intention was to make the lm\_sensors api code FreeBSD exclusive, which unfortunately is unsupported in BSD.
 
 To see the currently played song name:
 

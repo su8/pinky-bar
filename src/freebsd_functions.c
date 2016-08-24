@@ -39,6 +39,21 @@
 #include "include/headers.h"
 #include "include/freebzd.h"
 
+/* bsdhwmon is nowhere closer to lm_sensors,
+ * which unfortunately is not supported in BSD.
+ *
+ * My initial attempt was to add alternative via lm_sensors
+ * to the FreeBSD users, because the unpredictable sensors 
+ * and their specific naming which has to be used in order to obtain the
+ * sensors values in FreeBSD pretty much restricts some of the code only
+ * to ASUS motherboards.
+ *
+ * In linux regardless of the modules, their names, the sensors reports will
+ * always be stored in same filename in the virtual filesystem. Now you
+ * understand how hard it is to make general assumption how to obtain such
+ * values in FreeBSD.
+*/
+
 void 
 get_ram(char *str1, uint8_t num) {
   u_int total = 0, freeram = 0, inactive = 0, pagesize = 0;
@@ -110,7 +125,6 @@ get_loadavg(char *str1) {
   dev.aibs.0.%driver: aibs
   dev.aibs.0.%desc: ASUSTeK AI Booster (ACPI ASOC ATK0110)
 */
-
 void
 get_voltage(char *str1) {
   u_int  vol0[3], vol1[3], vol2[3], vol3[3];
@@ -136,16 +150,6 @@ get_voltage(char *str1) {
 
 
 void
-get_mobo(char *str1) {
-  char temp[VLA];
-  size_t len = sizeof(temp);
-
-  SYSCTLVAL("dev.aibs.0.%desc", &temp);
-  FILL_STR_ARR(1, str1, temp);
-}
-
-
-void
 get_mobo_temp(char *str1) {
   u_int  temp[3];
   memset(temp, 0, sizeof(temp));
@@ -153,6 +157,15 @@ get_mobo_temp(char *str1) {
 
   SYSCTLVAL("dev.aibs.0.temp.1", &temp);
   get_temp(str1, (uint_least32_t)temp[0]);
+}
+
+void
+get_mobo(char *str1) {
+  char temp[VLA];
+  size_t len = sizeof(temp);
+
+  SYSCTLVAL("dev.aibs.0.%desc", &temp);
+  FILL_STR_ARR(1, str1, temp);
 }
 
 
@@ -225,7 +238,6 @@ error:
   }
   return;
 }
-
 
 
 /*

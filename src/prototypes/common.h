@@ -27,7 +27,10 @@ void get_kernel(char *, uint8_t num);
 void get_packs(char *);
 void get_taim(char *);
 void get_uptime(char *);
+
+#if !defined(HAVE_SENSORS_SENSORS_H)
 void get_fans(char *);
+#endif /* !HAVE_SENSORS_SENSORS_H */
 
 #if defined(__linux__)
 void get_temp(const char *, char *);

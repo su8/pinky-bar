@@ -322,6 +322,7 @@ set_status(const char *str1) {
 #endif
 
 
+#if !defined(HAVE_SENSORS_SENSORS_H)
 void 
 get_fans(char *str1) {
   bool found_fans = true;
@@ -381,6 +382,7 @@ get_fans(char *str1) {
     FILL_STR_ARR(1, str1, (y != x ? buffer : NOT_FOUND));
   }
 }
+#endif /* !HAVE_SENSORS_SENSORS_H */
 
 
 #if defined(HAVE_CDIO_CDIO_H)

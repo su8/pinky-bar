@@ -9,3 +9,4 @@ src/.deps/
 *.in
 *.in~
 stamp-h1
+*.txt
