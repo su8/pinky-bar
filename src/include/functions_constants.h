@@ -95,4 +95,6 @@
 /* How many fans to try for detection */
 #define MAX_FANS 20
 
+#define STREQ(x, z) (0 == (strcmp(x, z)))
+
 #endif /* CONSTANTS2_H_ */

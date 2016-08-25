@@ -213,7 +213,7 @@ get_statio(char *str1, char *str2) {
 
   for (x = 0; x < 16; x++) {
     d = &stats.dinfo->devices[x];
-    if (!(strcmp(str2, d->device_name))) {
+    if (STREQ(str2, d->device_name)) {
 
       if (d->device_type != DEVSTAT_TYPE_DIRECT &&
         d->device_type != DEVSTAT_TYPE_IF_SCSI &&

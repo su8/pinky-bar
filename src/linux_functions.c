@@ -167,7 +167,7 @@ match_feature(char *str1, uint8_t num) {
                 if (NULL == (label = sensors_get_label(chip, features))) {
                   break;
                 }
-                if (0 == (strcmp("MB Temperature", label))) {
+                if (STREQ("MB Temperature", label)) {
                   FILL_ARR(str1, UFINT, (uint_fast16_t)value);
                 }
                 if (NULL != label) {

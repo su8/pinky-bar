@@ -94,7 +94,7 @@ get_net(char *str1, char *str2, uint8_t num) {
     }
     if (3 == num || 5 == num || 6 == num) { /* ip | netmask | broadcast */
       if (ifa->ifa_addr->sa_family == AF_INET) {
-        if (0 == (strcmp(str2, ifa->ifa_name))) {
+        if (STREQ(str2, ifa->ifa_name)) {
           switch(num) {
             case 3:
               temp_void = ifa->ifa_addr;
@@ -119,7 +119,7 @@ get_net(char *str1, char *str2, uint8_t num) {
     } else if (ifa->ifa_addr->sa_family == AF_LINK &&
         NULL != ifa->ifa_data) {
 #endif /* __linux__ */
-        if (0 == (strcmp(str2, ifa->ifa_name))) {
+        if (STREQ(str2, ifa->ifa_name)) {
 
 #if defined(__linux__)
           stats = ifa->ifa_data;
