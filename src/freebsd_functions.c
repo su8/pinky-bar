@@ -263,18 +263,17 @@ get_battery(char *str1) {
 }
 
 
-/* TODO: make the function 4 way */
 void
-get_swapp(char *str1) {
+get_swapp(char *str1, uint8_t num) {
   struct xswdev xsw;
   u_int pagesize = 0, dummy = 0;
-  uintmax_t used = 0, pz = 0;
+  uintmax_t total = 0, used = 0, pz = 0;
   int mib[20];
   memset(mib, 0, sizeof(mib));
   size_t mibi = sizeof(mib) / sizeof(mib[0]);
   size_t len = sizeof(dummy), sisi = sizeof(struct xswdev);
 
-  FILL_STR_ARR(1, str1, "Null");
+  FILL_STR_ARR(1, str1, "0 MB");
   SYSCTLVAL("vm.stats.vm.v_page_size", &pagesize);
   pz = (uintmax_t)pagesize;
 
@@ -287,12 +286,28 @@ get_swapp(char *str1) {
   if (xsw.xsw_version != XSWDEV_VERSION) {
     return;
   }
-  used = (uintmax_t)xsw.xsw_used;
-  /* if (0 == (used = (uintmax_t)xsw.xsw_used)) { */
-  /*   return; */
-  /* } */
-  /* total = (uintmax_t)xsw.xsw_nblks; */
+  used  = (uintmax_t)xsw.xsw_used;
+  total = (uintmax_t)xsw.xsw_nblks;
 
-  FILL_ARR(str1, FMT_UINT" %s", ((used * pz) / MB), "MB");
-    /* ((total - used) * pz) / MB, "MB"); */
+  switch(num) {
+    case 1:
+      FILL_ARR(str1, FMT_UINT" %s", ((total * pz) / MB), "MB");
+      break;
+    case 2:
+      FILL_ARR(str1, FMT_UINT" %s",
+        (((total - used) * pz) / MB), "MB");
+      break;
+    case 3:
+      FILL_ARR(str1, FMT_UINT" %s", ((used * pz) / MB), "MB");
+      break;
+    case 4:
+      {
+        if (0 != total && 0 != used) {
+          FILL_ARR(str1, FMT_UINT"%%", (used * 100) / total);
+        } else {
+          FILL_STR_ARR(1, str1, "0 %");
+        }
+      }
+      break;
+  }
 }

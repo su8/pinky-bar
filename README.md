@@ -56,7 +56,6 @@ The order of supplied options will dictate how, where and what system informatio
 | -N           | --drivefree | The free drive storage                                             |
 | -O           | --driveavail| The available drive storage                                        |
 | -g           | --battery   | The remaining battery charge                                       |
-| -F           | --drivemodel| The vendor name of your drive [argument - sda]                     |
 | -z           | --dvdstr    | The vendor and model name of your cdrom/dvdrom                     |
 | -S           | --statio    | Read and written MBs to the drive so far [argument - sda]          |
 | -p           | --packages  | The number of installed packages                                   |
@@ -80,21 +79,28 @@ The order of supplied options will dictate how, where and what system informatio
 | -A           | --ipmac     | The NIC mac address [argument - eth0]                              |
 | -B           | --ipmask    | The NIC subnet mask [argument - eth0]                              |
 | -D           | --ipcast    | The NIC broadcast address [argument - eth0]                        |
-| -e           | --iplink    | The NIC link speed (useful for wireless/wifi) [argument - eth0]    |
 | -E           | --iplookup  | Mini website IP lookup [website argument - google.com]             |
+| -j           | --nicfw     | The NIC firmware [argument - eth0]                                 |
+
+The following options are available only in Linux:
+
+| short option | long option | Descrtiption                                                       |
+|--------------|-------------|--------------------------------------------------------------------|
+| -F           | --drivemodel| The vendor name of your drive [argument - sda]                     |
 | -G           | --nicinfo   | The NIC vendor and model [argument - eth0]                         |
 | -h           | --nicdrv    | The NIC driver [argument - eth0]                                   |
 | -H           | --nicver    | The NIC version [argument - eth0]                                  |
-| -j           | --nicfw     | The NIC firmware [argument - eth0]                                 |
-
-The following options are available only in Linux: `-FhHGe`.
+| -e           | --iplink    | The NIC link speed (useful for wireless/wifi) [argument - eth0]    |
 
 The following options are available only in FreeBSD:
 
 | short option | long option | Descrtiption                                                       |
 |--------------|-------------|--------------------------------------------------------------------|
 | -j           | --nicgw     | The NIC gateway address [argument - re0]                           |
-| -Z           | --driveswap | The used drive swap (added by request)                             |
+| -Z           | --swapused  | The used drive swap in MB                                          |
+| -F           | --swaperc   | The used drive swap in percentage                                  |
+| -h           | --swaptotal | The total drive swap                                               |
+| -H           | --swapavail | The available drive swap                                           |
 
 ---
 

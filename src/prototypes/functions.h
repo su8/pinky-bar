@@ -40,7 +40,7 @@ void match_feature(char *, uint8_t num);
 #endif /* HAVE_SENSORS_SENSORS_H */
 
 #if defined(__FreeBSD__)
-void get_swapp(char *);
+void get_swapp(char *, uint8_t num);
 #endif /* __FreeBSD__ */
 
 #endif /* FUNCTIONS_H_ */

@@ -86,8 +86,11 @@ static const struct argp_option options[] = {
   { .name = "iplink",       .key = 'e', .arg = "eth0", .doc = "The NIC link speed (useful for wireless/wifi)."           },
   { .name = "nicinfo",      .key = 'G', .arg = "eth0", .doc = "The NIC vendor and model."                                },
 #else
-  { .name = "driveswap",    .key = 'Z',                .doc = "The used drive swap."                                     },
-  { .name = "nicgw",        .key = 'j', .arg = "re0", .doc = "The NIC gateway address."                                  },
+  { .name = "swapused",     .key = 'Z',                .doc = "The used drive swap in MB."                               },
+  { .name = "swaperc",      .key = 'F',                .doc = "The used drive swap in percentage."                       },
+  { .name = "swaptotal",    .key = 'h',                .doc = "The total drive swap."                                    },
+  { .name = "swapavail",    .key = 'H',                .doc = "The available drive swap."                                },
+  { .name = "nicgw",        .key = 'j', .arg = "re0",  .doc = "The NIC gateway address."                                 },
 #endif /* __linux__ */
   { .doc = NULL }
 };
@@ -193,17 +196,21 @@ parse_opt(int key, char *arg, struct argp_state *state) {
     NEW_LABEL('g', char battery[VLA], battery, FMT_BATT, BATT_STR);
 
 #if defined(__FreeBSD__)
-    NEW_LABEL('Z', char swapp[VLA], swapp, FMT_SSD2, SSD_STR);
+    NEW_SWAPP_LABEL('h', char swapp_total[VLA], swapp_total, 1, FMT_SSD2, SSD_STR);
+
+    NEW_SWAPP_LABEL('H', char swapp_avail[VLA], swapp_avail, 2, FMT_SSD2, SSD_STR);
+
+    NEW_SWAPP_LABEL('Z', char swapp_used[VLA], swapp_used, 3, FMT_SSD2, SSD_STR);
+
+    NEW_SWAPP_LABEL('F', char swapp_perc[VLA], swapp_perc, 4, FMT_SSD2, SSD_STR);
+
+    NEW_NET_LABEL('j', char nic_info[VLA], nic_info, 7, FMT_KERN);
 #endif /* __FreeBSD__ */
+
 
 #if defined(__linux__)
     NEW_NET_LABEL('j', char nic_info[VLA], nic_info, 10, FMT_KERN);
-#else
-    NEW_NET_LABEL('j', char nic_info[VLA], nic_info, 7, FMT_KERN);
-#endif /* __linux__ */
 
-
-#if defined(__linux__)
     NEW_ARG_LABEL('F', char ssd_model[VLA], ssd_model, FMT_KERN);
 
     NEW_NET_LABEL('h', char nic_drv[VLA], nic_drv, 8, FMT_KERN);

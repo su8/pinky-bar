@@ -107,6 +107,9 @@
 #define NEW_KERNEL_LABEL(...) \
   LABEL_WITH_NUM_GENERATOR(kernel, __VA_ARGS__);
 
+#define NEW_SWAPP_LABEL(...) \
+  LABEL_WITH_NUM_GENERATOR(swapp, __VA_ARGS__);
+
 /* Fire the preprocessor */
 
 
