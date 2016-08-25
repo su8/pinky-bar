@@ -93,6 +93,9 @@ AC_DEFUN([TEST_TYPEZ],[
     AC_CHECK_HEADERS([ \
       sys/types.h      \
       sys/sysctl.h     \
+      sys/param.h      \
+      sys/stat.h       \
+      vm/vm_param.h    \
     ],[],[
       ERR([Missing core header files.])
     ])
@@ -135,6 +138,7 @@ AC_DEFUN([TEST_TYPEZ],[
     AC_CHECK_FUNCS([  \
       sysctl          \
       sysctlbyname    \
+      sysctlnametomib \
       getloadavg      \
       malloc          \
       free            \

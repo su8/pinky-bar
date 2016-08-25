@@ -115,6 +115,7 @@ AC_DEFUN([TEST_SOME_FUNCS],[
 
   ])
 
+
   NOTIFY([openNreadFile])
   AC_COMPILE_IFELSE([
     AC_LANG_SOURCE([[
@@ -150,6 +151,7 @@ AC_DEFUN([TEST_SOME_FUNCS],[
     ]
   )
 
+
   ifdef([ITS_BSD],[],[
     NOTIFY([glob])
     AC_COMPILE_IFELSE([
@@ -166,6 +168,7 @@ AC_DEFUN([TEST_SOME_FUNCS],[
     )
 
   ])
+
 
   NOTIFY([sysconf])
   AC_COMPILE_IFELSE([
@@ -375,6 +378,48 @@ AC_DEFUN([TEST_SOME_FUNCS],[
         ])
     ])
 
+
+    NOTIFY([xswdev-swap])
+    AC_COMPILE_IFELSE([
+      AC_LANG_SOURCE([[
+        #include <stdio.h>
+        #include <string.h>
+        #include <stdlib.h>
+        #include <inttypes.h>
+        #include <sys/types.h>
+        #include <sys/param.h>
+        #include <sys/stat.h>
+        #include <sys/sysctl.h>
+        #include <vm/vm_param.h>
+        int main(void) {
+          struct xswdev xsw;
+          u_int pagesize = 4096, dummy = 0;
+          uintmax_t total = 0, used = 0, pz = 0;
+          int mib[20];
+          memset(mib, 0, sizeof(mib));
+          size_t mibi = sizeof(mib) / sizeof(mib[0]);
+          size_t len = sizeof(dummy), sisi = sizeof(struct xswdev);
+
+          pz = (uintmax_t)pagesize;
+          if (0 != (sysctlnametomib("vm.swap_info", mib, &mibi))) {
+            return 0;
+          }
+          if (0 != (sysctl(mib, (u_int)(mibi + 1), &xsw, &sisi, NULL, 0))) {
+            return 0;
+          }
+          if (xsw.xsw_version != XSWDEV_VERSION) {
+            return 0;
+          }
+          used  = (uintmax_t)xsw.xsw_used;
+          total = (uintmax_t)xsw.xsw_nblks;
+
+          return 0;
+        }
+      ]])
+    ],[],[
+      COMPILE_FAILED([xswdev-swap])
+      ]
+    )
 
   ],
   [])
