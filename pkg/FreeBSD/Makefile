@@ -11,9 +11,9 @@ COMMENT=                     Gather some system information
 USE_GITHUB=                  yes
 GH_ACCOUNT=                  wifiextender
 GH_PROJECT=                  pinky-bar
-GH_TAGNAME=                  7592e22
+GH_TAGNAME=                  e35a1a8
 
-GNU_CONFIGURE=	             yes
+GNU_CONFIGURE=               yes
 USE_XORG+=                   x11
 LDFLAGS+=                    -L${LOCALBASE}/lib
 CFLAGS+=                     -I${LOCALBASE}/include
