@@ -131,6 +131,8 @@ By default, if **no** options are passed, the program will be compiled with/with
 --without-alsa --without-x11 --without-mpd --with-colours --with-net --with-pci --without-dvd --without-sensors
 ```
 
+The pci and sensors configure options will be discarded in FreeBSD. If you supplied **--with-alsa** and **--with-oss** or used the port package with the ncurses dialogue, alsa will have higher precedence over OSS. By default the port package will have OSS selected and alsa unselected.
+
 **--with-net** will substitute -O0 flag to mitigate a bug in GCC caused by -O2. -O0 will optimize the compiled binary for file size, while -O2 will optimize it for speed. So don't be shocked to find out that **--without-net** will cause the compiled binary to double it's size.
 
 ---
@@ -159,7 +161,7 @@ while true; do
 done &
 ```
 
-## installation for xmonad (or other WM)
+## Installation for xmonad (or other WM)
 
 ```bash
 # Copy the xbm icons
@@ -192,13 +194,17 @@ while true; do
 done | dzen2 -w 1800 -x 130 -ta r -fn '-*-dejavusans-*-r-*-*-11-*-*-*-*-*-*-*' &
 ```
 
+## Installation in FreeBSD
+
+You can use the provided port package instead.
+
 ## Installation for anything else
 
 pinky-bar is no longer tied to Window Managers only. With the addition of "without colours", the output can be shown in any program, just bear in mind that the more options you've supplied the more system information will be shown.
 
 ![](img/pic4.png)
 
-Here's the Installation steps:
+The installation steps:
 
 ```bash
 bash bootstrap distro
