@@ -447,7 +447,7 @@ get_nic_info(char *str1, char *str2) {
 
   lim = buf + needed;
   for (next = buf; next < lim; next += rtm->rtm_msglen) {
-    rtm = (struct rt_msghdr *)next;
+    rtm = (struct rt_msghdr *)(void *)next;
     sa = (struct sockaddr *)(rtm + 1);
     if (NULL == sa) {
       continue;

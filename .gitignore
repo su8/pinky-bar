@@ -10,3 +10,16 @@ src/.deps/
 *.in~
 stamp-h1
 *.txt
+
+
+
+
+
+
+
+
+
+
+
+
+!pkg/FreeBSD/Makefile
