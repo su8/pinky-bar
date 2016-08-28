@@ -79,18 +79,46 @@
 
 /* exit with error */
 #define CANNOT_OPEN "Could not open"
+#define CANNOT_CLOSE "Could not close a file handle"
+#define CANNOT_OPEN_FP "Could not open a file handle"
+#define FSCANF_FAILED "fscanf() failed"
 #define ERR "Error:"
 #define NOT_FOUND "Not found, "
 #define FUNC_FAILED(x) (exit_with_err(ERR, x " failed"))
 #define RECOMPILE_WITH(x) (exit_with_err(ERR, "recompile the program --with-" x))
 
 /* Let the preprocessor Do Repeat Myself */
+
+#define CHECK_FSCANF(fp, x, z) \
+  if (EOF == (fscanf(fp, x, z))) { \
+    exit_with_err(ERR, FSCANF_FAILED); \
+  }
+
+#define CHECK_FP(fp) \
+  if (NULL == fp) { \
+    exit_with_err(ERR, CANNOT_OPEN_FP); \
+  }
+
+#define CLOSE_X(fp) \
+  if (EOF == (fclose(fp))) { \
+    exit_with_err(ERR, CANNOT_CLOSE); \
+  }
+
 #define OPEN_X(fp, x, y, z) \
   if (NULL == (fp = fopen(x, "r"))) { \
     exit_with_err(CANNOT_OPEN, x); \
   } \
-  fscanf(fp, y, z); \
-  fclose(fp);
+  CHECK_FSCANF(fp, y, z); \
+  CLOSE_X(fp);
+
+#define CHECK_POPEN(fp, x, packs) \
+  if (NULL == (fp = popen(x, "r"))) { \
+    exit_with_err(CANNOT_OPEN, x); \
+  } \
+  CHECK_FSCANF(fp, SCAN_UFINT, packs); \
+  if (-1 == (pclose(fp))) { \
+    exit_with_err(CANNOT_CLOSE, x); \
+  }
 
 /* How many fans to try for detection */
 #define MAX_FANS 20

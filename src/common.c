@@ -185,14 +185,12 @@ get_packs(char *str1) {
   packages = glob_packages("/var/lib/pacman/local/*");
 
 #elif DISTRO == FRUGALWARE
-  FILE *pkgs_file = popen("pacman-g2 -Q 2> /dev/null | wc -l", "r");
+  FILE *pkgs_file;
 
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wunused-result"
-  fscanf(pkgs_file, SCAN_UFINT, &packages);
+  CHECK_POPEN(pkgs_file, "pacman-g2 -Q 2> /dev/null | wc -l", &packages);
 #pragma GCC diagnostic pop
-
-  pclose(pkgs_file);
 
 #elif DISTRO == DEBIAN
   packages = glob_packages("/var/lib/dpkg/info/*.list");
@@ -204,34 +202,28 @@ get_packs(char *str1) {
   packages = glob_packages("/var/db/pkg/*/*");
 
 #elif DISTRO == RHEL
-  FILE *pkgs_file = popen("rpm -qa 2> /dev/null | wc -l", "r");
+  FILE *pkgs_file;
 
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wunused-result"
-  fscanf(pkgs_file, SCAN_UFINT, &packages);
+  CHECK_POPEN(pkgs_file, "rpm -qa 2> /dev/null | wc -l", &packages);
 #pragma GCC diagnostic pop
-
-  pclose(pkgs_file);
 
 #elif DISTRO == ANGSTROM
-  FILE *pkgs_file = popen("opkg list-installed 2> /dev/null | wc -l", "r");
+  FILE *pkgs_file;
 
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wunused-result"
-  fscanf(pkgs_file, SCAN_UFINT, &packages);
+  CHECK_POPEN(pkgs_file, "opkg list-installed 2> /dev/null | wc -l", &packages);
 #pragma GCC diagnostic pop
-
-  pclose(pkgs_file);
 
 #elif DISTRO == FREEBSD
-  FILE *pkgs_file = popen("pkg info | wc -l", "r");
+  FILE *pkgs_file;
 
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wunused-result"
-  fscanf(pkgs_file, SCAN_UFINT, &packages);
+  CHECK_POPEN(pkgs_file, "pkg info | wc -l", &packages);
 #pragma GCC diagnostic pop
-
-  pclose(pkgs_file);
 
 #endif
 
@@ -346,9 +338,9 @@ get_fans(char *str1) {
 
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wunused-result"
-    fscanf(fp, UFINT, &rpm[z]);
+    CHECK_FSCANF(fp, UFINT, &rpm[z]);
 #pragma GCC diagnostic pop
-    fclose(fp);
+    CLOSE_X(fp);
   }
 
 #else
@@ -374,10 +366,11 @@ get_fans(char *str1) {
 
   if (found_fans) {
     for (x = 0; x < z; x++) {
-      if (0 != rpm[x])
+      if (0 != rpm[x]) {
         GLUE2(all_fans, UFINT" ", rpm[x]);
-      else
+      } else {
         ++y; /* non-spinning | removed | failed fan */
+      }
     }
     FILL_STR_ARR(1, str1, (y != x ? buffer : NOT_FOUND));
   }
@@ -393,7 +386,7 @@ get_dvd(char *str1) {
 
   FILL_STR_ARR(1, str1, "Null");
   if (NULL == p_cdio) {
-    FUNC_FAILED("cdio_open()");
+    return;
   }
   if (mmc_get_hwinfo(p_cdio, &hwinfo)) {
     FILL_STR_ARR(2, str1, hwinfo.psz_vendor, hwinfo.psz_model);

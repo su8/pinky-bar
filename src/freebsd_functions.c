@@ -18,18 +18,6 @@
    MA 02110-1301, USA.
 */
 
-/* The pragma directives are here
- * to mute the gcc twisted vision,
- * and clangs inabillity to distinguish
- * C from C++
- *
- * https://llvm.org/bugs/show_bug.cgi?id=21689 
- * https://gcc.gnu.org/bugzilla/show_bug.cgi?id=66425
- * https://gcc.gnu.org/bugzilla/show_bug.cgi?id=25509
- *
- * Do not add any -Wno flags just to mute the compilers snafus
- * */
-
 #include "config.h" /* Auto-generated */
 
 #include <sys/stat.h>

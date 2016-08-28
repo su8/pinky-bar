@@ -208,10 +208,11 @@ match_feature(char *str1, uint8_t num) {
 
   if (found_fans) {
     for (x = 0; x < z; x++) {
-      if (0 != rpm[x])
+      if (0 != rpm[x]) {
         GLUE2(all, UFINT" ", rpm[x]);
-      else
+      } else {
         ++y; /* non-spinning | removed | failed fan */
+      }
     }
     FILL_STR_ARR(1, str1, (y != x ? buffer : NOT_FOUND));
   }
@@ -260,9 +261,9 @@ get_voltage(char *str1) {
     }
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wunused-result"
-    fscanf(fp, "%f", &voltage[x]);
+    CHECK_FSCANF(fp, "%f", &voltage[x]);
 #pragma GCC diagnostic pop
-    fclose(fp);
+    CLOSE_X(fp);
 
     voltage[x] /= (float)1000.0;
   }
@@ -305,20 +306,18 @@ get_statio(char *str1, char *str2) {
   memset(statio, 0, sizeof(statio));
 
   FILE *fp = fopen(stat_file, "r");
-  if (NULL == fp) {
-    exit_with_err(CANNOT_OPEN, stat_file);
-  }
+  CHECK_FP(fp);
 
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wunused-result"
   if (fscanf(fp, FMT_UINT FMT_UINT FMT_UINT FMT_UINT FMT_UINT FMT_UINT FMT_UINT,
     &statio[0], &statio[1], &statio[2], &statio[3],
     &statio[4], &statio[5], &statio[6]) == EOF) {
-      fclose(fp);
+      CLOSE_X(fp);
       exit_with_err(ERR, "reading the stat file failed");
   }
 #pragma GCC diagnostic pop
-  fclose(fp);
+  CLOSE_X(fp);
 
   FILL_ARR(str1, "Read " FMT_UINT " MB, Written " FMT_UINT " MB",
     BYTES_TO_MB(statio[2]), BYTES_TO_MB(statio[6]));
@@ -345,9 +344,9 @@ get_battery(char *str1) {
 
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wunused-result"
-  fscanf(fp, FMT_UINT, &total);
+  CHECK_FSCANF(fp, FMT_UINT, &total);
 #pragma GCC diagnostic pop
-  fclose(fp);
+  CLOSE_X(fp);
 
   BATTERY_USED(temp, num);
 

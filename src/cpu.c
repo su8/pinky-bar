@@ -52,9 +52,7 @@ get_cpu(char *str1) {
 
 #if defined(__linux__)
   FILE *fp = fopen("/proc/stat", "r");
-  if (NULL == fp) {
-    exit_with_err(CANNOT_OPEN, "/proc/stat");
-  }
+  CHECK_FP(fp);
 
   /* Some kernels will produce 7, 8 and 9 columns
    * We rely on 10, refer to `man proc' for more details */
@@ -64,11 +62,11 @@ get_cpu(char *str1) {
     &cpu_active[0], &cpu_active[1], &cpu_active[2], &cpu_active[3],
     &cpu_active[4], &cpu_active[5], &cpu_active[6], &cpu_active[7],
     &cpu_active[8], &cpu_active[9]) == EOF) {
-      fclose(fp);
+      CLOSE_X(fp);
       exit_with_err(ERR,"Upgrade to a newer kernel");
   }
 #pragma GCC diagnostic pop
-  fclose(fp);
+  CLOSE_X(fp);
 #endif /* __linux__ */
 
   for (x = 0; x < LOOP_ITERZ; x++) {
@@ -118,18 +116,16 @@ get_cores_load(char *str1) {
 
 #if defined(__linux__)
   FILE *fp = fopen("/proc/stat", "r");
-  if (NULL == fp) {
-    exit_with_err(CANNOT_OPEN, "/proc/stat");
-  }
+  CHECK_FP(fp);
 
   if (NULL == fgets(buf, VLA, fp)) {
-    fclose(fp);
+    CLOSE_X(fp);
     exit_with_err(ERR, "reached /proc/stat EOF");
   }
 
   for (x = 0; x < MAX_CORES; x++, z++) {
     if (NULL == fgets(buf, VLA, fp)) {
-      fclose(fp);
+      CLOSE_X(fp);
       exit_with_err(ERR, "reached /proc/stat EOF");
     }
 
@@ -141,11 +137,11 @@ get_cores_load(char *str1) {
       &core_active[x][0], &core_active[x][1], &core_active[x][2], &core_active[x][3],
       &core_active[x][4], &core_active[x][5], &core_active[x][6], &core_active[x][7],
       &core_active[x][8], &core_active[x][9]) == EOF) {
-        fclose(fp);
+        CLOSE_X(fp);
         exit_with_err(ERR,"Upgrade to a newer kernel");
     }
   }
-  fclose(fp);
+  CLOSE_X(fp);
 
   for (x = 0; x < z; x++) {
 
