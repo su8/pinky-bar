@@ -142,7 +142,6 @@ get_song(char *str1, uint8_t num) {
   if (NULL == (song = mpd_recv_song(conn))) {
     goto error;
   }
-  mpd_connection_free(conn);
 
   /* You can add more TAGs to be obtained,
    * look at /usr/include/mpd/tag.h
@@ -167,11 +166,13 @@ get_song(char *str1, uint8_t num) {
       FILL_STR_ARR(1, str1, mpd_song_get_uri(song));
       break;
   }
-  return;
 
 error:
   if (NULL != conn) {
     mpd_connection_free(conn);
+  }
+  if (NULL != song) {
+    mpd_song_free(song);
   }
   return;
 
