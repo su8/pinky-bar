@@ -11,7 +11,7 @@ COMMENT=                     Gather some system information
 USE_GITHUB=                  yes
 GH_ACCOUNT=                  wifiextender
 GH_PROJECT=                  pinky-bar
-GH_TAGNAME=                  796aceb
+GH_TAGNAME=                  4252f74
 
 GNU_CONFIGURE=               yes
 USE_XORG+=                   x11
