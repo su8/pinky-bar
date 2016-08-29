@@ -1,5 +1,4 @@
-dnl Copyright 07/06/2015, 08/03/2016
-dnl Aaron Caffrey https://github.com/wifiextender
+dnl 08/03/2016
 
 dnl This program is free software; you can redistribute it and/or modify
 dnl it under the terms of the GNU General Public License as published by

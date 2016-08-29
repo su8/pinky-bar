@@ -142,7 +142,7 @@ The pci and sensors configure options will be discarded in FreeBSD. If you suppl
 ```bash
 bash bootstrap distro
 ./configure --prefix=$HOME/.cache --with-x11 --with-alsa
-make -j$(grep -c '^processor' /proc/cpuinfo)
+make
 make install
 ```
 
@@ -177,7 +177,7 @@ bash bootstrap distro
 ./configure --prefix=$HOME/.cache --without-x11 --with-alsa icons=$HOME/.xmonad/icons
 
 # compile 'n install
-make -j$(grep -c '^processor' /proc/cpuinfo)
+make
 make install
 ```
 
@@ -209,7 +209,7 @@ The installation steps:
 ```bash
 bash bootstrap distro
 ./configure --prefix=$HOME/.cache --without-x11 --without-colours
-make -j$(grep -c '^processor' /proc/cpuinfo)
+make
 make install
 ```
 
@@ -237,11 +237,8 @@ Cannot list FreeBSD as "distro", so it deserve it's own option:
 
 ## Linux Mandatory requirements
 
-* gcc/clang   # Compiler
-* glibc       # Standard C libraries
-
-GNU Build System
-
+* gcc/clang
+* glibc
 * autoconf
 * automake
 * m4
@@ -249,7 +246,7 @@ GNU Build System
 
 ## FreeBSD Mandatory requirements
 
-* gcc/clang/llvm
+* gcc/clang
 * bash
 * autoconf
 * automake
@@ -373,21 +370,6 @@ use **--without-colours** to skip the following step:
 
 * dwm compiled with [statuscolor](https://github.com/wifiextender/dwm-fork/blob/master/patches/statuscolours.diff) patch. The colours in use are specified in your [config.h](https://github.com/wifiextender/dwm-fork/blob/master/config.h#L6)
 
-
-## Maximum clock speed
-
-At least on any AMD model that I tested the program, the maximum clock speed with/without overclock is reported correctly. Even when enabling the 4th core on my 3 core amd cpu and overclocking it even further afterwards.
-
-![](img/small-oc.png)
-
-![](img/huge-oc.png)
-
-Compare the voltage usage in both snapshots.
-
-Before you ask, [this](https://raw.githubusercontent.com/wifiextender/dotfiles/master/gentoo/home/frost/.config/misc/pinky.jpg) is the used background image in above two snapshots.
-
----
-
 ## Wish list
 
 ~~As top priority:~~
@@ -445,13 +427,3 @@ Show the idle time in seconds/minutes: easy to be added via [XScreenSaverQueryIn
 ---
 
 Show the CapsLock/NumLock/ScrollLock indicator status for keyboard without LEDs: easy to be added via [XkbGetIndicatorState](http://linux.die.net/man/3/xkbgetindicatorstate), but will discriminate the users that have compiled the program **--without-x11**.
-
----
-
-## But can it run Crysis ?
-
-I think you are on the wrong page.
-
-## Want xinitrc template ?
-
-Take a look in my [xinitrc](https://github.com/wifiextender/dotfiles/blob/master/gentoo/home/frost/.config/misc/xinitrc) and [dwm-start](https://github.com/wifiextender/dotfiles/blob/master/gentoo/home/frost/.config/dwm_scripts/dwm-start).
