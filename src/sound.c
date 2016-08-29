@@ -168,11 +168,11 @@ get_song(char *str1, uint8_t num) {
   }
 
 error:
-  if (NULL != conn) {
-    mpd_connection_free(conn);
-  }
   if (NULL != song) {
     mpd_song_free(song);
+  }
+  if (NULL != conn) {
+    mpd_connection_free(conn);
   }
   return;
 
