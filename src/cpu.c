@@ -79,7 +79,7 @@ get_cpu(char *str1) {
   previous_idle  = cpu_active[IDLE_NUM];
 
   percent        = 0;
-  if (0 != diff_total && 0 != diff_idle) {
+  if (0 != diff_total) {
     percent      = ((uintmax_t)TICKZ * (diff_total - diff_idle)) / diff_total;
   }
 
@@ -164,7 +164,7 @@ get_cores_load(char *str1) {
     previous_idle[x]  = core_active[x][IDLE_NUM];
 
     percent[x]        = 0;
-    if (0 != diff_total[x] && 0 != diff_idle[x]) {
+    if (0 != diff_total[x]) {
       percent[x]      = ((uintmax_t)TICKZ * (diff_total[x] - diff_idle[x]))
                             / diff_total[x];
     }
