@@ -65,7 +65,8 @@
 #include "include/freebzd.h"
 #endif /* __FreeBSD__ */
 
-/* Thanks to http://www.matisse.net/bitcalc/?source=print */
+/* Thanks to http://www.matisse.net/bitcalc/?source=print
+ * and `man netdevice' */
 void
 get_net(char *str1, char *str2, uint8_t num) {
 #if WITH_NET == 1
@@ -91,6 +92,11 @@ get_net(char *str1, char *str2, uint8_t num) {
   FILL_STR_ARR(1, str1, "Null");
 
   for (ifa = ifaddr; NULL != ifa; ifa = ifa->ifa_next) {
+    if ((IFF_UP | IFF_BROADCAST) != (ifa->ifa_flags & (
+      IFF_UP | IFF_BROADCAST | IFF_POINTOPOINT |
+       IFF_LOOPBACK | IFF_NOARP))) {
+      continue;
+    }
     if (NULL == ifa->ifa_addr || NULL == ifa->ifa_addr->sa_data) {
       continue;
     }
