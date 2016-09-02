@@ -97,7 +97,7 @@ get_net(char *str1, char *str2, uint8_t num) {
        IFF_LOOPBACK | IFF_NOARP))) {
       continue;
     }
-    if (NULL == ifa->ifa_addr || NULL == ifa->ifa_addr->sa_data) {
+    if (NULL == ifa->ifa_addr) {
       continue;
     }
     if (3 == num || 5 == num || 6 == num) { /* ip | netmask | broadcast */
