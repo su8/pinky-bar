@@ -131,10 +131,10 @@ get_voltage(char *str1) {
   SYSCTLVAL(VOLTAGE_FILE("3"), &vol3);
 
   FILL_ARR(str1, "%.2f %.2f %.2f %.2f",
-    (float)vol0[0] / 1000.0,
-    (float)vol1[0] / 1000.0,
-    (float)vol2[0] / 1000.0,
-    (float)vol3[0] / 1000.0);
+    (float)vol0[0] / 1000.0f,
+    (float)vol1[0] / 1000.0f,
+    (float)vol2[0] / 1000.0f,
+    (float)vol3[0] / 1000.0f);
 }
 
 
@@ -147,6 +147,7 @@ get_mobo_temp(char *str1) {
   SYSCTLVAL("dev.aibs.0.temp.1", &temp);
   get_temp(str1, (uint_least32_t)temp[0]);
 }
+
 
 void
 get_mobo(char *str1) {
@@ -289,7 +290,7 @@ get_swapp(char *str1, uint8_t num) {
       break;
     case 4:
       {
-        if (0 != total && 0 != used) {
+        if (0 != total) {
           FILL_ARR(str1, FMT_UINT"%%", (used * 100) / total);
         } else {
           FILL_STR_ARR(1, str1, "0 %");

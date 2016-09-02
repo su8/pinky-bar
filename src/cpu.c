@@ -57,12 +57,12 @@ get_cpu(char *str1) {
    * We rely on 10, refer to `man proc' for more details */
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wunused-result"
-  if (fscanf(fp, "%*s " FMT_UINT FMT_UINT FMT_UINT FMT_UINT FMT_UINT FMT_UINT FMT_UINT FMT_UINT FMT_UINT FMT_UINT,
+  if (EOF == (fscanf(fp, "%*s " FMT_UINT FMT_UINT FMT_UINT FMT_UINT FMT_UINT FMT_UINT FMT_UINT FMT_UINT FMT_UINT FMT_UINT,
     &cpu_active[0], &cpu_active[1], &cpu_active[2], &cpu_active[3],
     &cpu_active[4], &cpu_active[5], &cpu_active[6], &cpu_active[7],
-    &cpu_active[8], &cpu_active[9]) == EOF) {
+    &cpu_active[8], &cpu_active[9]))) {
       CLOSE_X(fp);
-      exit_with_err(ERR,"Upgrade to a newer kernel");
+      exit_with_err(ERR, "Upgrade to a newer kernel");
   }
 #pragma GCC diagnostic pop
   CLOSE_X(fp);
@@ -90,7 +90,7 @@ get_cpu(char *str1) {
 void
 get_cores_load(char *str1) {
   static uintmax_t previous_total[MAX_CORES], previous_idle[MAX_CORES];
-  static uint8_t test_flag = 0;
+  static bool test_flag = false;
   uint8_t x = 0, y = 0, z = 0;
   uintmax_t percent[MAX_CORES], diff_total[MAX_CORES], core_active[MAX_CORES][LOOP_ITERZ];
   uintmax_t diff_idle[MAX_CORES], total[MAX_CORES];
@@ -103,7 +103,7 @@ get_cores_load(char *str1) {
   memset(total, 0, sizeof(total));
   memset(core_active, 0, sizeof(core_active));
 
-  if (0 == test_flag) {
+  if (false == test_flag) {
     memset(previous_idle, 0, sizeof(previous_idle));
     memset(previous_total, 0, sizeof(previous_total));
   }
@@ -132,12 +132,12 @@ get_cores_load(char *str1) {
       break;
     }
 
-    if (sscanf(buf, "%*s " FMT_UINT FMT_UINT FMT_UINT FMT_UINT FMT_UINT FMT_UINT FMT_UINT FMT_UINT FMT_UINT FMT_UINT,
+    if (EOF == (sscanf(buf, "%*s " FMT_UINT FMT_UINT FMT_UINT FMT_UINT FMT_UINT FMT_UINT FMT_UINT FMT_UINT FMT_UINT FMT_UINT,
       &core_active[x][0], &core_active[x][1], &core_active[x][2], &core_active[x][3],
       &core_active[x][4], &core_active[x][5], &core_active[x][6], &core_active[x][7],
-      &core_active[x][8], &core_active[x][9]) == EOF) {
+      &core_active[x][8], &core_active[x][9]))) {
         CLOSE_X(fp);
-        exit_with_err(ERR,"Upgrade to a newer kernel");
+        exit_with_err(ERR, "Upgrade to a newer kernel");
     }
   }
   CLOSE_X(fp);
@@ -171,7 +171,7 @@ get_cores_load(char *str1) {
 
     GLUE2(all, FMT_UINT"%% ", percent[x]);
   }
-  test_flag = 1;
+  test_flag = true;
 
   FILL_STR_ARR(1, str1, temp);
 }

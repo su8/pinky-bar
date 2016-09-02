@@ -79,7 +79,7 @@ get_volume(char *str1) {
   snd_mixer_selem_get_playback_volume_range(elem, &min, &max);
 
   percent = 0L;
-  if (0 != max && 0 != vol) {
+  if (0 != max) {
     percent = (vol * 100) / max;
   }
 

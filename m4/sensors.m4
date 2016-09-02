@@ -73,8 +73,9 @@ AC_DEFUN([TEST_SENSORS],[
             double value = 0.0;
             char *label = NULL;
 
-            if (0 != (sensors_init(NULL)))
+            if (0 != (sensors_init(NULL))) {
               return 0;
+            }
 
             while (NULL != (chip = sensors_get_detected_chips(NULL, &nr))) {
               nr2 = 0;
@@ -106,12 +107,13 @@ AC_DEFUN([TEST_SENSORS],[
                 }
               }
             }
+            sensors_cleanup();
 
             return 0;
           }
         ]])
       ],[],[
-          LINK_FAILED([sensors])
+          ERR([Either you miss lm_sensors or your lm_sensors API version is unsupported by pinky-bar.])
         ]
       )
     ])

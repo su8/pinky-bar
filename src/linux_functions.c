@@ -101,9 +101,9 @@ get_loadavg(char *str1) {
     FUNC_FAILED("sysinfo()");
   }
   FILL_ARR(str1, "%.2f %.2f %.2f",
-    (float)up.loads[0] / 65535.0,
-    (float)up.loads[1] / 65535.0,
-    (float)up.loads[2] / 65535.0);
+    (float)up.loads[0] / 65535.0f,
+    (float)up.loads[1] / 65535.0f,
+    (float)up.loads[2] / 65535.0f);
 }
 
 /* My inital attempt was to make this code FreeBSD exclusive as the
@@ -264,7 +264,7 @@ get_voltage(char *str1) {
 #pragma GCC diagnostic pop
     CLOSE_X(fp);
 
-    voltage[x] /= (float)1000.0;
+    voltage[x] /= 1000.0f;
   }
   FILL_ARR(str1, "%.2f %.2f %.2f %.2f",
     voltage[0], voltage[1], voltage[2], voltage[3]);
@@ -355,7 +355,7 @@ get_battery(char *str1) {
 #pragma GCC diagnostic pop
 
   percent = 0;
-  if (0 != total && 0 != used) {
+  if (0 != total) {
     percent = (used * 100) / total;
   }
   FILL_UINT_ARR(str1, percent);

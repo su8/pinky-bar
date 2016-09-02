@@ -159,13 +159,11 @@ glob_packages(const char *str1) {
   uint_fast16_t packs_num = 0;
   glob_t gl;
 
-  if (0 == (glob(str1, GLOB_NOSORT, NULL, &gl)))
+  if (0 == (glob(str1, GLOB_NOSORT, NULL, &gl))) {
     packs_num = gl.gl_pathc;
-
-  else {
+  } else {
     exit_with_err("Could not traverse", str1);
   }
-
   globfree(&gl);
 
   return packs_num;
@@ -179,12 +177,12 @@ glob_packages(const char *str1) {
 void 
 get_packs(char *str1) {
   uint_fast16_t packages = 0;
+  FILE *pkgs_file;
 
 #if DISTRO == ARCHLINUX
   packages = glob_packages("/var/lib/pacman/local/*");
 
 #elif DISTRO == FRUGALWARE
-  FILE *pkgs_file;
 
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wunused-result"
@@ -201,7 +199,6 @@ get_packs(char *str1) {
   packages = glob_packages("/var/db/pkg/*/*");
 
 #elif DISTRO == RHEL
-  FILE *pkgs_file;
 
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wunused-result"
@@ -209,7 +206,6 @@ get_packs(char *str1) {
 #pragma GCC diagnostic pop
 
 #elif DISTRO == ANGSTROM
-  FILE *pkgs_file;
 
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wunused-result"
@@ -217,7 +213,6 @@ get_packs(char *str1) {
 #pragma GCC diagnostic pop
 
 #elif DISTRO == FREEBSD
-  FILE *pkgs_file;
 
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wunused-result"
@@ -251,7 +246,7 @@ get_uptime(char *str1) {
   time_t t;
   size_t len = sizeof(tc);
 
-  if (0 != sysctl(mib, 2, &tc, &len, NULL, 0)) {
+  if (0 != (sysctl(mib, 2, &tc, &len, NULL, 0))) {
     FUNC_FAILED("sysctl()");
   }
 
@@ -262,7 +257,7 @@ get_uptime(char *str1) {
   now = (uintmax_t)t - (uintmax_t)tc.tv_sec;
 #endif /* __linux__ */
 
-  if ((0 != (now / 86400))) { /* days */
+  if (0 != (now / 86400)) { /* days */
     FILL_ARR(str1, FMT_UINT "d " FMT_UINT "h " FMT_UINT "m",
       (now / 86400),
       ((now / 3600) % 24),
@@ -350,9 +345,9 @@ get_fans(char *str1) {
 
   for (x = 0; x < MAX_FANS; x++, z++) {
     FAN_STR(tempstr, x);
-    memset(fan, 0, sizeof(fan));
+    memset(fan, 0, len);
 
-    if (0 != sysctlbyname(tempstr, &fan, &len, NULL, 0)) {
+    if (0 != (sysctlbyname(tempstr, &fan, &len, NULL, 0))) {
       if (0 == x) { /* no system fans at all */
         FILL_STR_ARR(1, str1, NOT_FOUND);
         found_fans = false;
@@ -387,7 +382,7 @@ get_dvd(char *str1) {
   if (NULL == p_cdio) {
     return;
   }
-  if (mmc_get_hwinfo(p_cdio, &hwinfo)) {
+  if (true == (mmc_get_hwinfo(p_cdio, &hwinfo))) {
     FILL_STR_ARR(2, str1, hwinfo.psz_vendor, hwinfo.psz_model);
   }
   if (NULL != p_cdio) {

@@ -463,7 +463,7 @@ get_nic_info(char *str1, char *str2) {
           addrs[x] = NULL;
         }
       }
-      if( ((rtm->rtm_addrs & (RTA_DST|RTA_GATEWAY)) == (RTA_DST|RTA_GATEWAY))
+      if (((rtm->rtm_addrs & (RTA_DST|RTA_GATEWAY)) == (RTA_DST|RTA_GATEWAY))
            && addrs[RTAX_DST]->sa_family == AF_INET
            && addrs[RTAX_GATEWAY]->sa_family == AF_INET) {
 
