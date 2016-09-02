@@ -35,7 +35,7 @@ _printf_err() {
 }
 
 _gen_files() {
-  progName='dwmbar'
+  progName='pinkybar'
   progVer='1.0.0'
   bsdLibs=''
   defTits=''

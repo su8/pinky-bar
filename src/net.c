@@ -91,7 +91,7 @@ get_net(char *str1, char *str2, uint8_t num) {
   FILL_STR_ARR(1, str1, "Null");
 
   for (ifa = ifaddr; NULL != ifa; ifa = ifa->ifa_next) {
-    if (NULL == ifa->ifa_addr) {
+    if (NULL == ifa->ifa_addr || NULL == ifa->ifa_addr->sa_data) {
       continue;
     }
     if (3 == num || 5 == num || 6 == num) { /* ip | netmask | broadcast */
@@ -451,7 +451,7 @@ get_nic_info(char *str1, char *str2) {
   for (next = buf; next < lim; next += rtm->rtm_msglen) {
     rtm = (struct rt_msghdr *)(void *)next;
     sa = (struct sockaddr *)(rtm + 1);
-    if (NULL == sa) {
+    if (NULL == sa || NULL == rtm) {
       continue;
     }
     if (sa->sa_family == AF_INET) {

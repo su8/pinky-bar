@@ -44,6 +44,7 @@ AC_DEFUN([TEST_MPD],[
         mpd_recv_song               ,
         mpd_connection_get_error    ,
         mpd_connection_free         ,
+        mpd_song_free               ,
         mpd_song_get_uri
       ],[
         AC_CHECK_LIB(mpdclient,LiB,[],[

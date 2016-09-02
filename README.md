@@ -156,7 +156,7 @@ Put the following in your **xinitrc** or the script used to start dwm.
 # Execute the "statusbar" program every 5 secs
 while true; do
   # scroll a few lines up to see the rest options
-  "$HOME/.cache/bin/dwmbar" -LTrspkvfmdVt
+  "$HOME/.cache/bin/pinkybar" -LTrspkvfmdVt
   sleep 5
 done &
 ```
@@ -169,7 +169,7 @@ mkdir -p --mode=700 $HOME/.xmonad/icons
 cp -r xbm_icons/*.xbm $HOME/.xmonad/icons
 
 # rename the program
-sed -i 's/dwmbar/xmonadbar/g' bootstrap
+sed -i 's/pinkybar/xmonadbar/g' bootstrap
 
 bash bootstrap distro
 
