@@ -17,7 +17,7 @@
    MA 02110-1301, USA.
 
    Compile with:
-    gcc -Wall -Wextra -O2 pinky_curses.c -o pinky_curses -lncurses
+    gcc -Wall -Wextra -O2 curses.c -o pinky_curses -lncurses
 */
 
 #include <stdio.h>
@@ -33,7 +33,7 @@
 
 #define VLA 1000
 
-void unglify_n_print(char *);
+void unuglify_n_print(char *);
 void sighandler(int num);
 
 void sighandler(int num) {
@@ -41,7 +41,7 @@ void sighandler(int num) {
   exit(EXIT_FAILURE);
 }
 
-void unglify_n_print(char *str1) {
+void unuglify_n_print(char *str1) {
   WINDOW *win = stdscr;
   int_least16_t color_pair = 1, fg = 1, bg = 1, iclr = 0;
   char *ptr = str1, cclr[1];
@@ -103,7 +103,7 @@ int main(void) {
 
   while (1) {
     if (NULL != (fgets(buf, VLA, stdin))) {
-      unglify_n_print(buf);
+      unuglify_n_print(buf);
     }
   }
   endwin();

@@ -217,7 +217,7 @@ make install
 
 # compile pinky curses
 cd src
-gcc -Wall -Wextra -O2 pinky\_curses.c -o $HOME/.cache/bin/pinky\_curses -lncurses
+gcc -Wall -Wextra -O2 curses.c -o $HOME/.cache/bin/pinky_curses -lncurses
 
 # add function or alias in your shell config
 pinky() {
