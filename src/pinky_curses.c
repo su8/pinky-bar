@@ -67,8 +67,7 @@ void unglify_n_print(char *str1) {
           waddch(win, (chtype)cclr[0]);
           break;
       }
-      iclr += (isupper((unsigned char) *ptr) ? 8 : 0);
-      wattrset(win, COLOR_PAIR(COLORS + iclr));  /* | A_BOLD */
+      wattrset(win, COLOR_PAIR(COLORS + iclr + 8));  /* | A_BOLD */
     } else {
       waddch(win, (chtype)*ptr);
     }
