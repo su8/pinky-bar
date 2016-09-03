@@ -4,11 +4,12 @@ dwm
 
 xmonad
 
-![](img/pic2.png)
-
-FreeBSD
-
 ![](img/pic5.png)
+
+ncurses
+
+![](img/pic6.png)
+
 
 Gather some system information and show it in this statusbar program, not tied to any Window Manager, terminal multiplexer, etc.
 
@@ -120,6 +121,7 @@ It's up to you to decide which features suit you best.
 | --with-pci     | --without-pci       | To get the NIC vendor and model in linux                                                   |
 | --with-dvd     | --without-dvd       | To get the cdrom/dvdrom vendor and model                                                   |
 | --with-sensors | --without-sensors   | Alternative way to get the sensors values (linux only)                                     |
+| --with-ncurses | --without-ncurses   | Output the data to the terminal using the ncurses library, can be colorized                |
 | --with-colours | --without-colours   | Colorize the output data.                                                                  |
 | icons=/tmp     |                     | Use xbm icons that can be used by dzen2 for example. Discarded when **--with-x11** is used |
 | --with-mpd     | --without-mpd       | To see the currently played song name (if any).                                            |
@@ -197,6 +199,40 @@ done | dzen2 -w 1800 -x 130 -ta r -fn '-*-dejavusans-*-r-*-*-11-*-*-*-*-*-*-*' &
 ## Installation in FreeBSD
 
 You can use the provided port package instead.
+
+## pinky curses installtion
+
+```bash
+# rename the program
+sed -i 's/pinkybar/randombar/g' bootstrap
+
+bash bootstrap distro
+
+# disable X11
+./configure --prefix=$HOME/.cache --without-x11 --with-alsa
+
+# compile 'n install
+make
+make install
+
+# compile pinky curses
+cd src/ported_or_not_included
+gcc -Wall -Wextra -O2 pinky\_curses.c -o pinky\_curses -lncurses
+
+# copy pinky_curses
+cp -r pinky_curses $HOME/.cache/bin/
+
+# add function or alias in your shell config
+pinky() {
+  location="${HOME}/.cache/bin"
+
+  while true; do
+    # scroll a few lines up to see the rest options
+    "${location}/pinkybar" -LTrspkvfmdVt
+    sleep 2
+  done | "${location}"/pinky_curses
+}
+```
 
 ## Installation for anything else
 
@@ -276,6 +312,10 @@ To get the sound volume level:
 * alsa-lib
 
 Then pass **--with-alsa** to configure. FreeBSD users can use the baked OSS instead, pass **--without-alsa --with-oss** to configure instead.
+
+To output the data to the terminal using the ncurses library:
+
+* ncurses
 
 To get the vendor and model name of your cdrom/dvdrom/blu-ray:
 

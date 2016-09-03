@@ -38,7 +38,7 @@
 #define KERN_ORIG STR_SPEC " "
 
 
-#if defined (HAVE_X11_XLIB_H) || WITH_COLOURS == 0
+#if defined (HAVE_X11_XLIB_H) || WITH_NCURSES == 1 || WITH_COLOURS == 0
 
 #define CPU_STR    "CPU"
 #define RAM_STR    "RAM"
@@ -56,11 +56,14 @@
 #define UP_STR     "Up"
 #define LOAD_STR   "Load/avg"
 
-#endif /* HAVE_X11_XLIB_H || WITH_COLOURS */
+#endif /* HAVE_X11_XLIB_H || WITH_NCURSES || WITH_COLOURS */
 
 
 #if defined (HAVE_X11_XLIB_H)
 #include "x11_colours.h"
+
+#elif WITH_NCURSES == 1
+#include "ncurses_colours.h"
 
 #else
 #include "non_x11_colours.h"
