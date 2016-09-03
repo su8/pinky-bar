@@ -46,6 +46,7 @@ void unglify_n_print(char *str1) {
   int_least16_t color_pair = 1, fg = 1, bg = 1, iclr = 0;
   char *ptr = str1, cclr[1];
 
+  clear();
   pair_content(color_pair, &fg, &bg);
   for (; *ptr; ptr++) {
     if ('\0' == *ptr) {
@@ -72,6 +73,7 @@ void unglify_n_print(char *str1) {
       waddch(win, (chtype)*ptr);
     }
   }
+  refresh();
 }
 
 int main(void) {
@@ -100,13 +102,10 @@ int main(void) {
   }
 
   while (1) {
-    clear();
     if (NULL != (fgets(buf, VLA, stdin))) {
       unglify_n_print(buf);
     }
-    refresh();
   }
-
   endwin();
   return EXIT_SUCCESS;
 }
