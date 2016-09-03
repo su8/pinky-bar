@@ -130,7 +130,7 @@ It's up to you to decide which features suit you best.
 By default, if **no** options are passed, the program will be compiled with/without:
 
 ```bash
---without-alsa --without-x11 --without-mpd --with-colours --with-net --with-pci --without-dvd --without-sensors
+--without-alsa --without-x11 --without-mpd --with-colours --with-net --with-pci --without-dvd --without-sensors --without-ncurses
 ```
 
 The pci and sensors configure options will be discarded in FreeBSD. If you supplied **--with-alsa** and **--with-oss** or used the port package with the ncurses dialogue, alsa will have higher precedence over OSS. By default the port package will have OSS selected and alsa unselected.
@@ -209,18 +209,15 @@ sed -i 's/pinkybar/randombar/g' bootstrap
 bash bootstrap distro
 
 # disable X11
-./configure --prefix=$HOME/.cache --without-x11 --with-alsa
+./configure --prefix=$HOME/.cache --without-x11 --with-alsa --with-ncurses
 
 # compile 'n install
 make
 make install
 
 # compile pinky curses
-cd src/ported_or_not_included
-gcc -Wall -Wextra -O2 pinky\_curses.c -o pinky\_curses -lncurses
-
-# copy pinky_curses
-cp -r pinky_curses $HOME/.cache/bin/
+cd src
+gcc -Wall -Wextra -O2 pinky\_curses.c -o $HOME/.cache/bin/pinky\_curses -lncurses
 
 # add function or alias in your shell config
 pinky() {
@@ -228,7 +225,7 @@ pinky() {
 
   while true; do
     # scroll a few lines up to see the rest options
-    "${location}/pinkybar" -LTrspkvfmdVt
+    "${location}/randombar" -LTrspkvfmdVt
     sleep 2
   done | "${location}"/pinky_curses
 }

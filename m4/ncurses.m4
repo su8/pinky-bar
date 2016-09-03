@@ -20,7 +20,7 @@ dnl TEST_NCURSES() function in configure.ac
 dnl
 dnl Test for the presence of the ncurses library
 dnl and substitute macro to determine whether the
-dnl program to be compiled with/out colours
+dnl program to be compiled with/out ncurses colours
 AC_DEFUN([TEST_NCURSES], [
   WITH_NCURSES=0
 
