@@ -84,7 +84,7 @@ int main(void) {
   initscr();
   noecho();
   cbreak();
-  halfdelay(20);
+  nodelay(stdscr, TRUE);
   nonl();
   intrflush(stdscr, FALSE);
   curs_set(FALSE);
