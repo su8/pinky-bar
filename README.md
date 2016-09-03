@@ -209,7 +209,7 @@ sed -i 's/pinkybar/randombar/g' bootstrap
 bash bootstrap distro
 
 # disable X11
-./configure --prefix=$HOME/.cache --without-x11 --with-alsa --with-ncurses
+./configure --prefix=$HOME/.cache --without-x11 --with-alsa --with-colours --with-ncurses
 
 # compile 'n install
 make
