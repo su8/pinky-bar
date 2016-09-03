@@ -200,7 +200,7 @@ done | dzen2 -w 1800 -x 130 -ta r -fn '-*-dejavusans-*-r-*-*-11-*-*-*-*-*-*-*' &
 
 You can use the provided port package instead.
 
-## pinky curses installtion
+## pinky curses installation
 
 ```bash
 # rename the program
@@ -229,6 +229,9 @@ pinky() {
     sleep 2
   done | "${location}"/pinky_curses
 }
+
+# Test the shell function
+pinky  # Press CTRL + C to stop the program
 ```
 
 ## Installation for anything else
