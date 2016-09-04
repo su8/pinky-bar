@@ -93,9 +93,9 @@ int main(void) {
     return EXIT_FAILURE;
   }
   start_color();
-  for (x = 0; x < COLORS; x++ ) {
-    for (z = 0; z < COLORS; z++ ) {
-      init_pair((x * COLORS) + z, x, z);
+  for (x = 0; x < COLORS; x++) {
+    for (z = 0; z < COLORS; z++) {
+      init_pair((int16_t)((x * COLORS) + z), x, z);
     }
   }
   pair_content(color_pair, &fg, &bg);
