@@ -209,6 +209,9 @@ get_net(char *str1, char *str2, uint8_t num) {
   }
 
 #else
+  (void)str1;
+  (void)str2;
+  (void)num;
   RECOMPILE_WITH("net");
 #endif /* WITH_NET */
 }
@@ -256,6 +259,8 @@ get_ip_lookup(char *str1, char *str2) {
   }
 
 #else
+  (void)str1;
+  (void)str2;
   RECOMPILE_WITH("net");
 #endif /* WITH_NET */
 }
@@ -336,6 +341,9 @@ get_nic_info2(char *str1, char *str2, uint8_t num) {
   }
 
 #else
+  (void)str1;
+  (void)str2;
+  (void)num;
   RECOMPILE_WITH("net");
 #endif /* WITH_NET */
 }
@@ -412,6 +420,8 @@ error:
   return;
 
 #else
+  (void)str1;
+  (void)str2;
   RECOMPILE_WITH("pci");
 #endif /* WITH_PCI */
 }
@@ -489,6 +499,8 @@ error:
   return;
 
 #else
+  (void)str1;
+  (void)str2;
   RECOMPILE_WITH("net");
 #endif /* WITH_NET */
 }

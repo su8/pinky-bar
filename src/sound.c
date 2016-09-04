@@ -176,6 +176,8 @@ error:
   return;
 
 #else
+  (void)str1;
+  (void)num;
   RECOMPILE_WITH("mpd");
 #endif
 }

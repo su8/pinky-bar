@@ -34,6 +34,8 @@ void unuglify(char *);
 void sighandler(int num);
 
 void sighandler(int num) {
+  (void)num;
+  curs_set(TRUE);
   endwin();
   fprintf(stderr, "\n%s\n", "See you later");
   exit(EXIT_FAILURE);
