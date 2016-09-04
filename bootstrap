@@ -1,0 +1,200 @@
+#!/usr/bin/env bash
+
+# 07/06/2015, 07/18/2016 
+
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 2 of the License, or
+# (at your option) any later version.
+
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+
+# You should have received a copy of the GNU General Public License
+# along with this program; if not, write to the Free Software
+# Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
+# MA 02110-1301, USA.
+
+declare -a _bases=(
+  'archlinux'
+  'debian'
+  'gentoo'
+  'slackware'
+  'rhel'
+  'frugalware'
+  'angstrom'
+  'freebsd'
+)
+
+_printf_err() {
+  printf '%s\n' "try again with: bash ${0} basedistro"
+  printf '%s ' "Bases: ${_bases[@]}"
+  printf '\n'
+}
+
+_gen_files() {
+  progName='pinkybar'
+  progVer='1.0.0'
+  bsdLibs=''
+  defTits=''
+  osEntered="${1,,}"
+  declare -a srcToAppend
+
+  [[ "${osEntered}" == 'freebsd' ]] && {
+    bsdLibs='-largp -ldevstat'
+    amCF='-I/usr/local/include -L/usr/local/lib'
+    # FreeBSD specific m4 tits
+    defTits='m4_define([ITS_BSD], [tits])'
+    srcToAppend=(
+      'freebsd_functions.c'
+      'include/freebzd.h'
+    )
+  } || {
+    amCF='-D_POSIX_C_SOURCE=200112L'
+    srcToAppend=(
+      'linux_functions.c'
+    )
+  }
+
+  # to strip get_packs() at compile time,
+  # also instead using more hard-coded macros
+  # let the shell enumerate them for us
+  declare -a enumDistros=()
+  for x in {0..7}
+  do
+    enumDistros[${x}]="AC_DEFINE_UNQUOTED([${_bases[${x}]^^}],[${x}],[distro enum generator])"
+
+    [[ "${osEntered}" == "${_bases[${x}]}" ]] && {
+      distroNum="AC_DEFINE_UNQUOTED([DISTRO],["${x}"],[passed distro as shell variable])"
+    }
+  done
+
+  # configure.ac
+  configure_ac=("# This file is processed by autoconf to create a configure script
+  AC_INIT(["${progName}"], ["${progVer}"])
+  AC_CONFIG_AUX_DIR([temp_dir])
+  AC_CONFIG_MACRO_DIR([m4])
+  AC_CONFIG_HEADER([src/config.h])
+  AM_INIT_AUTOMAKE([1.11 -Wall no-define foreign subdir-objects dist-xz no-dist-gzip std-options])
+
+  m4_ifdef([AM_SILENT_RULES], [AM_SILENT_RULES([yes])])
+  '${defTits}'
+
+  # With the addition of more runtime compile and
+  # link tests, this option is no longer necessary.
+  # Any compiler and C library succeeding to pass the
+  # tests will be able to compile and run the
+  # program flawlessly.
+  #AC_PROG_CC([clang llvm-gcc gcc])
+
+  AC_PROG_CC_C99
+  AC_C_CONST
+  AC_HEADER_STDC
+  AM_PROG_CC_C_O
+
+  # The linker flags tests in m4 dir
+  TEST_SOME_FUNCS
+  TEST_NET
+  TEST_PCI
+  TEST_X11
+  TEST_ALSA
+  TEST_MPD
+  TEST_DVD
+  TEST_SENSORS
+  TEST_TYPEZ
+  TEST_CFLAGZ
+
+  # Definitions
+  "${distroNum}"
+  "${enumDistros[@]}"
+
+  AC_CONFIG_FILES([
+    Makefile
+    src/Makefile
+  ])
+
+  AC_OUTPUT
+
+  echo
+  echo 'Now type \"make\" and \"make install\" afterwards'
+  echo")
+
+
+  # Makefile.am
+  main_makefile=('
+    SUBDIRS = src
+  ')
+
+
+  # src/Makefile.am
+  src_files=(
+    'main.c'
+    'cpu.c'
+    'common.c'
+    'sound.c'
+    'options.c'
+    'net.c'
+
+    'prototypes/cpu.h'
+    'prototypes/common.h'
+    'prototypes/sound.h'
+    'prototypes/net.h'
+    'prototypes/functions.h'
+    'prototypes/options.h'
+
+    'include/headers.h'
+    'include/options_constants.h'
+    'include/functions_constants.h'
+    'include/non_x11_colours.h'
+    'include/x11_colours.h'
+    'include/options_generator.h'
+
+    "${srcToAppend[@]}"
+  )
+
+  # Do not pass more definitions to AM_CFLAGS
+  # Think of the line limit
+  src_makefile=('AM_CFLAGS = '${amCF}'
+
+    bin_PROGRAMS = '${progName}'
+
+    '${progName}'_LDADD = $(X_LIBS) $(ALSA_LIBS)
+    '${progName}'_LDADD += $(MPD_LIBS) $(PCI_LIBS)
+    '${progName}'_LDADD += $(DVD_LIBS) $(SENSORS_LIBS) '${bsdLibs}'
+
+    '${progName}'_SOURCES = '${src_files[@]}'
+
+    # To satisfy make dist
+    EXTRA_DIST =     \
+      ../bootstrap   \
+      ../README.md   \
+      ../.gitignore  \
+      ../m4          \
+      ../xbm_icons
+  ')
+
+
+  cat <<EOF > configure.ac
+${configure_ac[@]}
+EOF
+
+  cat <<EOF > Makefile.am
+${main_makefile[@]}
+EOF
+
+  cat <<EOF > src/Makefile.am
+${src_makefile[@]}
+EOF
+
+
+  # do not remove nor edit
+  autoreconf --install --force
+}
+
+
+[[ -z "${1}" ]] && _printf_err "$@" || {
+  [[ " ${_bases[@]} " =~ " ${1,,} " ]] && \
+    _gen_files "$@" || _printf_err "$@"
+}
