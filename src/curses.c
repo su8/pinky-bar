@@ -33,7 +33,7 @@
 
 #define VLA 1000
 
-void unuglify_n_print(char *);
+void unuglify(char *);
 void sighandler(int num);
 
 void sighandler(int num) {
@@ -41,13 +41,15 @@ void sighandler(int num) {
   exit(EXIT_FAILURE);
 }
 
-void unuglify_n_print(char *str1) {
+void unuglify(char *str1) {
   WINDOW *win = stdscr;
   int_least16_t color_pair = 1, fg = 1, bg = 1, iclr = 0;
   char *ptr = str1, cclr[1];
 
-  clear();
+  /* clear(); */
   pair_content(color_pair, &fg, &bg);
+  wmove(win, 0, 0);
+
   for (; *ptr; ptr++) {
     if ('\0' == *ptr) {
       break;
@@ -103,7 +105,7 @@ int main(void) {
 
   while (1) {
     if (NULL != (fgets(buf, VLA, stdin))) {
-      unuglify_n_print(buf);
+      unuglify(buf);
     }
   }
   endwin();
