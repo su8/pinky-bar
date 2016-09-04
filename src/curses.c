@@ -75,7 +75,7 @@ void unuglify(char *str1) {
       waddch(win, (chtype)*ptr);
     }
   }
-  refresh();
+  wrefresh(win);
 }
 
 int main(void) {
