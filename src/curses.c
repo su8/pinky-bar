@@ -49,6 +49,7 @@ void unuglify(char *str1) {
   /* clear(); */
   pair_content(color_pair, &fg, &bg);
   wmove(win, 0, 0);
+  wclrtoeol(win);
 
   for (; *ptr; ptr++) {
     if ('\0' == *ptr) {
