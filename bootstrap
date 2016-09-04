@@ -40,7 +40,6 @@ _gen_files() {
   bsdLibs=''
   defTits=''
   osEntered="${1,,}"
-  curses='pinky_curses'
   declare -a srcToAppend
 
   [[ "${osEntered}" == 'freebsd' ]] && {
@@ -159,15 +158,13 @@ _gen_files() {
   # Think of the line limit
   src_makefile=('AM_CFLAGS = '${amCF}'
 
-    bin_PROGRAMS = '${progName}' '${curses}'
+    bin_PROGRAMS = '${progName}'
 
     '${progName}'_LDADD = $(X_LIBS) $(ALSA_LIBS)
     '${progName}'_LDADD += $(MPD_LIBS) $(PCI_LIBS)
     '${progName}'_LDADD += $(DVD_LIBS) $(SENSORS_LIBS) '${bsdLibs}'
 
     '${progName}'_SOURCES = '${src_files[@]}'
-
-    '${curses}'_SOURCES = curses.c
 
     # To satisfy make dist
     EXTRA_DIST =     \

@@ -215,7 +215,14 @@ bash bootstrap distro
 make
 make install
 
-# add function or alias in your shell config
+# compile pinky_curses
+cd src
+gcc -Wall -Wextra -O2 curses.c -o $HOME/.cache/bin/pinky_curses -lncurses
+```
+
+Put the following in your shell config as function or alias.
+
+```bash
 pinky() {
   location="${HOME}/.cache/bin"
 
@@ -225,8 +232,11 @@ pinky() {
     sleep 2
   done | "${location}"/pinky_curses
 }
+```
 
-# Test the shell function
+Test it:
+
+```bash
 pinky  # Press CTRL + C to stop the program
 ```
 
