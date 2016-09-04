@@ -37,7 +37,9 @@
 #define SONG_ORIG STR_SPEC " "
 #define KERN_ORIG STR_SPEC " "
 
-
+#ifndef WITH_NCURSES
+#define WITH_NCURSES 6
+#endif
 #if defined (HAVE_X11_XLIB_H) || WITH_NCURSES == 1 || WITH_COLOURS == 0
 
 #define CPU_STR    "CPU"

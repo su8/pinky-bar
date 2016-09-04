@@ -90,4 +90,95 @@ AC_DEFUN([TEST_X11],[
     )
   ])
 
+  AS_IF([test "x$with_x11" = "xno"], [
+    TEST_NCURSES()
+  ])
+
+])
+
+
+dnl Test for the presence of the ncurses library
+dnl and substitute macro to determine whether the
+dnl program to be compiled with/out ncurses colours
+AC_DEFUN([TEST_NCURSES], [
+  WITH_NCURSES=0
+
+  AC_ARG_WITH([ncurses],
+    AS_HELP_STRING([--with-ncurses],
+      [Output the data to your terminal using the ncurses library.]),
+    [],
+    [with_ncurses=no]
+  )
+
+  AS_IF([test "x$with_ncurses" = "xyes"], [
+    AC_CHECK_HEADERS([ncurses.h], [
+      WITH_NCURSES=1
+      ],[
+        ERR_MUST_INSTALL([ncurses])
+    ])
+
+    m4_foreach([LiB], [
+        initscr        ,
+        noecho         ,
+        cbreak         ,
+        halfdelay      ,
+        nonl           ,
+        intrflush      ,
+        curs_set       ,
+        start_color    ,
+        init_pair      ,
+        refresh        ,
+        clear          ,
+        endwin         ,
+        has_colors     ,
+        pair_content   ,
+        wattrset       ,
+        waddch
+      ],[
+        AC_CHECK_LIB(ncurses,LiB,[],[
+          ERR([Missing core ncurses function.])
+        ])
+    ])
+  ])
+
+  AS_IF([test "x$with_ncurses" = "xyes"], [
+    AC_LINK_IFELSE([
+      AC_LANG_SOURCE([[
+        #include <ncurses.h>
+        int main(void) {
+          initscr();
+          printw("elo");
+          refresh();
+          endwin();
+          return 0;
+        }
+      ]])
+    ],[],[
+        LINK_FAILED([ncurses])
+      ]
+    )
+
+    AC_COMPILE_IFELSE([
+      AC_LANG_SOURCE([[
+        #include <stdlib.h>
+        #include <unistd.h>
+        #include <signal.h>
+        void sighandler(int num);
+        void sighandler(int num) {
+          exit(1);
+        }
+        int main(void) {
+          signal(SIGINT, sighandler);
+          return 0;
+        }
+      ]])
+    ],[],[
+      COMPILE_FAILED([signal])
+      ]
+    )
+
+  ])
+
+  AC_DEFINE_UNQUOTED([WITH_NCURSES],[$WITH_NCURSES],[Where to output the data])
+
 ])
