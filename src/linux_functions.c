@@ -182,8 +182,10 @@ match_feature(char *str1, uint8_t num) {
                 if (0 != (sensors_get_value(chip, subfeatures->number, &value))) {
                   break;
                 }
-                rpm[x++] = (uint_fast16_t)value;
-                z++;
+                if (MAX_FANS != z) {
+                  rpm[x++] = (uint_fast16_t)value;
+                  z++;
+                }
                 found_fans = true;
               }
               break;
@@ -217,7 +219,7 @@ match_feature(char *str1, uint8_t num) {
   }
 
 #else
-  exit_with_err(ERR, "The sensors API version is >= 500. Not supported.");
+  exit_with_err(ERR, "The version of your sensors API is not supported by this program.");
 #endif /* SENSORS_API_VERSION >= 0x400 && SENSORS_API_VERSION <= 0x499 */
 }
 
