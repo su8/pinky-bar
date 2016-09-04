@@ -15,9 +15,6 @@
    along with this program; if not, write to the Free Software
    Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
    MA 02110-1301, USA.
-
-   Compile with:
-    gcc -Wall -Wextra -O2 curses.c -o pinky_curses -lncurses
 */
 
 #include <stdio.h>

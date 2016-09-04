@@ -215,17 +215,13 @@ bash bootstrap distro
 make
 make install
 
-# compile pinky curses
-cd src
-gcc -Wall -Wextra -O2 curses.c -o $HOME/.cache/bin/pinky_curses -lncurses
-
 # add function or alias in your shell config
 pinky() {
   location="${HOME}/.cache/bin"
 
   while true; do
     # scroll a few lines up to see the rest options
-    "${location}/randombar" -LTrspkvfmdVt
+    "${location}"/randombar -LTrspkvfmdVt
     sleep 2
   done | "${location}"/pinky_curses
 }

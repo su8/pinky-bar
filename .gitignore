@@ -10,7 +10,7 @@ src/.deps/
 *.in~
 stamp-h1
 *.txt
-
+src/pinky_curses
 
 
 
