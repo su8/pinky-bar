@@ -43,11 +43,9 @@ void sighandler(int num) {
 
 void unuglify(char *str1) {
   WINDOW *win = stdscr;
-  int_least16_t color_pair = 1, fg = 1, bg = 1, iclr = 0;
+  uint8_t iclr = 0;
   char *ptr = str1, cclr[1];
 
-  /* clear(); */
-  pair_content(color_pair, &fg, &bg);
   wmove(win, 0, 0);
   wclrtoeol(win);
 
@@ -83,6 +81,7 @@ int main(void) {
   signal(SIGINT, sighandler);
 
   int_least16_t x = 0, z = 0;
+  int_least16_t color_pair = 1, fg = 1, bg = 1;
   char buf[VLA];
 
   initscr();
@@ -103,6 +102,7 @@ int main(void) {
       init_pair((x * COLORS) + z, x, z);
     }
   }
+  pair_content(color_pair, &fg, &bg);
 
   while (1) {
     if (NULL != (fgets(buf, VLA, stdin))) {
