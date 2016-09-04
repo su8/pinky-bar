@@ -35,6 +35,7 @@ void sighandler(int num);
 
 void sighandler(int num) {
   endwin();
+  fprintf(stderr, "\n%s\n", "See you later");
   exit(EXIT_FAILURE);
 }
 
@@ -47,11 +48,8 @@ void unuglify(char *str1) {
   wclrtoeol(win);
 
   for (; *ptr; ptr++) {
-    if ('\0' == *ptr) {
-      break;
-    }
     if ('&' == *ptr)  {
-      cclr[0] = *ptr++;
+      cclr[0] = *(++ptr);
       switch(toupper((unsigned char) *ptr)) {
         case 'B':
           iclr = COLOR_BLUE;
@@ -77,16 +75,17 @@ void unuglify(char *str1) {
 int main(void) {
   signal(SIGINT, sighandler);
 
-  int_least16_t x = 0, z = 0;
-  int_least16_t color_pair = 1, fg = 1, bg = 1;
+  WINDOW *win = stdscr;
+  int16_t color_pair = 1, fg = 1, bg = 1, x = 0, z = 0;
+  int32_t old_x = 0, old_y = 0, new_y = 0, new_x = 0;
   char buf[VLA];
 
   initscr();
   noecho();
-  cbreak();
-  nodelay(stdscr, TRUE);
+  nocbreak();
+  nodelay(win, TRUE);
   nonl();
-  intrflush(stdscr, FALSE);
+  intrflush(win, FALSE);
   curs_set(FALSE);
 
   if(FALSE == (has_colors())) {
@@ -100,8 +99,16 @@ int main(void) {
     }
   }
   pair_content(color_pair, &fg, &bg);
+  getmaxyx(win, old_y, old_x);
 
   while (1) {
+    getmaxyx(win, new_y, new_x);
+    if (old_y != new_y || old_x != new_x) {
+      old_y = new_y;
+      old_x = new_x;
+      werase(win);
+      wrefresh(win);
+    }
     if (NULL != (fgets(buf, VLA, stdin))) {
       unuglify(buf);
     }
