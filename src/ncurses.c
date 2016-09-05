@@ -17,7 +17,7 @@
    MA 02110-1301, USA.
 
   Compile with:
-   gcc -Wall -Wextra -O2 curses.c -o pinky_curses -lncurses
+   gcc -Wall -Wextra -O2 ncurses.c -o pinky_curses -lncurses
 */
 
 #include <stdio.h>
@@ -32,14 +32,16 @@
 #include <ncurses.h>
 
 #define VLA 1000
+#define RESTORE_CURSOR() \
+  curs_set(TRUE); \
+  endwin();
 
 void unuglify(char *);
 void sighandler(int num);
 
 void sighandler(int num) {
   (void)num;
-  curs_set(TRUE);
-  endwin();
+  RESTORE_CURSOR();
   fprintf(stderr, "\n%s\n", "See you later");
   exit(EXIT_FAILURE);
 }
@@ -53,9 +55,12 @@ void unuglify(char *str1) {
   wclrtoeol(win);
 
   for (; *ptr; ptr++) {
+    if (0 != (iscntrl((unsigned char) *ptr))) {
+      continue;
+    }
     if ('&' == *ptr)  {
       cclr[0] = *(++ptr);
-      switch(toupper((unsigned char) *ptr)) {
+      switch((toupper((unsigned char) *ptr))) {
         case 'B':
           iclr = COLOR_BLUE;
           break;
@@ -94,7 +99,7 @@ int main(void) {
   curs_set(FALSE);
 
   if(FALSE == (has_colors())) {
-    endwin();
+    RESTORE_CURSOR();
     return EXIT_FAILURE;
   }
   start_color();

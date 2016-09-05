@@ -216,8 +216,7 @@ make
 make install
 
 # compile pinky_curses
-cd src
-gcc -Wall -Wextra -O2 curses.c -o $HOME/.cache/bin/pinky_curses -lncurses
+gcc -Wall -Wextra -O2 src/ncurses.c -o $HOME/.cache/bin/pinky_curses -lncurses
 ```
 
 Put the following in your shell config as function or alias.
