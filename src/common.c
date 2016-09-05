@@ -117,7 +117,6 @@ get_ssd(char *str1, uint8_t num) {
       }
       break;
   }
-
 }
 
 
@@ -148,7 +147,6 @@ get_kernel(char *str1, uint8_t num) {
       FILL_STR_ARR(2, str1, KerneL.sysname, KerneL.release);
       break;
   }
-
 }
 
 #if defined(__linux__)
@@ -315,7 +313,9 @@ get_fans(char *str1) {
   char tempstr[VLA], buffer[VLA];
   char *all_fans = buffer;
   uint8_t x = 0, y = 0, z = 0;
-  uint_fast16_t rpm[21];
+  uint_fast16_t rpm[MAX_FANS+1];
+
+  memset(rpm, 0, sizeof(rpm));
 
 #if defined(__linux__)
   FILE *fp;
@@ -340,7 +340,6 @@ get_fans(char *str1) {
 #else
   u_int fan[3];
   memset(fan, 0, sizeof(fan));
-  memset(rpm, 0, sizeof(rpm));
   size_t len = sizeof(fan);
 
   for (x = 0; x < MAX_FANS; x++, z++) {

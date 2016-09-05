@@ -123,6 +123,6 @@ int main(void) {
       unuglify(buf);
     }
   }
-  endwin();
+  RESTORE_CURSOR();
   return EXIT_SUCCESS;
 }

@@ -128,7 +128,7 @@ get_cores_load(char *str1) {
       exit_with_err(ERR, "reached /proc/stat EOF");
     }
 
-    if (buf[0] != 'c' && buf[1] != 'p' && buf[2] != 'u') {
+    if ('c' != buf[0] && 'p' != buf[1] && 'u' != buf[2]) {
       break;
     }
 
@@ -254,8 +254,10 @@ get_cpu_clock_speed(char *str1) {
   }
   z[1] = (uintmax_t)(stop.tv_nsec - stop.tv_sec);
 
-  FILL_ARR(str1, FMT_UINT " MHz",
-    (1000 * (y - x) / (z[1] - z[0])));
+  if (0 != (z[1] - z[0])) {
+    FILL_ARR(str1, FMT_UINT " MHz",
+      (1000 * (y - x) / (z[1] - z[0])));
+  }
 }
 
 

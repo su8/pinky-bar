@@ -81,7 +81,6 @@ The order of supplied options will dictate how, where and what system informatio
 | -B           | --ipmask    | The NIC subnet mask [argument - eth0]                              |
 | -D           | --ipcast    | The NIC broadcast address [argument - eth0]                        |
 | -E           | --iplookup  | Mini website IP lookup [website argument - google.com]             |
-| -j           | --nicfw     | The NIC firmware [argument - eth0]                                 |
 
 The following options are available only in Linux:
 
@@ -92,6 +91,7 @@ The following options are available only in Linux:
 | -h           | --nicdrv    | The NIC driver [argument - eth0]                                   |
 | -H           | --nicver    | The NIC version [argument - eth0]                                  |
 | -e           | --iplink    | The NIC link speed (useful for wireless/wifi) [argument - eth0]    |
+| -j           | --nicfw     | The NIC firmware [argument - eth0]                                 |
 
 The following options are available only in FreeBSD:
 

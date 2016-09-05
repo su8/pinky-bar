@@ -74,7 +74,6 @@ get_ram(char *str1, uint8_t num) {
       }
       break;
   }
-
 }
 
 
@@ -90,7 +89,6 @@ get_ssd_model(char *str1, char *str2) {
 #pragma GCC diagnostic pop
 
   FILL_STR_ARR(1, str1, model);
-
 }
 
 
@@ -121,7 +119,7 @@ match_feature(char *str1, uint8_t num) {
   double value = 0.0;
   int nr = 0, nr2 = 0, nr3 = 0;
   uint8_t x = 0, y = 0, z = 0;
-  uint_fast16_t rpm[21];
+  uint_fast16_t rpm[MAX_FANS+1];
   bool found_fans = false;
 
   if (3 == num) {
