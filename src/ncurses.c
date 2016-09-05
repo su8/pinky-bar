@@ -17,7 +17,8 @@
    MA 02110-1301, USA.
 
   Compile with:
-   gcc -std=c99 -D_POSIX_C_SOURCE=200112L -Wall -Wextra -O2 ncurses.c -o pinky_curses -lncurses
+   gcc -std=c99 -D_POSIX_C_SOURCE=200112L -Wall -Wextra -O2 src/ncurses.c -o pinky_curses -lncurses
+  FreeBSD users should type -D_DEFAULT_SOURCE instead.
 */
 
 #include <stdio.h>
@@ -33,15 +34,39 @@
 
 #define VLA 1000
 #define RESTORE_CURSOR() \
+  echo(); \
+  nl(); \
   curs_set(TRUE); \
   endwin();
 
 void unuglify(char *);
 void sighandler(int num);
-void init_da_handler(void);
 
+/* 
+ * The signal handler is based on
+ * https://www.gnu.org/software/libc/manual/html_node/Advanced-Signal-Handling.html#Advanced-Signal-Handling
+*/
 int main(void) {
-  init_da_handler();
+  struct sigaction setup_action;
+  sigset_t block_mask;
+
+  sigemptyset(&block_mask);
+  memset(&setup_action, 0, sizeof(struct sigaction));
+
+  sigaddset(&block_mask, SIGQUIT);
+  sigaddset(&block_mask, SIGTERM);
+  sigaddset(&block_mask, SIGTSTP);
+  sigaddset(&block_mask, SIGSEGV);
+  sigaddset(&block_mask, SIGABRT);
+
+  setup_action.sa_handler = &sighandler;
+  setup_action.sa_mask = block_mask;
+  setup_action.sa_flags = 0;
+
+  if (-1 == sigaction(SIGINT, &setup_action, NULL)) {
+    fprintf(stderr, "%s\n", "sigaction handler snap!");
+    exit(EXIT_FAILURE);
+  }
 
   WINDOW *win = stdscr;
   int16_t color_pair = 1, fg = 1, bg = 1, x = 0, z = 0;
@@ -80,39 +105,14 @@ int main(void) {
       wrefresh(win);
     }
     if (NULL != (fgets(buf, VLA, stdin))) {
+      sigprocmask(SIG_BLOCK, &block_mask, NULL);
       unuglify(buf);
+      sigprocmask(SIG_UNBLOCK, &block_mask, NULL);
     }
   }
 
   RESTORE_CURSOR();
   return EXIT_SUCCESS;
-}
-
-/* 
- * Based on
- * https://www.gnu.org/software/libc/manual/html_node/Advanced-Signal-Handling.html#Advanced-Signal-Handling
-*/
-void init_da_handler(void) {
-  struct sigaction setup_action;
-  sigset_t block_mask;
-
-  sigemptyset(&block_mask);
-  memset(&setup_action, 0, sizeof(struct sigaction));
-
-  sigaddset(&block_mask, SIGQUIT);
-  sigaddset(&block_mask, SIGTERM);
-  sigaddset(&block_mask, SIGTSTP);
-  sigaddset(&block_mask, SIGSEGV);
-  sigaddset(&block_mask, SIGABRT);
-
-  setup_action.sa_handler = &sighandler;
-  setup_action.sa_mask = block_mask;
-  setup_action.sa_flags = 0;
-
-  if (-1 == sigaction(SIGINT, &setup_action, NULL)) {
-    fprintf(stderr, "%s\n", "sigaction handler snap!");
-    exit(EXIT_FAILURE);
-  }
 }
 
 void sighandler(int num) {

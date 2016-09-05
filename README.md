@@ -216,7 +216,8 @@ make
 make install
 
 # compile pinky_curses
-gcc -Wall -Wextra -O2 src/ncurses.c -o $HOME/.cache/bin/pinky_curses -lncurses
+# FreeBSD users should type -D_DEFAULT_SOURCE instead
+gcc -std=c99 -D_POSIX_C_SOURCE=200112L -Wall -Wextra -O2 src/ncurses.c -o pinky_curses -lncurses
 ```
 
 Put the following in your shell config as function or alias.
