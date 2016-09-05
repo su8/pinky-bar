@@ -24,11 +24,11 @@
 int main(int argc, char *argv[]) {
 
   if (1 == argc) {
-    printf("%s\n", "Try --help or --usage for more information.");
+    FPRINTF("%s\n", "Try --help or --usage for more information.");
     return EXIT_FAILURE;
   }
   if (-1 == (sysconf(_SC_CLK_TCK))) {
-    printf("%s\n", "Error: sysconf() failed");
+    FPRINTF("%s\n", "Error: sysconf() failed");
     return EXIT_FAILURE;
   }
 
@@ -40,7 +40,7 @@ int main(int argc, char *argv[]) {
 #if defined (HAVE_X11_XLIB_H)
     set_status(combined);
 #else
-    printf("%s\n", combined);
+    fprintf(stdout, "%s\n", combined);
 #endif
   }
 

@@ -229,7 +229,7 @@ parse_opt(int key, char *arg, struct argp_state *state) {
       }
       break;
 #else
-      printf("%s\n", "recompile the program --with-alsa");
+      FPRINTF("%s\n", "recompile the program --with-alsa");
       return ARGP_KEY_ERROR;
 #endif /* HAVE_ALSA_ASOUNDLIB_H || HAVE_SYS_SOUNDCARD_H */
 
@@ -241,7 +241,7 @@ parse_opt(int key, char *arg, struct argp_state *state) {
       }
       break;
 #else
-      printf("%s\n", "This option is not supported "
+      FPRINTF("%s\n", "This option is not supported "
                 "by your CPU architecture");
       return ARGP_KEY_ERROR;
 #endif /* __i386__ || __i686__ || __x86_64__ */
@@ -254,7 +254,7 @@ parse_opt(int key, char *arg, struct argp_state *state) {
       }
       break;
 #else
-      printf("%s\n", "This option is not supported "
+      FPRINTF("%s\n", "This option is not supported "
                 "by your CPU architecture");
       return ARGP_KEY_ERROR;
 #endif /* __i386__ || __i686__ || __x86_64__ */

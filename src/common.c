@@ -50,7 +50,7 @@ static uint_fast16_t glob_packages(const char *);
 
 void
 exit_with_err(const char *str1, const char *str2) {
-  printf("%s %s\n", str1, str2);
+  FPRINTF("%s %s\n", str1, str2);
   exit(EXIT_FAILURE);
 }
 

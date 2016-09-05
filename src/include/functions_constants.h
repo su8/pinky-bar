@@ -124,5 +124,6 @@
 #define MAX_FANS 20
 
 #define STREQ(x, z) (0 == (strcmp(x, z)))
+#define FPRINTF(...) (fprintf(stderr, __VA_ARGS__))
 
 #endif /* CONSTANTS2_H_ */
