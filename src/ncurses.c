@@ -41,32 +41,10 @@
 
 void unuglify(char *);
 void sighandler(int num);
+void init_da_handler(void);
 
-/* 
- * The signal handler is based on
- * https://www.gnu.org/software/libc/manual/html_node/Advanced-Signal-Handling.html#Advanced-Signal-Handling
-*/
 int main(void) {
-  struct sigaction setup_action;
-  sigset_t block_mask;
-
-  sigemptyset(&block_mask);
-  memset(&setup_action, 0, sizeof(struct sigaction));
-
-  sigaddset(&block_mask, SIGQUIT);
-  sigaddset(&block_mask, SIGTERM);
-  sigaddset(&block_mask, SIGTSTP);
-  sigaddset(&block_mask, SIGSEGV);
-  sigaddset(&block_mask, SIGABRT);
-
-  setup_action.sa_handler = &sighandler;
-  setup_action.sa_mask = block_mask;
-  setup_action.sa_flags = 0;
-
-  if (-1 == sigaction(SIGINT, &setup_action, NULL)) {
-    fprintf(stderr, "%s\n", "sigaction handler snap!");
-    exit(EXIT_FAILURE);
-  }
+  init_da_handler();
 
   WINDOW *win = stdscr;
   int16_t color_pair = 1, fg = 1, bg = 1, x = 0, z = 0;
@@ -105,14 +83,29 @@ int main(void) {
       wrefresh(win);
     }
     if (NULL != (fgets(buf, VLA, stdin))) {
-      sigprocmask(SIG_BLOCK, &block_mask, NULL);
       unuglify(buf);
-      sigprocmask(SIG_UNBLOCK, &block_mask, NULL);
     }
   }
 
   RESTORE_CURSOR();
   return EXIT_SUCCESS;
+}
+
+/* 
+ * The signal handler is based on
+ * https://www.gnu.org/software/libc/manual/html_node/Advanced-Signal-Handling.html#Advanced-Signal-Handling
+*/
+void init_da_handler(void) {
+  struct sigaction setup_action;
+  memset(&setup_action, 0, sizeof(struct sigaction));
+
+  setup_action.sa_handler = &sighandler;
+  setup_action.sa_flags = 0;
+
+  if (-1 == sigaction(SIGINT, &setup_action, NULL)) {
+    fprintf(stderr, "%s\n", "sigaction() failed");
+    exit(EXIT_FAILURE);
+  }
 }
 
 void sighandler(int num) {
@@ -150,7 +143,7 @@ void unuglify(char *str1) {
           waddch(win, (chtype)cclr[0]);
           break;
       }
-      wattrset(win, COLOR_PAIR(COLORS + iclr + 8));  /* | A_BOLD */
+      wattrset(win, COLOR_PAIR(COLORS + iclr + 8));
     } else {
       waddch(win, (chtype)*ptr);
     }
