@@ -33,6 +33,7 @@
 #include <ncurses.h>
 
 #define VLA 1000
+
 #define RESTORE_CURSOR() \
   echo(); \
   nl(); \
@@ -42,6 +43,8 @@
 void unuglify(char *);
 void sighandler(int num);
 void init_da_handler(void);
+
+volatile sig_atomic_t call_it_quits = 0;
 
 int main(void) {
   init_da_handler();
@@ -85,9 +88,14 @@ int main(void) {
     if (NULL != (fgets(buf, VLA, stdin))) {
       unuglify(buf);
     }
+    if (1 == call_it_quits) {
+      break;
+    }
   }
 
   RESTORE_CURSOR();
+  fprintf(stderr, "\n%s\n", "See you later");
+
   return EXIT_SUCCESS;
 }
 
@@ -110,9 +118,7 @@ void init_da_handler(void) {
 
 void sighandler(int num) {
   (void)num;
-  RESTORE_CURSOR();
-  fprintf(stderr, "\n%s\n", "See you later");
-  exit(EXIT_SUCCESS);
+  call_it_quits = 1;
 }
 
 void unuglify(char *str1) {
