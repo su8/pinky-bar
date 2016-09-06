@@ -49,10 +49,12 @@
  * how many cpu cores/threads to try for detection */
 #define MAX_CORES 40
 
-
 void get_cpu(char *);
 void get_cores_load(char *);
+
+#if !defined(HAVE_SENSORS_SENSORS_H)
 void get_cpu_temp(char *);
+#endif /* HAVE_SENSORS_SENSORS_H */
 
 #if defined(__i386__) || defined(__i686__) || defined(__x86_64__)
 void get_cpu_clock_speed(char *);

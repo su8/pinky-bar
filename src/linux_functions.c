@@ -118,9 +118,10 @@ match_feature(char *str1, uint8_t num) {
   char *label = NULL, *all = buffer;
   double value = 0.0;
   int nr = 0, nr2 = 0, nr3 = 0;
-  uint8_t x = 0, y = 0, z = 0;
+  uint8_t x = 0, y = 0, z = 0, dummy = 0;
   uint_fast16_t rpm[MAX_FANS+1];
   bool found_fans = false;
+  const char *temp_sens[] = { "MB Temperature", "CPU Temperature" };
 
   if (3 == num) {
     memset(rpm, 0, sizeof(rpm));
@@ -157,14 +158,15 @@ match_feature(char *str1, uint8_t num) {
 
           case SENSORS_SUBFEATURE_TEMP_INPUT:
             {
-              if (2 == num) {
+              if (2 == num || 4 == num) {
+                dummy = (2 == num ? 0 : 1);
                 if (0 != (sensors_get_value(chip, subfeatures->number, &value))) {
                   break;
                 }
                 if (NULL == (label = sensors_get_label(chip, features))) {
                   break;
                 }
-                if (STREQ("MB Temperature", label)) {
+                if (STREQ(temp_sens[dummy], label)) {
                   FILL_ARR(str1, UFINT, (uint_fast16_t)value);
                 }
                 if (NULL != label) {
@@ -237,6 +239,12 @@ get_mobo_temp(char *str1) {
 void
 get_fans(char *str1) {
   match_feature(str1, 3);
+}
+
+
+void
+get_cpu_temp(char *str1) {
+  match_feature(str1, 4);
 }
 
 

@@ -178,10 +178,13 @@ get_cores_load(char *str1) {
 
 
 #if defined(__linux__)
+
+#if !defined(HAVE_SENSORS_SENSORS_H)
 void
 get_cpu_temp(char *str1) {
   get_temp(CPU_TEMP_FILE, str1);
 }
+#endif /* HAVE_SENSORS_SENSORS_H */
 
 #else /* FreeBSD */
 
