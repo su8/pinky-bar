@@ -34,6 +34,7 @@
 
 #define VLA 1000
 #define EIGHT 8
+#define WIN95 stdscr
 
 #define RESTORE_CURSOR() \
   echo(); \
@@ -46,11 +47,9 @@ void sighandler(int num);
 void init_da_handler(void);
 
 volatile sig_atomic_t call_it_quits = 0;
-
 int main(void) {
   init_da_handler();
 
-  WINDOW *win = stdscr;
   int16_t color_pair = 1, fg = 1, bg = 1, x = 0, z = 0;
   int32_t old_x = 0, old_y = 0, new_y = 0, new_x = 0;
   char buf[VLA];
@@ -58,9 +57,9 @@ int main(void) {
   initscr();
   noecho();
   nocbreak();
-  nodelay(win, TRUE);
+  nodelay(WIN95, TRUE);
   nonl();
-  intrflush(win, FALSE);
+  intrflush(WIN95, FALSE);
   curs_set(FALSE);
 
   if(FALSE == (has_colors())) {
@@ -76,15 +75,15 @@ int main(void) {
   }
 
   pair_content(color_pair, &fg, &bg);
-  getmaxyx(win, old_y, old_x);
+  getmaxyx(WIN95, old_y, old_x);
 
   while (1) {
-    getmaxyx(win, new_y, new_x);
+    getmaxyx(WIN95, new_y, new_x);
     if (old_y != new_y || old_x != new_x) {
       old_y = new_y;
       old_x = new_x;
-      werase(win);
-      wrefresh(win);
+      werase(WIN95);
+      wrefresh(WIN95);
     }
     if (NULL != (fgets(buf, VLA, stdin))) {
       unuglify(buf);
@@ -125,12 +124,11 @@ void sighandler(int num) {
 }
 
 void unuglify(char *str1) {
-  WINDOW *win = stdscr;
   uint8_t iclr = 0;
   char *ptr = str1, cclr[1];
 
-  wmove(win, 0, 0);
-  wclrtoeol(win);
+  wmove(WIN95, 0, 0);
+  wclrtoeol(WIN95);
 
   for (; *ptr; ptr++) {
     if (0 != (iscntrl((unsigned char) *ptr))) {
@@ -149,14 +147,14 @@ void unuglify(char *str1) {
           iclr = COLOR_YELLOW;
           break;
         default:
-          waddch(win, (chtype)cclr[0]);
+          waddch(WIN95, (chtype)cclr[0]);
           break;
       }
-      wattrset(win,
+      wattrset(WIN95,
         COLOR_PAIR((iclr % EIGHT) * EIGHT) | A_BOLD);
     } else {
-      waddch(win, (chtype)*ptr);
+      waddch(WIN95, (chtype)*ptr);
     }
   }
-  wrefresh(win);
+  wrefresh(WIN95);
 }
