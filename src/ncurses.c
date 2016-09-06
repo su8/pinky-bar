@@ -33,6 +33,7 @@
 #include <ncurses.h>
 
 #define VLA 1000
+#define EIGHT 8
 
 #define RESTORE_CURSOR() \
   echo(); \
@@ -68,9 +69,9 @@ int main(void) {
   }
   start_color();
 
-  for (x = 0; x < COLORS; x++) {
-    for (z = 0; z < COLORS; z++) {
-      init_pair((int16_t)((x * COLORS) + z), x, z);
+  for (x = 0; x < EIGHT; x++) {
+    for (z = 0; z < EIGHT; z++) {
+      init_pair((int16_t)((x * EIGHT) + z), x, z);
     }
   }
 
@@ -116,7 +117,9 @@ void init_da_handler(void) {
   }
 }
 
+/* !!! WARNING !!! */
 void sighandler(int num) {
+/* ASYNC CODE ONLY */
   (void)num;
   call_it_quits = 1;
 }
@@ -149,7 +152,8 @@ void unuglify(char *str1) {
           waddch(win, (chtype)cclr[0]);
           break;
       }
-      wattrset(win, COLOR_PAIR(COLORS + iclr + 8));
+      wattrset(win,
+        COLOR_PAIR((iclr % EIGHT) * EIGHT) | A_BOLD);
     } else {
       waddch(win, (chtype)*ptr);
     }
