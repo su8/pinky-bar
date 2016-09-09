@@ -125,16 +125,15 @@ get_cores_load(char *str1) {
 
 #if defined(__OpenBSD__)
   uintmax_t ncpu = 0;
-  int mib[] = { CTL_KERN, KERN_CPTIME2, 0 }, mibx = 0;
+  int mib[] = { CTL_KERN, KERN_CPTIME2, 0 };
   int mib2[] = { CTL_HW, HW_NCPU };
   size_t len = sizeof(core_active), len2 = sizeof(ncpu);
 
   SYSCTLVAL(mib2, 2, &ncpu, &len2);
-  for (x = 0; x < ncpu; x++) {
+  for (x = 0; x < ncpu; x++, mib[2]++) {
     if (0 != (sysctl(mib, 3, &core_active[x], &len, NULL, 0))) {
       break;
     }
-    mib[2] = mibx++;
   }
 
 #endif
