@@ -100,12 +100,14 @@ AC_DEFUN([TEST_TYPEZ],[
     ])
 
   ], [
-    AC_CHECK_HEADERS([ \
-      argp.h           \
-      sys/sysinfo.h    \
-      glob.h           \
-    ],[],[
-      ERR([Missing core header files.])
+    ifdef([OPENBZD],[],[
+      AC_CHECK_HEADERS([ \
+        argp.h           \
+        sys/sysinfo.h    \
+        glob.h           \
+      ],[],[
+        ERR([Missing core header files.])
+      ])
     ])
 
   ])
@@ -146,14 +148,17 @@ AC_DEFUN([TEST_TYPEZ],[
     ])
 
   ], [
-    AC_CHECK_FUNCS([  \
-      sysinfo         \
-      glob            \
-      globfree        \
-      argp_parse      \
-      argp_usage      \
-    ],[],[
-      ERR([Missing core library functions.])
+
+    ifdef([OPENBZD],[],[
+      AC_CHECK_FUNCS([  \
+        sysinfo         \
+        glob            \
+        globfree        \
+        argp_parse      \
+        argp_usage      \
+      ],[],[
+        ERR([Missing core library functions.])
+      ])
     ])
 
   ])

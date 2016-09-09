@@ -19,7 +19,7 @@ The program is smart enough to detect whether some of your fan(s) blades are spi
 
 If you compile your kernel from source code make sure to include your cpu and motherboard sensors as **modules** and not inlined.
 
-**Just an example if you use FreeBSD - acpi/aibs, coretemp/amdtemp.**
+**Just an example if you use BSD - acpi/aibs, coretemp/amdtemp.**
 
 ![](img/cpu-temp.png)
 ![](img/mobo-temp.png)
@@ -103,6 +103,12 @@ The following options are available only in FreeBSD:
 | -h           | --swaptotal | The total drive swap                                               |
 | -H           | --swapavail | The available drive swap                                           |
 
+The following options are **NOT** available only to OpenBSD:
+
+```bash
+-gSlo
+```
+
 ---
 
 ## GNU Build System (configure) options
@@ -116,7 +122,7 @@ It's up to you to decide which features suit you best.
 |----------------|---------------------|--------------------------------------------------------------------------------------------|
 | --with-x11     | --without-x11       | Enable it if you are using Window Manager (dwm) to be more specific.                       |
 | --with-alsa    | --without-alsa      | To get the sound volume level.                                                             |
-| --with-oss     | --without-oss       | To get the sound volume level in FreeBSD.                                                  |
+| --with-oss     | --without-oss       | To get the sound volume level in \*BSD.                                                    |
 | --with-net     | --without-net       | Enable the internet related options.                                                       |
 | --with-pci     | --without-pci       | To get the NIC vendor and model in linux                                                   |
 | --with-dvd     | --without-dvd       | To get the cdrom/dvdrom vendor and model                                                   |
@@ -133,7 +139,7 @@ By default, if **no** options are passed, the program will be compiled with/with
 --without-alsa --without-x11 --without-mpd --with-colours --with-net --with-pci --without-dvd --without-sensors --without-ncurses
 ```
 
-The pci and sensors configure options will be discarded in FreeBSD. If you supplied **--with-alsa** and **--with-oss** or used the port package with the ncurses dialogue, alsa will have higher precedence over OSS. By default the port package will have OSS selected and alsa unselected.
+The pci and sensors configure options will be discarded in \*BSD. If you supplied **--with-alsa** and **--with-oss** or used the port package with the ncurses dialogue, alsa will have higher precedence over OSS. By default the port package will have OSS selected and alsa unselected.
 
 **--with-net** will substitute -O0 flag to mitigate a bug in GCC caused by -O2. -O0 will optimize the compiled binary for file size, while -O2 will optimize it for speed. So don't be shocked to find out that **--without-net** will cause the compiled binary to double it's size.
 
@@ -199,6 +205,26 @@ done | dzen2 -w 1800 -x 130 -ta r -fn '-*-dejavusans-*-r-*-*-11-*-*-*-*-*-*-*' &
 ## Installation in FreeBSD
 
 You can use the provided port package instead.
+
+## Installation in OpenBSD
+
+Same steps as above except you'll have to do this before even executing the **bootstrap** script:
+
+```bash
+# To detect the newer compiler that you are
+# about to install
+sed -i 's/#AC_PROG_CC(/AC_PROG_CC(/g' bootstrap
+
+ls /usr/local/bin/automake-*
+ls /usr/local/bin/autoconf-*
+
+# Then replace the numbers below
+export AUTOCONF_VERSION=2.69
+export AUTOMAKE_VERSION=1.15
+
+# Your call, gcc or llvm ?
+pkg_add gcc
+```
 
 ## pinky curses installation
 
@@ -405,7 +431,7 @@ Cannot list FreeBSD as "distro", so it deserve it's own option:
 * m4
 * gawk
 
-## FreeBSD Mandatory requirements
+## \*BSD Mandatory requirements
 
 * gcc/clang
 * bash
@@ -514,6 +540,16 @@ port "6600"
 bind_to_address "127.0.0.1"
 ```
 
+OpenBSD conf, same as the FreeBSD one, just replace audio\_output with:
+
+```nginx
+audio_output {
+  type "ao"
+  name "My sound card"
+  mixer_type "software"
+}
+```
+
 Keep an eye on the **log file size** if you are using raspberry pi (or equivalent device) that streams the music, make sure that it's deleted automatically if it exceeds some pre-defined size.
 
 ---
@@ -537,11 +573,11 @@ use **--without-colours** to skip the following step:
 
 ## Wish list
 
-~~As top priority:~~
+As top priority:
 
-~~FreeBSD disk io~~
+OpenBSD disk io
 
-~~FreeBSD laptop battery support~~
+OpenBSD laptop battery support
 
 ---
 

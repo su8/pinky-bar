@@ -41,7 +41,7 @@
 
 #endif /* __linux__ */
 
-#if defined(__FreeBSD__)
+#if defined(__FreeBSD__) || defined(__OpenBSD__)
 #include <netdb.h>
 /* #include <sys/types.h> */
 #include <sys/socket.h>
@@ -64,6 +64,10 @@
 #if defined(__FreeBSD__)
 #include "include/freebzd.h"
 #endif /* __FreeBSD__ */
+
+#if defined(__OpenBSD__)
+#include "include/openbzd.h"
+#endif /* __OpenBSD__ */
 
 /* Thanks to http://www.matisse.net/bitcalc/?source=print
  * and `man netdevice' */
@@ -197,7 +201,9 @@ get_net(char *str1, char *str2, uint8_t num) {
                 *umac, *(umac + 1), *(umac + 2),
                 *(umac + 3), *(umac + 4), *(umac + 5));
           } else if (7 == num) { /* gateway */
+/* #if !defined(__OpenBSD__) */
             get_nic_info(str1, str2);
+/* #endif /1* !__OpenBSD__ *1/ */
           }
 #endif /* __linux__ */
           break;
@@ -430,7 +436,7 @@ error:
 
 
 
-#if defined(__FreeBSD__)
+#if defined(__FreeBSD__) || defined(__OpenBSD__)
 #define ROUNDUP(x) ((x) > 0 ? \
   (1 + (((x) - 1) | (sizeof(long) - 1))) : sizeof(long))
 
@@ -441,6 +447,8 @@ error:
 void
 get_nic_info(char *str1, char *str2) {
 #if WITH_NET == 1
+
+  (void)str2;
 
   struct rt_msghdr *rtm = NULL;
   struct sockaddr *sa = NULL, *addrs[RTAX_MAX];

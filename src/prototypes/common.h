@@ -26,16 +26,19 @@ void get_kernel(char *, uint8_t num);
 void get_packs(char *);
 void get_taim(char *);
 void get_uptime(char *);
+void check_fan_vals(char *, uint_fast16_t *, uint8_t iterz);
 
-#if !defined(HAVE_SENSORS_SENSORS_H)
+#if !defined(HAVE_SENSORS_SENSORS_H) && !defined(__OpenBSD__)
 void get_fans(char *);
-#endif /* !HAVE_SENSORS_SENSORS_H */
+#endif /* !HAVE_SENSORS_SENSORS_H && !__OpenBSD__ */
 
 #if defined(__linux__)
 void get_temp(const char *, char *);
-#else
-void get_temp(char *, uint_least32_t temp);
 #endif /* __linux__ */
+
+#if defined(__FreeBSD__)
+void get_temp(char *, uint_least32_t temp);
+#endif /* __FreeBSD__ */
 
 #if defined (HAVE_X11_XLIB_H)
 void set_status(const char *);
@@ -44,5 +47,9 @@ void set_status(const char *);
 #if defined(HAVE_CDIO_CDIO_H) || defined(__linux__)
 void get_dvd(char *);
 #endif /* HAVE_CDIO_CDIO_H || __linux__ */
+
+#if defined(__FreeBSD__) || defined(__OpenBSD__)
+void get_loadavg(char *);
+#endif
 
 #endif /* COMMON_H_ */

@@ -21,25 +21,35 @@
 #define FUNCTIONS_H_
 
 void get_ram(char *, uint8_t num);
-void get_loadavg(char *);
 void get_voltage(char *);
 void get_mobo(char *);
 void get_mobo_temp(char *);
+void get_cpu_temp(char *);
+
+#if !defined(__OpenBSD__)
 void get_statio(char *, char *);
 void get_battery(char *);
+#endif /* !__OpenBSD__ */
 
 #if defined(__linux__)
 void get_ssd_model(char *, char *);
-#endif
+void get_loadavg(char *);
 
 #if defined(HAVE_SENSORS_SENSORS_H)
-void get_cpu_temp(char *);
 void get_fans(char *);
 void match_feature(char *, uint8_t num);
 #endif /* HAVE_SENSORS_SENSORS_H */
 
+#endif /* __linux__ */
+
+
 #if defined(__FreeBSD__)
 void get_swapp(char *, uint8_t num);
 #endif /* __FreeBSD__ */
+
+#if defined(__OpenBSD__)
+void get_fans(char *);
+void match_feature(char *str1, uint8_t sens_type, uint8_t sens_num);
+#endif /* __OpenBSD__ */
 
 #endif /* FUNCTIONS_H_ */

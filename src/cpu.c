@@ -26,11 +26,15 @@
 #include "include/freebzd.h"
 #endif /* __FreeBSD__ */
 
+#if defined(__OpenBSD__)
+#include "include/openbzd.h"
+#endif /* __OpenBSD__ */
+
 #if defined(__linux__)
 #define IDLE_NUM 3
 #define LOOP_ITERZ 10
 
-#else /* FreeBSD */
+#else /* FreeBSD || OpenBSD */
 #define IDLE_NUM 4
 #define LOOP_ITERZ 5
 #endif /* __linux__ */
@@ -48,6 +52,12 @@ get_cpu(char *str1) {
   size_t len = sizeof(cpu_active);
   SYSCTLVAL("kern.cp_time", &cpu_active);
 #endif /* __FreeBSD__ */
+
+#if defined(__OpenBSD__)
+  int mib[] = { CTL_KERN, KERN_CPTIME };
+  size_t len = sizeof(cpu_active);
+  SYSCTLVAL(mib, 2, &cpu_active, &len);
+#endif
 
 #if defined(__linux__)
   FILE *fp = fopen("/proc/stat", "r");
@@ -113,6 +123,21 @@ get_cores_load(char *str1) {
   SYSCTLVAL("kern.cp_times", &core_active);
 #endif /* __FreeBSD__ */
 
+#if defined(__OpenBSD__)
+  uintmax_t ncpu = 0;
+  int mib[] = { CTL_KERN, KERN_CPTIME2, 0 };
+  int mib2[] = { CTL_HW, HW_NCPU };
+  size_t len = sizeof(core_active), len2 = sizeof(ncpu);
+
+  SYSCTLVAL(mib2, 2, &ncpu, &len2);
+  for (x = 0; x < ncpu; x++) {
+    if (0 != (sysctl(mib, 3, &core_active[x], &len, NULL, 0))) {
+      break;
+    }
+  }
+
+#endif
+
 #if defined(__linux__)
   FILE *fp = fopen("/proc/stat", "r");
   CHECK_FP(fp);
@@ -144,7 +169,7 @@ get_cores_load(char *str1) {
 
   for (x = 0; x < z; x++) {
 
-#else /* FreeBSD */
+#else /* FreeBSD || OpenBSD */
   for (x = 0; x < MAX_CORES; x++) {
     if (0 == core_active[x][0] && 0 ==
       core_active[x][1] && 0 ==
@@ -175,42 +200,6 @@ get_cores_load(char *str1) {
 
   FILL_STR_ARR(1, str1, temp);
 }
-
-
-#if defined(__linux__)
-
-#if !defined(HAVE_SENSORS_SENSORS_H)
-void
-get_cpu_temp(char *str1) {
-  get_temp(CPU_TEMP_FILE, str1);
-}
-#endif /* HAVE_SENSORS_SENSORS_H */
-
-#else /* FreeBSD */
-
-
-/*
-  Go figure which one to blame.
-
-  the "aibs" module temps:
-  dev.aibs.0.temp.0: 39.0C
-
-  the "amdtemp" module temps:
-  dev.cpu.0.temperature: 28.5C
-
-  In linux the "aibs" temps are matching
-  my idle temps.
-*/
-void
-get_cpu_temp(char *str1) {
-  u_int temp = 0;
-  size_t len = sizeof(temp);
-
-  SYSCTLVAL("dev.cpu.0.temperature", &temp);
-  get_temp(str1, (uint_least32_t)temp);
-}
-
-#endif /* __linux__ */
 
 
 /*  Taken from the gcc documentation

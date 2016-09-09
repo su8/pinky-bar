@@ -26,6 +26,7 @@ declare -a _bases=(
   'frugalware'
   'angstrom'
   'freebsd'
+  'openbsd'
 )
 
 _printf_err() {
@@ -45,24 +46,33 @@ _gen_files() {
   [[ "${osEntered}" == 'freebsd' ]] && {
     bsdLibs='-largp -ldevstat'
     amCF='-I/usr/local/include -L/usr/local/lib'
-    # FreeBSD specific m4 tits
     defTits='m4_define([ITS_BSD], [tits])'
     srcToAppend=(
       'freebsd_functions.c'
       'include/freebzd.h'
     )
   } || {
-    amCF='-D_POSIX_C_SOURCE=200112L'
-    srcToAppend=(
-      'linux_functions.c'
-    )
+    [[ "${osEntered}" == openbsd  ]] && {
+      bsdLibs='-largp -lossaudio'
+      amCF='-D_DEFAULT_SOURCE -I/usr/local/include -L/usr/local/lib'
+      defTits='m4_define([OPENBZD], [forShure])'
+      srcToAppend=(
+        'openbsd_functions.c'
+        'include/openbzd.h'
+      )
+    } || {
+      amCF='-D_POSIX_C_SOURCE=200112L'
+      srcToAppend=(
+        'linux_functions.c'
+      )
+    }
   }
 
   # to strip get_packs() at compile time,
   # also instead using more hard-coded macros
   # let the shell enumerate them for us
   declare -a enumDistros=()
-  for x in {0..7}
+  for x in {0..8}
   do
     enumDistros[${x}]="AC_DEFINE_UNQUOTED([${_bases[${x}]^^}],[${x}],[distro enum generator])"
 
@@ -87,7 +97,10 @@ _gen_files() {
   # Any compiler and C library succeeding to pass the
   # tests will be able to compile and run the
   # program flawlessly.
-  #AC_PROG_CC([clang llvm-gcc gcc])
+
+  # If you use OpenBSD uncomment the AC_PROG_CC line below
+  # make sure that you have the latest gcc/llvm
+  #AC_PROG_CC([egcc clang llvm-gcc gcc])
 
   AC_PROG_CC_C99
   AC_C_CONST

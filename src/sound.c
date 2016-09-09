@@ -27,11 +27,17 @@
 #include <alsa/asoundlib.h>
 #endif /* HAVE_ALSA_ASOUNDLIB_H */
 
-#if defined(HAVE_SYS_SOUNDCARD_H)
+#if defined(HAVE_SYS_SOUNDCARD_H) || defined(HAVE_SOUNDCARD_H)
 #include <fcntl.h>
 #include <sys/ioctl.h>
+
+#if defined(HAVE_SOUNDCARD_H)
+#include <soundcard.h>
+#else
 #include <sys/soundcard.h>
-#endif /* HAVE_SYS_SOUNDCARD_H */
+#endif /* HAVE_SOUNDCARD_H */
+
+#endif /* HAVE_SYS_SOUNDCARD_H || HAVE_SOUNDCARD_H */
 
 #include "include/headers.h"
 #include "prototypes/sound.h"
@@ -101,7 +107,7 @@ error:
 #endif /* HAVE_ALSA_ASOUNDLIB_H */
 
 
-#if defined(HAVE_SYS_SOUNDCARD_H)
+#if defined(HAVE_SYS_SOUNDCARD_H) || defined(HAVE_SOUNDCARD_H)
 /* Used the following resource:
     sources.freebsd.org/RELENG_9/src/usr.sbin/mixer/mixer.c
 */
@@ -113,15 +119,18 @@ get_volume(char *str1) {
     exit_with_err(CANNOT_OPEN, "/dev/mixer");
   }
   if (-1 == (ioctl(fd, SOUND_MIXER_READ_DEVMASK, &devmask))) {
+    close(fd);
     exit_with_err(ERR, "SOUND_MIXER_READ_DEVMASK");
   }
   if (-1 == (ioctl(fd, MIXER_READ(0), &volume))) {
+    close(fd);
     exit_with_err(ERR, "MIXER_READ()");
   }
+  close(fd);
 
   FILL_ARR(str1, "%d", ((volume >> 8) & 0x7f));
 }
-#endif /* HAVE_SYS_SOUNDCARD_H */
+#endif /* HAVE_SYS_SOUNDCARD_H || HAVE_SOUNDCARD_H */
 
 
 void

@@ -43,6 +43,10 @@
 #include "include/freebzd.h"
 #endif /* __FreeBSD__ */
 
+#if defined(__OpenBSD__)
+#include "include/openbzd.h"
+#endif /* __OpenBSD__ */
+
 
 #if defined(__linux__)
 static uint_fast16_t glob_packages(const char *);
@@ -74,7 +78,9 @@ get_temp(const char *str1, char *str2) {
   }
 }
 
-#else
+#endif /* __linux__ */
+
+#if defined(__FreeBSD__)
 void
 get_temp(char *str1, uint_least32_t temp) {
   if (9999 < temp) { /* > 99C */
@@ -84,7 +90,25 @@ get_temp(char *str1, uint_least32_t temp) {
       temp / 100 : temp / 10)); /* > 9C || < 9C */
   }
 }
-#endif /* __linux__ */
+#endif /* __FreeBSD__ */
+
+
+void
+check_fan_vals(char *str1, uint_fast16_t *rpm, uint8_t iterz) {
+  uint8_t x = 0, y = 0;
+  char buffer[VLA];
+  char *all_fans = buffer;
+
+  for (x = 0; x < iterz; x++) {
+    if (0 != rpm[x]) {
+      GLUE2(all_fans, UFINT" ", rpm[x]);
+    } else {
+      ++y; /* non-spinning | removed | failed fan */
+    }
+  }
+  FILL_STR_ARR(1, str1, (y != x ? buffer : NOT_FOUND));
+
+}
 
 
 void 
@@ -148,6 +172,7 @@ get_kernel(char *str1, uint8_t num) {
       break;
   }
 }
+
 
 #if defined(__linux__)
 /* Source (my improved screenfetch-c fork):
@@ -216,6 +241,14 @@ get_packs(char *str1) {
 #pragma GCC diagnostic ignored "-Wunused-result"
   CHECK_POPEN(pkgs_file, "pkg info | wc -l", &packages);
 #pragma GCC diagnostic pop
+
+#elif DISTRO == OPENBSD
+
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wunused-result"
+  CHECK_POPEN(pkgs_file, "pkg_info | wc -l", &packages);
+#pragma GCC diagnostic pop
+
 
 #endif
 
@@ -306,12 +339,11 @@ set_status(const char *str1) {
 #endif
 
 
-#if !defined(HAVE_SENSORS_SENSORS_H)
+#if !defined(HAVE_SENSORS_SENSORS_H) && !defined(__OpenBSD__)
 void 
 get_fans(char *str1) {
   bool found_fans = true;
-  char tempstr[VLA], buffer[VLA];
-  char *all_fans = buffer;
+  char tempstr[VLA];
   uint8_t x = 0, y = 0, z = 0;
   uint_fast16_t rpm[MAX_FANS+1];
 
@@ -338,6 +370,7 @@ get_fans(char *str1) {
   }
 
 #else
+
   u_int fan[3];
   memset(fan, 0, sizeof(fan));
   size_t len = sizeof(fan);
@@ -355,20 +388,14 @@ get_fans(char *str1) {
     }
     rpm[x] = (uint_fast16_t)fan[0];
   }
+
 #endif /* __linux__ */
 
   if (found_fans) {
-    for (x = 0; x < z; x++) {
-      if (0 != rpm[x]) {
-        GLUE2(all_fans, UFINT" ", rpm[x]);
-      } else {
-        ++y; /* non-spinning | removed | failed fan */
-      }
-    }
-    FILL_STR_ARR(1, str1, (y != x ? buffer : NOT_FOUND));
+    check_fan_vals(str1, rpm, z);
   }
 }
-#endif /* !HAVE_SENSORS_SENSORS_H */
+#endif /* !HAVE_SENSORS_SENSORS_H && !__OpenBSD__ */
 
 
 #if defined(HAVE_CDIO_CDIO_H)
@@ -411,3 +438,16 @@ get_dvd(char *str1) {
 #endif /* __linux__ */
 
 #endif /* HAVE_CDIO_CDIO_H */
+
+
+#if defined(__FreeBSD__) || defined(__OpenBSD__)
+void
+get_loadavg(char *str1) {
+  double up[3];
+  if (-1 == getloadavg(up, 3)) {
+  	FUNC_FAILED("getloadavg()");
+  }
+  FILL_ARR(str1, "%.2f %.2f %.2f",
+    (float)up[0], (float)up[1], (float)up[2]);
+}
+#endif /* __FreeBSD__ || __OpenBSD__ */

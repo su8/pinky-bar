@@ -87,17 +87,6 @@ get_ram(char *str1, uint8_t num) {
 }
 
 
-void
-get_loadavg(char *str1) {
-  double up[3];
-  if (-1 == getloadavg(up, 3)) {
-  	FUNC_FAILED("getloadavg()");
-  }
-  FILL_ARR(str1, "%.2f %.2f %.2f",
-    (float)up[0], (float)up[1], (float)up[2]);
-}
-
-
 /* 
   sysctl -a|grep 'aibs'
   dev.aibs.0.volt.0: 1356 850 1600
@@ -135,6 +124,16 @@ get_voltage(char *str1) {
     (float)vol1[0] / 1000.0f,
     (float)vol2[0] / 1000.0f,
     (float)vol3[0] / 1000.0f);
+}
+
+
+void
+get_cpu_temp(char *str1) {
+  u_int temp = 0;
+  size_t len = sizeof(temp);
+
+  SYSCTLVAL("dev.cpu.0.temperature", &temp);
+  get_temp(str1, (uint_least32_t)temp);
 }
 
 

@@ -183,8 +183,7 @@ match_feature(char *str1, uint8_t num) {
                   break;
                 }
                 if (MAX_FANS != z) {
-                  rpm[x++] = (uint_fast16_t)value;
-                  z++;
+                  rpm[z++] = (uint_fast16_t)value;
                 }
                 found_fans = true;
               }
@@ -208,14 +207,7 @@ match_feature(char *str1, uint8_t num) {
   }
 
   if (found_fans) {
-    for (x = 0; x < z; x++) {
-      if (0 != rpm[x]) {
-        GLUE2(all, UFINT" ", rpm[x]);
-      } else {
-        ++y; /* non-spinning | removed | failed fan */
-      }
-    }
-    FILL_STR_ARR(1, str1, (y != x ? buffer : NOT_FOUND));
+    check_fan_vals(str1, rpm, z);
   }
 
 #else
@@ -283,6 +275,12 @@ void
 get_mobo_temp(char *str1) {
   get_temp(MOBO_TEMP_FILE, str1);
 }
+
+
+void
+get_cpu_temp(char *str1) {
+  get_temp(CPU_TEMP_FILE, str1);
+}
 #endif /* HAVE_SENSORS_SENSORS_H */
 
 
@@ -304,6 +302,7 @@ get_mobo(char *str1) {
   FILL_STR_ARR(2, str1, vendor, name);
 }
 
+
 void 
 get_statio(char *str1, char *str2) {
   uintmax_t statio[7];
@@ -317,9 +316,9 @@ get_statio(char *str1, char *str2) {
 
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wunused-result"
-  if (fscanf(fp, FMT_UINT FMT_UINT FMT_UINT FMT_UINT FMT_UINT FMT_UINT FMT_UINT,
+  if (EOF == (fscanf(fp, FMT_UINT FMT_UINT FMT_UINT FMT_UINT FMT_UINT FMT_UINT FMT_UINT,
     &statio[0], &statio[1], &statio[2], &statio[3],
-    &statio[4], &statio[5], &statio[6]) == EOF) {
+    &statio[4], &statio[5], &statio[6]))) {
       CLOSE_X(fp);
       exit_with_err(ERR, "reading the stat file failed");
   }

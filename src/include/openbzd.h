@@ -1,5 +1,5 @@
 /*
-   08/06/2016
+   09/08/2016
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -17,14 +17,15 @@
    MA 02110-1301, USA.
 */
 
-#ifndef SOUND_H_
-#define SOUND_H_
+#ifndef INCLUDE_OPENBZD_HEADERZ_H_
+#define INCLUDE_OPENBZD_HEADERZ_H_
 
-#if defined (HAVE_ALSA_ASOUNDLIB_H) || defined(HAVE_SYS_SOUNDCARD_H) || \
-  defined(HAVE_SOUNDCARD_H)
-void get_volume(char *);
-#endif
+#include <sys/types.h>
+#include <sys/sysctl.h>
 
-void get_song(char *, uint8_t num);
+#define SYSCTLVAL(w, x, y, z) \
+  if (0 != sysctl(w, x, y, z, NULL, 0)) { \
+    FUNC_FAILED("sysctl()"); \
+  }
 
-#endif /* SOUND_H_ */
+#endif /* INCLUDE_OPENBZD_HEADERZ_H_ */

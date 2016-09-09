@@ -33,7 +33,7 @@ AC_DEFUN([TEST_ALSA],[
 
   AC_ARG_WITH([oss],
     AS_HELP_STRING([--with-oss],
-      [FreeBSD OSS flag for sound support]),
+      [BSD OSS flag for sound support]),
     [],
     [with_oss=no]
   )
@@ -87,32 +87,48 @@ AC_DEFUN([TEST_ALSA],[
   ifdef([ITS_BSD],[
     AS_IF([test "x$with_alsa" = "xno"], [
       AS_IF([test "x$with_oss" = "xyes"], [
-        AC_CHECK_HEADERS([sys/soundcard.h], [
-          ],[
-            ERR([Homie, where is sys/soundcard.h ?])
-        ])
-
-        NOTIFY([fcntl])
-        AC_COMPILE_IFELSE([
-          AC_LANG_SOURCE([[
-            #include <fcntl.h>
-            int main(void) {
-              int fd = 0;
-              if (-1 == (fd = open("elo", O_RDONLY))) {
-                return 0;
-              }
-              return 0;
-            }
-          ]])
-        ],[],[
-          COMPILE_FAILED([fcntl])
-          ]
-        )
-
+        TEST_OZZ([sys/soundcard.h])
       ])
     ])
-  ],[
+  ],[])
+
+
+  ifdef([OPENBZD],[
+    AS_IF([test "x$with_alsa" = "xno"], [
+      AS_IF([test "x$with_oss" = "xyes"], [
+        TEST_OZZ([soundcard.h])
+      ])
+    ])
+  ],[])
+
+
+])
+
+
+dnl Internal function to check the BSD
+dnl OSS headers and perfom some tests
+AC_DEFUN([TEST_OZZ],[
+
+  AC_CHECK_HEADERS([$1], [
+    ],[
+      ERR([Homie, where is $1 ?])
   ])
 
+  NOTIFY([fcntl])
+  AC_COMPILE_IFELSE([
+    AC_LANG_SOURCE([[
+      #include <fcntl.h>
+      int main(void) {
+        int fd = 0;
+        if (-1 == (fd = open("elo", O_RDONLY))) {
+          return 0;
+        }
+        return 0;
+      }
+    ]])
+  ],[],[
+    COMPILE_FAILED([fcntl])
+    ]
+  )
 
 ])

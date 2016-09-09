@@ -51,7 +51,6 @@ AC_DEFUN([TEST_NET],[
       ifaddrs.h           \
       arpa/inet.h         \
       sys/socket.h        \
-      net/if.h            \
       sys/ioctl.h         \
       netdb.h             \
     ],[],[
@@ -61,21 +60,24 @@ AC_DEFUN([TEST_NET],[
     ifdef([ITS_BSD], [
       AC_CHECK_HEADERS([    \
         arpa/nameser.h      \
+        netinet/in.h        \
         net/if.h            \
         net/if_dl.h         \
-        netinet/in.h        \
       ],[],[
         ERR([Missing core header files.])
       ])
 
     ],[
-      AC_CHECK_HEADERS([    \
-        linux/if_link.h     \
-        netpacket/packet.h  \
-        linux/sockios.h     \
-        linux/ethtool.h     \
-      ],[],[
-        ERR([Missing core header files.])
+
+      ifdef([OPENBZD], [], [
+        AC_CHECK_HEADERS([ \
+          linux/if_link.h     \
+          netpacket/packet.h  \
+          linux/sockios.h     \
+          linux/ethtool.h     \
+        ],[],[
+          ERR([Missing core header files.])
+        ])
       ])
 
     ])

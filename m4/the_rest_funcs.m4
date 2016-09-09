@@ -90,27 +90,29 @@ AC_DEFUN([TEST_SOME_FUNCS],[
 
 
   ifdef([ITS_BSD],[],[
-    NOTIFY([sysinfo])
-    AC_COMPILE_IFELSE([
-      AC_LANG_SOURCE([[
-        #include <sys/sysinfo.h>
-        int main(void) {
-          struct sysinfo inf;
-          sysinfo(&inf);
-          inf.totalram;
-          inf.freeram;
-          inf.sharedram;
-          inf.bufferram;
-          inf.loads[0];
-          inf.loads[1];
-          inf.loads[2];
-          return 0;
-        }
-      ]])
-    ],[],[
-      COMPILE_FAILED([sysinfo RAM and average load])
-      ]
-    )
+    ifdef([OPENBZD],[],[
+      NOTIFY([sysinfo])
+      AC_COMPILE_IFELSE([
+        AC_LANG_SOURCE([[
+          #include <sys/sysinfo.h>
+          int main(void) {
+            struct sysinfo inf;
+            sysinfo(&inf);
+            inf.totalram;
+            inf.freeram;
+            inf.sharedram;
+            inf.bufferram;
+            inf.loads[0];
+            inf.loads[1];
+            inf.loads[2];
+            return 0;
+          }
+        ]])
+      ],[],[
+        COMPILE_FAILED([sysinfo RAM and average load])
+        ]
+      )
+    ])
 
   ])
 
