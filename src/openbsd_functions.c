@@ -185,6 +185,7 @@ void
 get_battery(char *str1) {
   struct apm_power_info bstate;
   int fd = 0;
+  uintmax_t dummy = 0;
 
   FILL_STR_ARR(1, str1, "Null");
   memset(&bstate, 0, sizeof(struct apm_power_info));
@@ -196,7 +197,9 @@ get_battery(char *str1) {
     close(fd);
     return;
   }
-  close(fd);
 
-  FILL_UINT_ARR(str1, (uintmax_t)bstate.battery_life);
+  close(fd);
+  dummy = (uintmax_t)bstate.battery_life;
+
+  FILL_UINT_ARR(str1, (101 < dummy ? 0 : dummy));
 }
