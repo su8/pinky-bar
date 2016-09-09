@@ -184,7 +184,6 @@ get_mobo(char *str1) {
 void
 get_battery(char *str1) {
   struct apm_power_info bstate;
-  uintmax_t percent = 0;
   int fd = 0;
 
   FILL_STR_ARR(1, str1, "Null");
@@ -197,9 +196,7 @@ get_battery(char *str1) {
     close(fd);
     return;
   }
-
-  percent = bstate.battery_life;
   close(fd);
 
-  FILL_UINT_ARR(str1, percent);
+  FILL_UINT_ARR(str1, (uintmax_t)bstate.battery_life);
 }
