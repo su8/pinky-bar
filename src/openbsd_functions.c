@@ -175,7 +175,7 @@ get_mobo(char *str1) {
 }
 
 
-/* 
+/*
  * Entirely based on:
  *  $OpenBSD: apmd.c,v 1.49 2007/11/24 14:58:44 deraadt Exp $
  * The source mentioned different values when
@@ -197,9 +197,8 @@ get_battery(char *str1) {
     close(fd);
     return;
   }
-  if (APM_AC_ON == bstate.ac_state) {
-    percent = bstate.battery_life;
-  }
+
+  percent = bstate.battery_life;
   close(fd);
 
   FILL_UINT_ARR(str1, percent);
