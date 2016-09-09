@@ -84,7 +84,7 @@ AC_DEFUN([TEST_ALSA],[
   ])
 
 
-  ifdef([ITS_BSD],[
+  ifdef([FREEBZD],[
     AS_IF([test "x$with_alsa" = "xno"], [
       AS_IF([test "x$with_oss" = "xyes"], [
         TEST_OZZ([sys/soundcard.h])

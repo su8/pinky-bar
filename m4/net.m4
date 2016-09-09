@@ -57,7 +57,7 @@ AC_DEFUN([TEST_NET],[
       ERR([Missing core header files.])
     ])
     
-    ifdef([ITS_BSD], [
+    ifdef([FREEBZD], [
       AC_CHECK_HEADERS([    \
         arpa/nameser.h      \
         netinet/in.h        \
@@ -70,7 +70,7 @@ AC_DEFUN([TEST_NET],[
     ],[
 
       ifdef([OPENBZD], [], [
-        AC_CHECK_HEADERS([ \
+        AC_CHECK_HEADERS([    \
           linux/if_link.h     \
           netpacket/packet.h  \
           linux/sockios.h     \
@@ -135,7 +135,7 @@ AC_DEFUN([TEST_NET],[
       ]
     )
 
-    ifdef([ITS_BSD],[
+    ifdef([FREEBZD],[
       NOTIFY([getifaddrs-heavy])
       AC_COMPILE_IFELSE([
         AC_LANG_SOURCE([[
@@ -193,7 +193,7 @@ AC_DEFUN([TEST_PCI],[
     CHECK_CFLAGZ([-O2])
   ])
 
-  ifdef([ITS_BSD],[],[
+  ifdef([FREEBZD],[],[
     AS_IF([test "x$with_pci" = "xyes"], [
 
       dnl For very first time I stumble upon GCC -O2 bug.

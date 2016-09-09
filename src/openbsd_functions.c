@@ -19,12 +19,13 @@
 
 #include "config.h" /* Auto-generated */
 
-#include <ctype.h>
-
 #include <sys/stat.h>
 #include <sys/time.h>
 #include <sys/param.h>
+#include <fcntl.h>
+#include <sys/ioctl.h>
 #include <sys/sensors.h>
+#include <machine/apmvar.h>
 
 #include "include/headers.h"
 #include "include/openbzd.h"
@@ -48,6 +49,9 @@ get_ram(char *str1, uint8_t num) {
     case 2:
       FILL_ARR(str1, FMT_UINT "%s",
         ((1 == num) ? total: freeram), "MB");
+      break;
+    case 3:
+      FILL_ARR(str1, FMT_UINT "%s", (total - freeram), "MB");
       break;
     case 5:
       FILL_UINT_ARR(str1, ((total - freeram) * 100) / total);
@@ -97,10 +101,12 @@ match_feature(char *str1, uint8_t sens_type, uint8_t sens_num) {
           break;
 
         case SENSOR_FANRPM:
-          if (MAX_FANS != z) {
-            rpm[z++] = (uint_fast16_t)sens.value;
+          {
+            if (MAX_FANS != z) {
+              rpm[z++] = (uint_fast16_t)sens.value;
+            }
+            found_fans = true;
           }
-          found_fans = true;
           break;
       }
     }
@@ -154,27 +160,47 @@ get_cpu_temp(char *str1) {
 
 void
 get_mobo(char *str1) {
-  char vendor[100], model[100];
-  char *ptr = vendor, *ptr2 = model;
-  size_t len = sizeof(vendor);
   int mib[] = { CTL_HW, HW_VENDOR };
   int mib2[] = { CTL_HW, HW_PRODUCT };
+  char vendor[100], model[100];
+  size_t len = sizeof(vendor);
 
   SYSCTLVAL(mib, 2, &vendor, &len);
   SYSCTLVAL(mib2, 2, &model, &len);
 
-  for (; *ptr; ptr++) {
-    if ((isspace((unsigned char) *ptr))) {
-      *ptr = '\0';
-      break;
-    }
-  }
-  for (; *ptr2; ptr2++) {
-    if ((isspace((unsigned char) *ptr2))) {
-      *ptr2 = '\0';
-      break;
-    }
-  }
+  split_n_index(vendor);
+  split_n_index(model);
 
   FILL_STR_ARR(2, str1, vendor, model);
+}
+
+
+/* 
+ * Entirely based on:
+ *  $OpenBSD: apmd.c,v 1.49 2007/11/24 14:58:44 deraadt Exp $
+ * The source mentioned different values when
+ * using Crapple machine that is charging the battery
+*/
+void
+get_battery(char *str1) {
+  struct apm_power_info bstate;
+  uintmax_t percent = 0;
+  int fd = 0;
+
+  FILL_STR_ARR(1, str1, "Null");
+  memset(&bstate, 0, sizeof(struct apm_power_info));
+
+  if (0 != (fd = open("/dev/apm", O_RDONLY))) {
+    return;
+  }
+  if (0 != (ioctl(fd, APM_IOC_GETPOWER, &bstate))) {
+    close(fd);
+    return;
+  }
+  if (APM_AC_ON == bstate.ac_state) {
+    percent = bstate.battery_life;
+  }
+  close(fd);
+
+  FILL_UINT_ARR(str1, percent);
 }

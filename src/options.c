@@ -50,13 +50,18 @@ static const struct argp_option options[] = {
   { .name = "drivefree",    .key = 'N',                .doc = "The free drive storage."                                  },
   { .name = "driveavail",   .key = 'O',                .doc = "The available drive storage."                             },
   { .name = "dvdstr",       .key = 'z',                .doc = "The vendor and model name of your cdrom/dvdrom."          },
+  { .name = "battery",      .key = 'g',                .doc = "The remaining battery charge."                            },
 
 #if !defined(__OpenBSD__)
-  { .name = "battery",      .key = 'g',                .doc = "The remaining battery charge."                            },
   { .name = "statio",       .key = 'S', .arg = "sda",  .doc = "Read and written MBs to the drive so far."                },
   { .name = "ramshared",    .key = 'l',                .doc = "The shared ram."                                          },
   { .name = "rambuffer",    .key = 'o',                .doc = "The buffered ram."                                        },
 #endif /* !__OpenBSD__ */
+
+
+#if defined(__OpenBSD__)
+  { .name = "ramused",      .key = 'l',                .doc = "The used ram in MB."                                      },
+#endif /* __OpenBSD__ */
 
   { .name = "packages",     .key = 'p',                .doc = "The number of installed packages."                        },
   { .name = "kernsys",      .key = 'P',                .doc = "The kernel name."                                         },
@@ -192,19 +197,19 @@ parse_opt(int key, char *arg, struct argp_state *state) {
 
     NEW_ARG_LABEL('E', char ip_lookup[VLA], ip_lookup, FMT_KERN);
 
+    NEW_RAM_LABEL('l', char ram_shared[VLA], ram_shared, 3, FMT_RAM2, RAM_STR);
+
+    NEW_LABEL('g', char battery[VLA], battery, FMT_BATT, BATT_STR);
+
 #if defined(HAVE_CDIO_CDIO_H) || defined(__linux__)
     NEW_LABEL('z', char dvd[VLA], dvd, FMT_KERN);
 #endif /* HAVE_CDIO_CDIO_H || __linux__ */
 
 
 #if !defined(__OpenBSD__)
-    NEW_RAM_LABEL('l', char ram_shared[VLA], ram_shared, 3, FMT_RAM2, RAM_STR);
-
     NEW_RAM_LABEL('o', char ram_buffer[VLA], ram_buffer, 4, FMT_RAM2, RAM_STR);
 
     NEW_ARG_LABEL('S', char statio[VLA], statio, FMT_STATIO, STATIO_STR);
-
-    NEW_LABEL('g', char battery[VLA], battery, FMT_BATT, BATT_STR);
 #endif /* !__OpenBSD__ */
 
 

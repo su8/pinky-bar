@@ -88,7 +88,7 @@ AC_DEFUN([TEST_TYPEZ],[
     ERR([Missing core header files.])
   ])
   
-  ifdef([ITS_BSD], [
+  ifdef([FREEBZD], [
     AC_CHECK_HEADERS([ \
       sys/types.h      \
       sys/sysctl.h     \
@@ -135,7 +135,7 @@ AC_DEFUN([TEST_TYPEZ],[
     ERR([Missing core library functions.])
   ])
 
-  ifdef([ITS_BSD], [
+  ifdef([FREEBZD], [
     AC_CHECK_FUNCS([  \
       sysctl          \
       sysctlbyname    \

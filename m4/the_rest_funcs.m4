@@ -89,7 +89,7 @@ AC_DEFUN([TEST_SOME_FUNCS],[
   )
 
 
-  ifdef([ITS_BSD],[],[
+  ifdef([FREEBZD],[],[
     ifdef([OPENBZD],[],[
       NOTIFY([sysinfo])
       AC_COMPILE_IFELSE([
@@ -153,7 +153,7 @@ AC_DEFUN([TEST_SOME_FUNCS],[
   )
 
 
-  ifdef([ITS_BSD],[],[
+  ifdef([FREEBZD],[],[
     NOTIFY([glob])
     AC_COMPILE_IFELSE([
       AC_LANG_SOURCE([[
@@ -281,7 +281,7 @@ AC_DEFUN([TEST_SOME_FUNCS],[
   )
   
   
-  ifdef([ITS_BSD],[
+  ifdef([FREEBZD],[
     NOTIFY([getloadavg])
     AC_COMPILE_IFELSE([
       AC_LANG_SOURCE([[

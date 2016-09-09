@@ -54,7 +54,7 @@
 #include <net/if_dl.h>
 #include <net/route.h>
 #include <netinet/in.h>
-#endif /* __FreeBSD__ */
+#endif /* __FreeBSD__ || __OpenBSD__ */
 
 #endif /* WITH_NET */
 
@@ -201,9 +201,7 @@ get_net(char *str1, char *str2, uint8_t num) {
                 *umac, *(umac + 1), *(umac + 2),
                 *(umac + 3), *(umac + 4), *(umac + 5));
           } else if (7 == num) { /* gateway */
-/* #if !defined(__OpenBSD__) */
             get_nic_info(str1, str2);
-/* #endif /1* !__OpenBSD__ *1/ */
           }
 #endif /* __linux__ */
           break;
@@ -512,4 +510,4 @@ error:
   RECOMPILE_WITH("net");
 #endif /* WITH_NET */
 }
-#endif /* __FreeBSD__ */
+#endif /* __FreeBSD__ || __OpenBSD__ */

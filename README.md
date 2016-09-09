@@ -6,6 +6,8 @@ xmonad
 
 ![](img/pic5.png)
 
+![](img/pic7.png)
+
 ncurses
 
 ![](img/pic6.png)
@@ -55,7 +57,7 @@ The order of supplied options will dictate how, where and what system informatio
 | -s           | --driveperc | The used drive storage in percentage                               |
 | -n           | --drivetotal| The total drive storage                                            |
 | -N           | --drivefree | The free drive storage                                             |
-| -O           | --driveavail| The available drive storage                                        |
+| -O           | --driveavail| The available drive storage (total - used)                         |
 | -g           | --battery   | The remaining battery charge                                       |
 | -z           | --dvdstr    | The vendor and model name of your cdrom/dvdrom                     |
 | -S           | --statio    | Read and written MBs to the drive so far [argument - sda]          |
@@ -101,13 +103,23 @@ The following options are available only in FreeBSD:
 | -Z           | --swapused  | The used drive swap in MB                                          |
 | -F           | --swaperc   | The used drive swap in percentage                                  |
 | -h           | --swaptotal | The total drive swap                                               |
-| -H           | --swapavail | The available drive swap                                           |
+| -H           | --swapavail | The available drive swap (total - used)                            |
 
 The following options are **NOT** available only to OpenBSD:
 
 ```bash
--gSlo
+-So
+
+# The short -l option is different
+# and the long one has different syntax
+# --ramused instead --ramshared
 ```
+
+The following options are available only in OpenBSD:
+
+| short option | long option | Descrtiption                                                       |
+|--------------|-------------|--------------------------------------------------------------------|
+| -l           | --ramused  | The used ram in MB                                                  |
 
 ---
 
@@ -129,7 +141,7 @@ It's up to you to decide which features suit you best.
 | --with-sensors | --without-sensors   | Alternative way to get the sensors values (linux only)                                     |
 | --with-ncurses | --without-ncurses   | Output the data to the terminal using the ncurses library, can be colorized                |
 | --with-colours | --without-colours   | Colorize the output data.                                                                  |
-| icons=/tmp     |                     | Use xbm icons that can be used by dzen2 for example. Discarded when **--with-x11** is used |
+| icons=/tmp     |                     | xbm icons that can be used by dzen2 for example. Discarded when **--with-x11** is used     |
 | --with-mpd     | --without-mpd       | To see the currently played song name (if any).                                            |
 | --prefix=/tmp  |                     | The directory where the program will be installed                                          |
 
@@ -416,9 +428,10 @@ Replace **distro** with archlinux, debian, gentoo, slackware, rhel, frugalware, 
 - [x] frugalware
 - [x] angstrom
 
-Cannot list FreeBSD as "distro", so it deserve it's own option:
+Cannot list the \*BSD flavours as "distros", so they deserve own options:
 
 - [x] freebsd
+- [x] openbsd
 
 ---
 
@@ -462,7 +475,9 @@ To get the sound volume level:
 * alsa-utils
 * alsa-lib
 
-Then pass **--with-alsa** to configure. FreeBSD users can use the baked OSS instead, pass **--without-alsa --with-oss** to configure instead.
+Then pass **--with-alsa** to configure.
+
+\*BSD users can use the baked OSS instead, pass **--without-alsa --with-oss** to configure instead.
 
 To output the data to the terminal using the ncurses library:
 
@@ -577,7 +592,7 @@ As top priority:
 
 OpenBSD disk io
 
-OpenBSD laptop battery support
+~~OpenBSD laptop battery support~~
 
 ---
 

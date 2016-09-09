@@ -25,10 +25,10 @@ void get_voltage(char *);
 void get_mobo(char *);
 void get_mobo_temp(char *);
 void get_cpu_temp(char *);
+void get_battery(char *);
 
 #if !defined(__OpenBSD__)
 void get_statio(char *, char *);
-void get_battery(char *);
 #endif /* !__OpenBSD__ */
 
 #if defined(__linux__)

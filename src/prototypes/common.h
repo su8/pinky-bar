@@ -27,6 +27,7 @@ void get_packs(char *);
 void get_taim(char *);
 void get_uptime(char *);
 void check_fan_vals(char *, uint_fast16_t *, uint8_t iterz);
+void split_n_index(char *);
 
 #if !defined(HAVE_SENSORS_SENSORS_H) && !defined(__OpenBSD__)
 void get_fans(char *);

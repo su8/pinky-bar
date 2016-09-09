@@ -31,7 +31,7 @@ AC_DEFUN([TEST_SENSORS],[
     [with_sensors=no]
   )
 
-  ifdef([ITS_BSD],[],[
+  ifdef([FREEBZD],[],[
     AS_IF([test "x$with_sensors" = "xyes"], [
       AC_CHECK_HEADERS([sensors/sensors.h], [
         SENSORS_LIBS="-lsensors"
@@ -57,7 +57,7 @@ AC_DEFUN([TEST_SENSORS],[
 
   AC_SUBST(SENSORS_LIBS)
 
-  ifdef([ITS_BSD],[],[
+  ifdef([FREEBZD],[],[
     AS_IF([test "x$with_sensors" = "xyes"], [
       AC_LINK_IFELSE([
         AC_LANG_SOURCE([[
@@ -118,6 +118,33 @@ AC_DEFUN([TEST_SENSORS],[
       )
     ])
 
+  ])
+
+
+  ifdef([OPENBZD], [
+    AC_COMPILE_IFELSE([
+      AC_LANG_SOURCE([[
+        #include <stdio.h>
+        #include <stdlib.h>
+        #include <string.h>
+        #include <sys/sensors.h>
+        int main(void) {
+          struct sensordev dev;
+          struct sensor sens;
+          SENSOR_VOLTS_DC;
+          SENSOR_TEMP;
+          SENSOR_FANRPM;
+          SENSOR_FINVALID;
+          SENSOR_FUNKNOWN;
+          return 0;
+        }
+      ]])
+    ],[],[
+      COMPILE_FAILED([sensors])
+      ]
+    )
+  ],[
+  
   ])
 
 

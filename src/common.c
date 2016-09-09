@@ -17,9 +17,13 @@
    MA 02110-1301, USA.
 */
 
-/* Functions shared between Linux and FreeBSD */
+/* Functions shared between different operating
+ * zyztemz or are short enough that doesn't meet the
+ * 100 lines requirement to be put in standalone module */
 
 #include "config.h" /* Auto-generated */
+
+#include <ctype.h>
 
 #include <sys/statvfs.h>
 #include <sys/utsname.h>
@@ -451,3 +455,16 @@ get_loadavg(char *str1) {
     (float)up[0], (float)up[1], (float)up[2]);
 }
 #endif /* __FreeBSD__ || __OpenBSD__ */
+
+
+void
+split_n_index(char *str1) {
+  char *ptr = str1;
+  for (; *ptr; ptr++) {
+    if ((isspace((unsigned char) *ptr))) {
+      break;
+    }
+    *str1++ = *ptr;
+  }
+  *str1 = '\0';
+}
