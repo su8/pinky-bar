@@ -95,7 +95,7 @@ The following options are available only in Linux:
 | -e           | --iplink    | The NIC link speed (useful for wireless/wifi) [argument - eth0]    |
 | -j           | --nicfw     | The NIC firmware [argument - eth0]                                 |
 
-The following options are available only in FreeBSD:
+The following options are available only to FreeBSD and OpenBSD:
 
 | short option | long option | Descrtiption                                                       |
 |--------------|-------------|--------------------------------------------------------------------|

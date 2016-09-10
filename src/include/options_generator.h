@@ -43,7 +43,7 @@
 
 /* Let the platform ticks decide how much
  * time is needed to sleep
- * 100 in linux and 133 in freebsd */
+ * 100 in linux and openbsd, 133 in freebsd */
 #define NEW_CPU_LABEL(lbl, declareVar, useVar, ...) \
   case lbl: \
   { \

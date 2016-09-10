@@ -95,14 +95,11 @@ static const struct argp_option options[] = {
   { .name = "nicinfo",      .key = 'G', .arg = "eth0", .doc = "The NIC vendor and model."                                },
 #endif
 
-#if defined(__FreeBSD__)
+#if defined(__FreeBSD__) || defined(__OpenBSD__)
   { .name = "swapused",     .key = 'Z',                .doc = "The used drive swap in MB."                               },
   { .name = "swaperc",      .key = 'F',                .doc = "The used drive swap in percentage."                       },
   { .name = "swaptotal",    .key = 'h',                .doc = "The total drive swap."                                    },
   { .name = "swapavail",    .key = 'H',                .doc = "The available drive swap."                                },
-#endif /* __FreeBSD__ */
-
-#if defined(__FreeBSD) || defined(__OpenBSD__)
   { .name = "nicgw",        .key = 'j', .arg = "re0",  .doc = "The NIC gateway address."                                 },
 #endif /* __FreeBSD__ || __OpenBSD__ */
 
@@ -213,7 +210,7 @@ parse_opt(int key, char *arg, struct argp_state *state) {
 #endif /* !__OpenBSD__ */
 
 
-#if defined(__FreeBSD__)
+#if defined(__FreeBSD__) || defined(__OpenBSD__)
     NEW_SWAPP_LABEL('h', char swapp_total[VLA], swapp_total, 1, FMT_SSD2, SSD_STR);
 
     NEW_SWAPP_LABEL('H', char swapp_avail[VLA], swapp_avail, 2, FMT_SSD2, SSD_STR);
@@ -222,7 +219,7 @@ parse_opt(int key, char *arg, struct argp_state *state) {
 
     NEW_SWAPP_LABEL('F', char swapp_perc[VLA], swapp_perc, 4, FMT_SSD2, SSD_STR);
 
-#endif /* __FreeBSD__ */
+#endif /* __FreeBSD__ || __OpenBSD__ */
 
 
 #if defined(__FreeBSD) || defined(__OpenBSD__)

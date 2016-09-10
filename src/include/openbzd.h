@@ -24,7 +24,7 @@
 #include <sys/sysctl.h>
 
 #define SYSCTLVAL(w, x, y, z) \
-  if (0 != sysctl(w, x, y, z, NULL, 0)) { \
+  if (0 != (sysctl(w, x, y, z, NULL, 0))) { \
     FUNC_FAILED("sysctl()"); \
   }
 

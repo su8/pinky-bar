@@ -43,9 +43,9 @@ void match_feature(char *, uint8_t num);
 #endif /* __linux__ */
 
 
-#if defined(__FreeBSD__)
+#if defined(__FreeBSD__) || defined(__OpenBSD__)
 void get_swapp(char *, uint8_t num);
-#endif /* __FreeBSD__ */
+#endif /* __FreeBSD__ || __OpenBSD__ */
 
 #if defined(__OpenBSD__)
 void get_fans(char *);
