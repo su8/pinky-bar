@@ -89,7 +89,7 @@ match_feature(char *str1, uint8_t sens_type, uint8_t sens_num) {
 
       switch(sens_type) {
         case SENSOR_VOLTS_DC:
-          GLUE2(all, "%.2f ", ((float)sens.value / 1000000.0));
+          GLUE2(all, "%.2f ", ((float)sens.value / 1000000.0f));
           break;
 
         case SENSOR_TEMP:

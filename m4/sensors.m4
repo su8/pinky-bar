@@ -31,7 +31,7 @@ AC_DEFUN([TEST_SENSORS],[
     [with_sensors=no]
   )
 
-  ifdef([FREEBZD],[],[
+  ifdef([LINUKS],[
     AS_IF([test "x$with_sensors" = "xyes"], [
       AC_CHECK_HEADERS([sensors/sensors.h], [
         SENSORS_LIBS="-lsensors"
@@ -53,11 +53,12 @@ AC_DEFUN([TEST_SENSORS],[
           ])
       ])
     ])
+  ],[
   ])
 
   AC_SUBST(SENSORS_LIBS)
 
-  ifdef([FREEBZD],[],[
+  ifdef([LINUKS],[
     AS_IF([test "x$with_sensors" = "xyes"], [
       AC_LINK_IFELSE([
         AC_LANG_SOURCE([[
@@ -118,6 +119,7 @@ AC_DEFUN([TEST_SENSORS],[
       )
     ])
 
+  ],[
   ])
 
 
@@ -144,7 +146,6 @@ AC_DEFUN([TEST_SENSORS],[
       ]
     )
   ],[
-  
   ])
 
 

@@ -69,7 +69,7 @@ AC_DEFUN([TEST_NET],[
 
     ],[
 
-      ifdef([OPENBZD], [], [
+      ifdef([LINUKS], [
         AC_CHECK_HEADERS([    \
           linux/if_link.h     \
           netpacket/packet.h  \
@@ -78,7 +78,8 @@ AC_DEFUN([TEST_NET],[
         ],[],[
           ERR([Missing core header files.])
         ])
-      ])
+      ],[
+    ])
 
     ])
 
@@ -188,12 +189,17 @@ AC_DEFUN([TEST_PCI],[
     [with_pci=yes]
   )
 
-  AS_IF([test "x$with_pci" = "xno"], [
+  ifdef([LINUKS],[],[
     WITH_PCI=0
     CHECK_CFLAGZ([-O2])
   ])
 
-  ifdef([FREEBZD],[],[
+  ifdef([LINUKS],[
+    AS_IF([test "x$with_pci" = "xno"], [
+      WITH_PCI=0
+      CHECK_CFLAGZ([-O2])
+    ])
+
     AS_IF([test "x$with_pci" = "xyes"], [
 
       dnl For very first time I stumble upon GCC -O2 bug.
@@ -245,6 +251,7 @@ AC_DEFUN([TEST_PCI],[
       )
     ])
 
+  ],[
   ])
 
   AC_DEFINE_UNQUOTED([WITH_PCI],[$WITH_PCI],[PCI funcs])

@@ -89,32 +89,30 @@ AC_DEFUN([TEST_SOME_FUNCS],[
   )
 
 
-  ifdef([FREEBZD],[],[
-    ifdef([OPENBZD],[],[
-      NOTIFY([sysinfo])
-      AC_COMPILE_IFELSE([
-        AC_LANG_SOURCE([[
-          #include <sys/sysinfo.h>
-          int main(void) {
-            struct sysinfo inf;
-            sysinfo(&inf);
-            inf.totalram;
-            inf.freeram;
-            inf.sharedram;
-            inf.bufferram;
-            inf.loads[0];
-            inf.loads[1];
-            inf.loads[2];
-            return 0;
-          }
-        ]])
-      ],[],[
-        COMPILE_FAILED([sysinfo RAM and average load])
-        ]
-      )
-    ])
+  ifdef([LINUKS],[
+    NOTIFY([sysinfo])
+    AC_COMPILE_IFELSE([
+      AC_LANG_SOURCE([[
+        #include <sys/sysinfo.h>
+        int main(void) {
+          struct sysinfo inf;
+          sysinfo(&inf);
+          inf.totalram;
+          inf.freeram;
+          inf.sharedram;
+          inf.bufferram;
+          inf.loads[0];
+          inf.loads[1];
+          inf.loads[2];
+          return 0;
+        }
+      ]])
+    ],[],[
+      COMPILE_FAILED([sysinfo RAM and average load])
+      ]
+    )
 
-  ])
+  ],[])
 
 
   NOTIFY([openNreadFile])
@@ -153,7 +151,7 @@ AC_DEFUN([TEST_SOME_FUNCS],[
   )
 
 
-  ifdef([FREEBZD],[],[
+  ifdef([LINUKS],[
     NOTIFY([glob])
     AC_COMPILE_IFELSE([
       AC_LANG_SOURCE([[
@@ -168,7 +166,7 @@ AC_DEFUN([TEST_SOME_FUNCS],[
       ]
     )
 
-  ])
+  ],[])
 
 
   NOTIFY([sysconf])
@@ -422,8 +420,59 @@ AC_DEFUN([TEST_SOME_FUNCS],[
       ]
     )
 
-  ],
-  [])
+  ],[])
+
+
+  ifdef([OPENBZD],[
+    NOTIFY([swapctl])
+    AC_COMPILE_IFELSE([
+      AC_LANG_SOURCE([[
+        #include <stdio.h>
+        #include <sys/swap.h>
+        int main(void) {
+          struct swapent *dev = NULL;
+          swapctl(SWAP_NSWAP, 0, 0);
+          return 0;
+        }
+      ]])
+    ],[],[
+      COMPILE_FAILED([swapctl])
+      ]
+    )
+
+    NOTIFY([apm battery])
+    AC_COMPILE_IFELSE([
+      AC_LANG_SOURCE([[
+        #include <stdio.h>
+        #include <string.h>
+        #include <stdint.h>
+        #include <fcntl.h>
+        #include <sys/ioctl.h>
+        #include <machine/apmvar.h>
+        int main(void) {
+          struct apm_power_info bstate;
+          int fd = 0;
+          uintmax_t dummy = 0;
+          memset(&bstate, 0, sizeof(struct apm_power_info));
+          if (0 != (fd = open("/dev/apm", O_RDONLY))) {
+            return 0;
+          }
+          if (0 != (ioctl(fd, APM_IOC_GETPOWER, &bstate))) {
+            close(fd);
+            return 0;
+          }
+          close(fd);
+          dummy = (uintmax_t)bstate.battery_life;
+          return 0;
+        }
+      ]])
+    ],[],[
+      COMPILE_FAILED([apm battery])
+      ]
+    )
+
+  ],[])
+
 
 
 ])

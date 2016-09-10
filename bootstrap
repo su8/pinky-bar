@@ -66,6 +66,7 @@ _gen_files() {
       ;;
     *)
         amCF="${posixCF}"
+        defTits='m4_define([LINUKS], [cryMeAriver])'
         srcToAppend=(
           'linux_functions.c'
         )
