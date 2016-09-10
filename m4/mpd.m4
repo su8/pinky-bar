@@ -26,7 +26,7 @@ AC_DEFUN([TEST_MPD],[
 
   AC_ARG_WITH([mpd],
     AS_HELP_STRING([--with-mpd],
-      [mpd linker flag to show the current playing song]),
+      [mpd linker flag to show the currently played song]),
     [],
     [with_mpd=no]
   )

@@ -24,6 +24,7 @@ If you compile your kernel from source code make sure to include your cpu and mo
 **Just an example if you use BSD - acpi/aibs, coretemp/amdtemp.**
 
 ![](img/cpu-temp.png)
+
 ![](img/mobo-temp.png)
 
 ---
@@ -105,21 +106,13 @@ The following options are available only to FreeBSD and OpenBSD:
 | -h           | --swaptotal | The total drive swap                                               |
 | -H           | --swapavail | The available drive swap (total - used)                            |
 
-The following options are **NOT** available only to OpenBSD:
-
-```bash
--So
-
-# The short -l option is different
-# and the long one has different syntax
-# --ramused instead --ramshared
-```
+The `-So` options are **NOT** available only to OpenBSD.
 
 The following options are available only in OpenBSD:
 
 | short option | long option | Descrtiption                                                       |
 |--------------|-------------|--------------------------------------------------------------------|
-| -l           | --ramused  | The used ram in MB                                                  |
+| -l           | --ramused   | The used ram in MB                                                 |
 
 ---
 
@@ -153,7 +146,7 @@ By default, if **no** options are passed, the program will be compiled with/with
 
 The pci and sensors configure options will be discarded in \*BSD. If you supplied **--with-alsa** and **--with-oss** or used the port package with the ncurses dialogue, alsa will have higher precedence over OSS. By default the port package will have OSS selected and alsa unselected.
 
-**--with-net** will substitute -O0 flag to mitigate a bug in GCC caused by -O2. -O0 will optimize the compiled binary for file size, while -O2 will optimize it for speed. So don't be shocked to find out that **--without-net** will cause the compiled binary to double it's size.
+Affects only linux, **--with-net** will substitute -O0 flag to mitigate a bug in GCC caused by -O2. -O0 will optimize the compiled binary for file size, while -O2 will optimize it for speed. So don't be shocked to find out that **--without-net** will cause the compiled binary to double it's size.
 
 ---
 
@@ -254,7 +247,7 @@ make
 make install
 
 # compile pinky_curses
-# FreeBSD users should type -D_DEFAULT_SOURCE instead
+# BSD users should type -D_DEFAULT_SOURCE instead
 gcc -std=c99 -D_POSIX_C_SOURCE=200112L -Wall -Wextra -O2 src/ncurses.c -o pinky_curses -lncurses
 ```
 
@@ -325,13 +318,6 @@ URxvt.skipBuiltinGlyphs         : true
 
 
 ! urxvt colours --------------------------------------------------------------------
-URxvt.tabbed.tabbar-fg: 2
-URxvt.tabbed.tabbar-bg: 0
-URxvt.tabbed.tab-fg: 8
-URxvt.tabbed.tab-bg: 0
-URxvt.tabbed.new-button: false
-URxvt.tabbed.autohide: true
-
 *.foreground:   #c5c8c6
 *.background:   #222222
 *.cursorColor:  #ffffff
@@ -393,8 +379,8 @@ Force your non xterm/urxvt terminal emulator to use the newer xterm/urxvt colour
 pinky\_curses is standalone program not tied to pinky-bar.
 
 ```bash
-# &B - Blue , &M - Magenta , &Y - Yellow
-while true; do echo "&BOh &Mhello &Ydear";sleep 1;done | ./pinky_curses
+# ^B - Blue , ^M - Magenta , ^Y - Yellow
+while true; do echo "^BOh ^Mhello ^Ydear";sleep 1;done | ./pinky_curses
 ```
 
 ## Installation for anything else
@@ -514,7 +500,6 @@ pid_file "/tmp/mpdpid"
 log_level "default"
 user "mpd"
 
-
 audio_output {
   type "alsa"
   name "My sound card"
@@ -584,7 +569,7 @@ for dwm:
 
 use **--without-colours** to skip the following step:
 
-* dwm compiled with [statuscolor](https://github.com/wifiextender/dwm-fork/blob/master/patches/statuscolours.diff) patch. The colours in use are specified in your [config.h](https://github.com/wifiextender/dwm-fork/blob/master/config.h#L6)
+* dwm compiled with statuscolor patch applied. The colours in use are specified in your dwm config.h
 
 ## Wish list
 

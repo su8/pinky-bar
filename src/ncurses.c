@@ -18,7 +18,7 @@
 
   Compile with:
    gcc -std=c99 -D_POSIX_C_SOURCE=200112L -Wall -Wextra -O2 src/ncurses.c -o pinky_curses -lncurses
-  FreeBSD users should type -D_DEFAULT_SOURCE instead.
+  BSD users should type -D_DEFAULT_SOURCE instead.
 */
 
 #include <stdio.h>
@@ -27,6 +27,7 @@
 #include <stdint.h>
 #include <ctype.h>
 
+#include <locale.h>
 #include <unistd.h>
 #include <signal.h>
 
@@ -47,8 +48,10 @@ void sighandler(int num);
 void init_da_handler(void);
 
 volatile sig_atomic_t call_it_quits = 0;
+
 int main(void) {
   init_da_handler();
+  setlocale(LC_ALL, "");
 
   int16_t color_pair = 1, fg = 1, bg = 1, x = 0, z = 0;
   int32_t old_x = 0, old_y = 0, new_y = 0, new_x = 0;
@@ -134,7 +137,7 @@ void unuglify(char *str1) {
     if (0 != (iscntrl((unsigned char) *ptr))) {
       continue;
     }
-    if ('&' == *ptr)  {
+    if ('^' == *ptr)  {
       cclr[0] = *(++ptr);
       switch((toupper((unsigned char) *ptr))) {
         case 'B':

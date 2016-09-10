@@ -27,7 +27,7 @@
 #include "prototypes/options.h"
 
 const char *argp_program_version = PACKAGE_STRING;
-const char *argp_program_bug_address = "https://github.com/wifiextender/pinky-bar ";
+const char *argp_program_bug_address = "https://gitlab.com/void0/pinky-bar ";
 static const char doc[] = "Statusbar program for anything (Window Manager, terminal multiplexer, etc..)";
 static const struct argp_option options[] = {
   { .doc = "Available options:" },
@@ -51,18 +51,6 @@ static const struct argp_option options[] = {
   { .name = "driveavail",   .key = 'O',                .doc = "The available drive storage."                             },
   { .name = "dvdstr",       .key = 'z',                .doc = "The vendor and model name of your cdrom/dvdrom."          },
   { .name = "battery",      .key = 'g',                .doc = "The remaining battery charge."                            },
-
-#if !defined(__OpenBSD__)
-  { .name = "statio",       .key = 'S', .arg = "sda",  .doc = "Read and written MBs to the drive so far."                },
-  { .name = "ramshared",    .key = 'l',                .doc = "The shared ram."                                          },
-  { .name = "rambuffer",    .key = 'o',                .doc = "The buffered ram."                                        },
-#endif /* !__OpenBSD__ */
-
-
-#if defined(__OpenBSD__)
-  { .name = "ramused",      .key = 'l',                .doc = "The used ram in MB."                                      },
-#endif /* __OpenBSD__ */
-
   { .name = "packages",     .key = 'p',                .doc = "The number of installed packages."                        },
   { .name = "kernsys",      .key = 'P',                .doc = "The kernel name."                                         },
   { .name = "kernode",      .key = 'q',                .doc = "The network node hostname."                               },
@@ -86,6 +74,17 @@ static const struct argp_option options[] = {
   { .name = "ipcast",       .key = 'D', .arg = "eth0", .doc = "The NIC broadcast address."                               },
   { .name = "iplookup",     .key = 'E', .arg = "site", .doc = "Mini website IP lookup."                                  },
 
+#if !defined(__OpenBSD__)
+  { .name = "statio",       .key = 'S', .arg = "sda",  .doc = "Read and written MBs to the drive so far."                },
+  { .name = "ramshared",    .key = 'l',                .doc = "The shared ram."                                          },
+  { .name = "rambuffer",    .key = 'o',                .doc = "The buffered ram."                                        },
+#endif /* !__OpenBSD__ */
+
+
+#if defined(__OpenBSD__)
+  { .name = "ramused",      .key = 'l',                .doc = "The used ram in MB."                                      },
+#endif /* __OpenBSD__ */
+
 #if defined(__linux__)
   { .name = "nicfw",        .key = 'j', .arg = "eth0", .doc = "The NIC firmware."                                        },
   { .name = "drivemodel",   .key = 'F', .arg = "sda",  .doc = "The vendor name of your drive."                           },
@@ -93,7 +92,7 @@ static const struct argp_option options[] = {
   { .name = "nicver",       .key = 'H', .arg = "eth0", .doc = "The NIC version."                                         },
   { .name = "iplink",       .key = 'e', .arg = "eth0", .doc = "The NIC link speed (useful for wireless/wifi)."           },
   { .name = "nicinfo",      .key = 'G', .arg = "eth0", .doc = "The NIC vendor and model."                                },
-#endif
+#endif /* __linux__ */
 
 #if defined(__FreeBSD__) || defined(__OpenBSD__)
   { .name = "swapused",     .key = 'Z',                .doc = "The used drive swap in MB."                               },
@@ -219,10 +218,6 @@ parse_opt(int key, char *arg, struct argp_state *state) {
 
     NEW_SWAPP_LABEL('F', char swapp_perc[VLA], swapp_perc, 4, FMT_SSD2, SSD_STR);
 
-#endif /* __FreeBSD__ || __OpenBSD__ */
-
-
-#if defined(__FreeBSD) || defined(__OpenBSD__)
     NEW_NET_LABEL('j', char nic_info[VLA], nic_info, 7, FMT_KERN);
 #endif /* __FreeBSD__ || __OpenBSD__ */
 

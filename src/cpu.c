@@ -57,7 +57,7 @@ get_cpu(char *str1) {
   int mib[] = { CTL_KERN, KERN_CPTIME };
   size_t len = sizeof(cpu_active);
   SYSCTLVAL(mib, 2, &cpu_active, &len);
-#endif
+#endif /* __OpenBSD__ */
 
 #if defined(__linux__)
   FILE *fp = fopen("/proc/stat", "r");
