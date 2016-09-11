@@ -26,10 +26,7 @@ void get_mobo(char *);
 void get_mobo_temp(char *);
 void get_cpu_temp(char *);
 void get_battery(char *);
-
-#if !defined(__OpenBSD__)
 void get_statio(char *, char *);
-#endif /* !__OpenBSD__ */
 
 #if defined(__linux__)
 void get_ssd_model(char *, char *);

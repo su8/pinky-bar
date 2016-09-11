@@ -73,9 +73,9 @@ static const struct argp_option options[] = {
   { .name = "ipmask",       .key = 'B', .arg = "eth0", .doc = "The NIC subnet mask address."                             },
   { .name = "ipcast",       .key = 'D', .arg = "eth0", .doc = "The NIC broadcast address."                               },
   { .name = "iplookup",     .key = 'E', .arg = "site", .doc = "Mini website IP lookup."                                  },
+  { .name = "statio",       .key = 'S', .arg = "sda",  .doc = "Read and written MBs to the drive so far."                },
 
 #if !defined(__OpenBSD__)
-  { .name = "statio",       .key = 'S', .arg = "sda",  .doc = "Read and written MBs to the drive so far."                },
   { .name = "ramshared",    .key = 'l',                .doc = "The shared ram."                                          },
   { .name = "rambuffer",    .key = 'o',                .doc = "The buffered ram."                                        },
 #endif /* !__OpenBSD__ */
@@ -197,6 +197,8 @@ parse_opt(int key, char *arg, struct argp_state *state) {
 
     NEW_LABEL('g', char battery[VLA], battery, FMT_BATT, BATT_STR);
 
+    NEW_ARG_LABEL('S', char statio[VLA], statio, FMT_STATIO, STATIO_STR);
+
 #if defined(HAVE_CDIO_CDIO_H) || defined(__linux__)
     NEW_LABEL('z', char dvd[VLA], dvd, FMT_KERN);
 #endif /* HAVE_CDIO_CDIO_H || __linux__ */
@@ -204,8 +206,6 @@ parse_opt(int key, char *arg, struct argp_state *state) {
 
 #if !defined(__OpenBSD__)
     NEW_RAM_LABEL('o', char ram_buffer[VLA], ram_buffer, 4, FMT_RAM2, RAM_STR);
-
-    NEW_ARG_LABEL('S', char statio[VLA], statio, FMT_STATIO, STATIO_STR);
 #endif /* !__OpenBSD__ */
 
 

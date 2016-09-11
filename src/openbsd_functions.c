@@ -23,6 +23,7 @@
 #include <sys/time.h>
 #include <sys/param.h>
 #include <sys/swap.h>
+#include <sys/disk.h>
 #include <fcntl.h>
 #include <sys/ioctl.h>
 #include <sys/sensors.h>
@@ -262,6 +263,45 @@ get_swapp(char *str1, uint8_t num) {
 error:
   if (NULL != dev) {
     free(dev);
+  }
+  return;
+}
+
+
+void
+get_statio(char *str1, char *str2) {
+  struct diskstats *ds = NULL;
+  int mib[] = { CTL_HW, HW_DISKSTATS };
+  uint_least16_t x = 0;
+  size_t len = 0, drivez = 0;
+
+  FILL_STR_ARR(1, str1, "Null");
+  SYSCTLVAL(mib, 2, NULL, &len);
+
+  if (0 == (drivez = (len / sizeof(*ds)))) {
+    return;
+  }
+
+  ds = (struct diskstats *)malloc(drivez * sizeof(char *));
+  if (NULL == ds) {
+    return;
+  }
+  if (0 != (sysctl(mib, 2, ds, &len, NULL, 0))) {
+    goto error;
+  }
+
+  for (x = 0; x < drivez; x++) {
+    if (STREQ(str2, ds[x].ds_name)) {
+      FILL_ARR(str1, "Read " FMT_UINT " MB, Written " FMT_UINT " MB",
+        (uintmax_t)ds[x].ds_rbytes / MB,
+        (uintmax_t)ds[x].ds_wbytes / MB);
+      break;
+    }
+  }
+
+error:
+  if (NULL != ds) {
+    free(ds);
   }
   return;
 }

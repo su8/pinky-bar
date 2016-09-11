@@ -54,7 +54,7 @@ The order of supplied options will dictate how, where and what system informatio
 | -J           | --ramtotal  | The total ram                                                      |
 | -K           | --ramfree   | The free ram                                                       |
 | -l           | --ramshared | The shared ram                                                     |
-| -o           | --rambuffer | The buffer ram                                                     |
+| -o           | --rambuffer | The buffer ram (not available in OpenBSD)                          |
 | -s           | --driveperc | The used drive storage in percentage                               |
 | -n           | --drivetotal| The total drive storage                                            |
 | -N           | --drivefree | The free drive storage                                             |
@@ -105,8 +105,6 @@ The following options are available only to FreeBSD and OpenBSD:
 | -F           | --swaperc   | The used drive swap in percentage                                  |
 | -h           | --swaptotal | The total drive swap                                               |
 | -H           | --swapavail | The available drive swap (total - used)                            |
-
-The `-So` options are **NOT** available only to OpenBSD.
 
 The following options are available only in OpenBSD:
 
@@ -575,7 +573,7 @@ use **--without-colours** to skip the following step:
 
 As top priority:
 
-OpenBSD disk io
+~~OpenBSD disk io~~
 
 ~~OpenBSD laptop battery support~~
 
