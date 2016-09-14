@@ -190,52 +190,40 @@ error:
 void
 get_song(char *str1, uint8_t num) {
   FILE *fp;
-  uint8_t x = 0, found_it = 0;
+  uint8_t found_it = 0;
   char buf[100], temp[100], *ptr;
   const char *tagz[] = { "artist", "title", "album", "date" };
-  const char *tagz2 = ((6 != num) ? tagz[num-2] : "ohsnap");
+  const char *idx_tagz = ((6 != num) ? tagz[num-2] : "ohsnap");
 
   if (NULL == (fp = popen("cmus-remote -Q 2> /dev/null", "r"))) {
     return;
   }
 
   while (true) {
-    if (NULL == (fgets(buf, 100, fp)) || 1 == found_it) {
+    if (NULL == (fgets(buf, 99, fp)) || 1 == found_it) {
       break;
     }
-    switch(num) {
-      case 2:
-      case 3:
-      case 4:
-      case 5:
-        {
-          if ('t' == buf[0] && 'a' == buf[1] && 'g' == buf[2]) {
-            CHECK_SSCANF(buf, "%*s %s", temp);
-            if (STREQ(tagz2, temp)) {
-              CHECK_SSCANF(buf, "%*s %*s %[^\n]", str1);
-              found_it = 1;
+    if (6 == num) {
+      if ('f' == buf[0] && 'i' == buf[1] && 'l' == buf[2]) {
+        CHECK_SSCANF(buf, "%*s %[^\n]", temp);
+        if (NULL != (ptr = strrchr(temp, '/'))) {
+          for (; *ptr; ptr++) {
+            if ('/' != *ptr) {
+              *str1++ = *ptr;
             }
           }
+          *str1 = '\0';
         }
-        break;
-
-      case 6:
-        {
-          if ('f' == buf[0] && 'i' == buf[1] && 'l' == buf[2]) {
-            CHECK_SSCANF(buf, "%*s %[^\n]", temp);
-            if (NULL != (ptr = strrchr(temp, '/'))) {
-              for (; *ptr; ptr++) {
-                if ('/' != *ptr && 99 != x) {
-                  *str1++ = *ptr;
-                  x++;
-                }
-              }
-              *str1 = '\0';
-            }
-            found_it = 1;
-          }
+        found_it = 1;
+      }
+    } else {
+      if ('t' == buf[0] && 'a' == buf[1] && 'g' == buf[2]) {
+        CHECK_SSCANF(buf, "%*s %s", temp);
+        if (STREQ(idx_tagz, temp)) {
+          CHECK_SSCANF(buf, "%*s %*s %[^\n]", str1);
+          found_it = 1;
         }
-        break;
+      }
     }
   }
 
