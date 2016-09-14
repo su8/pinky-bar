@@ -110,6 +110,9 @@ match_feature(char *str1, uint8_t sens_type, uint8_t sens_num) {
             found_fans = true;
           }
           break;
+
+        default:
+          continue;
       }
     }
   }

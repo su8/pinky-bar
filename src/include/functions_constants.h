@@ -88,6 +88,10 @@
 #define RECOMPILE_WITH(x) (exit_with_err(ERR, "recompile the program --with-" x))
 
 /* Let the preprocessor Do Repeat Myself */
+#define CHECK_SSCANF(buf, x, z) \
+  if (EOF == (sscanf(buf, x, z))) { \
+    exit_with_err(ERR, "sscanf() EOF"); \
+  }
 
 #define CHECK_FSCANF(fp, x, z) \
   if (EOF == (fscanf(fp, x, z))) { \

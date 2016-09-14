@@ -133,9 +133,9 @@ get_volume(char *str1) {
 #endif /* HAVE_SYS_SOUNDCARD_H || HAVE_SOUNDCARD_H */
 
 
+#if defined (HAVE_MPD_CLIENT_H)
 void
 get_song(char *str1, uint8_t num) {
-#if defined (HAVE_MPD_CLIENT_H)
 
   struct mpd_connection *conn = NULL;
   struct mpd_song *song = NULL;
@@ -183,10 +183,64 @@ error:
     mpd_connection_free(conn);
   }
   return;
+}
 
 #else
-  (void)str1;
-  (void)num;
-  RECOMPILE_WITH("mpd");
-#endif
+
+void
+get_song(char *str1, uint8_t num) {
+  FILE *fp;
+  uint8_t x = 0, found_it = 0;
+  char buf[100], temp[100], *ptr;
+  const char *tagz[] = { "artist", "title", "album", "date" };
+  const char *tagz2 = ((6 != num) ? tagz[num-2] : "ohsnap");
+
+  if (NULL == (fp = popen("cmus-remote -Q 2> /dev/null", "r"))) {
+    return;
+  }
+
+  while (true) {
+    if (NULL == (fgets(buf, 100, fp)) || 1 == found_it) {
+      break;
+    }
+    switch(num) {
+      case 2:
+      case 3:
+      case 4:
+      case 5:
+        {
+          if ('t' == buf[0] && 'a' == buf[1] && 'g' == buf[2]) {
+            CHECK_SSCANF(buf, "%*s %s", temp);
+            if (STREQ(tagz2, temp)) {
+              CHECK_SSCANF(buf, "%*s %*s %[^\n]", str1);
+              found_it = 1;
+            }
+          }
+        }
+        break;
+
+      case 6:
+        {
+          if ('f' == buf[0] && 'i' == buf[1] && 'l' == buf[2]) {
+            CHECK_SSCANF(buf, "%*s %[^\n]", temp);
+            if (NULL != (ptr = strrchr(temp, '/'))) {
+              for (; *ptr; ptr++) {
+                if ('/' != *ptr && 99 != x) {
+                  *str1++ = *ptr;
+                  x++;
+                }
+              }
+              *str1 = '\0';
+            }
+            found_it = 1;
+          }
+        }
+        break;
+    }
+  }
+
+  if (-1 == (pclose(fp))) {
+    exit_with_err(CANNOT_CLOSE, "popen()");
+  }
 }
+#endif /* HAVE_MPD_CLIENT_H */

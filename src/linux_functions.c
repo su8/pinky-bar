@@ -153,8 +153,8 @@ match_feature(char *str1, uint8_t num) {
                 }
                 GLUE2(all, "%.2f ", (float)value);
               }
-              break;
             }
+            break;
 
           case SENSORS_SUBFEATURE_TEMP_INPUT:
             {
@@ -173,8 +173,8 @@ match_feature(char *str1, uint8_t num) {
                   free(label);
                 }
               }
-              break;
             }
+            break;
 
           case SENSORS_SUBFEATURE_FAN_INPUT:
             {
@@ -187,8 +187,8 @@ match_feature(char *str1, uint8_t num) {
                 }
                 found_fans = true;
               }
-              break;
             }
+            break;
 
           default:
             continue;

@@ -32,7 +32,6 @@ static const char doc[] = "Statusbar program for anything (Window Manager, termi
 static const struct argp_option options[] = {
   { .doc = "Available options:" },
   { .name = "mpd",          .key = 'M',                .doc = "The song filename."                                       },
-  { .name = "mpdtrack",     .key = 'W',                .doc = "The song track name."                                     },
   { .name = "mpdartist",    .key = 'x',                .doc = "The song artist(s) name(s)."                              },
   { .name = "mpdtitle",     .key = 'X',                .doc = "The song title."                                          },
   { .name = "mpdalbum",     .key = 'y',                .doc = "The song album name."                                     },
@@ -74,6 +73,10 @@ static const struct argp_option options[] = {
   { .name = "ipcast",       .key = 'D', .arg = "eth0", .doc = "The NIC broadcast address."                               },
   { .name = "iplookup",     .key = 'E', .arg = "site", .doc = "Mini website IP lookup."                                  },
   { .name = "statio",       .key = 'S', .arg = "sda",  .doc = "Read and written MBs to the drive so far."                },
+
+#if defined(HAVE_MPD_CLIENT_H)
+  { .name = "mpdtrack",     .key = 'W',                .doc = "The song track name."                                     },
+#endif /* HAVE_MPD_CLIENT_H */
 
 #if !defined(__OpenBSD__)
   { .name = "ramshared",    .key = 'l',                .doc = "The shared ram."                                          },
@@ -118,8 +121,6 @@ parse_opt(int key, char *arg, struct argp_state *state) {
 
   struct arguments *arguments = state->input;
   switch(key) {
-
-    NEW_MPD_LABEL('W', char song_track[VLA], song_track, 1);
 
     NEW_MPD_LABEL('x', char song_artist[VLA], song_artist, 2);
 
@@ -198,6 +199,11 @@ parse_opt(int key, char *arg, struct argp_state *state) {
     NEW_LABEL('g', char battery[VLA], battery, FMT_BATT, BATT_STR);
 
     NEW_ARG_LABEL('S', char statio[VLA], statio, FMT_STATIO, STATIO_STR);
+
+#if defined(HAVE_MPD_CLIENT_H)
+    NEW_MPD_LABEL('W', char song_track[VLA], song_track, 1);
+#endif /* HAVE_MPD_CLIENT_H */
+
 
 #if defined(HAVE_CDIO_CDIO_H) || defined(__linux__)
     NEW_LABEL('z', char dvd[VLA], dvd, FMT_KERN);

@@ -135,8 +135,7 @@ get_cores_load(char *str1) {
       break;
     }
   }
-
-#endif
+#endif /* __OpenBSD__ */
 
 #if defined(__linux__)
   FILE *fp = fopen("/proc/stat", "r");

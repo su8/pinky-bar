@@ -40,7 +40,7 @@ The order of supplied options will dictate how, where and what system informatio
 | short option | long option | Descrtiption                                                       |
 |--------------|-------------|--------------------------------------------------------------------|
 | -M           | --mpd       | The song filename                                                  |
-| -W           | --mpdtrack  | The song track name                                                |
+| -W           | --mpdtrack  | The song track name  (not available in cmus)                       |
 | -x           | --mpdartist | The song artist(s) name(s)                                         |
 | -X           | --mpdtitle  | The song title                                                     |
 | -y           | --mpdalbum  | The song album name                                                |
@@ -141,6 +141,8 @@ By default, if **no** options are passed, the program will be compiled with/with
 ```bash
 --without-alsa --without-x11 --without-mpd --with-colours --with-net --with-pci --without-dvd --without-sensors --without-ncurses
 ```
+
+**--without-mpd** will compile the program with cmus support, the options sytax stays as is.
 
 The pci and sensors configure options will be discarded in \*BSD. If you supplied **--with-alsa** and **--with-oss** or used the port package with the ncurses dialogue, alsa will have higher precedence over OSS. By default the port package will have OSS selected and alsa unselected.
 
@@ -481,6 +483,7 @@ Jokes aside, but my intention was to make the lm\_sensors api code FreeBSD exclu
 
 To see the currently played song name:
 
+* cmus (if compiled **--without-mpd**)
 * libmpdclient
 * mpd (with properly configured config)
 
