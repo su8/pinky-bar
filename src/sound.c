@@ -190,7 +190,6 @@ error:
 void
 get_song(char *str1, uint8_t num) {
   FILE *fp;
-  uint8_t found_it = 0;
   char buf[100], temp[100], *ptr;
   const char *tagz[] = { "artist", "title", "album", "date" };
   const char *idx_tagz = ((6 != num) ? tagz[num-2] : "ohsnap");
@@ -200,7 +199,7 @@ get_song(char *str1, uint8_t num) {
   }
 
   while (true) {
-    if (NULL == (fgets(buf, 99, fp)) || 1 == found_it) {
+    if (NULL == (fgets(buf, 99, fp))) {
       break;
     }
     if (6 == num) {
@@ -214,14 +213,14 @@ get_song(char *str1, uint8_t num) {
           }
           *str1 = '\0';
         }
-        found_it = 1;
+        break;
       }
     } else {
       if ('t' == buf[0] && 'a' == buf[1] && 'g' == buf[2]) {
         CHECK_SSCANF(buf, "%*s %s", temp);
         if (STREQ(idx_tagz, temp)) {
           CHECK_SSCANF(buf, "%*s %*s %[^\n]", str1);
-          found_it = 1;
+          break;
         }
       }
     }
