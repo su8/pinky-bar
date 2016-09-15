@@ -216,6 +216,12 @@ get_song(char *str1, uint8_t num) {
         break;
       }
     } else {
+      if ('s' == buf[0] && 't' == buf[1] && 'r' == buf[2]) {
+        if (1 != (num-2)) {
+          CHECK_SSCANF(buf, "%*s %[^\n]", str1);
+        }
+        break;
+      }
       if ('t' == buf[0] && 'a' == buf[1] && 'g' == buf[2]) {
         CHECK_SSCANF(buf, "%*s %s", temp);
         if (STREQ(idx_tagz, temp)) {
