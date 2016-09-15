@@ -96,7 +96,7 @@ _gen_files() {
   AM_INIT_AUTOMAKE([1.11 -Wall no-define foreign subdir-objects dist-xz no-dist-gzip std-options])
 
   m4_ifdef([AM_SILENT_RULES], [AM_SILENT_RULES([yes])])
-  '${defTits}'
+  "${defTits}"
 
   # With the addition of more runtime compile and
   # link tests, this option is no longer necessary.

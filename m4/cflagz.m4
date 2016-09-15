@@ -100,9 +100,12 @@ AC_DEFUN([TEST_CFLAGZ],[
   dnl -Wno-unused-result,
 
   dnl For very first time I stumble upon GCC -O2 bug.
-  dnl It hangs on pci_init with -O2
+  dnl It hangs on pci_init and sensors_init with -O2
   dnl net.m4 will append -O2 or -O0
-  dnl according whether --with-pci is used or not
+  dnl according whether --with-pci and --with-sensors
+  dnl are used or not. Another "newer" GCC release
+  dnl that I just installed hangs on sensors_init.
+  dnl One more snafu GCC, and I'll drop -02 in linux
 
   AC_MSG_NOTICE([checking all CFLAGS])
   CHECK_CFLAGZ([

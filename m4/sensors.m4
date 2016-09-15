@@ -99,9 +99,8 @@ AC_DEFUN([TEST_SENSORS],[
                       if (NULL != label) {
                         free(label);
                       }
-
-                      break;
                     }
+                      break;
                     default:
                       continue;
                   }
@@ -148,5 +147,11 @@ AC_DEFUN([TEST_SENSORS],[
   ],[
   ])
 
+  AS_IF([test "x$with_sensors" = "xyes"], [
+    ifdef([NO_PCI],[
+      CHECK_CFLAGZ([-O0])
+    ],[])
+    m4_define([NO_SENSR],[meltCPU])
+  ])
 
 ])

@@ -142,11 +142,11 @@ By default, if **no** options are passed, the program will be compiled with/with
 --without-alsa --without-x11 --without-mpd --with-colours --with-net --with-pci --without-dvd --without-sensors --without-ncurses
 ```
 
-**--without-mpd** will compile the program with cmus support, the options sytax stays as is.
+**--without-mpd** will compile the program with cmus support, the options syntax stays as is.
 
 The pci and sensors configure options will be discarded in \*BSD. If you supplied **--with-alsa** and **--with-oss** or used the port package with the ncurses dialogue, alsa will have higher precedence over OSS. By default the port package will have OSS selected and alsa unselected.
 
-Affects only linux, **--with-net** will substitute -O0 flag to mitigate a bug in GCC caused by -O2. -O0 will optimize the compiled binary for file size, while -O2 will optimize it for speed. So don't be shocked to find out that **--without-net** will cause the compiled binary to double it's size.
+Affects only linux, **--with-pci** and or **--with-sensors** will substitute -O0 flag to mitigate bugs in GCC caused by -O2 optimizations. -O0 will optimize the compiled binary for file size, while -O2 will optimize it for speed. So don't be shocked to find out that **--without-pci --without-sensors** will cause the compiled binary to double it's size. If things doesn't improve with upcomining GCC releases I will temporary drop -O2.
 
 ---
 
@@ -483,7 +483,7 @@ Jokes aside, but my intention was to make the lm\_sensors api code FreeBSD exclu
 
 To see the currently played song name:
 
-* cmus (if compiled **--without-mpd**)
+* cmus (only if compiled **--without-mpd**)
 * libmpdclient
 * mpd (with properly configured config)
 

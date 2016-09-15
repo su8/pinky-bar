@@ -197,7 +197,12 @@ AC_DEFUN([TEST_PCI],[
   ifdef([LINUKS],[
     AS_IF([test "x$with_pci" = "xno"], [
       WITH_PCI=0
-      CHECK_CFLAGZ([-O2])
+      ifdef([NO_SENSR],[
+        CHECK_CFLAGZ([-O0])
+      ],[
+        CHECK_CFLAGZ([-O2])
+      ])
+      m4_define([NO_PCI],[thenFryAGP])
     ])
 
     AS_IF([test "x$with_pci" = "xyes"], [

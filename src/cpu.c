@@ -255,14 +255,14 @@ get_cpu_clock_speed(char *str1) {
 #elif defined(__x86_64__)
 static __inline__ uintmax_t 
 rdtsc(void) {
-  unsigned int tickhi, ticklo;
+  unsigned int tickhi = 0, ticklo = 0;
   __asm__ __volatile__ ("rdtsc" : "=a"(ticklo), "=d"(tickhi));
   return (((uintmax_t)tickhi << 32) | (uintmax_t)ticklo);
 }
 
 void
 get_cpu_clock_speed(char *str1) {
-  uintmax_t x, z;
+  uintmax_t x = 0, z = 0;
 
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wmissing-field-initializers"
