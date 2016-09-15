@@ -39,7 +39,6 @@ _gen_files() {
   progName='pinkybar'
   progVer='1.0.0'
   bsdLibs=''
-  defTits=''
   osEntered="${1,,}"
   bsdCF='-D_DEFAULT_SOURCE -I/usr/local/include -L/usr/local/lib'
   posixCF='-D_POSIX_C_SOURCE=200112L'

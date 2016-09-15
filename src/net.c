@@ -368,7 +368,7 @@ get_nic_info2(char *str1, char *str2, uint8_t num) {
 */
 void
 get_nic_info(char *str1, char *str2) {
-#if WITH_PCI == 1
+#if WITH_PCI == 1 && WITH_NET == 1
 
   uintmax_t vendor = 0, model = 0;
   char temp[VLA];
@@ -427,7 +427,7 @@ error:
   (void)str1;
   (void)str2;
   RECOMPILE_WITH("pci");
-#endif /* WITH_PCI */
+#endif /* WITH_PCI && WITH_NET */
 }
 
 #endif /* __linux__ */

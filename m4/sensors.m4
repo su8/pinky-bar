@@ -151,7 +151,7 @@ AC_DEFUN([TEST_SENSORS],[
     ifdef([NO_PCI],[
       CHECK_CFLAGZ([-O0])
     ],[])
-    m4_define([NO_SENSR],[meltCPU])
+    m4_define([GOT_SENSR],[meltCPU])
   ])
 
 ])
