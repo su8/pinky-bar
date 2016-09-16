@@ -287,7 +287,7 @@ void
 get_cpu_info(char *str1) {
   char buffer[VLA], vend_id[13], vend_chars[17];
   char *all = buffer;
-  uint_fast16_t vend = 0, x = 0, z = 0, corez = 0;
+  uint_fast16_t vend = 0, x = 0, z = 0, corez = 0, ph_bits = 0, vr_bits = 0;
   uint_fast16_t eax = 0, ecx = 0, edx = 0, ebx = 0, eax_old = 0;
   uint_fast16_t l2_cache = 0, line_size = 0, regz = 0, clflu6 =0;
 
@@ -329,15 +329,21 @@ get_cpu_info(char *str1) {
       line_size = (ecx & 0xff);                     /* movl %ecx, 0 */
     }
 
+    if (0x80000008 <= regz) {
+      CPU_STR2(0x80000008, eax, ebx, ecx, edx);     /* movl $0x80000008, %eax */
+      ph_bits  = (eax & 0xff);                      /* movl %eax, 0 */
+      vr_bits  = ((eax >> (8)) & 0xff);             /* movl %eax, 8 */
+    }
+
     CPU_STR2(1, eax, ebx, ecx, edx);                /* movl $0x00000001, %eax */
-    clflu6    = ((ebx >> (8)) & 0xff);              /* movl %ebx, 8 */
-    corez     = ((ebx >> (16)) & 0xff);             /* movl %ebx, 16 */
+    clflu6  = ((ebx >> (8)) & 0xff);                /* movl %ebx, 8 */
+    corez   = ((ebx >> (2 * 8)) & 0xff);            /* movl %ebx, 16 */
 
     FILL_ARR(str1,
      UFINT "x %s ID %s CLFLUSH/Line size " UFINT " " UFINT " L2 cache "
-     UFINT "KB Stepping " UFINT " Family " UFINT " Model " UFINT,
+     UFINT "KB Stepping " UFINT " Family " UFINT " Model " UFINT " Bits " UFINT " " UFINT,
       corez, buffer, vend_id, clflu6*8, line_size, l2_cache, BIT_SHIFT(eax_old),
-      BIT_SHIFT(eax_old >> 8), BIT_SHIFT(eax_old >> 4));
+      BIT_SHIFT(eax_old >> 8), BIT_SHIFT(eax_old >> 4), ph_bits, vr_bits);
   }
 }
 #endif

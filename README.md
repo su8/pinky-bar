@@ -48,8 +48,8 @@ The order of supplied options will dictate how, where and what system informatio
 | -c           | --cpu       | The current cpu load (summed up all cores/threads)                 |
 | -L           | --coresload | Show the load regarding each individual cpu core/thread            |
 | -T           | --cputemp   | The current cpu temperature                                        |
-| -C           | --cpuspeed  | Show your maximum cpu clock speed in MHz, regardless of the used governor |
-| -I           | --cpuinfo   | Detect your CPU vendor, stepping, family, clflush, cache line size, l2 cache, physical cores |
+| -C           | --cpuspeed  | Show your maximum cpu clock speed in MHz, regardless of the used governor. Uses assembly. |
+| -I           | --cpuinfo   | Detect your CPU vendor, stepping, family, clflush, cache line size, l2 cache, physical cores. Uses assembly. |
 | -r           | --ramperc   | The used ram in percentage                                         |
 | -J           | --ramtotal  | The total ram                                                      |
 | -K           | --ramfree   | The free ram                                                       |
@@ -84,6 +84,8 @@ The order of supplied options will dictate how, where and what system informatio
 | -B           | --ipmask    | The NIC subnet mask [argument - eth0]                              |
 | -D           | --ipcast    | The NIC broadcast address [argument - eth0]                        |
 | -E           | --iplookup  | Mini website IP lookup [website argument - google.com]             |
+
+Be aware of the options that mention **Uses assembly** are tested only on AMD and Intel CPUs (starting from pentium 4 onwards).
 
 The following options are available only in Linux:
 
