@@ -287,7 +287,7 @@ void
 get_cpu_info(char *str1) {
   char buffer[VLA], vend_id[13], vend_chars[17];
   char *all = buffer;
-  uint_fast16_t vend = 0, vend_str = 0, x = 0, z = 0;
+  uint_fast16_t vend = 0, x = 0, z = 0;
   uint_fast16_t eax = 0, ecx = 0, edx = 0, ebx = 0, eax_old = 0;
   uint_fast16_t l2_cache = 0, line_size = 0, regz = 0;
 
@@ -298,10 +298,9 @@ get_cpu_info(char *str1) {
   }
 
   CPU_FEATURE(1, eax_old);
-  CPU_FEATURE(0x80000000, vend_str);                /* movl $0x80000000, %eax */
-  CPU_FEATURE(0x80000000, regz);                    /* How many registers the chicken has */
+  CPU_FEATURE(0x80000000, regz);                    /* movl $0x80000000, %eax */
 
-  if (0 != vend_str && 0x80000004 <= regz) {
+  if (0x80000004 <= regz) {
     for (x = 0x80000002; x <= 0x80000004; x++) {    /* movl $0x80000002, %esi */
       CPU_STR2(x, eax, ebx, ecx, edx);              /* cmpl $0x80000004, %eax */
       memset(vend_chars, 0, sizeof(vend_chars));
