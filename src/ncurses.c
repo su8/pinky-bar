@@ -17,7 +17,7 @@
    MA 02110-1301, USA.
 
   Compile with:
-   gcc -std=c99 -D_POSIX_C_SOURCE=200112L -Wall -Wextra -O2 src/ncurses.c -o pinky_curses -lncurses
+   gcc -std=c99 -D_POSIX_C_SOURCE=200112L -Wall -Wextra -O2 ncurses.c -o pinky_curses -lncurses
   BSD users should type -D_DEFAULT_SOURCE instead.
 */
 
@@ -51,7 +51,9 @@ volatile sig_atomic_t call_it_quits = 0;
 
 int main(void) {
   init_da_handler();
-  setlocale(LC_ALL, "");
+  if (NULL == (setlocale(LC_ALL, ""))) {
+    return EXIT_FAILURE;
+  }
 
   int16_t color_pair = 1, fg = 1, bg = 1, x = 0, z = 0;
   int32_t old_x = 0, old_y = 0, new_y = 0, new_x = 0;

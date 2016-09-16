@@ -199,11 +199,11 @@ get_battery(char *str1) {
     return;
   }
   if (0 != (ioctl(fd, APM_IOC_GETPOWER, &bstate))) {
-    close(fd);
+    CLOSE_FD(fd);
     return;
   }
 
-  close(fd);
+  CLOSE_FD(fd);
   dummy = (uintmax_t)bstate.battery_life;
 
   FILL_UINT_ARR(str1, (101 < dummy ? 0 : dummy));

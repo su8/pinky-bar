@@ -326,8 +326,10 @@ get_cpu_info(char *str1) {
     vend_id[12] = '\0';
 
     if (vend == AmD) {
-      CPU_STR2(0x80000005, eax, ebx, ecx, edx);     /* movl $0x80000005, %eax */
-      caches[0]  = (ecx >> (3 * 8));                /* movl %ecx, 24 */
+      if (0x80000005 <= regz) {
+        CPU_STR2(0x80000005, eax, ebx, ecx, edx);   /* movl $0x80000005, %eax */
+        caches[0]  = (ecx >> (3 * 8));              /* movl %ecx, 24 */
+      }
     }
 
     if (0x80000006 <= regz) {

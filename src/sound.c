@@ -119,14 +119,14 @@ get_volume(char *str1) {
     exit_with_err(CANNOT_OPEN, "/dev/mixer");
   }
   if (-1 == (ioctl(fd, SOUND_MIXER_READ_DEVMASK, &devmask))) {
-    close(fd);
+    CLOSE_FD(fd);
     exit_with_err(ERR, "SOUND_MIXER_READ_DEVMASK");
   }
   if (-1 == (ioctl(fd, MIXER_READ(0), &volume))) {
-    close(fd);
+    CLOSE_FD(fd);
     exit_with_err(ERR, "MIXER_READ()");
   }
-  close(fd);
+  CLOSE_FD(fd);
 
   FILL_ARR(str1, "%d", ((volume >> 8) & 0x7f));
 }

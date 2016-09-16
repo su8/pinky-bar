@@ -124,6 +124,11 @@
     exit_with_err(CANNOT_CLOSE, x); \
   }
 
+#define CLOSE_FD(fd) \
+  if (-1 == (close(fd))) { \
+    exit_with_err(ERR, CANNOT_CLOSE); \
+  }
+
 /* How many fans to try for detection */
 #define MAX_FANS 20
 
