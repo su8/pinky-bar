@@ -229,7 +229,7 @@ get_ip_lookup(char *str1, char *str2) {
   void *temp_void = NULL;
   char temp[VLA];
 
-  memset(&hints, 0, sizeof(hints));
+  memset(&hints, 0, sizeof(struct addrinfo));
 
   hints.ai_family = AF_INET;
   hints.ai_socktype = SOCK_DGRAM;

@@ -285,27 +285,26 @@ get_cpu_clock_speed(char *str1) {
 #if defined(__i386__) || defined(__i686__) || defined(__x86_64__)
 void
 get_cpu_info(char *str1) {
-  char buffer[VLA], vend_id[13];
+  char buffer[VLA], vend_id[13], vend_chars[17];
   char *all = buffer;
-  uintmax_t vend = 0, vend_str = 0, x = 0, z = 0, chicken = 0;
-  uintmax_t eax = 0, ecx = 0, edx = 0, ebx = 0, eax_old = 0;
-  uint_fast16_t l2_cache = 0, line_size = 0;
+  uint_fast16_t vend = 0, vend_str = 0, x = 0, z = 0;
+  uint_fast16_t eax = 0, ecx = 0, edx = 0, ebx = 0, eax_old = 0;
+  uint_fast16_t l2_cache = 0, line_size = 0, regz = 0;
 
+  FILL_STR_ARR(1, str1, "Null");
   CPU_VENDOR(0, vend);
   if (0 == vend) {
-    FILL_STR_ARR(1, str1, "Null");
     return;
   }
+
   CPU_FEATURE(1, eax_old);
-
   CPU_FEATURE(0x80000000, vend_str);                /* movl $0x80000000, %eax */
-  CPU_STR2(0x80000000, chicken, ebx, ecx, edx);     /* How many registers the chicken has */
+  CPU_FEATURE(0x80000000, regz);                    /* How many registers the chicken has */
 
-  if (0 != vend_str && 0x80000004 <= chicken) {
-
+  if (0 != vend_str && 0x80000004 <= regz) {
     for (x = 0x80000002; x <= 0x80000004; x++) {    /* movl $0x80000002, %esi */
       CPU_STR2(x, eax, ebx, ecx, edx);              /* cmpl $0x80000004, %eax */
-      char vend_chars[17]; /* 12 + 4 */
+      memset(vend_chars, 0, sizeof(vend_chars));
 
       for (z = 0; z < 4; z++) {
         vend_chars[z] = (char)(eax >> (z * 8));     /* movl %eax */
@@ -325,15 +324,15 @@ get_cpu_info(char *str1) {
     }
     vend_id[12] = '\0';
 
-    if (0x80000006 <= chicken) {
+    if (0x80000006 <= regz) {
       CPU_STR2(0x80000006, eax, ebx, ecx, edx);     /* movl $0x80000006, %eax */
-      l2_cache  = (uint_fast16_t)(ecx >> (2 * 8));  /* movl %ecx, 16 */
-      line_size = (uint_fast16_t)(ecx & 0xff);      /* movl %ecx, 0 */
+      l2_cache  = (ecx >> (2 * 8));                 /* movl %ecx, 16 */
+      line_size = (ecx & 0xff);                     /* movl %ecx, 0 */
     }
 
     FILL_ARR(str1,
      "%s ID %s Line size " UFINT " L2 cache " UFINT "KB Stepping "
-     FMT_UINT " Family " FMT_UINT " Model " FMT_UINT,
+     UFINT " Family " UFINT " Model " UFINT,
       buffer, vend_id, line_size, l2_cache, BIT_SHIFT(eax_old),
       BIT_SHIFT(eax_old >> 8), BIT_SHIFT(eax_old >> 4));
   }

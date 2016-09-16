@@ -181,7 +181,7 @@ get_statio(char *str1, char *str2) {
     return;
   }
 
-  memset(&stats, 0, sizeof(stats));
+  memset(&stats, 0, sizeof(struct statinfo));
   stats.dinfo = (struct devinfo *)malloc(sizeof(struct devinfo));
   if (NULL == stats.dinfo) {
     return;
