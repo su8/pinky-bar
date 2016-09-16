@@ -287,7 +287,7 @@ void
 get_cpu_info(char *str1) {
   char buffer[VLA], vend_id[13];
   char *all = buffer;
-  uintmax_t vend = 0, vend_str = 0, x = 0, z = 0;
+  uintmax_t vend = 0, vend_str = 0, x = 0, z = 0, chicken = 0;
   uintmax_t eax = 0, ecx = 0, edx = 0, ebx = 0, eax_old = 0;
   uint_fast16_t l2_cache = 0;
 
@@ -299,7 +299,9 @@ get_cpu_info(char *str1) {
   CPU_FEATURE(1, eax_old);
 
   CPU_FEATURE(0x80000000, vend_str);                /* movl $0x80000000, %eax */
-  if (0 != vend_str) {
+  CPU_STR2(0x80000000, chicken, ebx, ecx, edx);     /* How many registers the chicken has */
+
+  if (0 != vend_str && 0x80000004 <= chicken) {
 
     for (x = 0x80000002; x <= 0x80000004; x++) {    /* movl $0x80000002, %esi */
       CPU_STR2(x, eax, ebx, ecx, edx);              /* cmpl $0x80000004, %eax */
@@ -323,14 +325,15 @@ get_cpu_info(char *str1) {
     }
     vend_id[12] = '\0';
 
-    CPU_STR2(0x80000006, eax, ebx, ecx, edx);       /* movl $0x80000006, %eax */
-    l2_cache = (uint_fast16_t)(ecx >> (2 * 8));     /* movl %ecx, 16 */
+    if (0x80000006 <= chicken) {
+      CPU_STR2(0x80000006, eax, ebx, ecx, edx);     /* movl $0x80000006, %eax */
+      l2_cache = (uint_fast16_t)(ecx >> (2 * 8));   /* movl %ecx, 16 */
+    }
 
     FILL_ARR(str1,
      "%s ID %s L2 cache " UFINT "KB Stepping " FMT_UINT " Family " FMT_UINT " Model " FMT_UINT,
       buffer, vend_id, l2_cache, BIT_SHIFT(eax_old),
       BIT_SHIFT(eax_old >> 8), BIT_SHIFT(eax_old >> 4));
-    return;
   }
 }
 #endif
