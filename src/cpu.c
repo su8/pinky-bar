@@ -289,7 +289,7 @@ get_cpu_info(char *str1) {
   char *all = buffer;
   uintmax_t vend = 0, vend_str = 0, x = 0, z = 0, chicken = 0;
   uintmax_t eax = 0, ecx = 0, edx = 0, ebx = 0, eax_old = 0;
-  uint_fast16_t l2_cache = 0;
+  uint_fast16_t l2_cache = 0, line_size = 0;
 
   CPU_VENDOR(0, vend);
   if (0 == vend) {
@@ -327,12 +327,14 @@ get_cpu_info(char *str1) {
 
     if (0x80000006 <= chicken) {
       CPU_STR2(0x80000006, eax, ebx, ecx, edx);     /* movl $0x80000006, %eax */
-      l2_cache = (uint_fast16_t)(ecx >> (2 * 8));   /* movl %ecx, 16 */
+      l2_cache  = (uint_fast16_t)(ecx >> (2 * 8));  /* movl %ecx, 16 */
+      line_size = (uint_fast16_t)(ecx & 0xff);      /* movl %ecx, 0 */
     }
 
     FILL_ARR(str1,
-     "%s ID %s L2 cache " UFINT "KB Stepping " FMT_UINT " Family " FMT_UINT " Model " FMT_UINT,
-      buffer, vend_id, l2_cache, BIT_SHIFT(eax_old),
+     "%s ID %s Line size " UFINT " L2 cache " UFINT "KB Stepping "
+     FMT_UINT " Family " FMT_UINT " Model " FMT_UINT,
+      buffer, vend_id, line_size, l2_cache, BIT_SHIFT(eax_old),
       BIT_SHIFT(eax_old >> 8), BIT_SHIFT(eax_old >> 4));
   }
 }
