@@ -3,7 +3,8 @@
 
 .section .data
 
-s0 : .asciz "Processor Brand String: %.48s\n"
+info : .ascii "L2 Cache Size : %u KB\nLine size : %u bytes\n"
+.asciz "Associativity : %02xh\n"
 err : .asciz "Feature unsupported.\n"
 
 .section .text
@@ -14,41 +15,36 @@ err : .asciz "Feature unsupported.\n"
 main:
 	pushq	%rbp
 	movq	%rsp,	%rbp
-	subq	$48,	%rsp
 	pushq	%rbx
 	
 	movl	$0x80000000,	%eax
 	cpuid
 	
-	cmpl	$0x80000004,	%eax
+	cmpl	$0x80000006,	%eax
 	jl	error
 	
-	movl	$0x80000002,	%esi
-	movq	%rsp,	%rdi
-
-.align 16
-get_brand:
-	movl	%esi,	%eax
+	movl	$0x80000006,	%eax
 	cpuid
 	
-	movl	%eax,	(%rdi)
-	movl	%ebx,	4(%rdi)
-	movl	%ecx,	8(%rdi)
-	movl	%edx,	12(%rdi)
+	movl	%ecx,	%eax
 	
-	addl	$1,	%esi
-	addq	$16,	%rdi
-	cmpl	$0x80000004,	%esi
-	jle	get_brand
-
-print_brand:
-	movq	$s0,	%rdi
-	movq	%rsp,	%rsi
+	movl	%eax,	%edx
+	andl	$0xff,	%edx
+	
+	movl	%eax,	%ecx
+	shrl	$12,	%ecx
+	andl	$0xf,	%ecx
+	
+	movl	%eax,	%esi
+	shrl	$16,	%esi
+	andl	$0xffff,%esi
+	
+	movq	$info,	%rdi
 	xorb	%al,	%al
 	call	printf
 	
-	jmp	end
-
+	jmp end
+	
 .align 16
 error:
 	movq	$err,	%rdi
