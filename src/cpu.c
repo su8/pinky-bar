@@ -289,10 +289,12 @@ get_cpu_info(char *str1) {
   char *all = buffer;
   uint_fast16_t vend = 0, x = 0, z = 0, corez = 0, ph_bits = 0, vr_bits = 0;
   uint_fast16_t eax = 0, ecx = 0, edx = 0, ebx = 0, eax_old = 0;
-  uint_fast16_t l2_cache = 0, line_size = 0, regz = 0, clflu6 =0;
+  uint_fast16_t line_size = 0, regz = 0, clflu6 = 0, caches[2];
 
+  memset(caches, 0, sizeof(caches));
   FILL_STR_ARR(1, str1, "Null");
   CPU_VENDOR(0, vend);
+
   if (0 == vend) {
     return;
   }
@@ -323,9 +325,14 @@ get_cpu_info(char *str1) {
     }
     vend_id[12] = '\0';
 
+    if (vend == AmD) {
+      CPU_STR2(0x80000005, eax, ebx, ecx, edx);     /* movl $0x80000005, %eax */
+      caches[0]  = (ecx >> (3 * 8));                /* movl %ecx, 24 */
+    }
+
     if (0x80000006 <= regz) {
       CPU_STR2(0x80000006, eax, ebx, ecx, edx);     /* movl $0x80000006, %eax */
-      l2_cache  = (ecx >> (2 * 8));                 /* movl %ecx, 16 */
+      caches[1] = (ecx >> (2 * 8));                 /* movl %ecx, 16 */
       line_size = (ecx & 0xff);                     /* movl %ecx, 0 */
     }
 
@@ -340,9 +347,9 @@ get_cpu_info(char *str1) {
     corez   = ((ebx >> (2 * 8)) & 0xff);            /* movl %ebx, 16 */
 
     FILL_ARR(str1,
-     UFINT "x %s ID %s CLFLUSH/Line size " UFINT " " UFINT " L2 cache "
-     UFINT "KB Stepping " UFINT " Family " UFINT " Model " UFINT " Bits " UFINT " " UFINT,
-      corez, buffer, vend_id, clflu6*8, line_size, l2_cache, BIT_SHIFT(eax_old),
+     UFINT "x %s ID %s CLFLUSH/Line size " UFINT " " UFINT " L1/L2 caches KB " UFINT " "
+     UFINT " Stepping " UFINT " Family " UFINT " Model " UFINT " Bits " UFINT " " UFINT,
+      corez, buffer, vend_id, clflu6*8, line_size, caches[0], caches[1], BIT_SHIFT(eax_old),
       BIT_SHIFT(eax_old >> 8), BIT_SHIFT(eax_old >> 4), ph_bits, vr_bits);
   }
 }
