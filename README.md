@@ -49,7 +49,7 @@ The order of supplied options will dictate how, where and what system informatio
 | -L           | --coresload | Show the load regarding each individual cpu core/thread            |
 | -T           | --cputemp   | The current cpu temperature                                        |
 | -C           | --cpuspeed  | Show your maximum cpu clock speed in MHz, regardless of the used governor |
-| -I           | --cpuinfo   | Detect your CPU vendor, stepping and family from low level assembly access |
+| -I           | --cpuinfo   | Detect your CPU vendor, stepping, family, clflush, cache line size, l2 cache, physical cores |
 | -r           | --ramperc   | The used ram in percentage                                         |
 | -J           | --ramtotal  | The total ram                                                      |
 | -K           | --ramfree   | The free ram                                                       |
