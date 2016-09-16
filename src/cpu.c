@@ -287,8 +287,9 @@ void
 get_cpu_info(char *str1) {
   char buffer[VLA], vend_id[13];
   char *all = buffer;
-  uintmax_t vend = 0, num = 0, vend_str = 0, x = 0, z = 0;
+  uintmax_t vend = 0, vend_str = 0, x = 0, z = 0;
   uintmax_t eax = 0, ecx = 0, edx = 0, ebx = 0, eax_old = 0;
+  uint_fast16_t l2_cache = 0;
 
   CPU_VENDOR(0, vend);
   if (0 == vend) {
@@ -297,55 +298,39 @@ get_cpu_info(char *str1) {
   }
   CPU_FEATURE(1, eax_old);
 
-  switch(vend) {
-    case AmD:
-      num = 0;
-      break;
+  CPU_FEATURE(0x80000000, vend_str);                /* movl $0x80000000, %eax */
+  if (0 != vend_str) {
 
-    case InteL:
-      num = 1;
-      break;
-  }
+    for (x = 0x80000002; x <= 0x80000004; x++) {    /* movl $0x80000002, %esi */
+      CPU_STR2(x, eax, ebx, ecx, edx);              /* cmpl $0x80000004, %eax */
+      char vend_chars[17]; /* 12 + 4 */
 
-  /* Dont have intel cpu to verify the following code
-     It works fine on both of my primary amd systems.
-     I'm also aware of linking against assembly object file,
-     wanted to learn more assembly by back porting it to C */
-  if (0 == num) {
-    CPU_FEATURE(0x80000000, vend_str);                /* movl $0x80000000, %eax */
-    if (0 != vend_str) {
-
-      for (x = 0x80000002; x <= 0x80000004; x++) {    /* movl $0x80000002, %esi */
-        CPU_STR2(x, eax, ebx, ecx, edx);              /* cmpl $0x80000004, %eax */
-        char vend_chars[17]; /* 12 + 4 */
-
-        for (z = 0; z < 4; z++) {
-          vend_chars[z] = (char)(eax >> (z * 8));     /* movl %eax */
-          vend_chars[z+4] = (char)(ebx >> (z * 8));   /* movl %ebx, 4 */
-          vend_chars[z+8] = (char)(ecx >> (z * 8));   /* movl %ecx, 8 */
-          vend_chars[z+12] = (char)(edx >> (z * 8));  /* movl %edx, 12 */
-        }
-        vend_chars[16] = '\0';
-        GLUE2(all, "%s", vend_chars);
-      }
-
-      CPU_ID_STR(0, ebx, ecx, edx);                   /* mov $0, %eax */
       for (z = 0; z < 4; z++) {
-        vend_id[z] = (char)(ebx >> (z * 8));          /* movl %ebx, 0 */
-        vend_id[z+4] = (char)(edx >> (z * 8));        /* movl %edx, 4 */
-        vend_id[z+8] = (char)(ecx >> (z * 8));        /* movl %ecx, 8 */
+        vend_chars[z] = (char)(eax >> (z * 8));     /* movl %eax */
+        vend_chars[z+4] = (char)(ebx >> (z * 8));   /* movl %ebx, 4 */
+        vend_chars[z+8] = (char)(ecx >> (z * 8));   /* movl %ecx, 8 */
+        vend_chars[z+12] = (char)(edx >> (z * 8));  /* movl %edx, 12 */
       }
-      vend_id[12] = '\0';
-
-      FILL_ARR(str1, "%s ID %s Stepping " FMT_UINT " Family " FMT_UINT " Model " FMT_UINT,
-        buffer, vend_id, BIT_SHIFT(eax_old),
-        BIT_SHIFT(eax_old >> 8), BIT_SHIFT(eax_old >> 4));
-      return;
+      vend_chars[16] = '\0';
+      GLUE2(all, "%s", vend_chars);
     }
-  }
 
-  FILL_ARR(str1, "%s Stepping " FMT_UINT " Family " FMT_UINT " Model " FMT_UINT,
-    (0 == num ? "AMD" : "Intel"), BIT_SHIFT(eax_old),
-    BIT_SHIFT(eax_old >> 8), BIT_SHIFT(eax_old >> 4));
+    CPU_ID_STR(0, ebx, ecx, edx);                   /* movl $0, %eax */
+    for (z = 0; z < 4; z++) {
+      vend_id[z] = (char)(ebx >> (z * 8));          /* movl %ebx, 0 */
+      vend_id[z+4] = (char)(edx >> (z * 8));        /* movl %edx, 4 */
+      vend_id[z+8] = (char)(ecx >> (z * 8));        /* movl %ecx, 8 */
+    }
+    vend_id[12] = '\0';
+
+    CPU_STR2(0x80000006, eax, ebx, ecx, edx);       /* movl $0x80000006, %eax */
+    l2_cache = (uint_fast16_t)(ecx >> (2 * 8));     /* movl %ecx, 16 */
+
+    FILL_ARR(str1,
+     "%s ID %s L2 cache " UFINT "KB Stepping " FMT_UINT " Family " FMT_UINT " Model " FMT_UINT,
+      buffer, vend_id, l2_cache, BIT_SHIFT(eax_old),
+      BIT_SHIFT(eax_old >> 8), BIT_SHIFT(eax_old >> 4));
+    return;
+  }
 }
 #endif
