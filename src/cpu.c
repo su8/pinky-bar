@@ -329,27 +329,27 @@ get_cpu_info(char *str1) {
     if (vend == AmD) {
       if (0x80000005 <= regz) {
         CPU_STR2(0x80000005, eax, ebx, ecx, edx);   /* movl $0x80000005, %eax */
-        caches[0]  = (ecx >> (3 * 8));              /* movl %ecx, 24 */
+        caches[0] = SHFT2(ecx >> (3 * 8));          /* movl %ecx, 24 */
       }
     }
 
     if (0x80000006 <= regz) {
       CPU_STR2(0x80000006, eax, ebx, ecx, edx);     /* movl $0x80000006, %eax */
       /* 1 L2, 2 line size */
-      caches[1] = (ecx >> (2 * 8));                 /* movl %ecx, 16 */
+      caches[1] = (ecx >> (2 * 8)) & 0xffff;        /* movl %ecx, 16 */
       caches[2] = SHFT2(ecx);                       /* movl %ecx, 0 */
     }
 
     if (0x80000008 <= regz) {
       CPU_STR2(0x80000008, eax, ebx, ecx, edx);     /* movl $0x80000008, %eax */
       /* 0 physical, 1 virtual */
-      bitz[0]  = SHFT2(eax);                        /* movl %eax, 0 */
-      bitz[1]  = SHFT2(eax >> 8);                   /* movl %eax, 8 */
+      bitz[0] = SHFT2(eax);                         /* movl %eax, 0 */
+      bitz[1] = SHFT2(eax >> 8);                    /* movl %eax, 8 */
     }
 
     CPU_STR2(1, eax, ebx, ecx, edx);                /* movl $0x00000001, %eax */
-    clflu6  = SHFT2(ebx >> 8);                      /* movl %ebx, 8 */
-    corez   = SHFT2(ebx >> (2 * 8));                /* movl %ebx, 16 */
+    clflu6 = SHFT2(ebx >> 8);                       /* movl %ebx, 8 */
+    corez  = SHFT2(ebx >> (2 * 8));                 /* movl %ebx, 16 */
 
     FILL_ARR(str1,
      UFINT "x %s ID %s CLFLUSH/Line size " UFINT " " UFINT " L1/L2 caches KB " UFINT " "
