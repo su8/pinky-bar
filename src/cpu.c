@@ -356,7 +356,7 @@ get_cpu_info(char *str1) {
      UFINT " Stepping " UFINT " Family " UFINT " Model " UFINT " Bits " UFINT " " UFINT,
       corez, buffer, vend_id, clflu6*8, caches[2], caches[0], caches[1], SHFT(eax_old),
       (SHFT(eax_old >> 8) + SHFT2(eax_old >> 20)),
-      (SHFT(eax_old >> 4) | ((eax >> 12) & 0xf0)), bitz[0], bitz[1]);
+      (SHFT(eax_old >> 4) | ((eax_old >> 12) & 0xf0)), bitz[0], bitz[1]);
   }
 }
 #endif
