@@ -349,14 +349,26 @@ get_cpu_info(char *str1) {
 
     CPU_STR2(1, eax, ebx, ecx, edx);                /* movl $0x00000001, %eax */
     clflu6 = SHFT2(ebx >> 8);                       /* movl %ebx, 8 */
+
+    /* Newer intel cpu's rely on 0B */
     corez  = SHFT2(ebx >> (2 * 8));                 /* movl %ebx, 16 */
 
     FILL_ARR(str1,
-     UFINT "x %s ID %s CLFLUSH/Line size " UFINT " " UFINT " L1/L2 caches KB " UFINT " "
-     UFINT " Stepping " UFINT " Family " UFINT " Model " UFINT " Bits " UFINT " " UFINT,
-      corez, buffer, vend_id, clflu6*8, caches[2], caches[0], caches[1], SHFT(eax_old),
-      (SHFT(eax_old >> 8) + SHFT2(eax_old >> 20)),
-      (SHFT(eax_old >> 4) | ((eax_old >> 12) & 0xf0)), bitz[0], bitz[1]);
+     UFINT "x %s ID %s "
+     "CLFLUSH/Line size " UFINT " " UFINT
+     " L1/L2 caches KB " UFINT " " UFINT
+     " Stepping " UFINT " Family " UFINT
+     " Model " UFINT
+     " Bits " UFINT " " UFINT
+     " apicid " UFINT,
+      corez, buffer, vend_id,
+      8 * clflu6, caches[2],
+      caches[0], caches[1],
+      SHFT(eax_old), (SHFT(eax_old >> 8) + SHFT2(eax_old >> 20)),
+      (SHFT(eax_old >> 4) | ((eax_old >> 12) & 0xf0)),
+      bitz[0], bitz[1],
+      SHFT2(ebx >> 24)
+    );
   }
 }
 #endif
