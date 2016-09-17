@@ -606,7 +606,9 @@ With the help from the gcc documentation, this wish list option has been solved.
 
 GPU temperature, voltage, fan(s) and used RAM: hard, but not impossible.
 
-It would be nice to have decent gpu temperature, voltage, fan(s) speed and used RAM detection. Should we detect multiple gpus (SLI,single dual gpu card), how to detect which of the multiple gpu cards is actually the one used for **this** monitor in case the program is compiled **--without-x11** and/or xinerama ? What about hybrid combination and some gpu manufactor that is not supported by MESA ? My legacy gpu only shows it's vendor name, model and used ram (in MESA) because it's onboard gpu.
+It would be nice to have decent gpu temperature, voltage, fan(s) speed and used RAM detection regarding SLI, single and dual gpu cards that doesn't require X and/or MESA.
+
+Using assembly is strongly no-go.
 
 ---
 

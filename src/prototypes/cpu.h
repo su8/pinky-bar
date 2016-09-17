@@ -40,7 +40,8 @@
     : "a" (regizter) \
 )
 
-#define BIT_SHIFT(x) ((x) & 0xf)
+#define SHFT(x) ((x) & 0x0f)
+#define SHFT2(x) ((x) & 0xff)
 #define AmD    0x68747541
 #define InteL  0x756e6547
 
