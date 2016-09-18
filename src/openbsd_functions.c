@@ -202,8 +202,13 @@ get_battery(char *str1) {
     CLOSE_FD(fd);
     return;
   }
-
   CLOSE_FD(fd);
+
+  if (APM_BATT_UNKNOWN == bstate.battery_state ||
+      APM_BATTERY_ABSENT == bstate.battery_state) {
+    return;
+  }
+
   dummy = (uintmax_t)bstate.battery_life;
 
   FILL_UINT_ARR(str1, (101 < dummy ? 0 : dummy));
