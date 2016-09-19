@@ -124,13 +124,8 @@ get_net(char *str1, char *str2, uint8_t num) {
           break;
         }
       }
-#if defined(__linux__)
-    } else if (ifa->ifa_addr->sa_family == AF_PACKET &&
-        NULL != ifa->ifa_data) {
-#else
-    } else if (ifa->ifa_addr->sa_family == AF_LINK &&
-        NULL != ifa->ifa_data) {
-#endif /* __linux__ */
+    } else if (ifa->ifa_addr->sa_family == NETFAM &&
+          NULL != ifa->ifa_data) {
         if (STREQ(str2, ifa->ifa_name)) {
 
 #if defined(__linux__)
@@ -140,13 +135,9 @@ get_net(char *str1, char *str2, uint8_t num) {
 #endif /* __linux__ */
 
           if (2 == num) { /* upload and download speeds */
-#if defined(__linux__)
-            cur_recv = (uintmax_t)stats->rx_bytes - prev_recv;
-            cur_sent = (uintmax_t)stats->tx_bytes - prev_sent;
-#else
-            cur_recv = (uintmax_t)stats->ifi_ibytes - prev_recv;
-            cur_sent = (uintmax_t)stats->ifi_obytes - prev_sent;
-#endif /* __linux__ */
+            cur_recv = (uintmax_t)stats->RECVBYTS - prev_recv;
+            cur_sent = (uintmax_t)stats->SENTBYTS - prev_sent;
+
             FILL_ARR(str1, "Down " FMT_UINT " KB, Up " FMT_UINT " KB",
               (cur_recv / KB), (cur_sent / KB));
 
@@ -154,15 +145,9 @@ get_net(char *str1, char *str2, uint8_t num) {
             prev_sent = cur_sent;
           } else if (1 == num) { /* consumed internet so far */
 
-#if defined(__linux__)
             FILL_ARR(str1, "Down " FMT_UINT " MB, Up " FMT_UINT " MB",
-              ((uintmax_t)stats->rx_bytes / MB),
-              ((uintmax_t)stats->tx_bytes / MB));
-#else
-            FILL_ARR(str1, "Down " FMT_UINT " MB, Up " FMT_UINT " MB",
-              ((uintmax_t)stats->ifi_ibytes / MB),
-              ((uintmax_t)stats->ifi_obytes / MB));
-#endif /* __linux__ */
+              ((uintmax_t)stats->RECVBYTS / MB),
+              ((uintmax_t)stats->SENTBYTS / MB));
 
 #if defined(__linux__)
           } else if (4 == num) { /* mac address */
@@ -301,6 +286,10 @@ get_nic_info2(char *str1, char *str2, uint8_t num) {
   if (-1 == sock) {
     return;
   }
+
+  memset(&ecmd, 0, sizeof(struct ethtool_cmd));
+  memset(&drvinfo, 0, sizeof(struct ethtool_drvinfo));
+  memset(&ifr, 0, sizeof(struct ifreq));
 
   switch(num) {
     case 1:
@@ -452,7 +441,7 @@ get_nic_info(char *str1, char *str2) {
   struct sockaddr *sa = NULL, *addrs[RTAX_MAX];
   char *buf = NULL, *next = NULL, *lim = NULL, temp[VLA];
   uint8_t x = 0;
-  size_t needed;
+  size_t needed = 0;
   void *temp_void = NULL;
 
   /* No, it's not Men In Black acronym */

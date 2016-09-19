@@ -28,20 +28,6 @@
 #include "include/headers.h"
 #include "include/freebzd.h"
 
-/* bsdhwmon is nowhere closer to lm_sensors,
- * which unfortunately is not supported in BSD.
- *
- * My initial attempt was to add alternative via lm_sensors
- * to the FreeBSD users, because the unpredictable sensors 
- * and their specific naming which has to be used in order to obtain the
- * sensors values in FreeBSD pretty much restricts some of the code only
- * to ASUS motherboards.
- *
- * In linux regardless of the modules, their names, the sensors reports will
- * always be stored in same filename in the virtual filesystem. Now you
- * understand how hard it is to make general assumption how to obtain such
- * values in FreeBSD.
-*/
 
 void 
 get_ram(char *str1, uint8_t num) {
@@ -87,22 +73,6 @@ get_ram(char *str1, uint8_t num) {
 }
 
 
-/* 
-  sysctl -a|grep 'aibs'
-  dev.aibs.0.volt.0: 1356 850 1600
-  dev.aibs.0.volt.1: 3344 2970 3630
-  dev.aibs.0.volt.2: 5040 4500 5500
-  dev.aibs.0.volt.3: 12278 10200 13800
-  dev.aibs.0.temp.0: 39.0C 60.0C 95.0C
-  dev.aibs.0.temp.1: 38.0C 45.0C 75.0C
-  dev.aibs.0.fan.0: 1053 600 7200
-  dev.aibs.0.fan.1: 1053 600 7200
-  dev.aibs.0.%parent: acpi0
-  dev.aibs.0.%pnpinfo: _HID=ATK0110 _UID=16843024
-  dev.aibs.0.%location: handle=\_SB_.PCI0.SBRG.ASOC
-  dev.aibs.0.%driver: aibs
-  dev.aibs.0.%desc: ASUSTeK AI Booster (ACPI ASOC ATK0110)
-*/
 void
 get_voltage(char *str1) {
   u_int  vol0[3], vol1[3], vol2[3], vol3[3];
@@ -258,6 +228,7 @@ get_swapp(char *str1, uint8_t num) {
   int mib[20];
 
   memset(mib, 0, sizeof(mib));
+  memset(&xsw, 0, sizeof(struct xswdev));
   size_t mibi = sizeof(mib) / sizeof(mib[0]);
   size_t len = sizeof(dummy), sisi = sizeof(struct xswdev);
 

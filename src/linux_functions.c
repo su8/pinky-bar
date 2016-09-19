@@ -97,6 +97,7 @@ void
 get_loadavg(char *str1) {
   struct sysinfo up;
   memset(&up, 0, sizeof(struct sysinfo));
+
   if (-1 == (sysinfo(&up))) {
     FUNC_FAILED("sysinfo()");
   }
@@ -248,6 +249,7 @@ get_voltage(char *str1) {
   float voltage[4];
   FILE *fp;
   uint8_t x = 0;
+  memset(voltage, 0, sizeof(voltage));
 
   const char *voltage_files[] = {
     VOLTAGE_FILE("0"),

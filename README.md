@@ -248,7 +248,7 @@ Send a request to the FreeBSD mail list and request the OpenBSD sensors API to b
 
 ## Installation in OpenBSD
 
-Same steps as above except you'll have to do this before even executing the **bootstrap** script:
+Before even executing the **bootstrap** script, you'll have to do this:
 
 ```bash
 # To detect the newer compiler that you are

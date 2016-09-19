@@ -153,6 +153,7 @@ void
 get_kernel(char *str1, uint8_t num) {
   struct utsname KerneL;
   memset(&KerneL, 0, sizeof(struct utsname));
+
   if (-1 == (uname(&KerneL))) {
     FUNC_FAILED("uname()");
   }
@@ -450,6 +451,8 @@ get_dvd(char *str1) {
 void
 get_loadavg(char *str1) {
   double up[3];
+  memset(up, 0, sizeof(up));
+
   if (-1 == getloadavg(up, 3)) {
   	FUNC_FAILED("getloadavg()");
   }
