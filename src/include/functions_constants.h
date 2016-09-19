@@ -54,11 +54,23 @@
 /* voltage and fans */
 #if defined(__linux__)
 #define VOLTAGE_FILE(x) (HWMON_DIR"/in"x"_input")
-#else
-#define VOLTAGE_FILE(x) "dev.aibs.0.volt."x
-#endif /* __linux__ */
 #define FAN_FILE HWMON_DIR"/fan"UFINT"_input"
-#define FAN_STR(x, z) (FILL_ARR(x, "%s"UFINT, "dev.aibs.0.fan.", z))
+#endif /* __linux__ */
+
+#if defined(__FreeBSD__)
+
+#if defined(MOBO_MODL) && defined(CPU_MODL)
+#define MOBO_VAL(x) MOBO_MODL "." x
+#define CPU_TEMP CPU_MODL
+#else
+#define MOBO_VAL(x) "dev.aibs.0."x
+#define CPU_TEMP "dev.cpu.0.temperature"
+
+#endif /* MOBO_MODL && CPU_MODL */
+
+#define VOLTAGE_FILE(x) MOBO_VAL("volt") "." x
+#define FAN_STR(x, z) (FILL_ARR(x, "%s"UFINT, MOBO_VAL("fan") ".", z))
+#endif /* __FreeBSD__ */
 
 /* battery reports */
 #define BATTERY_NUM(x, y, z) (FILL_ARR(x, "%s"USINT"%s%s", \

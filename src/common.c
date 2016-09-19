@@ -119,6 +119,7 @@ void
 get_ssd(char *str1, uint8_t num) {
   uintmax_t val = 0;
   struct statvfs ssd;
+  memset(&ssd, 0, sizeof(struct statvfs));
 
   if (-1 == (statvfs(getenv("HOME"), &ssd))) {
     FUNC_FAILED("statvfs()");
@@ -151,6 +152,7 @@ get_ssd(char *str1, uint8_t num) {
 void 
 get_kernel(char *str1, uint8_t num) {
   struct utsname KerneL;
+  memset(&KerneL, 0, sizeof(struct utsname));
   if (-1 == (uname(&KerneL))) {
     FUNC_FAILED("uname()");
   }
@@ -340,7 +342,7 @@ set_status(const char *str1) {
     exit_with_err(CANNOT_OPEN, "X server");
   }
 }
-#endif
+#endif /* HAVE_X11_XLIB_H */
 
 
 #if !defined(HAVE_SENSORS_SENSORS_H) && !defined(__OpenBSD__)

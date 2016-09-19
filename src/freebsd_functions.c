@@ -132,7 +132,7 @@ get_cpu_temp(char *str1) {
   u_int temp = 0;
   size_t len = sizeof(temp);
 
-  SYSCTLVAL("dev.cpu.0.temperature", &temp);
+  SYSCTLVAL(CPU_TEMP, &temp);
   get_temp(str1, (uint_least32_t)temp);
 }
 
@@ -143,7 +143,7 @@ get_mobo_temp(char *str1) {
   memset(temp, 0, sizeof(temp));
   size_t len = sizeof(temp);
 
-  SYSCTLVAL("dev.aibs.0.temp.1", &temp);
+  SYSCTLVAL(MOBO_VAL("temp.1"), &temp);
   get_temp(str1, (uint_least32_t)temp[0]);
 }
 
@@ -153,7 +153,7 @@ get_mobo(char *str1) {
   char temp[VLA];
   size_t len = sizeof(temp);
 
-  SYSCTLVAL("dev.aibs.0.%desc", &temp);
+  SYSCTLVAL(MOBO_VAL("%desc"), &temp);
   FILL_STR_ARR(1, str1, temp);
 }
 
@@ -256,6 +256,7 @@ get_swapp(char *str1, uint8_t num) {
   u_int pagesize = 0, dummy = 0;
   uintmax_t total = 0, used = 0, pz = 0;
   int mib[20];
+
   memset(mib, 0, sizeof(mib));
   size_t mibi = sizeof(mib) / sizeof(mib[0]);
   size_t len = sizeof(dummy), sisi = sizeof(struct xswdev);

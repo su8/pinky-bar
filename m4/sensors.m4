@@ -56,6 +56,23 @@ AC_DEFUN([TEST_SENSORS],[
   ],[
   ])
 
+  ifdef([FREEBZD],[
+    AC_ARG_VAR(mobo_sensor, [mobo sensors module name to use in sysctl calls])
+    if [[ ! -z "${mobo_sensor}" ]]
+    then
+      MOBO_MODL=\""${mobo_sensor}"\"
+      AC_DEFINE_UNQUOTED([MOBO_MODL],[$MOBO_MODL],[mobo sensors module])
+    fi
+
+    AC_ARG_VAR(cpu_sensor, [cpu sensors module name to use in sysctl calls])
+    if [[ ! -z "${cpu_sensor}" ]]
+    then
+      CPU_MODL=\""${cpu_sensor}"\"
+      AC_DEFINE_UNQUOTED([CPU_MODL],[$CPU_MODL],[cpu sensors module])
+    fi
+  ],[
+  ])
+
   AC_SUBST(SENSORS_LIBS)
 
   ifdef([LINUKS],[

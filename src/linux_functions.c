@@ -43,6 +43,7 @@ void
 get_ram(char *str1, uint8_t num) {
   uintmax_t used = 0, total = 0;
   struct sysinfo mem;
+  memset(&mem, 0, sizeof(struct sysinfo));
 
   if (-1 == (sysinfo(&mem))) {
     FUNC_FAILED("sysinfo()");
@@ -95,6 +96,7 @@ get_ssd_model(char *str1, char *str2) {
 void
 get_loadavg(char *str1) {
   struct sysinfo up;
+  memset(&up, 0, sizeof(struct sysinfo));
   if (-1 == (sysinfo(&up))) {
     FUNC_FAILED("sysinfo()");
   }

@@ -137,6 +137,8 @@ It's up to you to decide which features suit you best.
 | icons=/tmp     |                     | xbm icons that can be used by dzen2 for example. Discarded when **--with-x11** is used     |
 | --with-mpd     | --without-mpd       | To see the currently played song name (if any).                                            |
 | --prefix=/tmp  |                     | The directory where the program will be installed                                          |
+| mobo\_sensor='dev.aibs.0'  |         | FreeBSD motherboard sensor module name to use in the sysctl calls. Read the FreeBSD installation below  |
+| cpu\_sensor='dev.cpu.0.temperature' |  | FreeBSD cpu temperature module name to use in the sysctl calls . Read the FreeBSD installation below  |
 
 By default, if **no** options are passed, the program will be compiled with/without:
 
@@ -211,7 +213,38 @@ done | dzen2 -w 1800 -x 130 -ta r -fn '-*-dejavusans-*-r-*-*-11-*-*-*-*-*-*-*' &
 
 ## Installation in FreeBSD
 
-You can use the provided port package instead.
+FreeBSD has no other way than using the module specific convention to query sysctl and obtain data from the sensors. Maintaining a list with all the possible module names and performing expensive sysctl calls in a loop to determine that X module is loaded into your system is no-go. Be prepared to spend a minute or two to find out some system information.
+
+Let's say you are using dwm:
+
+Determine the motherboard sensor module name.
+
+```bash
+sysctl -a|grep 'aibs'
+
+dev.aibs.0.volt.0: 1356 850 1600
+dev.aibs.0.volt.1: 3344 2970 3630
+dev.aibs.0.volt.2: 5040 4500 5500
+dev.aibs.0.volt.3: 12278 10200 13800
+dev.aibs.0.temp.0: 39.0C 60.0C 95.0C
+dev.aibs.0.temp.1: 38.0C 45.0C 75.0C
+dev.aibs.0.fan.0: 1053 600 7200
+dev.aibs.0.fan.1: 1053 600 7200
+```
+
+Copy only 'dev.MODULE.NUMBER' (if there is any number at all) and paste it into the **mobo\_sensor** option below.
+
+Do the same for your cpu temperature, copy and paste the variable as is. **dev.cpu.0.temperature** below is provied as example.
+
+```bash
+bash bootstrap freebsd
+./configure --prefix=$HOME/.cache --with-x11 --without-alsa --with-oss mobo_sensor='dev.aibs.0' cpu_sensor='dev.cpu.0.temperature'
+make
+make install
+```
+
+Send a request to the FreeBSD mail list and request the OpenBSD sensors API to be ported.
+
 
 ## Installation in OpenBSD
 
@@ -578,9 +611,7 @@ use **--without-colours** to skip the following step:
 
 As top priority:
 
-~~OpenBSD disk io~~
-
-~~OpenBSD laptop battery support~~
+It would be great if I had \*BSD compatible usb wifi dongle to add wifi options in pinky-bar.
 
 ---
 
@@ -600,7 +631,7 @@ With the help from the gcc documentation, this wish list option has been solved.
 
 ~~Decision 1: On a multicore/thread cpu, the detection for each core/thread will produce up to 8 digit number, thus 4 core and 4 thread cpu will produce: 1234.5678 1234.5678 1234.5678 1234.5678 1234.5678 1234.5678 1234.5678 1234.5678, without including MHz for each core/thread, which will take a lot of space in the final statusbar output. This way the user will know for how long and which core/thread is under some load.~~
 
-~~Decision 2: On other hand it will be lame on a 10/16 core/thread system to show the overall (not per core/thread) cpu frequency that have been summed up, which will beat the purpose of cpu frequency detection in first place, as the user will not be aware that some core/thread is running at full cpu clock speed as the load will be spread equally when summing the numbers up.~~
+~~Decision 2: On other hand it will be lame on a multi core/thread system to show the overall (not per core/thread) cpu frequency that have been summed up, which will beat the purpose of cpu frequency detection in first place, as the user will not be aware that some core/thread is running at full cpu clock speed as the load will be spread equally when summing the numbers up.~~
 
 ---
 

@@ -462,6 +462,10 @@ AC_DEFUN([TEST_SOME_FUNCS],[
             return 0;
           }
           close(fd);
+          if (APM_BATT_UNKNOWN == bstate.battery_state ||
+              APM_BATTERY_ABSENT == bstate.battery_state) {
+            return 0;
+          }
           dummy = (uintmax_t)bstate.battery_life;
           return 0;
         }
