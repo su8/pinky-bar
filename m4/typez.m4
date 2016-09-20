@@ -85,7 +85,7 @@ AC_DEFUN([TEST_TYPEZ],[
     getopt.h         \
     sys/socket.h     \
   ],[],[
-    ERR([Missing core header files.])
+    MISSING_HEADER()
   ])
   
   ifdef([FREEBZD], [
@@ -96,7 +96,7 @@ AC_DEFUN([TEST_TYPEZ],[
       sys/stat.h       \
       vm/vm_param.h    \
     ],[],[
-      ERR([Missing core header files.])
+      MISSING_HEADER()
     ])
 
   ], [
@@ -106,7 +106,7 @@ AC_DEFUN([TEST_TYPEZ],[
         sys/sysinfo.h    \
         glob.h           \
       ],[],[
-        ERR([Missing core header files.])
+        MISSING_HEADER()
       ])
     ],[
     ])
@@ -133,7 +133,7 @@ AC_DEFUN([TEST_TYPEZ],[
     getopt_long     \
 
   ],[],[
-    ERR([Missing core library functions.])
+    MISSING_FUNC()
   ])
 
   ifdef([FREEBZD], [
@@ -145,7 +145,7 @@ AC_DEFUN([TEST_TYPEZ],[
       malloc          \
       free            \
     ],[],[
-      ERR([Missing core library functions.])
+      MISSING_FUNC()
     ])
 
   ], [
@@ -158,7 +158,7 @@ AC_DEFUN([TEST_TYPEZ],[
         argp_parse      \
         argp_usage      \
       ],[],[
-        ERR([Missing core library functions.])
+        MISSING_FUNC()
       ])
     ],[
     ])

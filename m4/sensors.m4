@@ -49,7 +49,7 @@ AC_DEFUN([TEST_SENSORS],[
           sensors_cleanup
         ],[
           AC_CHECK_LIB(sensors,LiB,[],[
-            ERR([Missing core sensors function.])
+            MISSING_FUNC()
           ])
       ])
     ])
@@ -70,6 +70,23 @@ AC_DEFUN([TEST_SENSORS],[
       CPU_MODL=\""${cpu_sensor}"\"
       AC_DEFINE_UNQUOTED([CPU_MODL],[$CPU_MODL],[cpu sensors module])
     fi
+
+    GOT_APM=0
+    AC_ARG_WITH([apm],
+      AS_HELP_STRING([--with-apm],
+        [APM power and resource management for laptops]),
+      [],
+      [with_apm=no]
+    )
+    AS_IF([test "x$with_apm" = "xyes"], [
+      AC_CHECK_HEADERS([machine/apm_bios.h], [
+        GOT_APM=1
+        ],[
+          MISSING_HEADER()
+      ])
+    ])
+    AC_DEFINE_UNQUOTED([GOT_APM],[$GOT_APM],[APM power and resource management for laptops])
+
   ],[
   ])
 

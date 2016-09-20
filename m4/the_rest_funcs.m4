@@ -345,7 +345,7 @@ AC_DEFUN([TEST_SOME_FUNCS],[
         devstat_selectdevs
       ],[
         AC_CHECK_LIB(devstat,LiB,[],[
-          ERR([Missing core devstat function.])
+          MISSING_FUNC()
         ])
     ])
 
@@ -373,7 +373,7 @@ AC_DEFUN([TEST_SOME_FUNCS],[
         argp_usage
       ],[
         AC_CHECK_LIB(argp,LiB,[],[
-          ERR([Missing core argp function.])
+          MISSING_FUNC()
         ])
     ])
 

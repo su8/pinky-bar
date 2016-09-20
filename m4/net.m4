@@ -54,7 +54,7 @@ AC_DEFUN([TEST_NET],[
       sys/ioctl.h         \
       netdb.h             \
     ],[],[
-      ERR([Missing core header files.])
+      MISSING_HEADER()
     ])
     
     ifdef([FREEBZD], [
@@ -64,7 +64,7 @@ AC_DEFUN([TEST_NET],[
         net/if.h            \
         net/if_dl.h         \
       ],[],[
-        ERR([Missing core header files.])
+        MISSING_HEADER()
       ])
 
     ],[
@@ -76,7 +76,7 @@ AC_DEFUN([TEST_NET],[
           linux/sockios.h     \
           linux/ethtool.h     \
         ],[],[
-          ERR([Missing core header files.])
+          MISSING_HEADER()
         ])
       ],[
     ])
@@ -92,7 +92,7 @@ AC_DEFUN([TEST_NET],[
       ioctl          \
       inet_ntop      \
     ],[],[
-      ERR([Missing core library functions.])
+      MISSING_FUNC()
     ])
     
     NOTIFY([addrinfo])
@@ -226,7 +226,7 @@ AC_DEFUN([TEST_PCI],[
           pci_cleanup
         ],[
           AC_CHECK_LIB(pci,LiB,[],[
-            ERR([Missing core pci function.])
+            MISSING_FUNC()
           ])
       ])
 

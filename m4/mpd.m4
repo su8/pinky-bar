@@ -48,7 +48,7 @@ AC_DEFUN([TEST_MPD],[
         mpd_song_get_uri
       ],[
         AC_CHECK_LIB(mpdclient,LiB,[],[
-          ERR([Missing core mpd function.])
+          MISSING_FUNC()
         ])
     ])
   ])

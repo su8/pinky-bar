@@ -39,3 +39,15 @@ dnl compiling some of tests failed
 AC_DEFUN([COMPILE_FAILED], [
   ERR([Failed to compile the $1 test.])
 ])
+
+dnl Internal function to show error msg when
+dnl some library function is missing
+AC_DEFUN([MISSING_FUNC], [
+  ERR([Missing core library functions.])
+])
+
+dnl Internal function to show error msg when
+dnl some header file is missing
+AC_DEFUN([MISSING_HEADER], [
+  ERR([Missing core header files.])
+])

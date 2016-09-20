@@ -45,7 +45,7 @@ AC_DEFUN([TEST_X11],[
         XCloseDisplay
       ],[
         AC_CHECK_LIB(X11,LiB,[],[
-          ERR([Missing core X11 function.])
+          MISSING_FUNC()
         ])
     ])dnl
   ])
@@ -136,7 +136,7 @@ AC_DEFUN([TEST_NCURSES], [
         waddch
       ],[
         AC_CHECK_LIB(ncurses,LiB,[],[
-          ERR([Missing core ncurses function.])
+          MISSING_FUNC()
         ])
     ])
   ])

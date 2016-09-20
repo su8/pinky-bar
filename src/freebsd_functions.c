@@ -25,6 +25,12 @@
 #include <vm/vm_param.h>
 #include <devstat.h>
 
+#if GOT_APM == 1 && defined(HAVE_MACHINE_APM_BIOS_H)
+#include <fcntl.h>
+#include <sys/ioctl.h>
+#include <machine/apm_bios.h>
+#endif /* GOT_APM && HAVE_MACHINE_APM_BIOS_H */
+
 #include "include/headers.h"
 #include "include/freebzd.h"
 
@@ -199,15 +205,34 @@ error:
 }
 
 
-/*
- Looks like acpi is the only way
- in FreeBSD to obtain battery information.
-  hw.acpi.acline: 1
-  hw.acpi.battery.life: 100
-  hw.acpi.battery.time: -1
-  hw.acpi.battery.state: 0
-  hw.acpi.battery.units: 1
+/* https://www.freebsd.org/doc/handbook/acpi-overview.html
+    ACPI_BATT_STAT_NOT_PRESENT
 */
+#if GOT_APM == 1 && defined(HAVE_MACHINE_APM_BIOS_H)
+void
+get_battery(char *str1) {
+  struct apm_info bstate;
+  int fd = 0;
+  uintmax_t dummy = 0;
+
+  FILL_STR_ARR(1, str1, "Null");
+  memset(&bstate, 0, sizeof(struct apm_info));
+
+  if (0 != (fd = open("/dev/apm", O_RDONLY))) {
+    return;
+  }
+  if (0 != (ioctl(fd, APMIO_GETINFO, &bstate))) {
+    CLOSE_FD(fd);
+    return;
+  }
+  CLOSE_FD(fd);
+
+  dummy = (uintmax_t)bstate.ai_batt_life;
+  FILL_UINT_ARR(str1, (101 < dummy ? 0 : dummy));
+}
+
+#else
+
 void 
 get_battery(char *str1) {
   u_int dummy = 0;
@@ -218,6 +243,7 @@ get_battery(char *str1) {
   perc = (uint_least32_t)dummy;
   FILL_ARR(str1, ULINT, (101 < perc ? 0 : perc));
 }
+#endif /* GOT_APM && HAVE_MACHINE_APM_BIOS_H */
 
 
 void

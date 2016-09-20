@@ -47,7 +47,7 @@ AC_DEFUN([TEST_DVD],[
         cdio_destroy
       ],[
         AC_CHECK_LIB(cdio,LiB,[],[
-          ERR([Missing core cdio function.])
+          MISSING_FUNC()
         ])
     ])
   ])

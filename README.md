@@ -75,7 +75,7 @@ The order of supplied options will dictate how, where and what system informatio
 | -f           | --fans      | All system fans and their speed in RPM                             |
 | -m           | --mobo      | Show the motherboard name and vendor                               |
 | -d           | --mobotemp  | The motherboard temperature                                        |
-| -V           | --volume    | The volume                                                         |
+| -V           | --volume    | The sound volume                                                   |
 | -t           | --time      | The current time                                                   |
 | -a           | --ipaddr    | The local ip address [argument - eth0]                             |
 | -b           | --bandwitdh | The consumed internet bandwidth so far [argument - eth0]           |
@@ -125,13 +125,14 @@ It's up to you to decide which features suit you best.
 
 | To include     | Not to include      | Descrtiption                                                                               |
 |----------------|---------------------|--------------------------------------------------------------------------------------------|
-| --with-x11     | --without-x11       | Enable it if you are using Window Manager (dwm) to be more specific.                       |
+| --with-x11     | --without-x11       | Enable it if you are using dwm.                                                            |
 | --with-alsa    | --without-alsa      | To get the sound volume level.                                                             |
 | --with-oss     | --without-oss       | To get the sound volume level in \*BSD.                                                    |
 | --with-net     | --without-net       | Enable the internet related options.                                                       |
 | --with-pci     | --without-pci       | To get the NIC vendor and model in linux                                                   |
 | --with-dvd     | --without-dvd       | To get the cdrom/dvdrom vendor and model                                                   |
 | --with-sensors | --without-sensors   | Alternative way to get the sensors values (linux only)                                     |
+| --with-apm     | --without-apm       | APM power and resource management for laptops (FreeBSD only)                               |
 | --with-ncurses | --without-ncurses   | Output the data to the terminal using the ncurses library, can be colorized                |
 | --with-colours | --without-colours   | Colorize the output data.                                                                  |
 | icons=/tmp     |                     | xbm icons that can be used by dzen2 for example. Discarded when **--with-x11** is used     |
@@ -145,6 +146,8 @@ By default, if **no** options are passed, the program will be compiled with/with
 ```bash
 --without-alsa --without-x11 --without-mpd --with-colours --with-net --with-pci --without-dvd --without-sensors --without-ncurses
 ```
+
+Affects only FreeBSD users with laptops, **--without-apm** will compile the program with acpi support to obtain the current battery life.
 
 **--without-mpd** will compile the program with cmus support, the options syntax stays as is.
 

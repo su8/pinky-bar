@@ -210,7 +210,6 @@ get_battery(char *str1) {
   }
 
   dummy = (uintmax_t)bstate.battery_life;
-
   FILL_UINT_ARR(str1, (101 < dummy ? 0 : dummy));
 }
 

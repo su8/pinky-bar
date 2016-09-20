@@ -59,7 +59,7 @@ AC_DEFUN([TEST_ALSA],[
         snd_mixer_close
       ],[
         AC_CHECK_LIB(asound,LiB,[],[
-          ERR([Missing core ALSA function.])
+          MISSING_FUNC()
         ])
     ])
   ])
