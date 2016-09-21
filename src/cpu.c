@@ -287,7 +287,8 @@ void
 get_cpu_info(char *str1) {
   char buffer[VLA], vend_id[13], vend_chars[17];
   char *all = buffer;
-  uint_fast16_t vend = 0, x = 0, z = 0, corez = 0, bitz[2];
+  bool got_leafB = false;
+  uint_fast16_t vend = 0, x = 0, z = 0, corez = 0, bitz[2], leafB = 0;
   uint_fast16_t eax = 0, ecx = 0, edx = 0, ebx = 0, eax_old = 0;
   uint_fast16_t line_size = 0, regz = 0, clflu6 = 0, caches[3];
 
@@ -331,6 +332,22 @@ get_cpu_info(char *str1) {
         CPU_STR2(0x80000005, eax, ebx, ecx, edx);   /* movl $0x80000005, %eax */
         caches[0] = SHFT2(ecx >> (3 * 8));          /* movl %ecx, 24 */
       }
+      CPU_STR2(1, eax, ebx, ecx, edx);              /* movl $0x00000001, %eax */
+      corez  = SHFT2(ebx >> (2 * 8));               /* movl %ebx, 16 */
+    }
+
+    if (vend == InteL) {
+      CPU_FEATURE(0x0000000B, eax);                 /* movl $0x0000000B, %eax */
+      if (0x0000000B <= eax) {
+        CPU_STR2(0x0000000B, eax, ebx, ecx, edx);
+        corez  = SHFT2(ebx);                        /* movl %ebx, 0 */
+        leafB  = SHFT2(edx);                        /* movl %edx, 0 */
+        got_leafB = true;
+
+      } else {
+        CPU_STR2(4, eax, ebx, ecx, edx);            /* movl $0x00000004, %eax */
+        corez  = SHFT2(eax >> 26);                  /* movl %eax, 26 */
+      }
     }
 
     if (0x80000006 <= regz) {
@@ -350,9 +367,6 @@ get_cpu_info(char *str1) {
     CPU_STR2(1, eax, ebx, ecx, edx);                /* movl $0x00000001, %eax */
     clflu6 = SHFT2(ebx >> 8);                       /* movl %ebx, 8 */
 
-    /* Newer intel cpu's rely on 0B */
-    corez  = SHFT2(ebx >> (2 * 8));                 /* movl %ebx, 16 */
-
     FILL_ARR(str1,
      UFINT "x %s ID %s "
      "CLFLUSH/Line size " UFINT " " UFINT
@@ -367,7 +381,7 @@ get_cpu_info(char *str1) {
       SHFT(eax_old), (SHFT(eax_old >> 8) + SHFT2(eax_old >> 20)),
       (SHFT(eax_old >> 4) | ((eax_old >> 12) & 0xf0)),
       bitz[0], bitz[1],
-      SHFT2(ebx >> 24)
+      (true == got_leafB) ? leafB : SHFT2(ebx >> 24)
     );
   }
 }

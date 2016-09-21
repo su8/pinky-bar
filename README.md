@@ -640,7 +640,7 @@ With the help from the gcc documentation, this wish list option has been solved.
 
 GPU temperature, voltage, fan(s) and used RAM: hard, but not impossible.
 
-It would be nice to have decent gpu temperature, voltage, fan(s) speed and used RAM detection regarding SLI, single and dual gpu cards that doesn't require X and/or MESA.
+It would be nice to have decent gpu temperature, voltage, fan(s) speed and used RAM detection regarding SLI, single and dual gpu cards that doesn't require X, MESA and **/sys/kernel/debug/dri**
 
 Using assembly is strongly no-go.
 
