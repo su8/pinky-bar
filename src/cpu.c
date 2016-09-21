@@ -285,23 +285,26 @@ get_cpu_clock_speed(char *str1) {
 #if defined(__i386__) || defined(__i686__) || defined(__x86_64__)
 void
 get_cpu_info(char *str1) {
+  uint_fast16_t vend = 0, x = 0, z = 0, corez = 0, bitz[2], leafB = 0;
+  uint_fast16_t eax = 0, ecx = 0, edx = 0, ebx = 0, eax_old = 0, leafs = 0;
+  uint_fast16_t line_size = 0, regz = 0, clflu6 = 0, caches[3];
   char buffer[VLA], vend_id[13], vend_chars[17];
   char *all = buffer;
   bool got_leafB = false;
-  uint_fast16_t vend = 0, x = 0, z = 0, corez = 0, bitz[2], leafB = 0;
-  uint_fast16_t eax = 0, ecx = 0, edx = 0, ebx = 0, eax_old = 0;
-  uint_fast16_t line_size = 0, regz = 0, clflu6 = 0, caches[3];
 
   memset(caches, 0, sizeof(caches));
   memset(bitz, 0, sizeof(bitz));
   FILL_STR_ARR(1, str1, "Null");
-  CPU_VENDOR(0, vend);
+  CPU_REGS(0x00000000, vend, leafs);                /* movl $0x00000000, %eax */
 
-  if (0 == vend) {
+  if (0x00000001 > leafs) {
+    return;
+  }
+  if (vend != AmD && vend != InteL) {
     return;
   }
 
-  CPU_FEATURE(1, eax_old);
+  CPU_FEATURE(0x00000001, eax_old);                 /* movl $0x00000001, %eax */
   CPU_FEATURE(0x80000000, regz);                    /* movl $0x80000000, %eax */
 
   if (0x80000004 <= regz) {
@@ -319,7 +322,7 @@ get_cpu_info(char *str1) {
       GLUE2(all, "%s", vend_chars);
     }
 
-    CPU_ID_STR(0, ebx, ecx, edx);                   /* movl $0, %eax */
+    CPU_ID_STR(0x00000000, ebx, ecx, edx);          /* movl $0x00000000, %eax */
     for (z = 0; z < 4; z++) {
       vend_id[z] = (char)(ebx >> (z * 8));          /* movl %ebx, 0 */
       vend_id[z+4] = (char)(edx >> (z * 8));        /* movl %edx, 4 */
@@ -332,21 +335,22 @@ get_cpu_info(char *str1) {
         CPU_STR2(0x80000005, eax, ebx, ecx, edx);   /* movl $0x80000005, %eax */
         caches[0] = SHFT2(ecx >> (3 * 8));          /* movl %ecx, 24 */
       }
-      CPU_STR2(1, eax, ebx, ecx, edx);              /* movl $0x00000001, %eax */
-      corez  = SHFT2(ebx >> (2 * 8));               /* movl %ebx, 16 */
+      CPU_STR2(0x00000001, eax, ebx, ecx, edx);     /* movl $0x00000001, %eax */
+      corez = SHFT2(ebx >> (2 * 8));                /* movl %ebx, 16 */
     }
 
     if (vend == InteL) {
-      CPU_FEATURE(0x0000000B, eax);                 /* movl $0x0000000B, %eax */
-      if (0x0000000B <= eax) {
-        CPU_STR2(0x0000000B, eax, ebx, ecx, edx);
+      if (0x0000000B <= leafs) {
+        CPU_STR2(0x0000000B, eax, ebx, ecx, edx);   /* movl $0x0000000B, %eax */
         corez  = SHFT2(ebx);                        /* movl %ebx, 0 */
         leafB  = SHFT2(edx);                        /* movl %edx, 0 */
         got_leafB = true;
 
       } else {
-        CPU_STR2(4, eax, ebx, ecx, edx);            /* movl $0x00000004, %eax */
-        corez  = SHFT2(eax >> 26);                  /* movl %eax, 26 */
+        if (0x00000004 <= leafs) {
+          CPU_STR2(0x00000004, eax, ebx, ecx, edx); /* movl $0x00000004, %eax */
+          corez  = SHFT2(eax >> 26);                /* movl %eax, 26 */
+        }
       }
     }
 
@@ -364,12 +368,12 @@ get_cpu_info(char *str1) {
       bitz[1] = SHFT2(eax >> 8);                    /* movl %eax, 8 */
     }
 
-    CPU_STR2(1, eax, ebx, ecx, edx);                /* movl $0x00000001, %eax */
+    CPU_STR2(0x00000001, eax, ebx, ecx, edx);       /* movl $0x00000001, %eax */
     clflu6 = SHFT2(ebx >> 8);                       /* movl %ebx, 8 */
 
     FILL_ARR(str1,
-     UFINT "x %s ID %s "
-     "CLFLUSH/Line size " UFINT " " UFINT
+     UFINT "x %s ID %s"
+     " CLFLUSH/Line size " UFINT " " UFINT
      " L1/L2 caches KB " UFINT " " UFINT
      " Stepping " UFINT " Family " UFINT
      " Model " UFINT
