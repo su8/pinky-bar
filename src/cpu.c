@@ -30,15 +30,6 @@
 #include "include/openbzd.h"
 #endif /* __OpenBSD__ */
 
-#if defined(__linux__)
-#define IDLE_NUM 3
-#define LOOP_ITERZ 10
-
-#else /* FreeBSD || OpenBSD */
-#define IDLE_NUM 4
-#define LOOP_ITERZ 5
-#endif /* __linux__ */
-
 void 
 get_cpu(char *str1) {
   static uintmax_t previous_total = 0, previous_idle = 0;
@@ -285,7 +276,7 @@ get_cpu_clock_speed(char *str1) {
 #if defined(__i386__) || defined(__i686__) || defined(__x86_64__)
 void
 get_cpu_info(char *str1) {
-  uint_fast16_t vend = 0, x = 0, z = 0, corez = 0, bitz[2], leafB = 0;
+  uint_fast16_t vend = 0, x = 0, z = 0, corez = 0, leafB = 0, bitz[2];
   uint_fast16_t eax = 0, ecx = 0, edx = 0, ebx = 0, eax_old = 0, leafs = 0;
   uint_fast16_t line_size = 0, regz = 0, clflu6 = 0, caches[3];
   char buffer[VLA], vend_id[13], vend_chars[17];
@@ -315,7 +306,7 @@ get_cpu_info(char *str1) {
     memset(vend_chars, 0, sizeof(vend_chars));
 
     for (z = 0; z < 4; z++) {
-      vend_chars[z] = (char)(eax >> (z * 8));     /* movl %eax */
+      vend_chars[z] = (char)(eax >> (z * 8));     /* movl %eax, 0 */
       vend_chars[z+4] = (char)(ebx >> (z * 8));   /* movl %ebx, 4 */
       vend_chars[z+8] = (char)(ecx >> (z * 8));   /* movl %ecx, 8 */
       vend_chars[z+12] = (char)(edx >> (z * 8));  /* movl %edx, 12 */
@@ -358,20 +349,26 @@ get_cpu_info(char *str1) {
 
   if (0x80000006 <= regz) {
     CPU_STR2(0x80000006, eax, ebx, ecx, edx);     /* movl $0x80000006, %eax */
-    /* 1 L2, 2 line size */
+    /* L2, line size */
     caches[1] = (ecx >> (2 * 8)) & 0xffff;        /* movl %ecx, 16 */
     caches[2] = SHFT2(ecx);                       /* movl %ecx, 0 */
   }
 
   if (0x80000008 <= regz) {
     CPU_STR2(0x80000008, eax, ebx, ecx, edx);     /* movl $0x80000008, %eax */
-    /* 0 physical, 1 virtual */
+    /* physical, virtual */
     bitz[0] = SHFT2(eax);                         /* movl %eax, 0 */
     bitz[1] = SHFT2(eax >> 8);                    /* movl %eax, 8 */
+
+    if (vend == AmD) {
+      corez = SHFT2(ecx) + 1;                     /* movl %ecx, 0 */
+    }
   }
 
   CPU_STR2(0x00000001, eax, ebx, ecx, edx);       /* movl $0x00000001, %eax */
-  clflu6 = SHFT2(ebx >> 8);                       /* movl %ebx, 8 */
+  if ((edx & (1 << 19))) {
+    clflu6 = SHFT2(ebx >> 8) * 8;                 /* movl %ebx, 8 */
+  }
 
   FILL_ARR(str1,
    UFINT "x %s ID %s"
@@ -381,12 +378,20 @@ get_cpu_info(char *str1) {
    " Model " UFINT
    " Bits " UFINT " " UFINT
    " apicid " UFINT,
+
+  /* cores, vendor, vendor id */
     corez, buffer, vend_id,
-    8 * clflu6, caches[2],
+  /* clflush, line size */
+    clflu6, caches[2],
+  /* L1, L2 */
     caches[0], caches[1],
+  /* stepping, family */
     SHFT(eax_old), (SHFT(eax_old >> 8) + SHFT2(eax_old >> 20)),
+  /* model */
     (SHFT(eax_old >> 4) | ((eax_old >> 12) & 0xf0)),
+  /* physical and virtual bits */
     bitz[0], bitz[1],
+  /* apicid */
     (true == got_leafB) ? leafB : SHFT2(ebx >> 24)
   );
 }

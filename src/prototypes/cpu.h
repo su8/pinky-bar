@@ -51,6 +51,14 @@
 #define AmD    0x68747541
 #define InteL  0x756e6547
 
+#if defined(__linux__)
+#define IDLE_NUM 3
+#define LOOP_ITERZ 10
+
+#else /* FreeBSD || OpenBSD */
+#define IDLE_NUM 4
+#define LOOP_ITERZ 5
+#endif /* __linux__ */
 
 /* --coresload related constant to determine
  * how many cpu cores/threads to try for detection */
