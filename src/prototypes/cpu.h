@@ -45,6 +45,7 @@
     "=d" (d) \
     : "a" (regizter) \
 )
+#define IZMAX(x) (((x >> 8) & 0x0f) == 0x0f)
 
 #define SHFT(x) ((x) & 0x0f)
 #define SHFT2(x) ((x) & 0xff)

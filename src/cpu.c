@@ -386,9 +386,11 @@ get_cpu_info(char *str1) {
   /* L1, L2 */
     caches[0], caches[1],
   /* stepping, family */
-    SHFT(eax_old), (SHFT(eax_old >> 8) + SHFT2(eax_old >> 20)),
+    SHFT(eax_old), (SHFT(eax_old >> 8) +
+     ((IZMAX(eax_old)) ? SHFT2(eax_old >> 20) : 0)),
   /* model */
-    (SHFT(eax_old >> 4) | ((eax_old >> 12) & 0xf0)),
+    (SHFT(eax_old >> 4) |
+     ((IZMAX(eax_old)) ? ((eax_old >> 12) & 0xf0) : 0)),
   /* physical and virtual bits */
     bitz[0], bitz[1],
   /* apicid */
