@@ -18,6 +18,7 @@
 */
 
 #include <argp.h>
+#include <limits.h>
 
 #include "config.h" /* Auto-generated */
 #include "include/headers.h"
@@ -26,6 +27,14 @@
 #include "prototypes/net.h"
 #include "prototypes/options.h"
 
+/* Because we ran out of a-z A-Z options,
+ * only long ones will be supported from now on.
+ * The enumerated argp_option keys below will be used as 
+ * case labels by the parse_opt switch */
+enum {
+  EXZTRA = CHAR_MAX + 1,
+  BULLSHIT
+};
 const char *argp_program_version = PACKAGE_STRING;
 const char *argp_program_bug_address = "https://gitlab.com/void0/pinky-bar ";
 static const char doc[] = "Statusbar program for anything (Window Manager, terminal multiplexer, etc..)";
@@ -252,7 +261,7 @@ parse_opt(int key, char *arg, struct argp_state *state) {
       }
       break;
 #else
-      FPRINTF("%s\n", "recompile the program --with-alsa");
+      FPRINTF("%s\n", "recompile the program --with-alsa or --with-oss");
       return ARGP_KEY_ERROR;
 #endif /* HAVE_ALSA_ASOUNDLIB_H || HAVE_SYS_SOUNDCARD_H || HAVE_SOUNDCARD_H */
 
