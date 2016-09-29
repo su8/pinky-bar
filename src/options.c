@@ -32,7 +32,7 @@
  * The enumerated argp_option keys below will be used as 
  * case labels by the parse_opt switch */
 enum {
-  EXZTRA = CHAR_MAX + 1,
+  WIFINAME = CHAR_MAX + 1,
   BULLSHIT
 };
 const char *argp_program_version = PACKAGE_STRING;
@@ -104,6 +104,7 @@ static const struct argp_option options[] = {
   { .name = "nicver",       .key = 'H', .arg = "eth0", .doc = "The NIC version."                                         },
   { .name = "iplink",       .key = 'e', .arg = "eth0", .doc = "The NIC link speed (useful for wireless/wifi)."           },
   { .name = "nicinfo",      .key = 'G', .arg = "eth0", .doc = "The NIC vendor and model."                                },
+  { .name = "wifiname",  .key = WIFINAME, .arg = "eth0", .doc = "The network name."                                      },
 #endif /* __linux__ */
 
 #if defined(__FreeBSD__) || defined(__OpenBSD__)
@@ -239,6 +240,8 @@ parse_opt(int key, char *arg, struct argp_state *state) {
 
 #if defined(__linux__)
     NEW_NET_LABEL('j', char nic_info[VLA], nic_info, 10, FMT_KERN);
+
+    NEW_NET_LABEL(WIFINAME, char wifiname[VLA], wifiname, 11, FMT_KERN);
 
     NEW_ARG_LABEL('F', char ssd_model[VLA], ssd_model, FMT_KERN);
 

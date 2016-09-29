@@ -97,6 +97,7 @@ The following options are available only in Linux:
 | -H           | --nicver    | The NIC version [argument - eth0]                                  |
 | -e           | --iplink    | The NIC link speed (useful for wireless/wifi) [argument - eth0]    |
 | -j           | --nicfw     | The NIC firmware [argument - eth0]                                 |
+| -j           | --wifiname  | The name of currently connected wifi/wireless network [argument - wlan0]  |
 
 The following options are available only to FreeBSD and OpenBSD:
 

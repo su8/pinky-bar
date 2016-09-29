@@ -33,7 +33,7 @@
 #include <net/if.h>
 #include <linux/sockios.h>
 #include <linux/ethtool.h>
-#include <linux/if.h>
+#include <linux/wireless.h>
 
 #if WITH_PCI == 1
 #include <pci/pci.h>
@@ -165,10 +165,19 @@ get_net(char *str1, char *str2, uint8_t num) {
                 mac->sll_addr[0], mac->sll_addr[1],
                 mac->sll_addr[2], mac->sll_addr[3],
                 mac->sll_addr[4], mac->sll_addr[5]);
-          } else if (7 == num || 8 == num || 9 == num ||
-              10 == num) { /* link speed | driver | version | firmware */
 
-            get_nic_info2(str1, str2, (uint8_t)(num - 6));
+          } else if (11 == num) { /* wifi name */
+            get_wifi(str1, str2, (uint8_t)(num - 10));
+
+          } else { /* link speed | driver | version | firmware */
+            switch(num) {
+              case 7:
+              case 8:
+              case 9:
+              case 10:
+                get_nic_info2(str1, str2, (uint8_t)(num - 6));
+                break;
+            }
           }
 #else
           } else if (4 == num) { /* mac address */
@@ -272,7 +281,6 @@ dev.re.0.%desc: RealTek 8168/8111 B/C/CP/D/DP/E/F/G PCIe Gigabit Ethernet */
 
 
 #if defined(__linux__)
-/* Not using exit_with_err to freeifaddrs */
 void
 get_nic_info2(char *str1, char *str2, uint8_t num) {
 #if WITH_NET == 1
@@ -306,18 +314,10 @@ get_nic_info2(char *str1, char *str2, uint8_t num) {
   snprintf(ifr.ifr_name, IF_NAMESIZE, "%s", str2);
 
   if (0 != (ioctl(sock, SIOCETHTOOL, &ifr))) {
+    CLOSE_FD(sock);
     return;
   }
 
-  /* The `ethtool_cmd_speed' negotiation concept
-   * is great, but the `SPEED_X' macros are not.
-   * They are constants representing the link speed
-   * from 10 Mbps up to 100 Gbps, but as we know,
-   * the wifi/wireless "things" suffer from various
-   * degradations, thus those macros are only reliable
-   * to detect wired NIC that doesn't tend to change
-   * it's link speed from various real-life factors.
-  */
   switch(num) {
     case 1:
       FILL_ARR(str1, "%d%s", ecmd.speed, "Mbps");
@@ -332,6 +332,7 @@ get_nic_info2(char *str1, char *str2, uint8_t num) {
       FILL_STR_ARR(1, str1, drvinfo.fw_version);
       break;
   }
+  CLOSE_FD(sock);
 
 #else
   (void)str1;
@@ -500,3 +501,46 @@ error:
 #endif /* WITH_NET */
 }
 #endif /* __FreeBSD__ || __OpenBSD__ */
+
+
+#if defined(__linux__)
+void
+get_wifi(char *str1, char *str2, uint8_t num) {
+#if WITH_NET == 1
+
+  struct iwreq iwr;
+  int sock = 0;
+
+  sock = socket(AF_INET, SOCK_DGRAM, 0);
+  if (-1 == sock) {
+    return;
+  }
+
+  memset(&iwr, 0, sizeof(struct iwreq));
+
+  iwr.u.essid.pointer = str2;
+  iwr.u.essid.length  = IW_ESSID_MAX_SIZE + 1;
+  iwr.u.essid.flags   = 0;
+
+  snprintf(iwr.ifr_name, IF_NAMESIZE, "%s", str2);
+
+  if (0 != (ioctl(sock, SIOCGIWESSID, &iwr))) {
+    CLOSE_FD(sock);
+    return;
+  }
+
+  switch(num) {
+    case 1:
+      FILL_STR_ARR(1, str1, str2);
+      break;
+  }
+  CLOSE_FD(sock);
+
+#else
+  (void)str1;
+  (void)str2;
+  (void)num;
+  RECOMPILE_WITH("net");
+#endif /* WITH_NET */
+}
+#endif /* __linux__ */

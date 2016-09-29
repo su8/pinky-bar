@@ -36,4 +36,8 @@ void get_nic_info2(char *, char *, uint8_t num);
 void get_ip_lookup(char *, char *);
 void get_nic_info(char *, char *);
 
+#if defined(__linux__)
+void get_wifi(char *, char *, uint8_t num);
+#endif /* __linux__ */
+
 #endif /* NET_H_ */
