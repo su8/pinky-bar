@@ -32,8 +32,8 @@
  * The enumerated argp_option keys below will be used as 
  * case labels by the parse_opt switch */
 enum {
-  WIFINAME = CHAR_MAX + 1,
-  BULLSHIT
+  NICDRV = CHAR_MAX + 1,
+  BULLSHIFT
 };
 const char *argp_program_version = PACKAGE_STRING;
 const char *argp_program_bug_address = "https://gitlab.com/void0/pinky-bar ";
@@ -100,11 +100,11 @@ static const struct argp_option options[] = {
 #if defined(__linux__)
   { .name = "nicfw",        .key = 'j', .arg = "eth0", .doc = "The NIC firmware."                                        },
   { .name = "drivemodel",   .key = 'F', .arg = "sda",  .doc = "The vendor name of your drive."                           },
-  { .name = "nicdrv",       .key = 'h', .arg = "eth0", .doc = "The NIC driver."                                          },
+  { .name = "nicdrv",    .key = NICDRV, .arg = "eth0", .doc = "The NIC driver."                                          },
   { .name = "nicver",       .key = 'H', .arg = "eth0", .doc = "The NIC version."                                         },
   { .name = "iplink",       .key = 'e', .arg = "eth0", .doc = "The NIC link speed (useful for wireless/wifi)."           },
   { .name = "nicinfo",      .key = 'G', .arg = "eth0", .doc = "The NIC vendor and model."                                },
-  { .name = "wifiname",  .key = WIFINAME, .arg = "eth0", .doc = "The network name."                                      },
+  { .name = "wifiname",     .key = 'h', .arg = "eth0", .doc = "The name of currently connected wireless/wifi network."   },
 #endif /* __linux__ */
 
 #if defined(__FreeBSD__) || defined(__OpenBSD__)
@@ -241,11 +241,11 @@ parse_opt(int key, char *arg, struct argp_state *state) {
 #if defined(__linux__)
     NEW_NET_LABEL('j', char nic_info[VLA], nic_info, 10, FMT_KERN);
 
-    NEW_NET_LABEL(WIFINAME, char wifiname[VLA], wifiname, 11, FMT_KERN);
+    NEW_NET_LABEL('h', char wifiname[VLA], wifiname, 11, FMT_KERN);
 
     NEW_ARG_LABEL('F', char ssd_model[VLA], ssd_model, FMT_KERN);
 
-    NEW_NET_LABEL('h', char nic_drv[VLA], nic_drv, 8, FMT_KERN);
+    NEW_NET_LABEL(NICDRV, char nic_drv[VLA], nic_drv, 8, FMT_KERN);
 
     NEW_NET_LABEL('H', char nic_ver[VLA], nic_ver, 9, FMT_KERN);
 

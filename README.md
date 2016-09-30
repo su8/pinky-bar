@@ -93,11 +93,11 @@ The following options are available only in Linux:
 |--------------|-------------|--------------------------------------------------------------------|
 | -F           | --drivemodel| The vendor name of your drive [argument - sda]                     |
 | -G           | --nicinfo   | The NIC vendor and model [argument - eth0]                         |
-| -h           | --nicdrv    | The NIC driver [argument - eth0]                                   |
+|              | --nicdrv    | The NIC driver [argument - eth0]                                   |
 | -H           | --nicver    | The NIC version [argument - eth0]                                  |
 | -e           | --iplink    | The NIC link speed (useful for wireless/wifi) [argument - eth0]    |
 | -j           | --nicfw     | The NIC firmware [argument - eth0]                                 |
-| -j           | --wifiname  | The name of currently connected wifi/wireless network [argument - wlan0]  |
+| -h           | --wifiname  | The name of currently connected wifi/wireless network [argument - wlan0]  |
 
 The following options are available only to FreeBSD and OpenBSD:
 
