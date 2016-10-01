@@ -625,22 +625,27 @@ get_wifi(char *str1, char *str2, uint8_t num) {
   dev = if_nametoindex(str2);
   msg = nlmsg_alloc();
   if (0 == dev || NULL == msg) {
-    goto error;
+    goto error_msg;
   }
 
   scan_ret = genlmsg_put(msg, 0, 0, fam, 0, NLM_F_DUMP, NL80211_CMD_GET_SCAN, 0);
   if (NULL == scan_ret ||
      0 != (nla_put_u32(msg, NL80211_ATTR_IFINDEX, dev))) {
-    goto error;
+    goto error_msg;
   }
 
   if (0 != (nl_send_sync(sock, msg))) {
     goto error;
   }
-
   (void)num;
 
 error:
+  if (NULL != sock) {
+    nl_socket_free(sock);
+  }
+  return;
+
+error_msg:
   if (NULL != msg) {
     nlmsg_free(msg);
   }
