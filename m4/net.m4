@@ -34,6 +34,7 @@ dnl so the program to be compiled with/out net functions support.
 AC_DEFUN([TEST_NET],[
   WITH_NET=1
   WITH_LIBNL=0
+  LIBNL_CF=""
 
   AC_ARG_WITH([net],
     AS_HELP_STRING([--with-net],
@@ -107,6 +108,7 @@ AC_DEFUN([TEST_NET],[
           AC_MSG_ERROR([Your libnl version is too old, consider updating to version three at least])
 
         ])
+        LIBNL_CF=$LIBNL_CFLAGS
         WITH_LIBNL=1
 
       ])
@@ -196,6 +198,7 @@ AC_DEFUN([TEST_NET],[
 
   ])
 
+  AC_SUBST(LIBNL_CF)
   AC_DEFINE_UNQUOTED([WITH_NET],[$WITH_NET],[Net funcs])
   AC_DEFINE_UNQUOTED([WITH_LIBNL],[$WITH_LIBNL],[wifi funcs])
 
