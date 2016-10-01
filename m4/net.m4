@@ -68,19 +68,52 @@ AC_DEFUN([TEST_NET],[
       ])
 
     ],[
-
-      ifdef([LINUKS], [
-        AC_CHECK_HEADERS([    \
-          linux/if_link.h     \
-          netpacket/packet.h  \
-          linux/sockios.h     \
-          linux/ethtool.h     \
-        ],[],[
-          MISSING_HEADER()
-        ])
-      ],[
     ])
 
+    ifdef([LINUKS], [
+      AC_CHECK_HEADERS([    \
+        linux/if_link.h     \
+        netpacket/packet.h  \
+        linux/sockios.h     \
+        linux/ethtool.h     \
+      ],[],[
+        MISSING_HEADER()
+      ])
+
+      WITH_LIBNL=0
+      AC_ARG_WITH([libnl],
+        AS_HELP_STRING([--with-libnl],
+          [wifi funcs]),
+        [],
+        [with_libnl=no]
+      )
+
+      AS_IF([test "x$with_libnl" = "xyes"], [
+        WITH_LIBNL=1
+
+        m4_ifndef([PKG_PROG_PKG_CONFIG], [
+          AC_MSG_ERROR([Either you dont have pkg-config installed, or pkg.m4 is not in 'ls /usr/share/aclocal | grep pkg', if thats so try exporting the following env var: execute 'aclocal --print-ac-dir' without quotes, then: 'export ACLOCAL_PATH=/tmp' where /tmp is the directory printed from the previous command.])
+        ])
+        PKG_PROG_PKG_CONFIG()
+
+        PKG_CHECK_MODULES([LIBNL], [libnl-3.0 >= 3.0 libnl-genl-3.0 >= 3.0], [
+          AC_CHECK_LIB(nl-3,nlmsg_data,[],[
+            MISSING_FUNC()
+          ])
+          AC_CHECK_LIB(nl-genl-3,genlmsg_put,[],[
+            MISSING_FUNC()
+          ])
+
+        ],[
+          AC_MSG_ERROR([Your libnl version is too old, consider updating to version three at least])
+
+        ])
+
+      ])
+
+      AC_DEFINE_UNQUOTED([WITH_LIBNL],[$WITH_LIBNL],[wifi funcs])
+
+    ],[
     ])
 
     AC_CHECK_FUNCS([ \

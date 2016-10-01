@@ -22,6 +22,7 @@
 #if WITH_NET == 1
 
 #if defined(__linux__)
+#include <ctype.h>
 #include <netdb.h>
 /* #include <sys/types.h> */
 #include <sys/socket.h>
@@ -33,7 +34,17 @@
 #include <net/if.h>
 #include <linux/sockios.h>
 #include <linux/ethtool.h>
+
+#if WITH_LIBNL == 1
+#include <netlink/netlink.h>
+#include <netlink/genl/genl.h>
+#include <netlink/genl/ctrl.h>
+#include <linux/nl80211.h>
+#include <linux/if.h>
+
+#else
 #include <linux/wireless.h>
+#endif /* WITH_LIBNL */
 
 #if WITH_PCI == 1
 #include <pci/pci.h>
@@ -68,6 +79,16 @@
 #if defined(__OpenBSD__)
 #include "include/openbzd.h"
 #endif /* __OpenBSD__ */
+
+
+#if defined(__linux__)
+
+#if WITH_LIBNL == 1
+static int call_back(struct nl_msg *, void *);
+#endif /* WITH_LIBNL */
+
+#endif /* __linux__ */
+
 
 /* Thanks to http://www.matisse.net/bitcalc/?source=print
  * and `man netdevice' */
@@ -343,7 +364,7 @@ get_nic_info2(char *str1, char *str2, uint8_t num) {
 }
 
 
-/* 
+/*
  Quick spot the bug game.
  code begin:
   struct pci_access *pacc= NULL;
@@ -504,6 +525,139 @@ error:
 
 
 #if defined(__linux__)
+/*
+
+  Entirely based on iw.c, link.c, genl.c, scan.c (print_bss_handler)
+  (v3.17)
+
+  Docs, return vals, and tips:
+   https://www.infradead.org/~tgr/libnl/doc/core.html
+   https://www.infradead.org/~tgr/libnl/doc/api/group__send__recv.html
+   http://lists.shmoo.com/pipermail/hostap/2011-October/024315.html
+   https://bugzilla.kernel.org/show_bug.cgi?id=78481
+*/
+#if WITH_LIBNL == 1
+
+static int call_back(struct nl_msg *msg, void *str1) {
+  struct genlmsghdr *gnlh = nlmsg_data(nlmsg_hdr(msg));
+  struct nlattr *tb[NL80211_ATTR_MAX + 1];
+  struct nlattr *bss[NL80211_BSS_MAX + 1];
+  struct nla_policy bss_policy[NL80211_BSS_MAX + 1] = {
+    [NL80211_BSS_BSSID] = {.type = NLA_UNSPEC},
+    [NL80211_BSS_INFORMATION_ELEMENTS] = {.type = NLA_UNSPEC}
+  };
+  uint32_t len = 0, x = 0, z = 0;
+  char elo = '\0', *ssid = NULL, *ptr = (char *)str1;
+
+  if (0 != (nla_parse(tb,
+     NL80211_ATTR_MAX, genlmsg_attrdata(gnlh, 0),
+     genlmsg_attrlen(gnlh, 0), NULL))) {
+    return NL_SKIP;
+  }
+
+  if (NULL == tb[NL80211_ATTR_BSS]) {
+    return NL_SKIP;
+  }
+  if (nla_parse_nested(bss, NL80211_BSS_MAX, tb[NL80211_ATTR_BSS], bss_policy)) {
+    return NL_SKIP;
+  }
+  if (NULL == bss[NL80211_BSS_STATUS]) {
+    return NL_SKIP;
+  }
+
+  switch(nla_get_u32(bss[NL80211_BSS_STATUS])) {
+    case NL80211_BSS_STATUS_ASSOCIATED:
+    case NL80211_BSS_STATUS_AUTHENTICATED:
+    case NL80211_BSS_STATUS_IBSS_JOINED:
+      break;
+    default:
+      return NL_SKIP;
+  }
+
+  if (NULL == bss[NL80211_BSS_BSSID]) {
+    return NL_SKIP;
+  }
+
+  if (bss[NL80211_BSS_INFORMATION_ELEMENTS]) {
+    ssid = (char *)(nla_data(bss[NL80211_BSS_INFORMATION_ELEMENTS]))+2;
+    len = (uint32_t)nla_len(bss[NL80211_BSS_INFORMATION_ELEMENTS]);
+
+    if (NULL != ssid && 0 != len) {
+      for (x = 0; x < len; x++) {
+        elo = ssid[x];
+        if (0 == (isprint((unsigned char)elo))) {
+          break;
+        }
+        *ptr++ = elo;
+      }
+      *ptr = '\0';
+    }
+  }
+  return NL_SKIP;
+}
+
+
+void
+get_wifi(char *str1, char *str2, uint8_t num) {
+#if WITH_NET == 1
+
+  struct nl_sock *sock = NULL;
+  struct nl_msg *msg = NULL;
+  int fam = 0;
+  uint32_t dev = 0;
+  void *scan_ret = NULL;
+
+  if (NULL == (sock = nl_socket_alloc())) {
+    return;
+  }
+  if (0 != (genl_connect(sock))) {
+    goto error;
+  }
+
+  if (0 != (nl_socket_modify_cb(sock,
+     NL_CB_VALID, NL_CB_CUSTOM, call_back, str1))) {
+    goto error;
+  }
+  if (0 > (fam = genl_ctrl_resolve(sock, "nl80211"))) {
+    goto error;
+  }
+
+  dev = if_nametoindex(str2);
+  msg = nlmsg_alloc();
+  if (0 == dev || NULL == msg) {
+    goto error;
+  }
+
+  scan_ret = genlmsg_put(msg, 0, 0, fam, 0, NLM_F_DUMP, NL80211_CMD_GET_SCAN, 0);
+  if (NULL == scan_ret ||
+     0 != (nla_put_u32(msg, NL80211_ATTR_IFINDEX, dev))) {
+    goto error;
+  }
+
+  if (0 != (nl_send_sync(sock, msg))) {
+    goto error;
+  }
+
+  (void)num;
+
+error:
+  if (NULL != msg) {
+    nlmsg_free(msg);
+  }
+  if (NULL != sock) {
+    nl_socket_free(sock);
+  }
+  return;
+
+#else
+  (void)str1;
+  (void)str2;
+  (void)num;
+  RECOMPILE_WITH("net");
+#endif /* WITH_NET */
+}
+
+#else
 void
 get_wifi(char *str1, char *str2, uint8_t num) {
 #if WITH_NET == 1
@@ -543,4 +697,5 @@ get_wifi(char *str1, char *str2, uint8_t num) {
   RECOMPILE_WITH("net");
 #endif /* WITH_NET */
 }
+#endif /* WITH_LIBNL */
 #endif /* __linux__ */

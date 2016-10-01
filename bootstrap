@@ -41,7 +41,7 @@ _gen_files() {
   bsdLibs=''
   osEntered="${1,,}"
   bsdCF='-D_DEFAULT_SOURCE -I/usr/local/include -L/usr/local/lib'
-  posixCF='-D_POSIX_C_SOURCE=200112L'
+  posixCF='-D_POSIX_C_SOURCE=200112L -I/usr/include/libnl3'
   declare -a srcToAppend
 
   case "${osEntered}" in

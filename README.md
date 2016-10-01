@@ -130,6 +130,7 @@ It's up to you to decide which features suit you best.
 | --with-alsa    | --without-alsa      | To get the sound volume level.                                                             |
 | --with-oss     | --without-oss       | To get the sound volume level in \*BSD.                                                    |
 | --with-net     | --without-net       | Enable the internet related options.                                                       |
+| --with-libnl   | --without-libnl     | Enable the wifi related options regarding chipsets supporting the cfg80211/mac80211 modules (linux only).  |
 | --with-pci     | --without-pci       | To get the NIC vendor and model in linux                                                   |
 | --with-dvd     | --without-dvd       | To get the cdrom/dvdrom vendor and model                                                   |
 | --with-sensors | --without-sensors   | Alternative way to get the sensors values (linux only)                                     |
@@ -155,6 +156,9 @@ Affects only FreeBSD users with laptops, **--without-apm** will compile the prog
 The pci and sensors configure options will be discarded in \*BSD. If you supplied **--with-alsa** and **--with-oss** or used the port package with the ncurses dialogue, alsa will have higher precedence over OSS. By default the port package will have OSS selected and alsa unselected.
 
 Affects only linux, **--with-pci** and or **--with-sensors** will substitute -O0 flag to mitigate bugs in GCC caused by -O2 optimizations. -O0 will optimize the compiled binary for file size, while -O2 will optimize it for speed. So don't be shocked to find out that **--without-pci --without-sensors** will cause the compiled binary to double it's size. If things doesn't improve with upcomining GCC releases I will temporary drop -O2.
+
+Affects only linux users with wifi/wireless chipsets, run `lsmod|grep 802` and see whether your chipset uses cfg80211/mac80211. If that's so you can rely on libnl and enable **--with-libnl** configure options, otherwise your chipset probably still uses we/wext, so type **--without-libnl**.
+
 
 ---
 
@@ -485,15 +489,30 @@ Cannot list the \*BSD flavours as "distros", so they deserve own options:
 
 ## Opt-in requirements
 
+Linux camp:
+
 The internet related options rely on headers provided iproute2.
 By default the program will try to compile with those headers included.
 If for any reason you would like to compile the program without internet related options, then pass **--without-net** to configure.
 
-* iproute2    # Linux Net headers
+* iproute2
 
-The get the NIC vendor and model (linux):
+wifi/wireless chipsets supporting mac80211/cfg80211:
+
+* libnl (>= 3.0)
+* pkg-config
+
+Then pass **--with-libnl** to configure.
+
+The get the NIC vendor and model names:
 
 * pciutils
+
+Alternative way to obtain data from the sensors:
+
+* lm\_sensors
+
+Linux camp end.
 
 To get the sound volume level:
 
@@ -514,11 +533,6 @@ To get the vendor and model name of your cdrom/dvdrom/blu-ray:
 * libcddb
 
 In linux **--without-dvd** will still compile the program with dvd support. Except it will be limited only to dvd support, it will try to parse the sr0 vendor and model name detected by the kernel.
-
-Alternative way to obtain sensors values in linux with:
-* lm\_sensors
-
-Jokes aside, but my intention was to make the lm\_sensors api code FreeBSD exclusive, which unfortunately is unsupported in BSD.
 
 To see the currently played song name:
 
