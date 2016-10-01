@@ -579,10 +579,11 @@ static int call_back(struct nl_msg *msg, void *str1) {
   }
 
   if (bss[NL80211_BSS_INFORMATION_ELEMENTS]) {
-    ssid = (char *)(nla_data(bss[NL80211_BSS_INFORMATION_ELEMENTS]))+2;
+    ssid = (char *)(nla_data(bss[NL80211_BSS_INFORMATION_ELEMENTS]));
     len = (uint32_t)nla_len(bss[NL80211_BSS_INFORMATION_ELEMENTS]);
 
     if (NULL != ssid && 0 != len) {
+      ssid += 2;
       for (x = 0; x < len; x++) {
         elo = ssid[x];
         if (0 == (isprint((unsigned char)elo))) {
