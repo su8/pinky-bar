@@ -33,6 +33,7 @@ dnl used in the net functions and substitute appropriate macro
 dnl so the program to be compiled with/out net functions support.
 AC_DEFUN([TEST_NET],[
   WITH_NET=1
+  WITH_LIBNL=0
 
   AC_ARG_WITH([net],
     AS_HELP_STRING([--with-net],
@@ -80,7 +81,6 @@ AC_DEFUN([TEST_NET],[
         MISSING_HEADER()
       ])
 
-      WITH_LIBNL=0
       AC_ARG_WITH([libnl],
         AS_HELP_STRING([--with-libnl],
           [wifi funcs]),
@@ -89,7 +89,6 @@ AC_DEFUN([TEST_NET],[
       )
 
       AS_IF([test "x$with_libnl" = "xyes"], [
-        WITH_LIBNL=1
 
         m4_ifndef([PKG_PROG_PKG_CONFIG], [
           AC_MSG_ERROR([Either you dont have pkg-config installed, or pkg.m4 is not in 'ls /usr/share/aclocal | grep pkg', if thats so try exporting the following env var: execute 'aclocal --print-ac-dir' without quotes, then: 'export ACLOCAL_PATH=/tmp' where /tmp is the directory printed from the previous command.])
@@ -108,10 +107,9 @@ AC_DEFUN([TEST_NET],[
           AC_MSG_ERROR([Your libnl version is too old, consider updating to version three at least])
 
         ])
+        WITH_LIBNL=1
 
       ])
-
-      AC_DEFINE_UNQUOTED([WITH_LIBNL],[$WITH_LIBNL],[wifi funcs])
 
     ],[
     ])
@@ -199,6 +197,7 @@ AC_DEFUN([TEST_NET],[
   ])
 
   AC_DEFINE_UNQUOTED([WITH_NET],[$WITH_NET],[Net funcs])
+  AC_DEFINE_UNQUOTED([WITH_LIBNL],[$WITH_LIBNL],[wifi funcs])
 
 ])
 
