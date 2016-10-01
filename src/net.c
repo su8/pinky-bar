@@ -84,7 +84,9 @@
 #if defined(__linux__)
 
 #if WITH_LIBNL == 1
+#if WITH_NET == 1
 static int call_back(struct nl_msg *, void *);
+#endif /* WITH_NET */
 #endif /* WITH_LIBNL */
 
 #endif /* __linux__ */
@@ -457,8 +459,6 @@ void
 get_nic_info(char *str1, char *str2) {
 #if WITH_NET == 1
 
-  (void)str2;
-
   struct rt_msghdr *rtm = NULL;
   struct sockaddr *sa = NULL, *addrs[RTAX_MAX];
   char *buf = NULL, *next = NULL, *lim = NULL, temp[VLA];
@@ -508,6 +508,7 @@ get_nic_info(char *str1, char *str2) {
       }
     }
   }
+  (void)str2;
 
 error:
   if (NULL != buf) {
@@ -538,6 +539,7 @@ error:
 */
 #if WITH_LIBNL == 1
 
+#if WITH_NET == 1
 static int call_back(struct nl_msg *msg, void *str1) {
   struct genlmsghdr *gnlh = nlmsg_data(nlmsg_hdr(msg));
   struct nlattr *tb[NL80211_ATTR_MAX + 1];
@@ -558,7 +560,8 @@ static int call_back(struct nl_msg *msg, void *str1) {
   if (NULL == tb[NL80211_ATTR_BSS]) {
     return NL_SKIP;
   }
-  if (nla_parse_nested(bss, NL80211_BSS_MAX, tb[NL80211_ATTR_BSS], bss_policy)) {
+  if (0 != (nla_parse_nested(bss,
+     NL80211_BSS_MAX, tb[NL80211_ATTR_BSS], bss_policy))) {
     return NL_SKIP;
   }
   if (NULL == bss[NL80211_BSS_STATUS]) {
@@ -589,14 +592,16 @@ static int call_back(struct nl_msg *msg, void *str1) {
         if (0 == (isprint((unsigned char)elo))) {
           break;
         }
-        *ptr++ = elo;
+        if (VLA > x) {
+          *ptr++ = elo;
+        }
       }
       *ptr = '\0';
     }
   }
   return NL_SKIP;
 }
-
+#endif /* WITH_NET */
 
 void
 get_wifi(char *str1, char *str2, uint8_t num) {
