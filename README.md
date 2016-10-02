@@ -290,8 +290,8 @@ make
 make install
 
 # compile pinky_curses
-# BSD users should type -D_DEFAULT_SOURCE instead
-gcc -std=c99 -D_POSIX_C_SOURCE=200112L -Wall -Wextra -O2 src/ncurses.c -o pinky_curses -lncurses
+cd src
+make ncurses
 ```
 
 Put the following in your shell config as function or alias.
@@ -304,7 +304,7 @@ pinky() {
     # scroll a few lines up to see the rest options
     "${location}"/randombar -LTrspkvfmdVt
     sleep 2
-  done | "${location}"/pinky_curses
+  done | "${location}"/ncurses
 }
 ```
 

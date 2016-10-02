@@ -40,7 +40,7 @@ _gen_files() {
   progVer='1.0.0'
   bsdLibs=''
   osEntered="${1,,}"
-  bsdCF='-D_DEFAULT_SOURCE -I/usr/local/include -L/usr/local/lib'
+  bsdCF='-D_DEFAULT_SOURCE'
   posixCF='-D_POSIX_C_SOURCE=200112L'
   declare -a srcToAppend
 
@@ -82,7 +82,7 @@ _gen_files() {
     enumDistros[${x}]="AC_DEFINE_UNQUOTED([${_bases[${x}]^^}],[${x}],[trololo enum generator])"
 
     [[ "${osEntered}" == "${_bases[${x}]}" ]] && {
-      distroNum="AC_DEFINE_UNQUOTED([DISTRO],["${x}"],[da monster])"
+      distroNum="AC_DEFINE_UNQUOTED([DISTRO],[${x}],[da monster])"
     }
   done
 
@@ -173,9 +173,15 @@ _gen_files() {
 
   # Do not pass more definitions to AM_CFLAGS
   # Think of the line limit
-  src_makefile=('AM_CFLAGS = '${amCF}' $(LIBNL_CF)
+  src_makefile=('AM_CFLAGS = '${amCF}'
+
+    INCLUDES  = -I/usr/local/include -L/usr/local/lib $(LIBNL_CF)
 
     bin_PROGRAMS = '${progName}'
+
+    EXTRA_PROGRAMS   = ncurses
+    ncurses_SOURCES  = ncurses.c
+    ncurses_LDADD    = -lncurses
 
     '${progName}'_LDADD = $(X_LIBS) $(ALSA_LIBS)
     '${progName}'_LDADD += $(MPD_LIBS) $(PCI_LIBS)
@@ -185,6 +191,7 @@ _gen_files() {
 
     # To satisfy make dist
     EXTRA_DIST =     \
+      ncurses.c      \
       ../bootstrap   \
       ../README.md   \
       ../.gitignore  \
