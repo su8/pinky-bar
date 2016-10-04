@@ -59,7 +59,7 @@ dnl several times, which may cause to
 dnl exceed the line limit
 AC_DEFUN([UPDATE_LIBS_VAR],[
   LIBS="$1"
-  AC_SUBST([LIBS])
+  AC_SUBST(LIBS)
 ])
 
 dnl Same description as the above func,

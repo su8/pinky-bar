@@ -38,7 +38,6 @@ AC_DEFUN([TEST_X11],[
         ERR_MUST_INSTALL([xorg and libx11])
     ])
 
-    CRAP="$LIBS"
     m4_foreach([LiB], [
         XOpenDisplay,
         XStoreName,
@@ -49,7 +48,6 @@ AC_DEFUN([TEST_X11],[
           MISSING_FUNC()
         ])
     ])
-    UPDATE_LIBS_VAR([$CRAP -lX11])
   ])
 
   WITH_COLOURS=0
@@ -119,7 +117,6 @@ AC_DEFUN([TEST_NCURSES], [
         ERR_MUST_INSTALL([ncurses])
     ])
 
-    CRAP="$LIBS"
     m4_foreach([LiB], [
         initscr        ,
         noecho         ,
@@ -142,7 +139,6 @@ AC_DEFUN([TEST_NCURSES], [
           MISSING_FUNC()
         ])
     ])
-    UPDATE_LIBS_VAR([$CRAP -lncurses])
   ])
 
   AS_IF([test "x$with_ncurses" = "xyes"], [

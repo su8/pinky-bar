@@ -45,7 +45,6 @@ AC_DEFUN([TEST_ALSA],[
         ERR_MUST_INSTALL([alsa-utils and alsa-lib])
       ])
 
-    CRAP="$LIBS"
     m4_foreach([LiB], [
         snd_mixer_open                              ,
         snd_mixer_attach                            ,
@@ -63,7 +62,6 @@ AC_DEFUN([TEST_ALSA],[
           MISSING_FUNC()
         ])
     ])
-    UPDATE_LIBS_VAR([$CRAP -lasound])
   ])
 
   AC_SUBST(ALSA_LIBS)
