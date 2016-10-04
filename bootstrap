@@ -40,7 +40,7 @@ _gen_files() {
   progVer='1.0.0'
   bsdLibs=''
   osEntered="${1,,}"
-  bsdCF='-D_DEFAULT_SOURCE'
+  bsdCF='-D_DEFAULT_SOURCE -L/usr/local/lib'
   posixCF='-D_POSIX_C_SOURCE=200112L'
   declare -a srcToAppend
 
@@ -111,6 +111,8 @@ _gen_files() {
   AC_HEADER_STDC
   AM_PROG_CC_C_O
 
+  AM_EXTRA_RECURSIVE_TARGETS([ncurses])
+
   # The linker flags tests in m4 dir
   TEST_SOME_FUNCS
   TEST_NET
@@ -175,7 +177,7 @@ _gen_files() {
   # Think of the line limit
   src_makefile=('AM_CFLAGS = '${amCF}'
 
-    INCLUDES  = -I/usr/local/include -L/usr/local/lib $(LIBNL_CF)
+    INCLUDES  = -I/usr/local/include $(LIBNL_CF)
 
     bin_PROGRAMS = '${progName}'
 

@@ -282,16 +282,12 @@ sed -i 's/pinkybar/randombar/g' bootstrap
 
 bash bootstrap distro
 
-# disable X11
+# disable X11, enable the colours and ncurses opts.
 ./configure --prefix=$HOME/.cache --without-x11 --with-alsa --with-colours --with-ncurses
 
 # compile 'n install
-make
+make all ncurses
 make install
-
-# compile pinky_curses
-cd src
-make ncurses
 ```
 
 Put the following in your shell config as function or alias.

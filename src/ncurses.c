@@ -21,6 +21,12 @@
   BSD users should type -D_DEFAULT_SOURCE instead.
 */
 
+#include "config.h" /* Auto-generated */
+
+#if WITH_NCURSES != 1
+#error "Have you forgot --with-ncurses ?"
+#endif /* WITH_NCURSES */
+
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
@@ -156,7 +162,7 @@ void unuglify(char *str1) {
           break;
       }
       wattrset(WIN95,
-        COLOR_PAIR((iclr % EIGHT) * EIGHT) | A_BOLD);
+        COLOR_PAIR((int32_t)((iclr % EIGHT) * EIGHT)) | (int32_t)A_BOLD);
     } else {
       waddch(WIN95, (chtype)*ptr);
     }
