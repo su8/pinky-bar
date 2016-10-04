@@ -92,9 +92,10 @@ _gen_files() {
   AC_CONFIG_AUX_DIR([temp_dir])
   AC_CONFIG_MACRO_DIR([m4])
   AC_CONFIG_HEADER([src/config.h])
-  AM_INIT_AUTOMAKE([1.11 -Wall no-define foreign subdir-objects dist-xz no-dist-gzip std-options])
+  # -Werror -Wportability
+  AM_INIT_AUTOMAKE([1.13 -Wall no-define foreign subdir-objects dist-xz no-dist-gzip std-options])
 
-  m4_ifdef([AM_SILENT_RULES], [AM_SILENT_RULES([yes])])
+  AM_SILENT_RULES([yes])
   "${defTits}"
 
   # With the addition of more runtime compile and
@@ -175,9 +176,8 @@ _gen_files() {
 
   # Do not pass more definitions to AM_CFLAGS
   # Think of the line limit
-  src_makefile=('AM_CFLAGS = '${amCF}'
-
-    INCLUDES  = -I/usr/local/include $(LIBNL_CF)
+  src_makefile=('AM_CFLAGS = '${amCF}' \
+    -I/usr/local/include $(LIBNL_CF)
 
     bin_PROGRAMS = '${progName}'
 

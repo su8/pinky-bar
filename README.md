@@ -619,7 +619,7 @@ for dwm:
 
 use **--without-colours** to skip the following step:
 
-* dwm compiled with statuscolor patch applied. The colours in use are specified in your dwm config.h
+* dwm compiled with statuscolor patch. The colours in use are specified in your dwm config.h
 
 ## Wish list
 
