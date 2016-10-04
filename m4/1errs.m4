@@ -15,39 +15,60 @@ dnl along with this program; if not, write to the Free Software
 dnl Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
 dnl MA 02110-1301, USA.
 
+dnl All funcs below are internal
 
-dnl Internal function to show
-dnl error message when smth is wrong
+dnl Error message when smth is wrong
 AC_DEFUN([ERR],[
   AC_MSG_ERROR($1)
 ])
 
-dnl Internal function to show what have to
-dnl be installed in order to compile the program.
+dnl What have to be installed in order to compile the program.
 AC_DEFUN([ERR_MUST_INSTALL],[
   ERR([Install $1 in order to compile the program.])
 ])
 
-dnl Internal function to show error msg when
-dnl compiling and linking some of tests failed
+dnl Failed to compile and linking some test(s)
 AC_DEFUN([LINK_FAILED], [
   ERR([Failed to compile and link the $1 test.])
 ])
 
-dnl Internal function to show error msg when
-dnl compiling some of tests failed
+dnl Failed to compile some test(s)
 AC_DEFUN([COMPILE_FAILED], [
   ERR([Failed to compile the $1 test.])
 ])
 
-dnl Internal function to show error msg when
-dnl some library function is missing
+dnl Missing library function(s)
 AC_DEFUN([MISSING_FUNC], [
   ERR([Missing core library functions.])
 ])
 
-dnl Internal function to show error msg when
-dnl some header file is missing
+dnl Missing header file(s)
 AC_DEFUN([MISSING_HEADER], [
   ERR([Missing core header files.])
+])
+
+
+
+dnl Not error related funcs,
+dnl neither fall in any of the test
+dnl categories listed in this folder
+
+dnl When using AC_CHECK_LIB in a loop,
+dnl it will substitute the same linker flag
+dnl several times, which may cause to
+dnl exceed the line limit
+AC_DEFUN([UPDATE_LIBS_VAR],[
+  LIBS="$1"
+  AC_SUBST([LIBS])
+])
+
+dnl Same description as the above func,
+dnl except it saves the LIBS var before
+dnl invoking AC_CHECK_LIB
+AC_DEFUN([SAVE_LIBS_VAR],[
+  m4_ifdef([ZaVeD], [
+    m4_undefine([ZaVeD])
+  ])
+
+  m4_define([ZaVeD],[$1])
 ])

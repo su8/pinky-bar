@@ -38,6 +38,7 @@ AC_DEFUN([TEST_MPD],[
         ERR_MUST_INSTALL([libmpdclient])
       ])
 
+    CRAP="$LIBS"
     m4_foreach([LiB], [
         mpd_connection_new          ,
         mpd_send_command            ,
@@ -51,6 +52,7 @@ AC_DEFUN([TEST_MPD],[
           MISSING_FUNC()
         ])
     ])
+    UPDATE_LIBS_VAR([$CRAP -lmpdclient])
   ])
 
   AC_SUBST(MPD_LIBS)

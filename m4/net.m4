@@ -252,6 +252,7 @@ AC_DEFUN([TEST_PCI],[
           ERR_MUST_INSTALL([pciutils])
         ])
 
+      CRAP="$LIBS"
       m4_foreach([LiB], [
           pci_alloc        ,
           pci_init         ,
@@ -264,7 +265,7 @@ AC_DEFUN([TEST_PCI],[
             MISSING_FUNC()
           ])
       ])
-
+      UPDATE_LIBS_VAR([$CRAP -lpci])
     ])
 
     AC_SUBST(PCI_LIBS)

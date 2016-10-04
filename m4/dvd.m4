@@ -41,6 +41,7 @@ AC_DEFUN([TEST_DVD],[
         ERR_MUST_INSTALL([libcdio])
     ])
 
+    CRAP="$LIBS"
     m4_foreach([LiB], [
         cdio_open        ,
         mmc_get_hwinfo   ,
@@ -50,6 +51,7 @@ AC_DEFUN([TEST_DVD],[
           MISSING_FUNC()
         ])
     ])
+    UPDATE_LIBS_VAR([$CRAP -lcdio])
   ])
 
   AC_SUBST(DVD_LIBS)

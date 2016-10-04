@@ -39,6 +39,7 @@ AC_DEFUN([TEST_SENSORS],[
           ERR_MUST_INSTALL([lm_sensors])
       ])
 
+      CRAP="$LIBS"
       m4_foreach([LiB], [
           sensors_init,
           sensors_get_value,
@@ -52,6 +53,7 @@ AC_DEFUN([TEST_SENSORS],[
             MISSING_FUNC()
           ])
       ])
+      UPDATE_LIBS_VAR([$CRAP -lsensors])
     ])
   ],[
   ])
