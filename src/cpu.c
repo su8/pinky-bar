@@ -200,54 +200,19 @@ get_cores_load(char *str1) {
  *  http://ref.x86asm.net/coder32.html#x0F31 
 */
 
-/* Not going to test for i486 and i586 */
-#if defined(__i386__) || defined(__i686__)
-static __inline__ uintmax_t 
-rdtsc(void) {
-  uintmax_t x = 0;
-  __asm__ __volatile__ (".byte 0x0f, 0x31" : "=A" (x));
-  return x;
-}
-
-void
-get_cpu_clock_speed(char *str1) {
-  uintmax_t x = 0, y = 0, z[2];
-
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wmissing-field-initializers"
-  struct timespec start = {0}, stop = {0}, tc = {0};
-#pragma GCC diagnostic pop
-
-  tc.tv_nsec = TICKZ * 1000000L;
-
-  x = rdtsc();
-  if (-1 == (clock_gettime(CLOCK_MONOTONIC, &start))) {
-    FUNC_FAILED("clock_gettime()");
-  }
-  z[0] = (uintmax_t)(start.tv_nsec - start.tv_sec);
-
-  if (-1 == (nanosleep(&tc, NULL))) {
-    FUNC_FAILED("nanosleep()");
-  }
-
-  y = rdtsc();
-  if (-1 == (clock_gettime(CLOCK_MONOTONIC, &stop))) {
-    FUNC_FAILED("clock_gettime()");
-  }
-  z[1] = (uintmax_t)(stop.tv_nsec - stop.tv_sec);
-
-  if (0 != (z[1] - z[0])) {
-    FILL_ARR(str1, FMT_UINT " MHz",
-      (1000 * (y - x) / (z[1] - z[0])));
-  }
-}
-
-
-#elif defined(__x86_64__)
+/* Not going to test for i486 and i586.
+ * Unforunately newer intel cpu's rely on rdtscp */
+#if defined(__i386__) || defined(__i686__) || defined(__x86_64__)
 static __inline__ uintmax_t 
 rdtsc(void) {
   unsigned int tickhi = 0, ticklo = 0;
-  __asm__ __volatile__ ("rdtsc" : "=a"(ticklo), "=d"(tickhi));
+  __asm__ __volatile__ (
+    "cpuid\n\t"
+    "rdtsc\n\t"
+    : "=a"(ticklo), "=d"(tickhi)
+    :: EBXR, ECXR
+  );
+
   return (((uintmax_t)tickhi << 32) | (uintmax_t)ticklo);
 }
 

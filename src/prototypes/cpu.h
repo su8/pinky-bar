@@ -52,6 +52,15 @@
 #define AmD    0x68747541
 #define InteL  0x756e6547
 
+#if defined(__x86_64__)
+#define EBXR "%rbx"
+#define ECXR "%rcx"
+#else
+#define EBXR "%ebx"
+#define ECXR "%ecx"
+#endif /* __x86_64__ */
+
+
 #if defined(__linux__)
 #define IDLE_NUM 3
 #define LOOP_ITERZ 10

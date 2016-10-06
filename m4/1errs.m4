@@ -46,29 +46,3 @@ dnl Missing header file(s)
 AC_DEFUN([MISSING_HEADER], [
   ERR([Missing core header files.])
 ])
-
-
-
-dnl Not error related funcs,
-dnl neither fall in any of the test
-dnl categories listed in this folder
-
-dnl When using AC_CHECK_LIB in a loop,
-dnl it will substitute the same linker flag
-dnl several times, which may cause to
-dnl exceed the line limit
-AC_DEFUN([UPDATE_LIBS_VAR],[
-  LIBS="$1"
-  AC_SUBST(LIBS)
-])
-
-dnl Same description as the above func,
-dnl except it saves the LIBS var before
-dnl invoking AC_CHECK_LIB
-AC_DEFUN([SAVE_LIBS_VAR],[
-  m4_ifdef([ZaVeD], [
-    m4_undefine([ZaVeD])
-  ])
-
-  m4_define([ZaVeD],[$1])
-])
