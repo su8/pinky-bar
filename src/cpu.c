@@ -247,7 +247,39 @@ get_cpu_clock_speed(char *str1) {
 static __inline__ uintmax_t 
 rdtsc(void) {
   unsigned int tickhi = 0, ticklo = 0;
-  __asm__ __volatile__ ("rdtsc" : "=a"(ticklo), "=d"(tickhi));
+  uint_fast16_t eax = 0, ecx = 0, edx = 0, ebx = 0;
+  uint_fast16_t vend = 0, leafs = 0, regz = 0;
+
+  __asm__ __volatile__ (
+    "cpuid\n\t"
+    "rdtsc\n\t"
+    : "=a"(ticklo), "=d"(tickhi)
+    :: "%rbx", "%rcx"
+  );
+
+  CPU_REGS(0x00000000, vend, leafs);
+  if (0x00000001 > leafs) {
+    goto seeyah;
+  }
+  if (vend != AmD && vend != InteL) {
+    goto seeyah;
+  }
+
+  CPU_FEATURE(0x80000000, regz);
+  if (0x80000001 > regz) {
+    goto seeyah;
+  }
+  CPU_STR2(0x80000001, eax, ebx, ecx, edx);
+
+  if (0 != (edx & (1 << 27))) {
+    __asm__ __volatile__ (
+      "rdtscp\n\t"
+      : "=a"(ticklo), "=d"(tickhi)
+      :: "%rbx", "%rcx"
+    );
+  }
+
+seeyah:
   return (((uintmax_t)tickhi << 32) | (uintmax_t)ticklo);
 }
 
@@ -366,7 +398,7 @@ get_cpu_info(char *str1) {
   }
 
   CPU_STR2(0x00000001, eax, ebx, ecx, edx);       /* movl $0x00000001, %eax */
-  if ((edx & (1 << 19))) {
+  if (0 != (edx & (1 << 19))) {
     clflu6 = SHFT2(ebx >> 8) * 8;                 /* movl %ebx, 8 */
   }
 
