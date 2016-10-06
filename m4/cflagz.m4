@@ -54,9 +54,13 @@ AC_DEFUN([TEST_ASSEMBLY],[
 
   AC_COMPILE_IFELSE([
     AC_LANG_PROGRAM([[
-      #include <stdint.h>]],[[
-      uintmax_t x;
-      __asm__ __volatile__ (".byte 0x0f, 0x31" : "=A" (x));
+      #include <stdio.h>]],[[
+      unsigned int x = 1, z = 2;
+      __asm__ __volatile__ (
+        "addl %%ebx, %%eax"
+        : "=a"(x)
+        : "a"(x), "b"(z)
+      );
     ]])
   ],[supportz_assembly=yes],[supportz_assembly=no])
 

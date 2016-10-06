@@ -244,6 +244,12 @@ get_cpu_clock_speed(char *str1) {
 
 
 #elif defined(__x86_64__)
+/* 
+ * Thanks to Intel docs for pointing out
+ * "Out of Order Execution", added
+ * cpuid after reading it and edited the rdtscp
+ * code according to the docs
+ * https://www-ssl.intel.com/content/dam/www/public/us/en/documents/white-papers/ia-32-ia-64-benchmark-code-execution-paper.pdf */
 static __inline__ uintmax_t 
 rdtsc(void) {
   unsigned int tickhi = 0, ticklo = 0;
@@ -274,8 +280,11 @@ rdtsc(void) {
   if (0 != (edx & (1 << 27))) {
     __asm__ __volatile__ (
       "rdtscp\n\t"
-      : "=a"(ticklo), "=d"(tickhi)
-      :: "%rbx", "%rcx"
+      "mov %%edx, %0\n\t"
+      "mov %%eax, %1\n\t"
+      "cpuid\n\t"
+      : "=r"(tickhi), "=r"(ticklo)
+      :: "%rax", "%rbx", "%rcx", "%rdx"
     );
   }
 
