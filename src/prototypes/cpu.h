@@ -21,16 +21,17 @@
 #define CPU_H_
 
 /* Inspired from  https://en.wikipedia.org/wiki/CPUID and
- * llvm Host.cpp */
-#define CPU_VENDOR(x, z) __asm__("cpuid": "=b" (z) : "a" (x))
-#define CPU_FEATURE(x, z) __asm__("cpuid": "=a" (z) : "a" (x))
-#define CPU_REGS(x, y, z) __asm__( \
+ * llvm Host.cpp, as hilarious as it sounds, llvm 3.7
+ * wants __volatile__ */
+#define CPU_VENDOR(x, z) __asm__ __volatile__ ("cpuid": "=b" (z) : "a" (x))
+#define CPU_FEATURE(x, z) __asm__ __volatile__("cpuid": "=a" (z) : "a" (x))
+#define CPU_REGS(x, y, z) __asm__ __volatile__ ( \
   "cpuid": \
   "=a" (z), \
   "=b" (y) \
   : "a" (x) \
 )
-#define CPU_STR2(regizter, a, b, c, d) __asm__( \
+#define CPU_STR2(regizter, a, b, c, d) __asm__ __volatile__ ( \
   "cpuid": \
     "=a" (a), \
     "=b" (b), \
@@ -38,13 +39,23 @@
     "=d" (d) \
     : "a" (regizter) \
 )
-#define CPU_ID_STR(regizter, b, c, d) __asm__( \
+#define CPU_ID_STR(regizter, b, c, d) __asm__ __volatile__ ( \
   "cpuid": \
     "=b" (b), \
     "=c" (c), \
     "=d" (d) \
     : "a" (regizter) \
 )
+#define RDZZTOP(tickhi, ticklo)  \
+  __asm__ __volatile__ ( \
+    "rdtscp\n\t" \
+    "mov %%edx, %0\n\t" \
+    "mov %%eax, %1\n\t" \
+    "cpuid\n\t" \
+    : "=r"(tickhi), "=r"(ticklo) \
+    :: "%rax", "%rbx", "%rcx", "%rdx" \
+  )
+
 #define IZMAX(x) (((x >> 8) & 0x0f) == 0x0f)
 
 #define SHFT(x) ((x) & 0x0f)

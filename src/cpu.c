@@ -254,7 +254,7 @@ static __inline__ uintmax_t
 rdtsc(void) {
   unsigned int tickhi = 0, ticklo = 0;
   uint_fast16_t eax = 0, ecx = 0, edx = 0, ebx = 0;
-  uint_fast16_t vend = 0, leafs = 0, regz = 0;
+  uint_fast16_t vend = 0, leafs = 0, regz = 0, x = 0;
 
   __asm__ __volatile__ (
     "cpuid\n\t"
@@ -278,14 +278,10 @@ rdtsc(void) {
   CPU_STR2(0x80000001, eax, ebx, ecx, edx);
 
   if (0 != (edx & (1 << 27))) {
-    __asm__ __volatile__ (
-      "rdtscp\n\t"
-      "mov %%edx, %0\n\t"
-      "mov %%eax, %1\n\t"
-      "cpuid\n\t"
-      : "=r"(tickhi), "=r"(ticklo)
-      :: "%rax", "%rbx", "%rcx", "%rdx"
-    );
+    for (x = 0; x < 6; x++) {
+      RDZZTOP(tickhi, ticklo);
+    }
+    RDZZTOP(tickhi, ticklo);
   }
 
 seeyah:
