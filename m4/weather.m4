@@ -23,6 +23,8 @@ dnl the variable 'CURL_LIBS' if the user enabled
 dnl the --with-weather switch
 AC_DEFUN([TEST_WEATHER],[
   CURL_LIBS=""
+  API_KEY=\""g0tm1lf"\"
+  API_TOWN=\""Venus,The nearby planet"\"
   WITH_WEATHER=0
 
   AC_ARG_WITH([weather],
@@ -56,17 +58,17 @@ AC_DEFUN([TEST_WEATHER],[
     if [[ ! -z "${api_key}" ]]
     then
       API_KEY=\""${api_key}"\"
-      AC_DEFINE_UNQUOTED([API_KEY],[$API_KEY],[weather api key])
     fi
 
     AC_ARG_VAR(api_town, [weather api town])
     if [[ ! -z "${api_town}" ]]
     then
       API_TOWN=\""${api_town}"\"
-      AC_DEFINE_UNQUOTED([API_TOWN],[$API_TOWN],[weather api town])
     fi
 
     WITH_WEATHER=1
+    AC_DEFINE_UNQUOTED([API_KEY],[$API_KEY],[weather api key])
+    AC_DEFINE_UNQUOTED([API_TOWN],[$API_TOWN],[weather api town])
 
   ])
 

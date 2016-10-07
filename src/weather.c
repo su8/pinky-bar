@@ -61,12 +61,11 @@ read_curl_data_cb(char *data, size_t size, size_t nmemb, char *str1) {
   API docs - http://openweathermap.org/current
   Register yourself, create a new API key:
    https://home.openweathermap.org/api_keys
-  add it after APPID=
+  Comply with your account limits.
 */
 void get_weather(char *str1) {
   const char *da_url = "http://api.openweathermap.org/data/2.5/weather?q="
     API_TOWN "&units=metric&APPID=" API_KEY;
-  /* const char *da_url = "http://api.openweathermap.org/data/2.5/weather?q=London,uk&units=metric&APPID=28459ae16e4b3a7e5628ff21f4907b6f"; */
 
   CURL *curl = NULL;
   CURLcode res;
@@ -93,4 +92,7 @@ error:
   curl_global_cleanup();
   return;
 }
+
+#else
+char *l33t;
 #endif /* WITH_WEATHER */

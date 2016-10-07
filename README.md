@@ -69,6 +69,7 @@ The order of supplied options will dictate how, where and what system informatio
 | -R           | --kernver   | The kernel version                                                 |
 | -u           | --kernarch  | The machine architecture                                           |
 | -k           | --kernel    | Combined kernel name and version                                   |
+| -q           | --weather   | Show the temperature outside (some details must be provided)       |
 | -U           | --uptime    | The system uptime                                                  |
 | -w           | --loadavg   | The system average load for past 1, 5 and 15 minutes               |
 | -v           | --voltage   | The system voltage                                                 |
@@ -136,6 +137,9 @@ It's up to you to decide which features suit you best.
 | --with-sensors | --without-sensors   | Alternative way to get the sensors values (linux only)                                     |
 | --with-apm     | --without-apm       | APM power and resource management for laptops (FreeBSD only)                               |
 | --with-ncurses | --without-ncurses   | Output the data to the terminal using the ncurses library, can be colorized                |
+| --with-weather | --without-weather   | The temperature outside  (some details must be provided)                                   |
+| api\_town='London,uk'              | | Town and country code to use for temperature monitoring                                    |
+| api\_key='123458976'               | | API key obtained after registering yourself in the weather website                         |
 | --with-colours | --without-colours   | Colorize the output data.                                                                  |
 | icons=/tmp     |                     | xbm icons that can be used by dzen2 for example. Discarded when **--with-x11** is used     |
 | --with-mpd     | --without-mpd       | To see the currently played song name (if any).                                            |
@@ -146,7 +150,7 @@ It's up to you to decide which features suit you best.
 By default, if **no** options are passed, the program will be compiled with/without:
 
 ```bash
---without-alsa --without-x11 --without-mpd --with-colours --with-net --with-pci --without-dvd --without-sensors --without-ncurses
+--without-alsa --without-x11 --without-mpd --with-colours --with-net --with-pci --without-dvd --without-sensors --without-ncurses --without-weather
 ```
 
 Affects only FreeBSD users with laptops, **--without-apm** will compile the program with acpi support to obtain the current battery life.
@@ -159,6 +163,17 @@ Affects only linux, **--with-pci** and or **--with-sensors** will substitute -O0
 
 Affects only linux users with wifi/wireless chipsets, run `lsmod|grep 802` and see whether your chipset uses cfg80211/mac80211. If that's so you can rely on libnl and enable **--with-libnl** configure options, otherwise your chipset probably still uses we/wext, so type **--without-libnl**.
 
+**--with-weather** is using [dis url](http://openweathermap.org/current), register yourself there, create a new [API key](https://home.openweathermap.org/api\_keys) and supply them like dis to **configure**.
+
+Don't just rush to register yourself, read carefully what the "Free" account limits are and take in account how often the program should call their api service. I'm not responsible if you exceeded the limits, you've been warned.
+
+```bash
+# Make sure it's working first
+# curl 'http://api.openweathermap.org/data/2.5/weather?q=London,uk&units=metric&APPID=28459ae16e4b3a7e5628ff21f4907b6f'
+
+# what to pass to configure
+--with-weather api_town='London,uk' api_key='28459ae16e4b3a7e5628ff21f4907b6f'
+```
 
 ---
 
@@ -529,6 +544,12 @@ To get the vendor and model name of your cdrom/dvdrom/blu-ray:
 * libcddb
 
 In linux **--without-dvd** will still compile the program with dvd support. Except it will be limited only to dvd support, it will try to parse the sr0 vendor and model name detected by the kernel.
+
+The weather related options, please go back and read **Don't just rush to register yourself**:
+
+* curl
+* gzip
+
 
 To see the currently played song name:
 
