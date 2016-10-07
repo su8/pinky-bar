@@ -42,14 +42,12 @@ read_curl_data_cb(char *data, size_t size, size_t nmemb, char *str1) {
 
   for (ptr = data; *ptr; ptr++, x++) {
     if (*ptr == 't') {
-      if ((x+1) < sz && (x+2) < sz && (x+3) < sz) {
+      if ((x+7) < sz) {
         if (*(ptr+1) == 'e' && *(ptr+2) == 'm' && *(ptr+3) == 'p') {
-          if ((x+6) < sz && (x+7) < sz) {
-            if ((isdigit((unsigned char) *(ptr+6))) &&
-             (isdigit((unsigned char) *(ptr+7)))) {
-              *str1++ = *(ptr+6);
-              *str1++ = *(ptr+7);
-            }
+          if ((isdigit((unsigned char) *(ptr+6))) &&
+           (isdigit((unsigned char) *(ptr+7)))) {
+            *str1++ = *(ptr+6);
+            *str1++ = *(ptr+7);
           }
           *str1 = '\0';
           break;
