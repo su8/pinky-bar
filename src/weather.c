@@ -76,7 +76,9 @@ void get_weather(char *str1) {
   CURL *curl = NULL;
   CURLcode res;
 
+  FILL_STR_ARR(1, str1, "0");
   curl_global_init(CURL_GLOBAL_ALL);
+
   if (NULL == (curl = curl_easy_init())) {
     goto error;
   }
