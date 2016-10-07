@@ -265,26 +265,33 @@ rdtsc(void) {
 
   CPU_REGS(0x00000000, vend, leafs);
   if (0x00000001 > leafs) {
-    goto seeyah;
+    goto seeya;
   }
   if (vend != AmD && vend != InteL) {
-    goto seeyah;
+    goto seeya;
   }
 
   CPU_FEATURE(0x80000000, regz);
   if (0x80000001 > regz) {
-    goto seeyah;
+    goto seeya;
   }
   CPU_STR2(0x80000001, eax, ebx, ecx, edx);
 
   if (0 != (edx & (1 << 27))) {
     for (x = 0; x < 6; x++) {
-      RDZZTOP(tickhi, ticklo);
+      printf("%s\n", "elo");
+      __asm__ __volatile__ (
+        "rdtscp\n\t"
+        "mov %%edx, %0\n\t"
+        "mov %%eax, %1\n\t"
+        "cpuid\n\t"
+        : "=r"(tickhi), "=r"(ticklo)
+        :: "%rax", "%rbx", "%rcx", "%rdx"
+      );
     }
-    RDZZTOP(tickhi, ticklo);
   }
 
-seeyah:
+seeya:
   return (((uintmax_t)tickhi << 32) | (uintmax_t)ticklo);
 }
 

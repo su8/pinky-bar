@@ -46,16 +46,6 @@
     "=d" (d) \
     : "a" (regizter) \
 )
-#define RDZZTOP(tickhi, ticklo)  \
-  __asm__ __volatile__ ( \
-    "rdtscp\n\t" \
-    "mov %%edx, %0\n\t" \
-    "mov %%eax, %1\n\t" \
-    "cpuid\n\t" \
-    : "=r"(tickhi), "=r"(ticklo) \
-    :: "%rax", "%rbx", "%rcx", "%rdx" \
-  )
-
 #define IZMAX(x) (((x >> 8) & 0x0f) == 0x0f)
 
 #define SHFT(x) ((x) & 0x0f)

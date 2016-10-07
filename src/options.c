@@ -26,6 +26,7 @@
 #include "prototypes/sound.h"
 #include "prototypes/net.h"
 #include "prototypes/options.h"
+#include "prototypes/weather.h"
 
 /* Because we ran out of a-z A-Z options,
  * only long ones will be supported from now on.
@@ -33,6 +34,7 @@
  * case labels by the parse_opt switch */
 enum {
   NICDRV = CHAR_MAX + 1,
+  KERNODE,
   BULLSHIFT
 };
 const char *argp_program_version = PACKAGE_STRING;
@@ -61,7 +63,7 @@ static const struct argp_option options[] = {
   { .name = "battery",      .key = 'g',                .doc = "The remaining battery charge."                            },
   { .name = "packages",     .key = 'p',                .doc = "The number of installed packages."                        },
   { .name = "kernsys",      .key = 'P',                .doc = "The kernel name."                                         },
-  { .name = "kernode",      .key = 'q',                .doc = "The network node hostname."                               },
+  { .name = "kernode",      .key = KERNODE,                .doc = "The network node hostname."                               },
   { .name = "kernrel",      .key = 'Q',                .doc = "The kernel release."                                      },
   { .name = "kernver",      .key = 'R',                .doc = "The kernel version."                                      },
   { .name = "kernarch",     .key = 'u',                .doc = "The machine architecture."                                },
@@ -82,6 +84,10 @@ static const struct argp_option options[] = {
   { .name = "ipcast",       .key = 'D', .arg = "eth0", .doc = "The NIC broadcast address."                               },
   { .name = "iplookup",     .key = 'E', .arg = "site", .doc = "Mini website IP lookup."                                  },
   { .name = "statio",       .key = 'S', .arg = "sda",  .doc = "Read and written MBs to the drive so far."                },
+
+#if WITH_WEATHER == 1
+  { .name = "weather",      .key = 'q',                .doc = "The temperature outside."                                 },
+#endif /* WITH_WEATHER */
 
 #if defined(HAVE_MPD_CLIENT_H)
   { .name = "mpdtrack",     .key = 'W',                .doc = "The song track name."                                     },
@@ -166,7 +172,7 @@ parse_opt(int key, char *arg, struct argp_state *state) {
 
     NEW_KERNEL_LABEL('P', char kernel_sys[VLA], kernel_sys, 1, FMT_KERN);
 
-    NEW_KERNEL_LABEL('q', char kernel_node[VLA], kernel_node, 2, FMT_KERN);
+    NEW_KERNEL_LABEL(KERNODE, char kernel_node[VLA], kernel_node, 2, FMT_KERN);
 
     NEW_KERNEL_LABEL('Q', char kernel_rel[VLA], kernel_rel, 3, FMT_KERN);
 
@@ -209,6 +215,11 @@ parse_opt(int key, char *arg, struct argp_state *state) {
     NEW_LABEL('g', char battery[VLA], battery, FMT_BATT, BATT_STR);
 
     NEW_ARG_LABEL('S', char statio[VLA], statio, FMT_STATIO, STATIO_STR);
+
+#if WITH_WEATHER == 1
+    NEW_LABEL('q', char weather[VLA], weather, FMT_TEMP);
+#endif /* WITH_WEATHER */
+
 
 #if defined(HAVE_MPD_CLIENT_H)
     NEW_MPD_LABEL('W', char song_track[VLA], song_track, 1);

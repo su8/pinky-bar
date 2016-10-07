@@ -64,7 +64,7 @@ The order of supplied options will dictate how, where and what system informatio
 | -S           | --statio    | Read and written MBs to the drive so far [argument - sda]          |
 | -p           | --packages  | The number of installed packages                                   |
 | -P           | --kernsys   | The kernel name                                                    |
-| -q           | --kernode   | The network node hostname                                          |
+|              | --kernode   | The network node hostname                                          |
 | -Q           | --kernrel   | The kernel release                                                 |
 | -R           | --kernver   | The kernel version                                                 |
 | -u           | --kernarch  | The machine architecture                                           |
@@ -500,7 +500,7 @@ wifi/wireless chipsets supporting mac80211/cfg80211:
 
 Then pass **--with-libnl** to configure.
 
-The get the NIC vendor and model names:
+To get the NIC vendor and model names:
 
 * pciutils
 
