@@ -49,6 +49,9 @@
 #define LOAD_STR   CPU_STR
 #define UP_STR     XBM_ICON("uptime.xbm")
 
+/* Only for the weather */
+#define OUT_STR    BLUE XBM_ICON("fox.xbm")" "
+
 /* tmux or other program that can spice
  * the output on it's own */
 #else

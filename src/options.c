@@ -217,7 +217,7 @@ parse_opt(int key, char *arg, struct argp_state *state) {
     NEW_ARG_LABEL('S', char statio[VLA], statio, FMT_STATIO, STATIO_STR);
 
 #if WITH_WEATHER == 1
-    NEW_LABEL('q', char weather[VLA], weather, FMT_TEMP);
+    NEW_LABEL('q', char weather[VLA], weather, OUT_STR FMT_TEMP);
 #endif /* WITH_WEATHER */
 
 

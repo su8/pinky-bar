@@ -279,7 +279,6 @@ rdtsc(void) {
 
   if (0 != (edx & (1 << 27))) {
     for (x = 0; x < 6; x++) {
-      printf("%s\n", "elo");
       __asm__ __volatile__ (
         "rdtscp\n\t"
         "mov %%edx, %0\n\t"
