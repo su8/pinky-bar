@@ -30,6 +30,10 @@
 #include "prototypes/weather.h"
 
 #if WITH_WEATHER == 1
+/*
+  The 4th arg:
+   https://curl.haxx.se/libcurl/c/CURLOPT_WRITEDATA.html
+*/
 size_t
 read_curl_data_cb(char *data, size_t size, size_t nmemb, char *str1) {
   uintmax_t x = 0;
@@ -62,6 +66,10 @@ read_curl_data_cb(char *data, size_t size, size_t nmemb, char *str1) {
   Register yourself, create a new API key:
    https://home.openweathermap.org/api_keys
   Comply with your account limits.
+
+  cURL related docs and examples
+   https://curl.haxx.se/libcurl/c/curl_easy_setopt.html
+   https://github.com/curl/curl/tree/master/docs/examples
 */
 void get_weather(char *str1) {
   const char *da_url = "http://api.openweathermap.org/data/2.5/weather?q="

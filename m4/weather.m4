@@ -35,6 +35,8 @@ AC_DEFUN([TEST_WEATHER],[
   )
 
   AS_IF([test "x$with_weather" = "xyes"], [
+    CHECK_CFLAGZ([-O0])
+
     AC_CHECK_HEADERS([curl/curl.h], [
       CURL_LIBS="-lcurl"
       ],[
