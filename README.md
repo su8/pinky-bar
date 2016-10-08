@@ -498,6 +498,13 @@ Cannot list the \*BSD flavours as "distros", so they deserve own options:
 * m4
 * gawk
 
+Some llvm and gcc versions will not check for headers and libraries in /usr/local, if that's the case for you, you should export the following environment variables:
+
+```bash
+export LDFLAGS='-L/usr/local/lib'
+export CFLAGS='-I/usr/local/include'
+```
+
 ## Opt-in requirements
 
 Linux camp:
