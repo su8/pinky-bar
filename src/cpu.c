@@ -192,6 +192,28 @@ get_cores_load(char *str1) {
 }
 
 
+#if defined(__i386__) || defined(__i686__) || defined(__x86_64__)
+uint8_t has_reg_one(void) {
+  uint_fast16_t vend = 0, leafs = 0;
+  uint_fast16_t eax = 0, ecx = 0, edx = 0, ebx = 0;
+
+  CPU_REGS(0x00000000, vend, leafs);
+  if (0x00000001 > leafs) {
+    return 1;
+  }
+  if (vend != AmD && vend != InteL) {
+    return 1;
+  }
+
+  CPU_STR2(0x00000001, eax, ebx, ecx, edx);
+  if (0 == (edx & (1 << 4))) {
+    return 1;
+  }
+  return 0;
+}
+#endif /* __i386__ || __i686__ || __x86_64__  */
+
+
 /*  Taken from the gcc documentation
  *  https://gcc.gnu.org/onlinedocs/gcc/Machine-Constraints.html
  *
@@ -205,7 +227,9 @@ get_cores_load(char *str1) {
 static __inline__ uintmax_t 
 rdtsc(void) {
   uintmax_t x = 0;
-  __asm__ __volatile__ (".byte 0x0f, 0x31" : "=A" (x));
+  if (0 == (has_reg_one())) {
+    __asm__ __volatile__ (".byte 0x0f, 0x31" : "=A" (x));
+  }
   return x;
 }
 
@@ -254,22 +278,17 @@ static __inline__ uintmax_t
 rdtsc(void) {
   unsigned int tickhi = 0, ticklo = 0;
   uint_fast16_t eax = 0, ecx = 0, edx = 0, ebx = 0;
-  uint_fast16_t vend = 0, leafs = 0, regz = 0, x = 0;
+  uint_fast16_t vend = 0, regz = 0, x = 0;
 
+  if (0 != (has_reg_one())) {
+    goto seeya;
+  }
   __asm__ __volatile__ (
     "cpuid\n\t"
     "rdtsc\n\t"
     : "=a"(ticklo), "=d"(tickhi)
     :: "%rbx", "%rcx"
   );
-
-  CPU_REGS(0x00000000, vend, leafs);
-  if (0x00000001 > leafs) {
-    goto seeya;
-  }
-  if (vend != AmD && vend != InteL) {
-    goto seeya;
-  }
 
   CPU_FEATURE(0x80000000, regz);
   if (0x80000001 > regz) {
@@ -313,7 +332,7 @@ get_cpu_clock_speed(char *str1) {
 
   FILL_ARR(str1, FMT_UINT " MHz", ((z - x) / 100000));
 }
-#endif
+#endif /* __i386__ || __i686__ || __x86_64__ */
 
 
 #if defined(__i386__) || defined(__i686__) || defined(__x86_64__)
@@ -440,4 +459,4 @@ get_cpu_info(char *str1) {
     (true == got_leafB) ? leafB : SHFT2(ebx >> 24)
   );
 }
-#endif
+#endif /* __i386__ || __i686__ || __x86_64__ */

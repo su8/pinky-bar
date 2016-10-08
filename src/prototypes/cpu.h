@@ -72,6 +72,7 @@ void get_cores_load(char *);
 #if defined(__i386__) || defined(__i686__) || defined(__x86_64__)
 void get_cpu_clock_speed(char *);
 void get_cpu_info(char *);
+uint8_t has_reg_one(void);
 #endif
 
 
