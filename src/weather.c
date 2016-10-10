@@ -33,19 +33,38 @@
 /*
   The 4th arg:
    https://curl.haxx.se/libcurl/c/CURLOPT_WRITEDATA.html
+
+   The JSON data that we are parsing, that's how it's returned:
+
+{"coord":{"lon":-0.13,"lat":51.51},"weather":[{"id":803,"main":"Clouds","description":"broken clouds","icon":"04d"}],"base":"stations","main":{"temp":12.05,"pressure":1030.73,"humidity":70,"temp_min":12.05,"temp_max":12.05,"sea_level":1038.34,"grnd_level":1030.73},"wind":{"speed":3.82,"deg":8.50131},"clouds":{"all":64},"dt":1476114783,"sys":{"message":0.011,"country":"GB","sunrise":1476080264,"sunset":1476119749},"id":2643743,"name":"London","cod":200}
 */
 size_t
 read_curl_data_cb(char *data, size_t size, size_t nmemb, char *str1) {
-  uintmax_t x = 0;
+  uint8_t z = 0;
   char *ptr = NULL;
-  size_t sz = nmemb * size;
+  size_t sz = nmemb * size, x = 0;
 
   for (ptr = data; *ptr; ptr++, x++) {
-    if (*ptr == 't') {
-      if ((x+7) < sz) {
-        if (*(ptr+1) == 'e' && *(ptr+2) == 'm' && *(ptr+3) == 'p') {
+    if ((x+7) < sz) { /* Verifying up to *(ptr+7) */
+
+      if ('m' == *ptr) { /* "main":"Clouds" */
+        if ('a' == *(ptr+1) && 'i' == *(ptr+2) && 'n' == *(ptr+3)) {
+          if ((x+30) < sz) {
+            for (; *ptr && *(ptr+7) && z < 29; z++, ptr++) {
+              if ('"' == *(ptr+7)) {
+                break;
+              }
+              *str1++ = *(ptr+7);
+            }
+          }
+        }
+      }
+
+      if ('t' == *ptr) { /* "temp":12.05 */
+        if ('e' == *(ptr+1) && 'm' == *(ptr+2) &&  'p' == *(ptr+3)) {
           if ((isdigit((unsigned char) *(ptr+6))) &&
            (isdigit((unsigned char) *(ptr+7)))) {
+            *str1++ = ' ';
             *str1++ = *(ptr+6);
             *str1++ = *(ptr+7);
           }
@@ -53,7 +72,12 @@ read_curl_data_cb(char *data, size_t size, size_t nmemb, char *str1) {
           break;
         }
       }
+
     }
+  }
+
+  if ('\0' != *str1) {
+    *str1++ = '\0';
   }
   return sz;
 }

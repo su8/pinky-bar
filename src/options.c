@@ -63,7 +63,7 @@ static const struct argp_option options[] = {
   { .name = "battery",      .key = 'g',                .doc = "The remaining battery charge."                            },
   { .name = "packages",     .key = 'p',                .doc = "The number of installed packages."                        },
   { .name = "kernsys",      .key = 'P',                .doc = "The kernel name."                                         },
-  { .name = "kernode",      .key = KERNODE,                .doc = "The network node hostname."                               },
+  { .name = "kernode",      .key = KERNODE,            .doc = "The network node hostname."                               },
   { .name = "kernrel",      .key = 'Q',                .doc = "The kernel release."                                      },
   { .name = "kernver",      .key = 'R',                .doc = "The kernel version."                                      },
   { .name = "kernarch",     .key = 'u',                .doc = "The machine architecture."                                },
