@@ -40,7 +40,7 @@
 */
 size_t
 read_curl_data_cb(char *data, size_t size, size_t nmemb, char *str1) {
-  uint8_t z = 0;
+  uint8_t z = 0, got_main = 0;
   char *ptr = NULL;
   size_t sz = nmemb * size, x = 0;
 
@@ -48,15 +48,19 @@ read_curl_data_cb(char *data, size_t size, size_t nmemb, char *str1) {
     if ((x+7) < sz) { /* Verifying up to *(ptr+7) */
 
       if ('m' == *ptr) { /* "main":"Clouds" */
-        if ('a' == *(ptr+1) && 'i' == *(ptr+2) && 'n' == *(ptr+3)) {
-          if ((x+30) < sz) {
-            for (; *ptr && *(ptr+7) && z < 29; z++, ptr++) {
-              if ('"' == *(ptr+7)) {
-                break;
+        if (0 == got_main) {
+          if ('a' == *(ptr+1) && 'i' == *(ptr+2) && 'n' == *(ptr+3)) {
+            if ((x+100) < sz) {
+              for (; *ptr && *(ptr+7) && z < 29; z++, ptr++) {
+                if ('"' == *(ptr+7)) {
+                  *str1++ = ' ';
+                  break;
+                }
+                if (0 != (isalpha((unsigned char) *(ptr+7)))) {
+                  *str1++ = *(ptr+7);
+                }
               }
-              if (0 != (isalpha((unsigned char) *(ptr+7)))) {
-                *str1++ = *(ptr+7);
-              }
+              got_main = 1;
             }
           }
         }
@@ -66,7 +70,6 @@ read_curl_data_cb(char *data, size_t size, size_t nmemb, char *str1) {
         if ('e' == *(ptr+1) && 'm' == *(ptr+2) &&  'p' == *(ptr+3)) {
           if (0 != (isdigit((unsigned char) *(ptr+6))) &&
            0 != (isdigit((unsigned char) *(ptr+7)))) {
-            *str1++ = ' ';
             *str1++ = *(ptr+6);
             *str1++ = *(ptr+7);
           }
