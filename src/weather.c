@@ -54,7 +54,9 @@ read_curl_data_cb(char *data, size_t size, size_t nmemb, char *str1) {
               if ('"' == *(ptr+7)) {
                 break;
               }
-              *str1++ = *(ptr+7);
+              if (0 != (isalpha((unsigned char) *(ptr+7)))) {
+                *str1++ = *(ptr+7);
+              }
             }
           }
         }
@@ -62,8 +64,8 @@ read_curl_data_cb(char *data, size_t size, size_t nmemb, char *str1) {
 
       if ('t' == *ptr) { /* "temp":12.05 */
         if ('e' == *(ptr+1) && 'm' == *(ptr+2) &&  'p' == *(ptr+3)) {
-          if ((isdigit((unsigned char) *(ptr+6))) &&
-           (isdigit((unsigned char) *(ptr+7)))) {
+          if (0 != (isdigit((unsigned char) *(ptr+6))) &&
+           0 != (isdigit((unsigned char) *(ptr+7)))) {
             *str1++ = ' ';
             *str1++ = *(ptr+6);
             *str1++ = *(ptr+7);

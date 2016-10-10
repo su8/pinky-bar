@@ -466,7 +466,7 @@ void
 split_n_index(char *str1) {
   char *ptr = str1;
   for (; *ptr; ptr++) {
-    if ((isspace((unsigned char) *ptr))) {
+    if (0 != (isspace((unsigned char) *ptr))) {
       break;
     }
     *str1++ = *ptr;
