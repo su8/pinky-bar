@@ -6,9 +6,10 @@ aclocal.m4
 *bar
 temp_dir/
 src/.deps/
+.deps/
 *.in
 *.in~
-stamp-h1
+*stam*
 *.txt
 src/pinky_curses
 
