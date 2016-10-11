@@ -121,7 +121,7 @@ void init_da_handler(void) {
   setup_action.sa_handler = &sighandler;
   setup_action.sa_flags = 0;
 
-  if (-1 == sigaction(SIGINT, &setup_action, NULL)) {
+  if (-1 == (sigaction(SIGINT, &setup_action, NULL))) {
     fprintf(stderr, "%s\n", "sigaction() failed");
     exit(EXIT_FAILURE);
   }

@@ -72,10 +72,9 @@ get_ram(char *str1, uint8_t num) {
         (uintmax_t)bufferram / MB, "MB");
       break;
     case 5:
-      FILL_UINT_ARR(str1, (used * 100) / utotal);
+      FILL_UINT_ARR(str1, (used * 100) / ((0 != utotal) ? utotal : 1));
       break;
   }
-
 }
 
 
@@ -163,14 +162,14 @@ get_statio(char *str1, char *str2) {
     return;
   }
 
-  if(-1 == devstat_getdevs(NULL, &stats)) {
+  if(-1 == (devstat_getdevs(NULL, &stats))) {
     goto error;
   }
 
   num_devices = stats.dinfo->numdevs;
-  if (-1 == devstat_selectdevs(&dev_select, &num_selected, &num_selections,
+  if (-1 == (devstat_selectdevs(&dev_select, &num_selected, &num_selections,
     &select_generation, stats.dinfo->generation, stats.dinfo->devices, num_devices,
-    NULL, 0, NULL, 0, DS_SELECT_ADD, 16, 0)) {
+    NULL, 0, NULL, 0, DS_SELECT_ADD, 16, 0))) {
     goto error;
   }
 
@@ -290,7 +289,7 @@ get_swapp(char *str1, uint8_t num) {
         if (0 != total) {
           FILL_ARR(str1, FMT_UINT"%%", (used * 100) / total);
         } else {
-          FILL_STR_ARR(1, str1, "0 %");
+          FILL_STR_ARR(1, str1, "0%");
         }
       }
       break;

@@ -56,7 +56,8 @@ get_ram(char *str1, uint8_t num) {
       FILL_ARR(str1, FMT_UINT "%s", (total - freeram), "MB");
       break;
     case 5:
-      FILL_UINT_ARR(str1, ((total - freeram) * 100) / total);
+      FILL_UINT_ARR(str1,
+        ((total - freeram) * 100) / ((0 != total) ? total : 1));
       break;
   }
 }
@@ -261,7 +262,7 @@ get_swapp(char *str1, uint8_t num) {
         if (0 != total) {
           FILL_ARR(str1, FMT_UINT"%%", (used * 100) / total);
         } else {
-          FILL_STR_ARR(1, str1, "0 %");
+          FILL_STR_ARR(1, str1, "0%");
         }
       }
       break;

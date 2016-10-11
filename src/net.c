@@ -98,7 +98,7 @@ void
 get_net(char *str1, char *str2, uint8_t num) {
 #if WITH_NET == 1
 
-#if defined(__linux)
+#if defined(__linux__)
   struct rtnl_link_stats *stats = NULL;
   struct sockaddr_ll *mac = NULL;
 #else
@@ -113,7 +113,7 @@ get_net(char *str1, char *str2, uint8_t num) {
   void *temp_void = NULL;
   char temp[VLA];
 
-  if (-1 == getifaddrs(&ifaddr)) {
+  if (-1 == (getifaddrs(&ifaddr))) {
     FUNC_FAILED("getifaddrs()");
   }
   FILL_STR_ARR(1, str1, "Null");
@@ -147,7 +147,7 @@ get_net(char *str1, char *str2, uint8_t num) {
           break;
         }
       }
-    } else if (ifa->ifa_addr->sa_family == NETFAM &&
+    } else if (NETFAM == ifa->ifa_addr->sa_family &&
           NULL != ifa->ifa_data) {
         if (STREQ(str2, ifa->ifa_name)) {
 
@@ -199,6 +199,8 @@ get_net(char *str1, char *str2, uint8_t num) {
               case 9:
               case 10:
                 get_nic_info2(str1, str2, (uint8_t)(num - 6));
+                break;
+              default:
                 break;
             }
           }
@@ -271,9 +273,6 @@ get_ip_lookup(char *str1, char *str2) {
 
       break;
     }
-  }
-  if ('\0' == str1[0]) {
-    FILL_STR_ARR(1, str1, "Null");
   }
   if (NULL != result) {
     freeaddrinfo(result);

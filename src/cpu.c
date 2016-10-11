@@ -132,13 +132,13 @@ get_cores_load(char *str1) {
   FILE *fp = fopen("/proc/stat", "r");
   CHECK_FP(fp);
 
-  if (NULL == fgets(buf, VLA, fp)) {
+  if (NULL == (fgets(buf, VLA, fp))) {
     CLOSE_X(fp);
     exit_with_err(ERR, "reached /proc/stat EOF");
   }
 
   for (x = 0; x < MAX_CORES; x++, z++) {
-    if (NULL == fgets(buf, VLA, fp)) {
+    if (NULL == (fgets(buf, VLA, fp))) {
       CLOSE_X(fp);
       exit_with_err(ERR, "reached /proc/stat EOF");
     }

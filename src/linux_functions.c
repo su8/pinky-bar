@@ -71,7 +71,7 @@ get_ram(char *str1, uint8_t num) {
         total   = (uintmax_t) mem.totalram / MB;
         used    = (uintmax_t) (mem.totalram - mem.freeram -
                          mem.bufferram - mem.sharedram) / MB;
-        FILL_UINT_ARR(str1, (used * 100) / total);
+        FILL_UINT_ARR(str1, (used * 100) / ((0 != total) ? total : 1));
       }
       break;
   }

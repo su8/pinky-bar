@@ -453,7 +453,7 @@ get_loadavg(char *str1) {
   double up[3];
   memset(up, 0, sizeof(up));
 
-  if (-1 == getloadavg(up, 3)) {
+  if (-1 == (getloadavg(up, 3))) {
   	FUNC_FAILED("getloadavg()");
   }
   FILL_ARR(str1, "%.2f %.2f %.2f",
