@@ -557,12 +557,18 @@ The weather related options, please go back and read **Don't just rush to regist
 * curl
 * gzip
 
+Warning, I'm not responsible for any lawsuit towards you, neither encourage you to pirate content that is not licensed as free and/or for fair use.
 
-To see the currently played song name:
+To see the currently played song name **--with-mpd**:
 
-* cmus (only if compiled **--without-mpd**)
 * libmpdclient
-* mpd (with properly configured config)
+* mpd (you can build it with soundcloud support)
+
+To see the currently played song name **--without-mpd**:
+
+* cmus
+
+The "soundcloud" alternative is to download **.m3u/.pls** files according to the [radio stream station](https://www.internet-radio.com) that you are interested to listen.
 
 The FreeBSD users will notice that "mpd" is named "musicpd".
 

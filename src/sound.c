@@ -190,6 +190,7 @@ error:
 void
 get_song(char *str1, uint8_t num) {
   FILE *fp;
+  static bool got_stream = false;
   char buf[100], temp[100], *ptr;
   const char *tagz[] = { "artist", "title", "album", "date" };
   const char *idx_tagz = ((6 != num) ? tagz[num-2] : "ohsnap");
@@ -224,8 +225,9 @@ get_song(char *str1, uint8_t num) {
         }
       }
       if ('s' == buf[0] && 't' == buf[1] && 'r' == buf[2]) {
-        if (1 != (num-2)) {
+        if (1 != (num-2) && false == got_stream) {
           CHECK_SSCANF(buf, "%*s %[^\n]", str1);
+          got_stream = true;
           break;
         }
       }
