@@ -557,18 +557,25 @@ The weather related options, please go back and read **Don't just rush to regist
 * curl
 * gzip
 
-Warning, I'm not responsible for any lawsuit towards you, neither encourage you to pirate content that is not licensed as free and/or for fair use.
+**Warning, I'm not responsible for any lawsuit towards you, neither encourage you to pirate content that is not licensed as free and/or for fair use.**
 
 To see the currently played song name **--with-mpd**:
 
-* libmpdclient
-* mpd (you can build it with soundcloud support)
+  Server side:
+
+  * libmpdclient
+  * mpd (can be build with soundcloud support)
+
+  Client side:
+
+  * libmpdclient
+  * mpc/ncmpc/ncmpcpp, [and the rest](http://mpd.wikia.com/wiki/Clients)
 
 To see the currently played song name **--without-mpd**:
 
 * cmus
 
-The "soundcloud" alternative is to download **.m3u/.pls** files according to the [radio stream station](https://www.internet-radio.com) that you are interested to listen.
+The "soundcloud" alternative that is supported in cmus and your mpd client will be to download **.m3u/.pls** files according to the [radio stream station](https://www.internet-radio.com) that you are interested to listen.
 
 The FreeBSD users will notice that "mpd" is named "musicpd".
 
@@ -590,38 +597,20 @@ audio_output {
   mixer_type "software"
 }
 
-audio_output {
-  type "httpd"
-  name "HTTP Stream"
-  encoder "vorbis"
-  port "8000"
-  bitrate "128"
-  format "44100:16:1"
-}
-
+port "6600"
 bind_to_address "127.0.0.1"
 ```
 
-
-FreeBSD conf, you'll have to add the "musicpd" daemon user on your own:
+FreeBSD conf, same as the Linux one, you'll have to add the "musicpd" daemon user on your own:
 
 ```nginx
-music_directory "/tmp/music"
-playlist_directory "/tmp/music"
-db_file "/tmp/mpddb"
-log_file "/tmp/mpdlog"
-state_file "/tmp/mpdstate"
-pid_file "/tmp/mpdpid"
-log_level "default"
 user "musicpd"
 
 audio_output {
   type "oss"
   name "My sound card"
+  mixer_type "software"
 }
-
-port "6600"
-bind_to_address "127.0.0.1"
 ```
 
 OpenBSD conf, same as the FreeBSD one, just replace audio\_output with:
