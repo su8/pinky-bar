@@ -193,7 +193,7 @@ get_cores_load(char *str1) {
 
 
 #if defined(__i386__) || defined(__i686__) || defined(__x86_64__)
-uint8_t has_reg_one(void) {
+uint8_t has_tsc_reg(void) {
   uint_fast16_t vend = 0, leafs = 0;
   uint_fast16_t eax = 0, ecx = 0, edx = 0, ebx = 0;
 
@@ -227,7 +227,7 @@ uint8_t has_reg_one(void) {
 static __inline__ uintmax_t 
 rdtsc(void) {
   uintmax_t x = 0;
-  if (0 == (has_reg_one())) {
+  if (0 == (has_tsc_reg())) {
     __asm__ __volatile__ (".byte 0x0f, 0x31" : "=A" (x));
   }
   return x;
@@ -280,7 +280,7 @@ rdtsc(void) {
   uint_fast16_t eax = 0, ecx = 0, edx = 0, ebx = 0;
   uint_fast16_t vend = 0, regz = 0, x = 0;
 
-  if (0 != (has_reg_one())) {
+  if (0 != (has_tsc_reg())) {
     goto seeya;
   }
   __asm__ __volatile__ (

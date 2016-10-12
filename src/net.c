@@ -128,7 +128,7 @@ get_net(char *str1, char *str2, uint8_t num) {
       continue;
     }
     if (3 == num || 5 == num || 6 == num) { /* ip | netmask | broadcast */
-      if (ifa->ifa_addr->sa_family == AF_INET) {
+      if (AF_INET == ifa->ifa_addr->sa_family) {
         if (STREQ(str2, ifa->ifa_name)) {
           switch(num) {
             case 3:
@@ -264,7 +264,7 @@ get_ip_lookup(char *str1, char *str2) {
       continue;
     }
     /* check ipv4 again, despite the "hints" */
-    if (rp->ai_family == AF_INET) {
+    if (AF_INET == rp->ai_family) {
       temp_void = rp->ai_addr;
 
       inet_ntop(AF_INET, &(((struct sockaddr_in *)temp_void)->sin_addr),
@@ -386,7 +386,7 @@ get_nic_info(char *str1, char *str2) {
   char temp[VLA];
   struct pci_access *pacc = NULL;
   struct pci_dev *dev = NULL;
-  FILE *fp;
+  FILE *fp = NULL;
 
   FILL_STR_ARR(1, str1, "Null");
   NIC_VEND(temp, str2);
@@ -486,7 +486,7 @@ get_nic_info(char *str1, char *str2) {
     if (NULL == sa || NULL == rtm) {
       continue;
     }
-    if (sa->sa_family == AF_INET) {
+    if (AF_INET == sa->sa_family) {
       for (x = 0; x < RTAX_MAX; x++) {
         if (rtm->rtm_addrs & (1 << x)) {
           addrs[x] = sa;
@@ -496,8 +496,8 @@ get_nic_info(char *str1, char *str2) {
         }
       }
       if (((rtm->rtm_addrs & (RTA_DST|RTA_GATEWAY)) == (RTA_DST|RTA_GATEWAY))
-           && addrs[RTAX_DST]->sa_family == AF_INET
-           && addrs[RTAX_GATEWAY]->sa_family == AF_INET) {
+           && AF_INET == addrs[RTAX_DST]->sa_family
+           && AF_INET == addrs[RTAX_GATEWAY]->sa_family) {
 
         temp_void = addrs[RTAX_GATEWAY];
         inet_ntop(AF_INET, &(((struct sockaddr_in *)temp_void)->sin_addr),

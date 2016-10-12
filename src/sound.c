@@ -51,7 +51,7 @@ get_volume(char *str1) {
   snd_mixer_t *handle = NULL;
   snd_mixer_elem_t *elem = NULL;
   snd_mixer_selem_id_t *s_elem = NULL;
-  long int vol = 0L, max = 0L, min = 0L, percent = 0L;
+  long int vol = 0L, max = 0L, min = 0L;
 
   if (0 != (snd_mixer_open(&handle, 0))) {
     FUNC_FAILED("alsa");
@@ -84,15 +84,11 @@ get_volume(char *str1) {
   }
   snd_mixer_selem_get_playback_volume_range(elem, &min, &max);
 
-  percent = 0L;
-  if (0 != max) {
-    percent = (vol * 100) / max;
-  }
-
   snd_mixer_selem_id_free(s_elem);
   snd_mixer_close(handle);
 
-  FILL_ARR(str1, "%ld", percent);
+  FILL_ARR(str1, "%ld", 
+    ((0 != max) ? ((vol * 100) / max) : 0L));
   return;
 
 error:
@@ -189,7 +185,7 @@ error:
 
 void
 get_song(char *str1, uint8_t num) {
-  FILE *fp;
+  FILE *fp = NULL;
   static bool got_stream = false;
   char buf[100], temp[100], *ptr;
   const char *tagz[] = { "artist", "title", "album", "date" };

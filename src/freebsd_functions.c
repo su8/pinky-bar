@@ -72,7 +72,8 @@ get_ram(char *str1, uint8_t num) {
         (uintmax_t)bufferram / MB, "MB");
       break;
     case 5:
-      FILL_UINT_ARR(str1, (used * 100) / ((0 != utotal) ? utotal : 1));
+      FILL_UINT_ARR(str1,
+        ((0 != utotal) ? ((used * 100) / utotal) : 0));
       break;
   }
 }
@@ -285,13 +286,8 @@ get_swapp(char *str1, uint8_t num) {
       FILL_ARR(str1, FMT_UINT" %s", ((used * pz) / MB), "MB");
       break;
     case 4:
-      {
-        if (0 != total) {
-          FILL_ARR(str1, FMT_UINT"%%", (used * 100) / total);
-        } else {
-          FILL_STR_ARR(1, str1, "0%");
-        }
-      }
+      FILL_ARR(str1, FMT_UINT"%%",
+        ((0 != total) ? ((used * 100) / total) : 0));
       break;
   }
 }

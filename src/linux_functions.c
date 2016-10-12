@@ -71,7 +71,8 @@ get_ram(char *str1, uint8_t num) {
         total   = (uintmax_t) mem.totalram / MB;
         used    = (uintmax_t) (mem.totalram - mem.freeram -
                          mem.bufferram - mem.sharedram) / MB;
-        FILL_UINT_ARR(str1, (used * 100) / ((0 != total) ? total : 1));
+        FILL_UINT_ARR(str1,
+          ((0 != total) ? ((used * 100) / total) : 0));
       }
       break;
   }
@@ -125,6 +126,7 @@ match_feature(char *str1, uint8_t num) {
   uint_fast16_t rpm[MAX_FANS+1];
   bool found_fans = false;
   const char *temp_sens[] = { "MB Temperature", "CPU Temperature" };
+  size_t len = 0;
 
   if (3 == num) {
     memset(rpm, 0, sizeof(rpm));
@@ -202,14 +204,14 @@ match_feature(char *str1, uint8_t num) {
   sensors_cleanup();
 
   if (1 == num && '\0' != buffer[0]) {
-    size_t len = strlen(buffer);
+    len = strlen(buffer);
     buffer[len-1] = '\0';
 
     FILL_STR_ARR(1, str1, buffer);
     return;
   }
 
-  if (found_fans) {
+  if (true == found_fans) {
     check_fan_vals(str1, rpm, z);
   }
 
@@ -247,7 +249,7 @@ get_cpu_temp(char *str1) {
 void 
 get_voltage(char *str1) {
   float voltage[4];
-  FILE *fp;
+  FILE *fp = NULL;
   uint8_t x = 0;
   memset(voltage, 0, sizeof(voltage));
 
@@ -290,7 +292,7 @@ get_cpu_temp(char *str1) {
 
 void 
 get_mobo(char *str1) {
-  FILE *fp;
+  FILE *fp = NULL;
   char vendor[100], name[100];
 
 #pragma GCC diagnostic push
@@ -337,7 +339,7 @@ get_statio(char *str1, char *str2) {
 /* Thanks to https://bugzilla.kernel.org/show_bug.cgi?id=83411 */
 void
 get_battery(char *str1) {
-  uintmax_t used = 0, total = 0, percent = 0;
+  uintmax_t used = 0, total = 0;
   uint8_t num = 0;
   char temp[VLA];
   BATTERY_TOTAL(temp, num);
@@ -365,9 +367,6 @@ get_battery(char *str1) {
   OPEN_X(fp, temp, FMT_UINT, &used);
 #pragma GCC diagnostic pop
 
-  percent = 0;
-  if (0 != total) {
-    percent = (used * 100) / total;
-  }
-  FILL_UINT_ARR(str1, percent);
+  FILL_UINT_ARR(str1,
+    ((0 != total) ? ((used * 100) / total) : 0));
 }

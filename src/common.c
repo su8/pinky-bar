@@ -67,7 +67,7 @@ exit_with_err(const char *str1, const char *str2) {
 void
 get_temp(const char *str1, char *str2) {
   uint_least32_t temp = 0;
-  FILE *fp;
+  FILE *fp = NULL;
 
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wunused-result"
@@ -207,7 +207,7 @@ glob_packages(const char *str1) {
 void 
 get_packs(char *str1) {
   uint_fast16_t packages = 0;
-  FILE *pkgs_file;
+  FILE *pkgs_file = NULL;
 
 #if DISTRO == ARCHLINUX
   packages = glob_packages("/var/lib/pacman/local/*");
@@ -357,7 +357,7 @@ get_fans(char *str1) {
   memset(rpm, 0, sizeof(rpm));
 
 #if defined(__linux__)
-  FILE *fp;
+  FILE *fp = NULL;
   for (x = 1; x < MAX_FANS; x++, z++) {
     FILL_ARR(tempstr, FAN_FILE, x);
 
@@ -398,7 +398,7 @@ get_fans(char *str1) {
 
 #endif /* __linux__ */
 
-  if (found_fans) {
+  if (true == found_fans) {
     check_fan_vals(str1, rpm, z);
   }
 }
@@ -427,7 +427,7 @@ get_dvd(char *str1) {
 #if defined(__linux__)
 void
 get_dvd(char *str1) {
-  FILE *fp;
+  FILE *fp = NULL;
   char vendor[100], model[100];
 
 #pragma GCC diagnostic push

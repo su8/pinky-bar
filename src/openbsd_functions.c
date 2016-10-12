@@ -57,7 +57,7 @@ get_ram(char *str1, uint8_t num) {
       break;
     case 5:
       FILL_UINT_ARR(str1,
-        ((total - freeram) * 100) / ((0 != total) ? total : 1));
+        ((0 != total) ? (((total - freeram) * 100) / total) : 0));
       break;
   }
 }
@@ -74,6 +74,7 @@ match_feature(char *str1, uint8_t sens_type, uint8_t sens_num) {
   char buffer[VLA];
   char *all = buffer;
   bool found_fans = false;
+  size_t len = 0;
 
   memset(rpm, 0, sizeof(rpm));
   memset(&dev, 0, sizeof(struct sensordev));
@@ -119,7 +120,7 @@ match_feature(char *str1, uint8_t sens_type, uint8_t sens_num) {
   }
 
   if (SENSOR_VOLTS_DC == sens_type && '\0' != buffer[0]) {
-    size_t len = strlen(buffer);
+    len = strlen(buffer);
     buffer[len-1] = '\0';
 
     FILL_STR_ARR(1, str1, buffer);
@@ -134,7 +135,7 @@ match_feature(char *str1, uint8_t sens_type, uint8_t sens_num) {
     }
     return;
   }
-  if (found_fans) {
+  if (true == found_fans) {
     check_fan_vals(str1, rpm, z);
   }
 }
@@ -258,13 +259,8 @@ get_swapp(char *str1, uint8_t num) {
       FILL_ARR(str1, FMT_UINT" %s", BYTES_TO_MB(used), "MB");
       break;
     case 4:
-      {
-        if (0 != total) {
-          FILL_ARR(str1, FMT_UINT"%%", (used * 100) / total);
-        } else {
-          FILL_STR_ARR(1, str1, "0%");
-        }
-      }
+      FILL_ARR(str1, FMT_UINT"%%",
+        ((0 != total) ? ((used * 100) / total) : 0));
       break;
   }
 
