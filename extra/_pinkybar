@@ -15,6 +15,8 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
 # MA 02110-1301, USA.
 
+# Cross-platform supported opts:
+
 _arguments -s -S -A '-*' : \
 '-M[song filename]' \
 '-W[song track name]' \
@@ -61,3 +63,27 @@ _arguments -s -S -A '-*' : \
 '-B[subnet mask, requires argument eth0]' \
 '-D[broadcast addr, requires argument eth0]' \
 '-E[website ip lookup, requires argument eth0]'
+
+
+# Linux opts
+#
+# '-F[vendor and model name of ur drive, requires argument sda]' \
+# '-G[NIC vendor and model names, requires argument eth0]' \
+# '--nicinfo[NIC driver, requires argument eth0]' \
+# '-H[NIC version, requires argument eth0]' \
+# '-e[NIC links speed, requires argument eth0]' \
+# '-j[NIC firmware, requires argument eth0]' \
+# '-h[wifi essid, requires argument eth0]'
+
+
+# FreeBSD and OpenBSD opts
+#
+# '-j[NIC gateway addr, requires argument re0]' \
+# '-Z[used drive swap in MB]' \
+# '-F[used drive swap in percentage]' \
+# '-h[total drive swap]' \
+# '-H[available drive swap]'
+
+# OpenBSD opts
+#
+#'-l[used ram in MB]'
