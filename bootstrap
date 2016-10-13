@@ -134,7 +134,6 @@ _gen_files() {
   AC_CONFIG_FILES([
     Makefile
     src/Makefile
-    extra/Makefile
   ])
 
   AC_OUTPUT
@@ -146,7 +145,19 @@ _gen_files() {
 
   # Makefile.am
   main_makefile=('
-    SUBDIRS = src extra
+    SUBDIRS = src
+
+    dist_man_MANS = extra/pinkybar.1
+
+    # To satisfy make dist
+    EXTRA_DIST =      \
+      src/ncurses.c   \
+      bootstrap       \
+      README.md       \
+      .gitignore      \
+      m4              \
+      xbm_icons       \
+      extra
   ')
 
 
@@ -178,6 +189,14 @@ _gen_files() {
     "${srcToAppend[@]}"
   )
 
+  # The syntax is autotools specific
+  src_libs_to_add=(
+    '$(X_LIBS) $(ALSA_LIBS)'
+    '$(MPD_LIBS) $(PCI_LIBS)'
+    '$(DVD_LIBS) $(SENSORS_LIBS)'
+    '$(CURL_LIBS) $(LIBNL_LZ)'
+  )
+
   # Do not pass more definitions to AM_CFLAGS
   # Think of the line limit
   src_makefile=('AM_CFLAGS = '${amCF}' \
@@ -189,29 +208,10 @@ _gen_files() {
     ncurses_SOURCES  = ncurses.c
     ncurses_LDADD    = -lncurses
 
-    '${progName}'_LDADD = $(X_LIBS) $(ALSA_LIBS)
-    '${progName}'_LDADD += $(MPD_LIBS) $(PCI_LIBS)
-    '${progName}'_LDADD += $(DVD_LIBS) $(SENSORS_LIBS)
-    '${progName}'_LDADD += $(CURL_LIBS) $(LIBNL_LZ) '${bsdLibs}'
-
+    '${progName}'_LDADD = '${src_libs_to_add[@]}' '${bsdLibs}'
     '${progName}'_SOURCES = '${src_files[@]}'
-
-    # To satisfy make dist
-    EXTRA_DIST =     \
-      ncurses.c      \
-      ../bootstrap   \
-      ../README.md   \
-      ../.gitignore  \
-      ../m4          \
-      ../xbm_icons   \
-      ../extra
   ')
 
-
-  # extra/Makefile.am
-  extra_makefile=('
-    dist_man_MANS = pinkybar.1
-  ')
 
   cat <<EOF > configure.ac
 ${configure_ac[@]}
@@ -225,9 +225,6 @@ EOF
 ${src_makefile[@]}
 EOF
 
-  cat <<EOF > extra/Makefile.am
-${extra_makefile[@]}
-EOF
 
   # do not remove nor edit
   autoreconf --install --force

@@ -12,6 +12,7 @@ src/.deps/
 *stam*
 *.txt
 src/pinky_curses
+*.xz
 
 
 
