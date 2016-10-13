@@ -13,6 +13,7 @@ src/.deps/
 *.txt
 src/pinky_curses
 *.xz
+*.pdc
 
 
 
@@ -26,3 +27,4 @@ src/pinky_curses
 
 !extra/FreeBSD/Makefile
 !extra/_pinkybar
+!extra/man_template.pdc

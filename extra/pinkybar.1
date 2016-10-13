@@ -2,12 +2,27 @@
 .TH "pinkybar" "1" "Oktoberfest 13, 2016" "manual" ""
 .SH NAME
 .PP
-Gather some system information and show it in this statusbar program,
-not tied to any Window Manager, terminal multiplexer, etc.
+This is man page is converted from it's markdown README source, and some
+information might not look good and/or have been stripped during the
+automated process.
 .SH SYNOPSIS
 .PP
-pinkybar [\f[I]option\f[]]
-.SH DESCRIPTION
+dwm
+.PP
+[IMAGE: image (img/pic.png)]
+.PP
+xmonad
+.PP
+[IMAGE: image (img/pic5.png)]
+.PP
+[IMAGE: image (img/pic7.png)]
+.PP
+ncurses
+.PP
+[IMAGE: image (img/pic6.png)]
+.PP
+Gather some system information and show it in this statusbar program,
+not tied to any Window Manager, terminal multiplexer, etc.
 .PP
 Please note that the program won't detect fans connected via molex
 connetor(s) or external fan controller.
@@ -24,7 +39,23 @@ your cheesy fingers open in the process.
 .PP
 If you compile your kernel from source code make sure to include your
 cpu and motherboard sensors as \f[B]modules\f[] and not inlined.
-.SH OPTIONS
+.PP
+\f[B]Just an example if you use BSD \- acpi/aibs, coretemp/amdtemp.\f[]
+.PP
+[IMAGE: image (img/cpu-temp.png)]
+.PP
+[IMAGE: image (img/mobo-temp.png)]
+.PP
+   *   *   *   *   *
+.SS Bandwidth measurment
+.PP
+pinky\-bar supplies bandwitdh/network throughput measurment to satisfy
+those users that pay for overpriced 3G/mobile internet, and want to
+monitor every single megabit/megabyte.
+.SS Program options
+.PP
+The order of supplied options will dictate how, where and what system
+information to be shown.
 .PP
 .TS
 tab(@);
@@ -502,7 +533,9 @@ T}@T{
 The used ram in MB
 T}
 .TE
-.SH GNU Build System (configure) options
+.PP
+   *   *   *   *   *
+.SS GNU Build System (configure) options
 .PP
 Before the source code is passed to the compiler, you can enable/disable
 the following \f[B]configure\f[] options that will increase/reduce the
@@ -716,7 +749,7 @@ I'm not responsible if you exceeded the limits, you've been warned.
 .fi
 .PP
    *   *   *   *   *
-.SH Installation for dwm
+.SS Installation for dwm
 .IP
 .nf
 \f[C]
@@ -746,7 +779,7 @@ while\ true;\ do
 done\ &
 \f[]
 .fi
-.SH Installation for xmonad (or other WM)
+.SS Installation for xmonad (or other WM)
 .IP
 .nf
 \f[C]
@@ -784,7 +817,7 @@ while\ true;\ do
 done\ |\ dzen2\ \-w\ 1800\ \-x\ 130\ \-ta\ r\ \-fn\ \[aq]\-*\-dejavusans\-*\-r\-*\-*\-11\-*\-*\-*\-*\-*\-*\-*\[aq]\ &
 \f[]
 .fi
-.SH Installation in FreeBSD
+.SS Installation in FreeBSD
 .PP
 FreeBSD has no other way than using the module specific convention to
 query sysctl and obtain data from the sensors.
@@ -830,7 +863,7 @@ make\ install
 .PP
 Send a request to the FreeBSD mail list and request the OpenBSD sensors
 API to be ported.
-.SH Installation in OpenBSD
+.SS Installation in OpenBSD
 .PP
 Before even executing the \f[B]bootstrap\f[] script, you'll have to do
 this:
@@ -852,7 +885,7 @@ export\ AUTOMAKE_VERSION=1.15
 pkg_add\ gcc
 \f[]
 .fi
-.SH pinky curses installation
+.SS pinky curses installation
 .IP
 .nf
 \f[C]
@@ -1013,7 +1046,7 @@ pinky_curses is standalone program not tied to pinky\-bar.
 while\ true;\ do\ echo\ "^BOh\ ^Mhello\ ^Ydear";sleep\ 1;done\ |\ ./pinky_curses
 \f[]
 .fi
-.SH Installation for anything else
+.SS Installation for anything else
 .PP
 pinky\-bar is no longer tied to Window Managers only.
 With the addition of \[lq]without colours\[rq], the output can be shown
@@ -1072,7 +1105,7 @@ options:
 [x] openbsd
 .PP
    *   *   *   *   *
-.SH Linux Mandatory requirements
+.SS Linux Mandatory requirements
 .IP \[bu] 2
 gcc/clang
 .IP \[bu] 2
@@ -1085,7 +1118,7 @@ automake
 m4
 .IP \[bu] 2
 gawk
-.SH *BSD Mandatory requirements
+.SS *BSD Mandatory requirements
 .IP \[bu] 2
 gcc/clang
 .IP \[bu] 2
@@ -1119,7 +1152,7 @@ export\ LDFLAGS=\[aq]\-L/usr/local/lib\[aq]
 export\ CFLAGS=\[aq]\-I/usr/local/include\[aq]
 \f[]
 .fi
-.SH Opt\-in requirements
+.SS Opt\-in requirements
 .PP
 Linux camp:
 .PP
@@ -1267,7 +1300,7 @@ Keep an eye on the \f[B]log file size\f[] if you are using raspberry pi
 deleted automatically if it exceeds some pre\-defined size.
 .PP
    *   *   *   *   *
-.SH WM specific requirements
+.SS WM specific requirements
 .PP
 If you would like the output to be shown in your Window Manager, those
 are the following requirements:
@@ -1286,12 +1319,103 @@ use \f[B]\[en]without\-colours\f[] to skip the following step:
 .IP \[bu] 2
 dwm compiled with statuscolor patch.
 The colours in use are specified in your dwm config.h
-.SH Wish list
+.SS Wish list
 .PP
 As top priority:
 .PP
 It would be great if I had *BSD compatible usb wifi dongle to add wifi
 options in pinky\-bar.
+.PP
+   *   *   *   *   *
+.PP
+With the help from the gcc documentation, this wish list option has been
+solved.
+.PP
+[STRIKEOUT:Per core/thread CPU frequency detection: Can add it at any
+time if there is enough demand, but needs some consideration first.]
+.PP
+[STRIKEOUT:The kernels cpu frequency governor \[lq]performance\[rq] will
+always run at the highest possible clock rate regardless of it's
+use/idle. The only side effect of this is higher temps when on idle
+(true if the cpu has multiple cores and or threads).]
+.PP
+[STRIKEOUT:The \[lq]powersaving\[rq] governor will always run at the
+lowest possible clock rate regardless of it's use/idle. The side effect
+\- slower machine no matter what you do.]
+.PP
+[STRIKEOUT:The \[lq]ondemand\[rq] governor does what it says \- ondemand
+scaling. With it you get the best performance when you need to,
+powersaving and lower temps when on idle.]
+.PP
+[STRIKEOUT:For example I manually turn off the cpu frequency governor in
+my kernel builds, which sets it to performance.]
+.PP
+[STRIKEOUT:The cpu frequency detection is easy, but it poses a roadblock
+by assuming that the \[lq]ondemand\[rq] is set and/or is enabled in the
+user kernel.]
+.PP
+[STRIKEOUT:Decision 1: On a multicore/thread cpu, the detection for each
+core/thread will produce up to 8 digit number, thus 4 core and 4 thread
+cpu will produce: 1234.5678 1234.5678 1234.5678 1234.5678 1234.5678
+1234.5678 1234.5678 1234.5678, without including MHz for each
+core/thread, which will take a lot of space in the final statusbar
+output. This way the user will know for how long and which core/thread
+is under some load.]
+.PP
+[STRIKEOUT:Decision 2: On other hand it will be lame on a multi
+core/thread system to show the overall (not per core/thread) cpu
+frequency that have been summed up, which will beat the purpose of cpu
+frequency detection in first place, as the user will not be aware that
+some core/thread is running at full cpu clock speed as the load will be
+spread equally when summing the numbers up.]
+.PP
+   *   *   *   *   *
+.PP
+GPU temperature, voltage, fan(s) and used RAM: hard, but not impossible.
+.PP
+It would be nice to have decent gpu temperature, voltage, fan(s) speed
+and used RAM detection regarding SLI, single and dual gpu cards that
+doesn't require X, MESA and \f[B]/sys/kernel/debug/dri\f[]
+.PP
+Using assembly is strongly no\-go.
+.PP
+   *   *   *   *   *
+.PP
+Currently played filename in
+VLC (https://github.com/videolan/vlc/blob/master/src/libvlc.c): easy to
+be added.
+.PP
+Unless MPRIS is replaced with sockets, I am not willing to add dbus as
+dependency to pinky\-bar.
+.IP
+.nf
+\f[C]
+//\ The\ "MPRIS_BUS_NAME"\ macro\ from\ libvlc
+dbus_message_new_method_call(
+\ \ "org.mpris.MediaPlayer2.vlc",
+\ \ "/org/mpris/MediaPlayer2",
+\ \ "org.mpris.MediaPlayer2.Player",
+\ \ "Metadata");
+//\ results\ in:\ \ \[aq]xesam:url\[aq]:\ <\[aq]file:///home/frost/music/Summer_Sixteen.mp3\[aq]>\ 
+\f[]
+.fi
+.PP
+   *   *   *   *   *
+.PP
+Show the idle time in seconds/minutes: easy to be added via
+XScreenSaverQueryInfo (http://linux.die.net/man/3/xscreensaverqueryinfo),
+but will discriminate the users that have compiled the program
+\f[B]\[en]without\-x11\f[].
+.PP
+   *   *   *   *   *
+.PP
+Show the CapsLock/NumLock/ScrollLock indicator status for keyboard
+without LEDs: easy to be added via
+XkbGetIndicatorState (http://linux.die.net/man/3/xkbgetindicatorstate),
+but will discriminate the users that have compiled the program
+\f[B]\[en]without\-x11\f[].
+pinkybar [\f[I]option\f[]]
+.SH DESCRIPTION
 .SH REPORTING BUGS
 .PP
 Report bugs to https://gitlab.com/void0/pinky\-bar

@@ -42,7 +42,8 @@ _gen_files() {
   osEntered="${1,,}"
   bsdCF='-D_DEFAULT_SOURCE -L/usr/local/lib'
   posixCF='-D_POSIX_C_SOURCE=200112L'
-  declare -a srcToAppend
+  declare -a srcToAppend configure_ac main_makefile
+  declare -a src_makefile src_libs_to_add src_files
 
   case "${osEntered}" in
     freebsd)
