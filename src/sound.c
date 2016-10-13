@@ -131,10 +131,20 @@ get_volume(char *str1) {
 
 #if defined (HAVE_MPD_CLIENT_H)
 void
-get_song(char *str1, uint8_t num) {
+get_song(char *str1, int8_t num) {
 
   struct mpd_connection *conn = NULL;
   struct mpd_song *song = NULL;
+  const char *stream = NULL;
+  size_t len = 0;
+  int8_t tagz_arr[] = {
+    0,
+    MPD_TAG_TRACK,
+    MPD_TAG_ARTIST,
+    MPD_TAG_TITLE,
+    MPD_TAG_ALBUM,
+    MPD_TAG_DATE
+  };
 
   if (NULL == (conn = mpd_connection_new(NULL, 0, 0))) {
     return;
@@ -147,28 +157,19 @@ get_song(char *str1, uint8_t num) {
     goto error;
   }
 
-  /* You can add more TAGs to be obtained,
-   * look at /usr/include/mpd/tag.h
-   */
-  switch(num) {
-    case 1:
-      FILL_STR_ARR(1, str1, mpd_song_get_tag(song, MPD_TAG_TRACK, 0));
-      break;
-    case 2:
-      FILL_STR_ARR(1, str1, mpd_song_get_tag(song, MPD_TAG_ARTIST, 0));
-      break;
-    case 3:
-      FILL_STR_ARR(1, str1, mpd_song_get_tag(song, MPD_TAG_TITLE, 0));
-      break;
-    case 4:
-      FILL_STR_ARR(1, str1, mpd_song_get_tag(song, MPD_TAG_ALBUM, 0));
-      break;
-    case 5:
-      FILL_STR_ARR(1, str1, mpd_song_get_tag(song, MPD_TAG_DATE, 0));
-      break;
-    case 6:
-      FILL_STR_ARR(1, str1, mpd_song_get_uri(song));
-      break;
+  if (6 != num) {
+    FILL_STR_ARR(1, str1,
+     mpd_song_get_tag(song, tagz_arr[num], 0));
+
+  } else {
+    stream = mpd_song_get_uri(song);
+    len = strlen(stream);
+    if (5 < len) {
+      if (0 == (strncmp(stream, "http", 4))) {
+        stream = "..";
+      }
+    }
+    FILL_STR_ARR(1, str1, stream);
   }
 
 error:
@@ -184,7 +185,7 @@ error:
 #else
 
 void
-get_song(char *str1, uint8_t num) {
+get_song(char *str1, int8_t num) {
   FILE *fp = NULL;
   static bool got_stream = false;
   char buf[100], temp[100], *ptr;

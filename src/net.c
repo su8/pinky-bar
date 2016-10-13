@@ -453,6 +453,10 @@ get_nic_info(char *str1, char *str2) {
     return;
   }
 
+  if (0 == needed) {
+    return;
+  }
+
   buf = (char *)malloc(needed);
   if (NULL == buf) {
     return;
