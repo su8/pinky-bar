@@ -164,10 +164,8 @@ get_song(char *str1, int8_t num) {
       FILL_STR_ARR(1, str1, taggy);
     }
   } else {
-    stream = mpd_song_get_uri(song);
-    if (NULL != stream) {
-      len = strlen(stream);
-      if (5 < len) {
+    if (NULL != (stream = mpd_song_get_uri(song))) {
+      if (5 < (len = strlen(stream))) {
         if (0 == (strncmp(stream, "http", 4))) {
           stream = "..";
         }

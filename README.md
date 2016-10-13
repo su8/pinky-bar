@@ -208,9 +208,6 @@ done &
 mkdir -p --mode=700 $HOME/.xmonad/icons
 cp -r xbm_icons/*.xbm $HOME/.xmonad/icons
 
-# rename the program
-sed -i 's/pinkybar/xmonadbar/g' bootstrap
-
 bash bootstrap distro
 
 # disable X11, point the location to the icons
@@ -229,7 +226,7 @@ Put the following in your **xinitrc** or the script used to start xmonad.
 # Execute the "statusbar" program every 2 secs
 while true; do
   # scroll a few lines up to see the rest options
-  "$HOME/.cache/bin/xmonadbar" -LTrspkvfmdVt
+  "$HOME/.cache/bin/pinkybar" -LTrspkvfmdVt
   sleep 2
 done | dzen2 -w 1800 -x 130 -ta r -fn '-*-dejavusans-*-r-*-*-11-*-*-*-*-*-*-*' &
 ```
@@ -292,9 +289,6 @@ pkg_add gcc
 ## pinky curses installation
 
 ```bash
-# rename the program
-sed -i 's/pinkybar/randombar/g' bootstrap
-
 bash bootstrap distro
 
 # disable X11, enable the colours and ncurses opts.
@@ -313,7 +307,7 @@ pinky() {
 
   while true; do
     # scroll a few lines up to see the rest options
-    "${location}"/randombar -LTrspkvfmdVt
+    "${location}"/pinkybar -LTrspkvfmdVt
     sleep 2
   done | "${location}"/ncurses
 }
@@ -451,8 +445,6 @@ bash bootstrap distro
 make
 make install
 ```
-
-Will mention that you can add **--with-mpd** too, but scroll a few lines up, re-read **Installation for anything else** and see the tmux snapshot.
 
 By choosing this 3rd installation method it is up to you where, how to start and use the system information that's produced by pinky-bar.
 

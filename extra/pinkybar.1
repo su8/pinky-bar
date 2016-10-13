@@ -2,9 +2,8 @@
 .TH "pinkybar" "1" "Oktoberfest 13, 2016" "manual" ""
 .SH NAME
 .PP
-This is man page is converted from it's markdown README source, and some
-information might not look good and/or have been stripped during the
-automated process.
+This man page is converted from markdown, and some information might not
+look good and/or have been stripped during the automated process.
 .SH SYNOPSIS
 .PP
 pinkybar [\f[I]option\f[]]
@@ -790,9 +789,6 @@ done\ &
 mkdir\ \-p\ \-\-mode=700\ $HOME/.xmonad/icons
 cp\ \-r\ xbm_icons/*.xbm\ $HOME/.xmonad/icons
 
-#\ rename\ the\ program
-sed\ \-i\ \[aq]s/pinkybar/xmonadbar/g\[aq]\ bootstrap
-
 bash\ bootstrap\ distro
 
 #\ disable\ X11,\ point\ the\ location\ to\ the\ icons
@@ -815,7 +811,7 @@ xmonad.
 #\ Execute\ the\ "statusbar"\ program\ every\ 2\ secs
 while\ true;\ do
 \ \ #\ scroll\ a\ few\ lines\ up\ to\ see\ the\ rest\ options
-\ \ "$HOME/.cache/bin/xmonadbar"\ \-LTrspkvfmdVt
+\ \ "$HOME/.cache/bin/pinkybar"\ \-LTrspkvfmdVt
 \ \ sleep\ 2
 done\ |\ dzen2\ \-w\ 1800\ \-x\ 130\ \-ta\ r\ \-fn\ \[aq]\-*\-dejavusans\-*\-r\-*\-*\-11\-*\-*\-*\-*\-*\-*\-*\[aq]\ &
 \f[]
@@ -892,9 +888,6 @@ pkg_add\ gcc
 .IP
 .nf
 \f[C]
-#\ rename\ the\ program
-sed\ \-i\ \[aq]s/pinkybar/randombar/g\[aq]\ bootstrap
-
 bash\ bootstrap\ distro
 
 #\ disable\ X11,\ enable\ the\ colours\ and\ ncurses\ opts.
@@ -915,7 +908,7 @@ pinky()\ {
 
 \ \ while\ true;\ do
 \ \ \ \ #\ scroll\ a\ few\ lines\ up\ to\ see\ the\ rest\ options
-\ \ \ \ "${location}"/randombar\ \-LTrspkvfmdVt
+\ \ \ \ "${location}"/pinkybar\ \-LTrspkvfmdVt
 \ \ \ \ sleep\ 2
 \ \ done\ |\ "${location}"/ncurses
 }
@@ -1068,10 +1061,6 @@ make
 make\ install
 \f[]
 .fi
-.PP
-Will mention that you can add \f[B]\[en]with\-mpd\f[] too, but scroll a
-few lines up, re\-read \f[B]Installation for anything else\f[] and see
-the tmux snapshot.
 .PP
 By choosing this 3rd installation method it is up to you where, how to
 start and use the system information that's produced by pinky\-bar.
