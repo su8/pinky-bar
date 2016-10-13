@@ -191,7 +191,7 @@ _gen_files() {
     '${progName}'_LDADD = $(X_LIBS) $(ALSA_LIBS)
     '${progName}'_LDADD += $(MPD_LIBS) $(PCI_LIBS)
     '${progName}'_LDADD += $(DVD_LIBS) $(SENSORS_LIBS)
-    '${progName}'_LDADD += $(CURL_LIBS) '${bsdLibs}'
+    '${progName}'_LDADD += $(CURL_LIBS) $(LIBNL_LZ) '${bsdLibs}'
 
     '${progName}'_SOURCES = '${src_files[@]}'
 

@@ -83,11 +83,9 @@
 
 #if defined(__linux__)
 
-#if WITH_LIBNL == 1
-#if WITH_NET == 1
+#if WITH_LIBNL == 1 && WITH_NET == 1
 static int call_back(struct nl_msg *, void *);
-#endif /* WITH_NET */
-#endif /* WITH_LIBNL */
+#endif /* WITH_LIBNL && WITH_NET */
 
 #endif /* __linux__ */
 
@@ -284,22 +282,6 @@ get_ip_lookup(char *str1, char *str2) {
   RECOMPILE_WITH("net");
 #endif /* WITH_NET */
 }
-
-
-/* It's so nice that the FreeBSD kernel
-   does all the heavy lifting for us.
-   In Linux you get only the hex numbers.
-
-sysctl -a | grep 'dev.re.0'
-
-dev.re.0.wake: 0
-dev.re.0.int_rx_mod: 65
-dev.re.0.stats: -1
-dev.re.0.%parent: pci2
-dev.re.0.%pnpinfo: vendor=0x10ec device=0x8168 subvendor=0x1043 subdevice=0x8432 class=0x020000
-dev.re.0.%location: pci0:2:0:0 handle=\_SB_.PCI0.PCE4.RLAN
-dev.re.0.%driver: re
-dev.re.0.%desc: RealTek 8168/8111 B/C/CP/D/DP/E/F/G PCIe Gigabit Ethernet */
 
 
 #if defined(__linux__)
