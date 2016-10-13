@@ -5,6 +5,6 @@ pinkybar.1 is the generated man page from the pinkybar.pdc pandoc markdown sourc
 man page regeneration happens by installing the whole pandoc suite and invoking the following command:
 
 ```bash
-sed -e '8r README.md' 'man_template.pdc' > 'pinkybar.pdc'
+sed -e '15r README.md' 'man_template.pdc' > 'pinkybar.pdc'
 pandoc -s -S -f markdown -t man pinkybar.pdc -o pinkybar.1
 ```
