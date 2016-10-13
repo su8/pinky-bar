@@ -1,42 +1,21 @@
-dwm
+% pinkybar(1) manual
+% Aaron Caffrey
+% Oktoberfest 13, 2016
 
-![](img/pic.png)
-
-xmonad
-
-![](img/pic5.png)
-
-![](img/pic7.png)
-
-ncurses
-
-![](img/pic6.png)
-
-
+# NAME
 Gather some system information and show it in this statusbar program, not tied to any Window Manager, terminal multiplexer, etc.
 
+# SYNOPSIS
+pinkybar [*option*]
+
+# DESCRIPTION
 Please note that the program won't detect fans connected via molex connetor(s) or external fan controller. Also I have not tested it with fan splitter(s) either.
 
 The program is smart enough to detect whether some of your fan(s) blades are spinning, or the particular fan have been removed. Hold down some of your fan blades and you'll see that the program won't include this fan and it's RPM, release the blades and you'll see the fan and it's RPM in the statusbar. Try simulating real fan hardware failure by holding down all system fan blades and watch what the program will show you, just try not to slice your cheesy fingers open in the process.
 
 If you compile your kernel from source code make sure to include your cpu and motherboard sensors as **modules** and not inlined.
 
-**Just an example if you use BSD - acpi/aibs, coretemp/amdtemp.**
-
-![](img/cpu-temp.png)
-
-![](img/mobo-temp.png)
-
----
-
-## Bandwidth measurment
-
-pinky-bar supplies bandwitdh/network throughput measurment to satisfy those users that pay for overpriced 3G/mobile internet, and want to monitor every single megabit/megabyte.
-
-## Program options
-
-The order of supplied options will dictate how, where and what system information to be shown.
-
+# OPTIONS
 | short option | long option | Descrtiption                                                       |
 |--------------|-------------|--------------------------------------------------------------------|
 | -M           | --mpd       | The song filename                                                  |
@@ -116,9 +95,8 @@ The following options are available only in OpenBSD:
 |--------------|-------------|--------------------------------------------------------------------|
 | -l           | --ramused   | The used ram in MB                                                 |
 
----
 
-## GNU Build System (configure) options
+# GNU Build System (configure) options
 
 Before the source code is passed to the compiler, you can enable/disable the following **configure** options 
 that will increase/reduce the number of dependencies required to compile the program.
@@ -177,7 +155,7 @@ Don't just rush to register yourself, read carefully what the "Free" account lim
 
 ---
 
-## Installation for dwm
+# Installation for dwm
 
 ```bash
 bash bootstrap distro
@@ -201,7 +179,7 @@ while true; do
 done &
 ```
 
-## Installation for xmonad (or other WM)
+# Installation for xmonad (or other WM)
 
 ```bash
 # Copy the xbm icons
@@ -234,7 +212,7 @@ while true; do
 done | dzen2 -w 1800 -x 130 -ta r -fn '-*-dejavusans-*-r-*-*-11-*-*-*-*-*-*-*' &
 ```
 
-## Installation in FreeBSD
+# Installation in FreeBSD
 
 FreeBSD has no other way than using the module specific convention to query sysctl and obtain data from the sensors. Maintaining a list with all the possible module names and performing expensive sysctl calls in a loop to determine that X module is loaded into your system is no-go. Be prepared to spend a minute or two to find out some system information.
 
@@ -269,7 +247,7 @@ make install
 Send a request to the FreeBSD mail list and request the OpenBSD sensors API to be ported.
 
 
-## Installation in OpenBSD
+# Installation in OpenBSD
 
 Before even executing the **bootstrap** script, you'll have to do this:
 
@@ -289,7 +267,7 @@ export AUTOMAKE_VERSION=1.15
 pkg_add gcc
 ```
 
-## pinky curses installation
+# pinky curses installation
 
 ```bash
 # rename the program
@@ -437,7 +415,7 @@ pinky\_curses is standalone program not tied to pinky-bar.
 while true; do echo "^BOh ^Mhello ^Ydear";sleep 1;done | ./pinky_curses
 ```
 
-## Installation for anything else
+# Installation for anything else
 
 pinky-bar is no longer tied to Window Managers only. With the addition of "without colours", the output can be shown in any program, just bear in mind that the more options you've supplied the more system information will be shown.
 
@@ -475,7 +453,7 @@ Cannot list the \*BSD flavours as "distros", so they deserve own options:
 
 ---
 
-## Linux Mandatory requirements
+# Linux Mandatory requirements
 
 * gcc/clang
 * glibc
@@ -484,7 +462,7 @@ Cannot list the \*BSD flavours as "distros", so they deserve own options:
 * m4
 * gawk
 
-## \*BSD Mandatory requirements
+# \*BSD Mandatory requirements
 
 * gcc/clang
 * bash
@@ -505,7 +483,7 @@ export LDFLAGS='-L/usr/local/lib'
 export CFLAGS='-I/usr/local/include'
 ```
 
-## Opt-in requirements
+# Opt-in requirements
 
 Linux camp:
 
@@ -627,7 +605,7 @@ Keep an eye on the **log file size** if you are using raspberry pi (or equivalen
 
 ---
 
-## WM specific requirements
+# WM specific requirements
 
 If you would like the output to be shown in your Window Manager, those are the following requirements:
 
@@ -644,60 +622,15 @@ use **--without-colours** to skip the following step:
 
 * dwm compiled with statuscolor patch. The colours in use are specified in your dwm config.h
 
-## Wish list
+# Wish list
 
 As top priority:
 
 It would be great if I had \*BSD compatible usb wifi dongle to add wifi options in pinky-bar.
 
----
+# REPORTING BUGS
+Report bugs to https://gitlab.com/void0/pinky-bar
 
-With the help from the gcc documentation, this wish list option has been solved.
-
-~~Per core/thread CPU frequency detection: Can add it at any time if there is enough demand, but needs some consideration first.~~
-
-~~The kernels cpu frequency governor "performance" will always run at the highest possible clock rate regardless of it's use/idle. The only side effect of this is higher temps when on idle (true if the cpu has multiple cores and or threads).~~
-
-~~The "powersaving" governor will always run at the lowest possible clock rate regardless of it's use/idle. The side effect - slower machine no matter what you do.~~
-
-~~The "ondemand" governor does what it says - ondemand scaling. With it you get the best performance when you need to, powersaving and lower temps when on idle.~~
-
-~~For example I manually turn off the cpu frequency governor in my kernel builds, which sets it to performance.~~
-
-~~The cpu frequency detection is easy, but it poses a roadblock by assuming that the "ondemand" is set and/or is enabled in the user kernel.~~
-
-~~Decision 1: On a multicore/thread cpu, the detection for each core/thread will produce up to 8 digit number, thus 4 core and 4 thread cpu will produce: 1234.5678 1234.5678 1234.5678 1234.5678 1234.5678 1234.5678 1234.5678 1234.5678, without including MHz for each core/thread, which will take a lot of space in the final statusbar output. This way the user will know for how long and which core/thread is under some load.~~
-
-~~Decision 2: On other hand it will be lame on a multi core/thread system to show the overall (not per core/thread) cpu frequency that have been summed up, which will beat the purpose of cpu frequency detection in first place, as the user will not be aware that some core/thread is running at full cpu clock speed as the load will be spread equally when summing the numbers up.~~
-
----
-
-GPU temperature, voltage, fan(s) and used RAM: hard, but not impossible.
-
-It would be nice to have decent gpu temperature, voltage, fan(s) speed and used RAM detection regarding SLI, single and dual gpu cards that doesn't require X, MESA and **/sys/kernel/debug/dri**
-
-Using assembly is strongly no-go.
-
----
-
-[Currently played filename in VLC](https://github.com/videolan/vlc/blob/master/src/libvlc.c): easy to be added.
-
-Unless MPRIS is replaced with sockets, I am not willing to add dbus as dependency to pinky-bar.
-
-```cpp
-// The "MPRIS_BUS_NAME" macro from libvlc
-dbus_message_new_method_call(
-  "org.mpris.MediaPlayer2.vlc",
-  "/org/mpris/MediaPlayer2",
-  "org.mpris.MediaPlayer2.Player",
-  "Metadata");
-// results in:  'xesam:url': <'file:///home/frost/music/Summer_Sixteen.mp3'> 
-```
-
----
-
-Show the idle time in seconds/minutes: easy to be added via [XScreenSaverQueryInfo](http://linux.die.net/man/3/xscreensaverqueryinfo), but will discriminate the users that have compiled the program **--without-x11**.
-
----
-
-Show the CapsLock/NumLock/ScrollLock indicator status for keyboard without LEDs: easy to be added via [XkbGetIndicatorState](http://linux.die.net/man/3/xkbgetindicatorstate), but will discriminate the users that have compiled the program **--without-x11**.
+# COPYRIGHT
+Copyright (c) 2016 Aaron Caffrey \
+Free use of this software is granted under the terms of the GNU General Public License (GPL).

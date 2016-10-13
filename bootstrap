@@ -134,6 +134,7 @@ _gen_files() {
   AC_CONFIG_FILES([
     Makefile
     src/Makefile
+    extra/Makefile
   ])
 
   AC_OUTPUT
@@ -145,7 +146,7 @@ _gen_files() {
 
   # Makefile.am
   main_makefile=('
-    SUBDIRS = src
+    SUBDIRS = src extra
   ')
 
 
@@ -202,9 +203,15 @@ _gen_files() {
       ../README.md   \
       ../.gitignore  \
       ../m4          \
-      ../xbm_icons
+      ../xbm_icons   \
+      ../extra
   ')
 
+
+  # extra/Makefile.am
+  extra_makefile=('
+    dist_man_MANS = pinkybar.1
+  ')
 
   cat <<EOF > configure.ac
 ${configure_ac[@]}
@@ -218,6 +225,9 @@ EOF
 ${src_makefile[@]}
 EOF
 
+  cat <<EOF > extra/Makefile.am
+${extra_makefile[@]}
+EOF
 
   # do not remove nor edit
   autoreconf --install --force

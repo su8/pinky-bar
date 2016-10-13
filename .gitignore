@@ -23,4 +23,4 @@ src/pinky_curses
 
 
 
-!pkg/FreeBSD/Makefile
+!extra/FreeBSD/Makefile

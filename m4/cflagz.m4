@@ -132,6 +132,7 @@ AC_DEFUN([TEST_CFLAGZ],[
     -Wendif-labels,
     -Wredundant-decls,
     -Wmissing-prototypes,
+    -Winit-self,
     -Wno-unused-variable
   ])
  
