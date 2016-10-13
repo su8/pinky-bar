@@ -135,7 +135,7 @@ get_song(char *str1, int8_t num) {
 
   struct mpd_connection *conn = NULL;
   struct mpd_song *song = NULL;
-  const char *stream = NULL;
+  const char *stream = NULL, *taggy = NULL;
   size_t len = 0;
   int8_t tagz_arr[] = {
     0,
@@ -146,6 +146,7 @@ get_song(char *str1, int8_t num) {
     MPD_TAG_DATE
   };
 
+  *str1 = '\0';
   if (NULL == (conn = mpd_connection_new(NULL, 0, 0))) {
     return;
   }
@@ -158,18 +159,21 @@ get_song(char *str1, int8_t num) {
   }
 
   if (6 != num) {
-    FILL_STR_ARR(1, str1,
-     mpd_song_get_tag(song, tagz_arr[num], 0));
-
+    taggy = mpd_song_get_tag(song, tagz_arr[num], 0);
+    if (NULL != taggy) {
+      FILL_STR_ARR(1, str1, taggy);
+    }
   } else {
     stream = mpd_song_get_uri(song);
-    len = strlen(stream);
-    if (5 < len) {
-      if (0 == (strncmp(stream, "http", 4))) {
-        stream = "..";
+    if (NULL != stream) {
+      len = strlen(stream);
+      if (5 < len) {
+        if (0 == (strncmp(stream, "http", 4))) {
+          stream = "..";
+        }
       }
+      FILL_STR_ARR(1, str1, stream);
     }
-    FILL_STR_ARR(1, str1, stream);
   }
 
 error:

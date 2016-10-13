@@ -138,15 +138,15 @@ parse_opt(int key, char *arg, struct argp_state *state) {
   struct arguments *arguments = state->input;
   switch(key) {
 
-    NEW_MPD_LABEL('x', char song_artist[VLA], song_artist, 2);
+    NEW_MPD_LABEL('x', char song_artist[VLA], song_artist, 2, FMT_SONG);
 
-    NEW_MPD_LABEL('X', char song_title[VLA], song_title, 3);
+    NEW_MPD_LABEL('X', char song_title[VLA], song_title, 3, FMT_SONG);
 
-    NEW_MPD_LABEL('y', char song_album[VLA], song_album, 4);
+    NEW_MPD_LABEL('y', char song_album[VLA], song_album, 4, FMT_SONG);
 
-    NEW_MPD_LABEL('Y', char song_date[VLA], song_date, 5);
+    NEW_MPD_LABEL('Y', char song_date[VLA], song_date, 5, FMT_SONG);
 
-    NEW_MPD_LABEL('M', char song[VLA], song, 6);
+    NEW_MPD_LABEL('M', char song[VLA], song, 6, FMT_SONG);
 
     NEW_CPU_LABEL('c', char cpu[VLA], cpu, FMT_CPU, CPU_STR);
 
@@ -222,7 +222,7 @@ parse_opt(int key, char *arg, struct argp_state *state) {
 
 
 #if defined(HAVE_MPD_CLIENT_H)
-    NEW_MPD_LABEL('W', char song_track[VLA], song_track, 1);
+    NEW_MPD_LABEL('W', char song_track[VLA], song_track, 1, FMT_SONG);
 #endif /* HAVE_MPD_CLIENT_H */
 
 
