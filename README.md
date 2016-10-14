@@ -497,6 +497,74 @@ export LDFLAGS='-L/usr/local/lib'
 export CFLAGS='-I/usr/local/include'
 ```
 
+After editing the wrong prototype I managed to stumbled upon a bug in OpenBSD's own libc.
+
+**Warning !!! OpenBSD users !!!**
+
+OpenBSD stdint.h:
+
+```cpp
+/* machine/_types.h */
+/* 7.18.1.1 Exact-width integer types */
+typedef	unsigned int		__uint32_t;
+
+/* 7.18.1.3 Fastest minimum-width integer types */
+typedef	__uint32_t		__uint_fast16_t;
+
+/* stdint.h */
+typedef	__uint_fast16_t		uint_fast16_t;
+
+/* inttypes.h */
+#define	PRIuFAST16		"u"		/* uint_fast16_t */
+#define	SCNuFAST16		"hu"		/* uint_fast16_t */
+```
+
+The bug was submitted.
+
+```cpp
+Synopsis:      Fixed integer mismatch definition
+Category:      libc
+Environment:
+  System      : OpenBSD 6.0
+  Details     : OpenBSD 6.0 (GENERIC.MP) #2319: Tue Jul 26 13:00:43 MDT 2016
+                   deraadt@amd64.openbsd.org:/usr/src/sys/arch/amd64/compile/GENERIC.MP
+
+  Architecture: OpenBSD.amd64
+  Machine     : amd64
+Description:
+  The header file inttypes.h defines different format specifiers for the fixed width uint_fast16_t integer which causes the compilers to issue warning.
+
+How-To-Repeat:
+
+/* test.c
+egcc -Wall -Wextra -std=c99 -pedantic -Wconversion -O2 test.c -o /tmp/test
+ */
+#include <stdio.h>
+#include <stdlib.h>
+#include <inttypes.h>
+
+int main(void) {
+  char elo[] = "1337";
+  uint_fast16_t x = 0;
+
+  if (EOF == (sscanf(elo, "%"SCNuFAST16, &x))) {
+    return EXIT_FAILURE;
+  }
+  printf("%"PRIuFAST16 "\n", x);
+
+  return EXIT_SUCCESS;
+}
+
+
+Fix:
+
+From
+#define	SCNuFAST16		"hu"		/* uint_fast16_t */
+
+To
+#define	SCNuFAST16		"u"		/* uint_fast16_t */
+```
+
 ## Opt-in requirements
 
 Linux camp:
