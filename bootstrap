@@ -92,7 +92,7 @@ _gen_files() {
   AC_INIT(["${progName}"], ["${progVer}"])
   AC_CONFIG_AUX_DIR([temp_dir])
   AC_CONFIG_MACRO_DIR([m4])
-  AC_CONFIG_HEADER([src/config.h])
+  AC_CONFIG_HEADERS([src/config.h])
   # -Werror -Wportability
   AM_INIT_AUTOMAKE([1.13 -Wall no-define foreign subdir-objects dist-xz no-dist-gzip std-options])
 
@@ -113,7 +113,7 @@ _gen_files() {
   AC_HEADER_STDC
   AM_PROG_CC_C_O
 
-  AM_EXTRA_RECURSIVE_TARGETS([ncurses])
+  # AM_EXTRA_RECURSIVE_TARGETS([ncurses])
 
   # The linker flags tests in m4 dir
   TEST_SOME_FUNCS
@@ -159,6 +159,10 @@ _gen_files() {
       m4              \
       xbm_icons       \
       extra
+
+# uses tabs
+ncurses:
+	@cd src && $(MAKE) ncurses
   ')
 
 
