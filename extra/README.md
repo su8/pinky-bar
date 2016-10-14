@@ -5,6 +5,6 @@ pinkybar.1 is the man page.
 To re-create the man page you'll have to install the whole pandoc suite and invoke the following commands:
 
 ```bash
-sed -e '15r ../README.md' 'man_template.pdc' > 'pinkybar.pdc'
+sed -e '15r ../README.md' 'man_template.pdc' | sed -e '15,30d' > 'pinkybar.pdc'
 pandoc -s -S -f markdown -t man pinkybar.pdc -o pinkybar.1
 ```

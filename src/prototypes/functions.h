@@ -34,7 +34,7 @@ void get_loadavg(char *);
 
 #if defined(HAVE_SENSORS_SENSORS_H)
 void get_fans(char *);
-void match_feature(char *, uint8_t num);
+void match_feature(char *, int8_t num);
 #endif /* HAVE_SENSORS_SENSORS_H */
 
 #endif /* __linux__ */

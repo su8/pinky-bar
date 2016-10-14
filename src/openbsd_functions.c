@@ -64,12 +64,12 @@ get_ram(char *str1, uint8_t num) {
 
 
 void
-match_feature(char *str1, uint8_t sens_type, uint8_t sens_num) {
+match_feature(char *str1, int8_t sens_type, int8_t sens_num) {
   int mib[] = { CTL_HW, HW_SENSORS, 0, sens_type, 0 };
   struct sensordev dev;
   struct sensor sens;
-  uint_fast16_t rpm[MAX_FANS+1];
-  uint8_t x = 0, y = 0, z = 0;
+  uint_fast16_t z = 0, rpm[MAX_FANS+1];
+  int8_t x = 0, y = 0;
   uintmax_t temp = 0;
   char buffer[VLA];
   char *all = buffer;

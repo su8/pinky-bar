@@ -98,8 +98,8 @@ get_temp(char *str1, uint_least32_t temp) {
 
 
 void
-check_fan_vals(char *str1, uint_fast16_t *rpm, uint8_t iterz) {
-  uint8_t x = 0, y = 0;
+check_fan_vals(char *str1, uint_fast16_t *rpm, uint_fast16_t iterz) {
+  uint_fast16_t x = 0, y = 0;
   char buffer[VLA];
   char *all_fans = buffer;
 
@@ -351,8 +351,7 @@ void
 get_fans(char *str1) {
   bool found_fans = true;
   char tempstr[VLA];
-  uint8_t x = 0, y = 0, z = 0;
-  uint_fast16_t rpm[MAX_FANS+1];
+  uint_fast16_t x = 0, y = 0, z = 0, rpm[MAX_FANS+1];
 
   memset(rpm, 0, sizeof(rpm));
 
