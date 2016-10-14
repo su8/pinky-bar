@@ -34,7 +34,7 @@ void get_loadavg(char *);
 
 #if defined(HAVE_SENSORS_SENSORS_H)
 void get_fans(char *);
-void match_feature(char *, int8_t num);
+void match_feature(char *, uint8_t num);
 #endif /* HAVE_SENSORS_SENSORS_H */
 
 #endif /* __linux__ */
@@ -46,7 +46,7 @@ void get_swapp(char *, uint8_t num);
 
 #if defined(__OpenBSD__)
 void get_fans(char *);
-void match_feature(char *str1, uint8_t sens_type, uint8_t sens_num);
+void match_feature(char *str1, int8_t sens_type, int8_t sens_num);
 #endif /* __OpenBSD__ */
 
 #endif /* FUNCTIONS_H_ */
