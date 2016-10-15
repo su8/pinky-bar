@@ -501,7 +501,13 @@ After editing the wrong prototype I managed to stumbled upon a bug in OpenBSD's 
 
 **Warning !!! OpenBSD users !!!**
 
-The majority of SCN\* macros differs from their PRI\* cousins. When you define unsigned int you should always follow the C standards that made it clear what format specifier unsigned int should use, unfortunately the majority of SCN\* managed not to follow the standard. "hu" and "hhu" are not unsigned int format specifiers, tried to get in touch with OpenBSD devs, reported this bug but no one responded.
+The majority of SCN\* macros differs from their PRI\* cousins. When you define unsigned int you should always follow the C standards that made it clear what format specifier unsigned int should use, unfortunately the majority of OpenBSD's own libc SCN\* macros managed not to follow the standard. "hu" and "hhu" are not unsigned int format specifiers, tried to get in touch with OpenBSD devs, reported this bug but no one responded.
+
+If they wanted to use specific integer type, then they should define it as such earlier. 8 bit integer is the smallest integer type in existance and for sure it cannot represent the 32 bit UINT\_MAX number. libc uses the maximum unsigned char and signed char for all int8\_t, int\_least8\_t, int\_fast8\_t and uint8\_t, uint\_least8\_t, uint\_fast8\_t , and yes libc defines corrent PRI\* and SCN\* format specifier macros to match the that integer type.
+
+It's dirty trick to let the complier do the conversion for you to lower integer type and not follow the standards to define it as such earlier.
+
+Way to go OpenBSD !
 
 ```cpp
 /* machine/_types.h */
