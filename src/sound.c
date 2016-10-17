@@ -131,6 +131,12 @@ get_volume(char *str1) {
 
 const char *
 shorten_stream(const char *str1) {
+  /* Dont submit pull request
+   * if you dont know the difference
+   * between the two examples below.
+   *
+   * const char *stream = "elo";
+   * char *const stream = "elo"; */
   const char *stream = str1;
 
   if (5 < (strlen(stream))) {
