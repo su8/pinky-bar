@@ -239,7 +239,6 @@ get_song(char *str1, int8_t num) {
       if ('s' == buf[0] && 't' == buf[1] && 'r' == buf[2]) {
         if (1 != (num-2) && false == got_stream) {
           CHECK_SSCANF(buf, "%*s %[^\n]", str1);
-          FILL_STR_ARR(1, str1, (shorten_stream(str1)));
           got_stream = true;
           break;
         }

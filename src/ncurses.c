@@ -135,18 +135,20 @@ void sighandler(int num) {
 }
 
 void unuglify(char *str1) {
-  uint8_t iclr = 0;
-  char *ptr = str1, cclr[1];
+  static uint8_t iclr = 0;
+  char *ptr = str1;
+  static const char discard[] = "\"*;`{}~|";
 
   wmove(WIN95, 0, 0);
   wclrtoeol(WIN95);
 
   for (; *ptr; ptr++) {
-    if (0 != (iscntrl((unsigned char) *ptr))) {
+    if (0 != (iscntrl((unsigned char) *ptr)) ||
+     0 == (isprint((unsigned char) *ptr))) {
       continue;
     }
     if ('^' == *ptr)  {
-      cclr[0] = *(++ptr);
+      ++ptr;
       switch((toupper((unsigned char) *ptr))) {
         case 'B':
           iclr = COLOR_BLUE;
@@ -158,13 +160,15 @@ void unuglify(char *str1) {
           iclr = COLOR_YELLOW;
           break;
         default:
-          waddch(WIN95, (chtype)cclr[0]);
+          /* Can be cntrl since we advanced with 1 char */
           break;
       }
       wattrset(WIN95,
         COLOR_PAIR((int32_t)((iclr % EIGHT) * EIGHT)) | (int32_t)A_BOLD);
     } else {
-      waddch(WIN95, (chtype)*ptr);
+      if (NULL == (strchr(discard, *ptr))) {
+        waddch(WIN95, (chtype)*ptr);
+      }
     }
   }
   wrefresh(WIN95);
