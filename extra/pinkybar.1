@@ -1130,6 +1130,101 @@ export\ LDFLAGS=\[aq]\-L/usr/local/lib\[aq]
 export\ CFLAGS=\[aq]\-I/usr/local/include\[aq]
 \f[]
 .fi
+.PP
+After editing the wrong prototype I managed to stumbled upon a bug in
+OpenBSD's own libc.
+.PP
+\f[B]Warning !!! OpenBSD users !!!\f[]
+.PP
+The majority of SCN* macros differs from their PRI* cousins.
+When you define unsigned int you should always follow the C standards
+that made it clear what format specifier unsigned int should use,
+unfortunately the majority of OpenBSD's own libc SCN* macros managed not
+to follow the standard.
+\[lq]hu\[rq] and \[lq]hhu\[rq] are not unsigned int format specifiers,
+tried to get in touch with OpenBSD devs, reported this bug but no one
+responded.
+.PP
+If they wanted to use specific integer type, then they should define it
+as such earlier.
+8 bit integer is the smallest integer type in existance and for sure it
+cannot represent the 32 bit UINT_MAX number.
+glibc uses the maximum unsigned char and signed char for all int8_t,
+int_least8_t, int_fast8_t and uint8_t, uint_least8_t, uint_fast8_t , and
+yes glibc defines corrent PRI* and SCN* format specifier macros to match
+that integer type.
+.PP
+It's not like to mistake the float format specifier with the
+\[lq]double\[rq] one.
+.PP
+It's dirty trick to let the complier do the conversion for you to lower
+the integer type and not follow the standards to define it as such
+earlier.
+.PP
+You'll be the judge in here, read the following code and try to
+understand what my intentions are:
+.IP
+.nf
+\f[C]
+unsigned\ long\ long\ int\ small_int\ =\ 240;
+
+printf("%hhu\\n",\ small_int);
+\f[]
+.fi
+.PP
+What I've done wrong in the above example by following the OpenBSD
+\[lq]standard\[rq] ?
+Way to go OpenBSD !
+.IP
+.nf
+\f[C]
+/*\ machine/_types.h\ */
+typedef\ unsigned\ int\ \ \ \ \ \ \ \ __uint32_t;
+
+typedef\ __uint32_t\ \ \ \ \ \ __uint_fast8_t;
+typedef\ __uint32_t\ \ \ \ \ \ __uint_fast16_t;
+
+/*\ stdint.h\ */
+typedef\ __uint_fast8_t\ \ \ \ \ \ uint_fast8_t;
+typedef\ __uint_fast16_t\ \ \ \ \ uint_fast16_t;
+
+/*\ inttypes.h\ */
+#define\ PRIuFAST8\ \ \ \ \ \ \ "u"\ \ \ \ \ /*\ uint_fast8_t\ */
+#define\ SCNuFAST8\ \ \ \ \ \ \ "hhu"\ \ \ \ \ \ \ /*\ uint_fast8_t\ */
+
+#define\ PRIuFAST16\ \ \ \ \ \ "u"\ \ \ \ \ /*\ uint_fast16_t\ */
+#define\ SCNuFAST16\ \ \ \ \ \ "hu"\ \ \ \ \ \ \ \ /*\ uint_fast16_t\ */
+\f[]
+.fi
+.PP
+The bug was submitted and have not been added to marc.info
+.IP
+.nf
+\f[C]
+/*\ test.c
+egcc\ \-Wall\ \-Wextra\ \-std=c99\ \-pedantic\ \-Wconversion\ \-O2\ test.c\ \-o\ /tmp/test
+\ */
+#include\ <stdio.h>
+#include\ <stdlib.h>
+#include\ <inttypes.h>
+
+int\ main(void)\ {
+\ \ char\ acc[]\ =\ "Remaining:\ 99000";
+\ \ uint_fast8_t\ cur\ =\ 0,\ started\ =\ 99000;
+
+\ \ printf("%s\\n",\ acc);
+\ \ if\ (EOF\ ==\ (sscanf(acc,\ "%*s\ %"SCNuFAST8,\ &cur)))\ {
+\ \ \ \ return\ EXIT_FAILURE;
+\ \ }
+\ \ printf("%s\ "\ "%"PRIuFAST8\ "\ %s\ "\ "%"PRIuFAST8\ "\\n",
+\ \ \ "Started\ with:\ $",\ started,
+\ \ \ "The\ current\ balance\ now:\ $",\ cur
+\ \ );
+
+\ \ return\ EXIT_SUCCESS;
+}
+\f[]
+.fi
 .SS Opt\-in requirements
 .PP
 Linux camp:
@@ -1146,6 +1241,18 @@ wifi/wireless chipsets supporting mac80211/cfg80211:
 libnl (>= 3.0)
 .IP \[bu] 2
 pkg\-config
+.PP
+In Gentoo there are two versions of pkg\-config.
+The first one is named dev\-util/pkgconfig and the second one is
+dev\-ruby/pkg\-config.
+In order to use the first one, you'll have to export the pkg\-config
+path to the following environment variable:
+.IP
+.nf
+\f[C]
+export\ PKG_CONFIG_PATH=/usr/bin/pkg\-config
+\f[]
+.fi
 .PP
 Then pass \f[B]\[en]with\-libnl\f[] to configure.
 .PP

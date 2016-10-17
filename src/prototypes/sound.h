@@ -25,6 +25,7 @@
 void get_volume(char *);
 #endif
 
+const char *shorten_stream(const char *);
 void get_song(char *, int8_t num);
 
 #endif /* SOUND_H_ */

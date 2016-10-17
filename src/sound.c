@@ -129,6 +129,19 @@ get_volume(char *str1) {
 #endif /* HAVE_SYS_SOUNDCARD_H || HAVE_SOUNDCARD_H */
 
 
+const char *
+shorten_stream(const char *str1) {
+  const char *stream = str1;
+
+  if (5 < (strlen(stream))) {
+    if (0 == (strncmp(stream, "http", 4))) {
+      stream = "..";
+    }
+  }
+  return stream;
+}
+
+
 #if defined (HAVE_MPD_CLIENT_H)
 void
 get_song(char *str1, int8_t num) {
@@ -136,8 +149,7 @@ get_song(char *str1, int8_t num) {
   struct mpd_connection *conn = NULL;
   struct mpd_song *song = NULL;
   const char *stream = NULL, *taggy = NULL;
-  size_t len = 0;
-  int8_t tagz_arr[] = {
+  static const int8_t tagz_arr[] = {
     0,
     MPD_TAG_TRACK,
     MPD_TAG_ARTIST,
@@ -165,12 +177,7 @@ get_song(char *str1, int8_t num) {
     }
   } else {
     if (NULL != (stream = mpd_song_get_uri(song))) {
-      if (5 < (len = strlen(stream))) {
-        if (0 == (strncmp(stream, "http", 4))) {
-          stream = "..";
-        }
-      }
-      FILL_STR_ARR(1, str1, stream);
+      FILL_STR_ARR(1, str1, (shorten_stream(stream)));
     }
   }
 
@@ -226,6 +233,7 @@ get_song(char *str1, int8_t num) {
       if ('s' == buf[0] && 't' == buf[1] && 'r' == buf[2]) {
         if (1 != (num-2) && false == got_stream) {
           CHECK_SSCANF(buf, "%*s %[^\n]", str1);
+          FILL_STR_ARR(1, str1, (shorten_stream(str1)));
           got_stream = true;
           break;
         }
