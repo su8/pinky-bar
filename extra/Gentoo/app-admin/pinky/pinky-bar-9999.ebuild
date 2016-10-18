@@ -71,18 +71,11 @@ src_configure() {
 }
 
 src_compile() {
-	if use ncurses
-	then
-		emake 'all' 'ncurses'
-	else
-		emake 'all'
-	fi
+	emake 'all'
 }
 
 src_install() {
-	use ncurses && newbin "${S}"/src/ncurses ncurses
-
-	if use colours && ! use x11
+	if use colours && ! use x11 && ! use ncurses
 	then
 		insinto /usr/share/icons/xbm_icons
 		doins "${S}"/xbm_icons/*
@@ -92,5 +85,10 @@ src_install() {
 }
 
 pkg_postinst() {
+	if use ncurses
+	then
+		einfo 'You can combine the output from this program with pinky-curses'
+	fi
+
 	einfo 'Please read the program man page'
 }
