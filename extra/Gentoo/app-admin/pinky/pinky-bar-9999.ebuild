@@ -13,7 +13,7 @@ HOMEPAGE="https://gitlab.com/void0/pinky-bar"
 
 LICENSE="GPL-2"
 SLOT="0"
-IUSE="x11 alsa net libnl pci dvd sensors ncurses colours weather mpd"
+IUSE="x11 alsa +net libnl +pci dvd sensors ncurses +colours weather mpd"
 
 DEPEND="
 	sys-devel/m4
@@ -33,6 +33,14 @@ RDEPEND="
 	weather? ( net-misc/curl app-arch/gzip )
 	mpd? ( media-sound/mpd media-libs/libmpdclient )
 "
+
+pkg_setup() {
+	if use x11 && use ncurses
+	then
+		eerror 'You cant use x11 and ncurses in the same time.'
+		die 'Choose between x11 or ncurses'
+	fi
+}
 
 src_prepare() {
 	default
