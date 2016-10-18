@@ -6,7 +6,7 @@ EAPI=6
 
 EGIT_REPO_URI="https://gitlab.com/void0/pinky-bar.git"
 
-inherit eutils git-r3
+inherit git-r3
 
 DESCRIPTION="Gather some system information and show it in this statusbar program"
 HOMEPAGE="https://gitlab.com/void0/pinky-bar"
@@ -15,15 +15,13 @@ LICENSE="GPL-2"
 SLOT="0"
 IUSE="x11 alsa net libnl pci dvd sensors ncurses colours weather mpd"
 
-RDEPEND="
+DEPEND="
 	sys-devel/m4
 	sys-apps/gawk
-	sys-libs/glibc
 	sys-devel/autoconf
 	>=sys-devel/automake-1.14.1
-	sys-devel/autoconf-wrapper
 "
-DEPEND="
+RDEPEND="
 	alsa? ( media-libs/alsa-lib )
 	x11? ( x11-libs/libX11 )
 	net? ( sys-apps/iproute2 )
@@ -37,9 +35,9 @@ DEPEND="
 "
 
 src_prepare() {
-	# eapply_user
 	default
 
+	einfo 'Generating Makefiles and will run autoconf afterwards'
 	chmod +x bootstrap
 	./bootstrap 'gentoo'
 }
@@ -62,4 +60,8 @@ src_configure() {
 		api_town='London,uk' \
 		api_key='28459ae16e4b3a7e5628ff21f4907b6f' \
 		icons=$HOME/.xmonad/icons
+}
+
+pkg_postinst() {
+	einfo 'Please read the program man page'
 }

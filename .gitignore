@@ -28,4 +28,4 @@ src/pinky_curses
 !extra/FreeBSD/Makefile
 !extra/_pinkybar
 !extra/man_template.pdc
-!extra/Gentoo/app-admin/progname/*
+!extra/Gentoo/app-admin/pinky/*
