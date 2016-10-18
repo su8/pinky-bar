@@ -37,7 +37,7 @@ RDEPEND="
 src_prepare() {
 	default
 
-	einfo 'Generating Makefiles and will run autoconf afterwards'
+	einfo 'Generating Makefiles'
 	chmod +x bootstrap
 	./bootstrap 'gentoo'
 }
@@ -59,7 +59,28 @@ src_configure() {
 		$(use_with mpd) \
 		api_town='London,uk' \
 		api_key='28459ae16e4b3a7e5628ff21f4907b6f' \
-		icons=$HOME/.xmonad/icons
+		icons=/usr/share/icons/xbm_icons
+}
+
+src_compile() {
+	if use ncurses
+	then
+		emake 'all' 'ncurses'
+	else
+		emake 'all'
+	fi
+}
+
+src_install() {
+	use ncurses && newbin "${S}"/src/ncurses ncurses
+
+	if use colours && ! use x11
+	then
+		insinto /usr/share/icons/xbm_icons
+		doins "${S}"/xbm_icons/*
+	fi
+
+	emake DESTDIR="${D}" install
 }
 
 pkg_postinst() {
