@@ -28,4 +28,5 @@ src/pinky_curses
 !extra/FreeBSD/Makefile
 !extra/_pinkybar
 !extra/man_template.pdc
-!extra/Gentoo/app-admin/pinky-bar/*
+!extra/Gentoo/app-admin/pinky-bar/metadata.xml
+!extra/Gentoo/app-admin/pinky-bar/pinky-bar-9999.ebuild
