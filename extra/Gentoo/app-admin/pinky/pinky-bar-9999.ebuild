@@ -38,6 +38,15 @@ REQUIRED_USE="
 	ncurses? ( !x11 )
 "
 
+pkg_setup() {
+	if use weather
+	then
+		einfo 'Currently, the weather USE flag will default to London,uk'
+		einfo 'To specify other country and town youll have to supply them as variable.'
+		einfo 'Here is how: # TWN="London,uk" USE="weather" emerge -a ...'
+	fi
+}
+
 src_prepare() {
 	default
 
@@ -61,7 +70,7 @@ src_configure() {
 		$(use_with colours) \
 		$(use_with weather) \
 		$(use_with mpd) \
-		api_town='London,uk' \
+		api_town="${TWN:-London,uk}" \
 		api_key='28459ae16e4b3a7e5628ff21f4907b6f' \
 		icons=/usr/share/icons/xbm_icons
 }
