@@ -416,6 +416,10 @@ get_cpu_info(char *str1) {
     caches[2] = SHFT2(ecx);                       /* movl %ecx, 0 */
   }
 
+  /* 100 mhz steps for the majority of AMD cpu's
+   *  movl $0x80000007 %edx, 6
+  */
+
   if (0x80000008 <= regz) {
     CPU_STR2(0x80000008, eax, ebx, ecx, edx);     /* movl $0x80000008, %eax */
     /* physical, virtual */
