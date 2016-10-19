@@ -33,14 +33,10 @@ RDEPEND="
 	weather? ( net-misc/curl app-arch/gzip )
 	mpd? ( media-sound/mpd media-libs/libmpdclient )
 "
-
-pkg_setup() {
-	if use x11 && use ncurses
-	then
-		eerror 'You cant use x11 and ncurses in the same time.'
-		die 'Choose between x11 or ncurses'
-	fi
-}
+REQUIRED_USE="
+	x11? ( !ncurses )
+	ncurses? ( !x11 )
+"
 
 src_prepare() {
 	default
@@ -85,10 +81,8 @@ src_install() {
 }
 
 pkg_postinst() {
-	if use ncurses
-	then
+	use ncurses && \
 		einfo 'You can combine the output from this program with pinky-curses'
-	fi
 
 	einfo 'Please read the program man page'
 }
