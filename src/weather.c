@@ -37,12 +37,15 @@
   The JSON data that we are parsing, that's how it's returned:
 
 {"coord":{"lon":-0.13,"lat":51.51},"weather":[{"id":803,"main":"Clouds","description":"broken clouds","icon":"04d"}],"base":"stations","main":{"temp":12.05,"pressure":1030.73,"humidity":70,"temp_min":12.05,"temp_max":12.05,"sea_level":1038.34,"grnd_level":1030.73},"wind":{"speed":3.82,"deg":8.50131},"clouds":{"all":64},"dt":1476114783,"sys":{"message":0.011,"country":"GB","sunrise":1476080264,"sunset":1476119749},"id":2643743,"name":"London","cod":200}
+
+  You can parse anything in the above example.
 */
 size_t
 read_curl_data_cb(char *data, size_t size, size_t nmemb, char *str1) {
-  uint8_t z = 0, y = 0;
-  uint8_t got_main = 0, got_temp  = 0;
+  uint8_t got_main = 0, got_temp = 0;
+  uint8_t y = 0, z = 0;
   char *ptr = NULL;
+  const char wind[] = " Wind ", kmh[] = " km/h";
   size_t sz = nmemb * size, x = 0;
 
   for (ptr = data; *ptr; ptr++, x++) {
@@ -70,9 +73,34 @@ read_curl_data_cb(char *data, size_t size, size_t nmemb, char *str1) {
       if ('t' == *ptr) { /* "temp":12.05 */
         if (0 == got_temp) {
           if ('e' == *(ptr+1) && 'm' == *(ptr+2) && 'p' == *(ptr+3)) {
-            PARSE_FIRST_TWO_NUMS(str1, ptr, 6, 7, got_temp);
-            if (0 != got_temp) {
+            if (0 != (isdigit((unsigned char) *(ptr+6)))) {
+              *str1++ = *(ptr+6);
+              if (0 != (isdigit((unsigned char) *(ptr+7)))) {
+                *str1++ = *(ptr+7);
+              }
               *str1++ = 'C';
+              got_temp = 1;
+            }
+          }
+        }
+      }
+
+      if ('s' == *ptr) { /* "speed":3.82 */
+        if ('p' == *(ptr+1) && 'e' == *(ptr+2) && 'e' == *(ptr+3)) {
+          if ((x+9) < sz) {
+            if (0 != (isdigit((unsigned char) *(ptr+7)))) {
+              for (y = 0; y < 6; y++) {
+                *str1++ = wind[y];
+              }
+              *str1++ = *(ptr+7);
+
+              if (0 != (isdigit((unsigned char) *(ptr+8)))) {
+                *str1++ = *(ptr+8);
+              }
+
+              for (y = 0; y < 5; y++) {
+                *str1++ = kmh[y];
+              }
             }
             *str1 = '\0';
             break;
