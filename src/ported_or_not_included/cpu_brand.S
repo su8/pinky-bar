@@ -1,5 +1,5 @@
-# source - https://en.wikipedia.org/wiki/CPUID
-# used it to port it to pinky-bar
+/* source - https://en.wikipedia.org/wiki/CPUID */
+/* used it to port it to pinky-bar */
 
 .section .data
 

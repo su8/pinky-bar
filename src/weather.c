@@ -40,7 +40,8 @@
 */
 size_t
 read_curl_data_cb(char *data, size_t size, size_t nmemb, char *str1) {
-  uint8_t z = 0, got_main = 0;
+  uint8_t z = 0, y = 0;
+  uint8_t got_main = 0, got_temp  = 0;
   char *ptr = NULL;
   size_t sz = nmemb * size, x = 0;
 
@@ -67,16 +68,15 @@ read_curl_data_cb(char *data, size_t size, size_t nmemb, char *str1) {
       }
 
       if ('t' == *ptr) { /* "temp":12.05 */
-        if ('e' == *(ptr+1) && 'm' == *(ptr+2) &&  'p' == *(ptr+3)) {
-          if (0 != (isdigit((unsigned char) *(ptr+6)))) {
-            *str1++ = *(ptr+6);
-            /* Might be 9.3C, so we access '.' */
-            if (0 != (isdigit((unsigned char) *(ptr+7)))) {
-              *str1++ = *(ptr+7);
+        if (0 == got_temp) {
+          if ('e' == *(ptr+1) && 'm' == *(ptr+2) && 'p' == *(ptr+3)) {
+            PARSE_FIRST_TWO_NUMS(str1, ptr, 6, 7, got_temp);
+            if (0 != got_temp) {
+              *str1++ = 'C';
             }
+            *str1 = '\0';
+            break;
           }
-          *str1 = '\0';
-          break;
         }
       }
 
@@ -100,7 +100,8 @@ read_curl_data_cb(char *data, size_t size, size_t nmemb, char *str1) {
    https://curl.haxx.se/libcurl/c/curl_easy_setopt.html
    https://github.com/curl/curl/tree/master/docs/examples
 */
-void get_weather(char *str1) {
+void 
+get_weather(char *str1) {
   const char *da_url = "http://api.openweathermap.org/data/2.5/weather?q="
     API_TOWN "&units=metric&APPID=" API_KEY;
 
