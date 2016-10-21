@@ -666,6 +666,46 @@ sudo hddtemp -d /dev/sda
 
 Open up your browser and navigate to 127.0.0.1:7634 and you'll get instant temperature report back to you.
 
+The "init" lock-in for those of you that cannot choose between udev or eudev puts me in position not rely on libatasmart, regardless how neat the library is.
+
+```cpp
+/* gcc -Wall -Wextra -O2 skdump.c -latasmart -o test */
+#include <stdio.h>
+#include <string.h>
+#include <errno.h>
+
+#include <atasmart.h>
+
+int main(void) {
+  uint64_t mkelvin = 0;
+  const char *device = "/dev/sda";
+  SkDisk *d = NULL;
+
+  if (-1 == (sk_disk_open(device, &d))) {
+    fprintf(stderr, "Failed to open disk %s: %s\n", device, strerror(errno));
+    return 1;
+  }
+
+  if (-1 == (sk_disk_smart_read_data(d))) {
+    fprintf(stderr, "Failed to read SMART data: %s\n", strerror(errno));
+    goto finish;
+  }
+
+  if (-1 == (sk_disk_smart_get_temperature(d, &mkelvin))) {
+    fprintf(stderr, "Failed to get temperature: %s\n", strerror(errno));
+    goto finish;
+  }
+
+  printf("%llu\n", (unsigned long long)mkelvin);
+
+finish:
+  if (NULL != d) {
+    sk_disk_free(d);
+  }
+  return 0;
+}
+```
+
 Linux camp end.
 
 To get the sound volume level:
