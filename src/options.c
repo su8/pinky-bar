@@ -86,6 +86,11 @@ static const struct argp_option options[] = {
   { .name = "iplookup",     .key = 'E', .arg = "site", .doc = "Mini website IP lookup."                                  },
   { .name = "statio",       .key = 'S', .arg = "sda",  .doc = "Read and written MBs to the drive so far."                },
 
+
+#if WITH_SMARTEMP == 1
+  { .name = "drivetemp",    .key = DRIVETEMP,          .doc = "Read the drive temperature from S.M.A.R.T"                },
+#endif /* WITH_SMARTEMP */
+
 #if WITH_WEATHER == 1
   { .name = "weather",      .key = 'q',                .doc = "The temperature outside."                                 },
 #endif /* WITH_WEATHER */
@@ -221,6 +226,12 @@ parse_opt(int key, char *arg, struct argp_state *state) {
     NEW_LABEL('g', char battery[VLA], battery, FMT_BATT, BATT_STR);
 
     NEW_ARG_LABEL('S', char statio[VLA], statio, FMT_STATIO, STATIO_STR);
+
+
+#if WITH_SMARTEMP == 1
+    NEW_LABEL(DRIVETEMP, char drivetemp[VLA], drivetemp, FMT_TEMP);
+#endif /* WITH_SMARTEMP */
+
 
 #if WITH_WEATHER == 1
     NEW_LABEL('q', char weather[VLA], weather, OUT_STR YELLOW STR_SPEC);

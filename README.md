@@ -59,6 +59,7 @@ The order of supplied options will dictate how, where and what system informatio
 | -n           | --drivetotal| The total drive storage                                            |
 | -N           | --drivefree | The free drive storage                                             |
 | -O           | --driveavail| The available drive storage (total - used)                         |
+|              | --drivetemp | Read the drive temperature from S.M.A.R.T                          |
 | -g           | --battery   | The remaining battery charge                                       |
 | -z           | --dvdstr    | The vendor and model name of your cdrom/dvdrom                     |
 | -S           | --statio    | Read and written MBs to the drive so far [argument - sda]          |
@@ -99,7 +100,6 @@ The following options are available only in Linux:
 | -e           | --iplink    | The NIC link speed (useful for wireless/wifi) [argument - eth0]    |
 | -j           | --nicfw     | The NIC firmware [argument - eth0]                                 |
 | -h           | --wifiname  | The name of currently connected wifi/wireless network [argument - wlan0]  |
-|              | --drivetemp | Read the drive temperature from S.M.A.R.T                          |
 
 The following options are available only to FreeBSD and OpenBSD:
 
@@ -141,7 +141,8 @@ It's up to you to decide which features suit you best.
 | --with-weather | --without-weather   | The temperature outside  (some details must be provided)                                   |
 | api\_town='London,uk'              | | Town and country code to use for temperature monitoring                                    |
 | api\_key='123458976'               | | API key obtained after registering yourself in the weather website                         |
-| --with-drivetemp | --without-drivetemp   | Read the drive temperature from S.M.A.R.T (linux only), use ata/smartctl in \*BSD      |
+| --with-drivetemp | --without-drivetemp   | Read the drive temperature from S.M.A.R.T (linux only)                                 |
+| --with-smartemp | --without-smartemp   | Read the drive temperature from S.M.A.R.T cross-platform available                       |
 | drive\_port='1234'  |                | Different TCP port to listen to for the drive temperature, default one is 7634             |
 | --with-colours | --without-colours   | Colorize the output data.                                                                  |
 | icons=/tmp     |                     | xbm icons that can be used by dzen2 for example. Discarded when **--with-x11** is used     |
@@ -153,7 +154,7 @@ It's up to you to decide which features suit you best.
 By default, if **no** options are passed, the program will be compiled with/without:
 
 ```bash
---without-alsa --without-x11 --without-mpd --with-colours --with-net --with-pci --without-dvd --without-sensors --without-ncurses --without-weather
+--without-alsa --without-x11 --without-mpd --with-colours --with-net --with-pci --without-dvd --without-sensors --without-ncurses --without-weather --without-drivetemp --without-smartemp
 ```
 
 Affects \*BSD, I can add daemon and/or simple kernel module for parsing the drive temperature, are you interested in obtaining such information ?
@@ -605,6 +606,8 @@ To read the drive temperature from S.M.A.R.T:
 
 * hddtemp
 
+Then pass **--with-drivetemp** to configure.
+
 Try running hddtemp to see if it detects your drive, depending if it has temperature sensor in first place:
 
 ```bash
@@ -707,6 +710,37 @@ finish:
 ```
 
 Linux camp end.
+
+To read the drive temperature from S.M.A.R.T:
+
+* smartmontools
+* perl (for the "one line" script below)
+
+Then pass **--with-smartemp** to configure.
+
+Execute the following command as root `visudo` and append:
+
+```bash
+# 'frost' is my computer username
+frost ALL=NOPASSWD:/usr/sbin/smartctl
+```
+
+Put the following code in xinitrc or the script used to start your DE/WM.
+
+```bash
+while true; do
+  sudo smartctl -a /dev/sda | \
+    perl -Mstrict -Mwarnings -ne '
+      my ($fifed_txt) = $_;
+      my @arr = split(" ", $fifed_txt);
+
+      if ($arr[1] and lc $arr[1] eq "temperature_celsius") {
+        printf("%d\n",(($arr[9] and $arr[9] =~ /\d+/) ? $arr[9] : 0));
+      }' > /tmp/pinkytemp
+
+  sleep 20
+done &
+```
 
 To get the sound volume level:
 

@@ -21,21 +21,6 @@
 #define WEATHER_H_
 
 #if WITH_WEATHER == 1
-
-#define PARSE_FIRST_TWO_NUMS(str, ptr1, num1, num2, flag) \
-  if (0 != (isdigit((unsigned char) *(ptr1+num1)))) { \
-    *str++ = *(ptr1+num1); \
-    if (0 != (isdigit((unsigned char) *(ptr1+num2)))) { \
-      *str++ = *(ptr1+num2); \
-    } \
-    flag = 1; \
-  }
-
-#define PARSE_NEXT_TWO_NUMS(str, ...) \
-  *str++ = ' '; \
-  PARSE_FIRST_TWO_NUMS(str, __VA_ARGS__);
-
-size_t read_curl_data_cb(char *, size_t size, size_t nmemb, char *);
 void get_weather(char *);
 #endif /* WITH_WEATHER */
 

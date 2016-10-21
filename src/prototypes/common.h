@@ -53,4 +53,8 @@ void get_dvd(char *);
 void get_loadavg(char *);
 #endif
 
+#if WITH_SMARTEMP == 1
+void get_drivetemp(char *);
+#endif /* WITH_SMARTEMP */
+
 #endif /* COMMON_H_ */

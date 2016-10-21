@@ -201,6 +201,12 @@ T}@T{
 The available drive storage (total \- used)
 T}
 T{
+T}@T{
+\[en]drivetemp
+T}@T{
+Read the drive temperature from S.M.A.R.T
+T}
+T{
 \-g
 T}@T{
 \[en]battery
@@ -448,12 +454,6 @@ T}@T{
 The name of currently connected wifi/wireless network [argument \-
 wlan0]
 T}
-T{
-T}@T{
-\[en]drivetemp
-T}@T{
-Read the drive temperature from S.M.A.R.T
-T}
 .TE
 .PP
 The following options are available only to FreeBSD and OpenBSD:
@@ -644,8 +644,14 @@ T{
 T}@T{
 \[en]without\-drivetemp
 T}@T{
-Read the drive temperature from S.M.A.R.T (linux only), use ata/smartctl
-in *BSD
+Read the drive temperature from S.M.A.R.T (linux only)
+T}
+T{
+\[en]with\-smartemp
+T}@T{
+\[en]without\-smartemp
+T}@T{
+Read the drive temperature from S.M.A.R.T cross\-platform available
 T}
 T{
 drive_port=`1234'
@@ -702,7 +708,7 @@ compiled with/without:
 .IP
 .nf
 \f[C]
-\-\-without\-alsa\ \-\-without\-x11\ \-\-without\-mpd\ \-\-with\-colours\ \-\-with\-net\ \-\-with\-pci\ \-\-without\-dvd\ \-\-without\-sensors\ \-\-without\-ncurses\ \-\-without\-weather
+\-\-without\-alsa\ \-\-without\-x11\ \-\-without\-mpd\ \-\-with\-colours\ \-\-with\-net\ \-\-with\-pci\ \-\-without\-dvd\ \-\-without\-sensors\ \-\-without\-ncurses\ \-\-without\-weather\ \-\-without\-drivetemp\ \-\-without\-smartemp
 \f[]
 .fi
 .PP
@@ -1293,6 +1299,8 @@ To read the drive temperature from S.M.A.R.T:
 .IP \[bu] 2
 hddtemp
 .PP
+Then pass \f[B]\[en]with\-drivetemp\f[] to configure.
+.PP
 Try running hddtemp to see if it detects your drive, depending if it has
 temperature sensor in first place:
 .IP
@@ -1414,6 +1422,43 @@ finish:
 .fi
 .PP
 Linux camp end.
+.PP
+To read the drive temperature from S.M.A.R.T:
+.IP \[bu] 2
+smartmontools
+.IP \[bu] 2
+perl (for the \[lq]one line\[rq] script below)
+.PP
+Then pass \f[B]\[en]with\-smartemp\f[] to configure.
+.PP
+Execute the following command as root \f[C]visudo\f[] and append:
+.IP
+.nf
+\f[C]
+#\ \[aq]frost\[aq]\ is\ my\ computer\ username
+frost\ ALL=NOPASSWD:/usr/sbin/smartctl
+\f[]
+.fi
+.PP
+Put the following code in xinitrc or the script used to start your
+DE/WM.
+.IP
+.nf
+\f[C]
+while\ true;\ do
+\ \ sudo\ smartctl\ \-a\ /dev/sda\ |\ \\
+\ \ \ \ perl\ \-Mstrict\ \-Mwarnings\ \-ne\ \[aq]
+\ \ \ \ \ \ my\ ($fifed_txt)\ =\ $_;
+\ \ \ \ \ \ my\ \@arr\ =\ split("\ ",\ $fifed_txt);
+
+\ \ \ \ \ \ if\ ($arr[1]\ and\ lc\ $arr[1]\ eq\ "temperature_celsius")\ {
+\ \ \ \ \ \ \ \ printf("%d\\n",(($arr[9]\ and\ $arr[9]\ =~\ /\\d+/)\ ?\ $arr[9]\ :\ 0));
+\ \ \ \ \ \ }\[aq]\ >\ /tmp/pinkytemp
+
+\ \ sleep\ 20
+done\ &
+\f[]
+.fi
 .PP
 To get the sound volume level:
 .IP \[bu] 2

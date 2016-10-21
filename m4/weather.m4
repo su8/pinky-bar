@@ -81,6 +81,11 @@ AC_DEFUN([TEST_WEATHER],[
       AC_ARG_VAR(drive_port, [TCP port to listen to])
 
       AS_IF([test "x$with_drivetemp" = "xyes"],[
+        ifdef([GOT_SMARTEMP],[
+          ERR([Choose between drivetemp or smartemp. You cant use both.])
+        ],[
+        ])
+
         WITH_DRIVETEMP=1
 
         if [[ ! -z "${drive_port}" ]]

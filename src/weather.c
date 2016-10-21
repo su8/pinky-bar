@@ -30,6 +30,8 @@
 #include "prototypes/weather.h"
 
 #if WITH_WEATHER == 1
+static size_t read_curl_data_cb(char *, size_t size, size_t nmemb, char *);
+
 /*
   The 4th arg:
    https://curl.haxx.se/libcurl/c/CURLOPT_WRITEDATA.html
@@ -40,7 +42,7 @@
 
   You can parse anything in the above example.
 */
-size_t
+static size_t
 read_curl_data_cb(char *data, size_t size, size_t nmemb, char *str1) {
   uint8_t got_main = 0, got_temp = 0;
   uint8_t y = 0, z = 0;
