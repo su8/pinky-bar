@@ -157,8 +157,6 @@ By default, if **no** options are passed, the program will be compiled with/with
 --without-alsa --without-x11 --without-mpd --with-colours --with-net --with-pci --without-dvd --without-sensors --without-ncurses --without-weather --without-drivetemp --without-smartemp
 ```
 
-Affects \*BSD, I can add daemon and/or simple kernel module for parsing the drive temperature, are you interested in obtaining such information ?
-
 Affects only FreeBSD users with laptops, **--without-apm** will compile the program with acpi support to obtain the current battery life.
 
 **--without-mpd** will compile the program with cmus support, the options syntax stays as is.
