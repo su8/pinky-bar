@@ -13,7 +13,7 @@ HOMEPAGE="https://gitlab.com/void0/pinky-bar"
 
 LICENSE="GPL-2"
 SLOT="0"
-IUSE="x11 alsa +net libnl +pci dvd sensors ncurses +colours weather mpd"
+IUSE="x11 alsa +net libnl +pci dvd sensors ncurses +colours weather mpd drivetemp"
 
 DEPEND="
 	sys-devel/m4
@@ -32,6 +32,7 @@ RDEPEND="
 	ncurses? ( sys-libs/ncurses )
 	weather? ( net-misc/curl app-arch/gzip )
 	mpd? ( media-sound/mpd media-libs/libmpdclient )
+	drivetemp? ( app-admin/hddtemp )
 "
 REQUIRED_USE="
 	x11? ( !ncurses )
@@ -70,6 +71,7 @@ src_configure() {
 		$(use_with colours) \
 		$(use_with weather) \
 		$(use_with mpd) \
+		$(use_with drivetemp) \
 		api_town="${TWN:-London,uk}" \
 		api_key='28459ae16e4b3a7e5628ff21f4907b6f' \
 		icons=/usr/share/icons/xbm_icons
