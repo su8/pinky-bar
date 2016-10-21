@@ -37,6 +37,10 @@ void get_fans(char *);
 void match_feature(char *, uint8_t num);
 #endif /* HAVE_SENSORS_SENSORS_H */
 
+#if WITH_DRIVETEMP == 1
+void get_drivetemp(char *);
+#endif /* WITH_DRIVETEMP */
+
 #endif /* __linux__ */
 
 

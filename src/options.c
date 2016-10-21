@@ -35,6 +35,7 @@
 enum {
   NICDRV = CHAR_MAX + 1,
   KERNODE,
+  DRIVETEMP,
   BULLSHIFT
 };
 const char *argp_program_version = PACKAGE_STRING;
@@ -111,6 +112,11 @@ static const struct argp_option options[] = {
   { .name = "iplink",       .key = 'e', .arg = "eth0", .doc = "The NIC link speed (useful for wireless/wifi)."           },
   { .name = "nicinfo",      .key = 'G', .arg = "eth0", .doc = "The NIC vendor and model."                                },
   { .name = "wifiname",     .key = 'h', .arg = "eth0", .doc = "The name of currently connected wireless/wifi network."   },
+
+#if WITH_DRIVETEMP == 1
+  { .name = "drivetemp",    .key = DRIVETEMP,          .doc = "Read the drive temperature from S.M.A.R.T"                },
+#endif /* WITH_DRIVETEMP */
+
 #endif /* __linux__ */
 
 #if defined(__FreeBSD__) || defined(__OpenBSD__)
@@ -263,6 +269,11 @@ parse_opt(int key, char *arg, struct argp_state *state) {
     NEW_ARG_LABEL('G', char nic_info[VLA], nic_info, FMT_KERN);
 
     NEW_NET_LABEL('e', char link_speed[VLA], link_speed, 7, FMT_KERN);
+
+#if WITH_DRIVETEMP == 1
+    NEW_LABEL(DRIVETEMP, char drivetemp[VLA], drivetemp, FMT_TEMP);
+#endif /* WITH_DRIVETEMP */
+
 #endif /* __linux__ */
 
 

@@ -448,6 +448,12 @@ T}@T{
 The name of currently connected wifi/wireless network [argument \-
 wlan0]
 T}
+T{
+T}@T{
+\[en]drivetemp
+T}@T{
+Read the drive temperature from S.M.A.R.T
+T}
 .TE
 .PP
 The following options are available only to FreeBSD and OpenBSD:
@@ -634,6 +640,21 @@ T}@T{
 API key obtained after registering yourself in the weather website
 T}
 T{
+\[en]with\-drivetemp
+T}@T{
+\[en]without\-drivetemp
+T}@T{
+Read the drive temperature from S.M.A.R.T (linux only), use ata/smartctl
+in *BSD
+T}
+T{
+drive_port=`1234'
+T}@T{
+T}@T{
+Different TCP port to listen to for the drive temperature, default one
+is 7634
+T}
+T{
 \[en]with\-colours
 T}@T{
 \[en]without\-colours
@@ -684,6 +705,10 @@ compiled with/without:
 \-\-without\-alsa\ \-\-without\-x11\ \-\-without\-mpd\ \-\-with\-colours\ \-\-with\-net\ \-\-with\-pci\ \-\-without\-dvd\ \-\-without\-sensors\ \-\-without\-ncurses\ \-\-without\-weather
 \f[]
 .fi
+.PP
+Affects *BSD, I can add daemon and/or simple kernel module for parsing
+the drive temperature, are you interested in obtaining such information
+?
 .PP
 Affects only FreeBSD users with laptops, \f[B]\[en]without\-apm\f[] will
 compile the program with acpi support to obtain the current battery
@@ -1264,6 +1289,86 @@ Alternative way to obtain data from the sensors:
 .IP \[bu] 2
 lm_sensors
 .PP
+To read the drive temperature from S.M.A.R.T:
+.IP \[bu] 2
+hddtemp
+.PP
+Try running hddtemp to see if it detects your drive, depending if it has
+temperature sensor in first place:
+.IP
+.nf
+\f[C]
+sudo\ hddtemp\ /dev/sda
+
+WARNING:\ Drive\ /dev/sda\ doesn\[aq]t\ appear\ in\ the\ database\ of\ supported\ drives
+WARNING:\ But\ using\ a\ common\ value,\ it\ reports\ something.
+WARNING:\ Note\ that\ the\ temperature\ shown\ could\ be\ wrong.
+WARNING:\ See\ \-\-help,\ \-\-debug\ and\ \-\-drivebase\ options.
+WARNING:\ And\ don\[aq]t\ forget\ you\ can\ add\ your\ drive\ to\ hddtemp.db
+/dev/sda:\ Corsair\ Force\ GT:\ \ 23°C\ or\ °F
+\f[]
+.fi
+.PP
+The message is pretty clear \[lq]don't forget to add your drive to
+hddtemp.db\[rq], first run the debug command to see which field is
+responsible to report your drive temperature, it should be in the range
+of 190 \- 200:
+.IP
+.nf
+\f[C]
+#\ Copy\ the\ Model:\ line
+
+sudo\ hddtemp\ \-\-debug\ /dev/sda
+
+=================\ hddtemp\ 0.3\-beta15\ ==================
+Model:\ Corsair\ Force\ GT
+
+field(1)\ \ \ \ \ \ \ \ \ =\ 0
+field(5)\ \ \ \ \ \ \ \ \ =\ 0
+field(9)\ \ \ \ \ \ \ \ \ =\ 253
+field(12)\ \ \ \ \ \ \ \ =\ 237
+field(171)\ \ \ \ \ \ \ =\ 0
+field(172)\ \ \ \ \ \ \ =\ 0
+field(174)\ \ \ \ \ \ \ =\ 147
+field(177)\ \ \ \ \ \ \ =\ 1
+field(181)\ \ \ \ \ \ \ =\ 0
+field(182)\ \ \ \ \ \ \ =\ 0
+field(187)\ \ \ \ \ \ \ =\ 0
+field(194)\ \ \ \ \ \ \ =\ 22
+field(195)\ \ \ \ \ \ \ =\ 0
+field(196)\ \ \ \ \ \ \ =\ 0
+field(201)\ \ \ \ \ \ \ =\ 0
+field(204)\ \ \ \ \ \ \ =\ 0
+field(230)\ \ \ \ \ \ \ =\ 100
+field(231)\ \ \ \ \ \ \ =\ 0
+field(233)\ \ \ \ \ \ \ =\ 130
+field(234)\ \ \ \ \ \ \ =\ 216
+field(241)\ \ \ \ \ \ \ =\ 216
+field(242)\ \ \ \ \ \ \ =\ 151
+\f[]
+.fi
+.PP
+Open up \f[B]/usr/share/hddtemp/hddtemp.db\f[] and append the Model:
+line that you copied earlier with the correct field that reports your
+drive temperature.
+.IP
+.nf
+\f[C]
+"Corsair\ Force\ GT"\ 194\ C\ "Corsair\ Force\ GT\ 120GB\ SSD"
+\f[]
+.fi
+.PP
+Next run hddtemp in daemon mode so we can request the temperature back:
+.IP
+.nf
+\f[C]
+sudo\ hddtemp\ \-d\ /dev/sda
+\f[]
+.fi
+.PP
+Open up your browser and navigate to 127.0.0.1:7634 and you'll get
+instant temperature report back to you.
+.PP
 Linux camp end.
 .PP
 To get the sound volume level:
@@ -1410,95 +1515,6 @@ As top priority:
 .PP
 It would be great if I had *BSD compatible usb wifi dongle to add wifi
 options in pinky\-bar.
-.PP
-   *   *   *   *   *
-.PP
-With the help from the gcc documentation, this wish list option has been
-solved.
-.PP
-[STRIKEOUT:Per core/thread CPU frequency detection: Can add it at any
-time if there is enough demand, but needs some consideration first.]
-.PP
-[STRIKEOUT:The kernels cpu frequency governor \[lq]performance\[rq] will
-always run at the highest possible clock rate regardless of it's
-use/idle. The only side effect of this is higher temps when on idle
-(true if the cpu has multiple cores and or threads).]
-.PP
-[STRIKEOUT:The \[lq]powersaving\[rq] governor will always run at the
-lowest possible clock rate regardless of it's use/idle. The side effect
-\- slower machine no matter what you do.]
-.PP
-[STRIKEOUT:The \[lq]ondemand\[rq] governor does what it says \- ondemand
-scaling. With it you get the best performance when you need to,
-powersaving and lower temps when on idle.]
-.PP
-[STRIKEOUT:For example I manually turn off the cpu frequency governor in
-my kernel builds, which sets it to performance.]
-.PP
-[STRIKEOUT:The cpu frequency detection is easy, but it poses a roadblock
-by assuming that the \[lq]ondemand\[rq] is set and/or is enabled in the
-user kernel.]
-.PP
-[STRIKEOUT:Decision 1: On a multicore/thread cpu, the detection for each
-core/thread will produce up to 8 digit number, thus 4 core and 4 thread
-cpu will produce: 1234.5678 1234.5678 1234.5678 1234.5678 1234.5678
-1234.5678 1234.5678 1234.5678, without including MHz for each
-core/thread, which will take a lot of space in the final statusbar
-output. This way the user will know for how long and which core/thread
-is under some load.]
-.PP
-[STRIKEOUT:Decision 2: On other hand it will be lame on a multi
-core/thread system to show the overall (not per core/thread) cpu
-frequency that have been summed up, which will beat the purpose of cpu
-frequency detection in first place, as the user will not be aware that
-some core/thread is running at full cpu clock speed as the load will be
-spread equally when summing the numbers up.]
-.PP
-   *   *   *   *   *
-.PP
-GPU temperature, voltage, fan(s) and used RAM: hard, but not impossible.
-.PP
-It would be nice to have decent gpu temperature, voltage, fan(s) speed
-and used RAM detection regarding SLI, single and dual gpu cards that
-doesn't require X, MESA and \f[B]/sys/kernel/debug/dri\f[]
-.PP
-Using assembly is strongly no\-go.
-.PP
-   *   *   *   *   *
-.PP
-Currently played filename in
-VLC (https://github.com/videolan/vlc/blob/master/src/libvlc.c): easy to
-be added.
-.PP
-Unless MPRIS is replaced with sockets, I am not willing to add dbus as
-dependency to pinky\-bar.
-.IP
-.nf
-\f[C]
-//\ The\ "MPRIS_BUS_NAME"\ macro\ from\ libvlc
-dbus_message_new_method_call(
-\ \ "org.mpris.MediaPlayer2.vlc",
-\ \ "/org/mpris/MediaPlayer2",
-\ \ "org.mpris.MediaPlayer2.Player",
-\ \ "Metadata");
-//\ results\ in:\ \ \[aq]xesam:url\[aq]:\ <\[aq]file:///home/frost/music/Summer_Sixteen.mp3\[aq]>\ 
-\f[]
-.fi
-.PP
-   *   *   *   *   *
-.PP
-Show the idle time in seconds/minutes: easy to be added via
-XScreenSaverQueryInfo (http://linux.die.net/man/3/xscreensaverqueryinfo),
-but will discriminate the users that have compiled the program
-\f[B]\[en]without\-x11\f[].
-.PP
-   *   *   *   *   *
-.PP
-Show the CapsLock/NumLock/ScrollLock indicator status for keyboard
-without LEDs: easy to be added via
-XkbGetIndicatorState (http://linux.die.net/man/3/xkbgetindicatorstate),
-but will discriminate the users that have compiled the program
-\f[B]\[en]without\-x11\f[].
 .SH REPORTING BUGS
 .PP
 Report bugs to https://gitlab.com/void0/pinky\-bar

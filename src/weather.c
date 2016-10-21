@@ -145,6 +145,7 @@ get_weather(char *str1) {
 
   curl_easy_setopt(curl, CURLOPT_URL, da_url);
   curl_easy_setopt(curl, CURLOPT_ACCEPT_ENCODING, "gzip");
+  curl_easy_setopt(curl, CURLOPT_TIMEOUT, 20L);
   curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, read_curl_data_cb);
   curl_easy_setopt(curl, CURLOPT_WRITEDATA, str1);
 

@@ -99,6 +99,7 @@ The following options are available only in Linux:
 | -e           | --iplink    | The NIC link speed (useful for wireless/wifi) [argument - eth0]    |
 | -j           | --nicfw     | The NIC firmware [argument - eth0]                                 |
 | -h           | --wifiname  | The name of currently connected wifi/wireless network [argument - wlan0]  |
+|              | --drivetemp | Read the drive temperature from S.M.A.R.T                          |
 
 The following options are available only to FreeBSD and OpenBSD:
 
@@ -140,6 +141,8 @@ It's up to you to decide which features suit you best.
 | --with-weather | --without-weather   | The temperature outside  (some details must be provided)                                   |
 | api\_town='London,uk'              | | Town and country code to use for temperature monitoring                                    |
 | api\_key='123458976'               | | API key obtained after registering yourself in the weather website                         |
+| --with-drivetemp | --without-drivetemp   | Read the drive temperature from S.M.A.R.T (linux only), use ata/smartctl in \*BSD      |
+| drive\_port='1234'  |                | Different TCP port to listen to for the drive temperature, default one is 7634             |
 | --with-colours | --without-colours   | Colorize the output data.                                                                  |
 | icons=/tmp     |                     | xbm icons that can be used by dzen2 for example. Discarded when **--with-x11** is used     |
 | --with-mpd     | --without-mpd       | To see the currently played song name (if any).                                            |
@@ -152,6 +155,8 @@ By default, if **no** options are passed, the program will be compiled with/with
 ```bash
 --without-alsa --without-x11 --without-mpd --with-colours --with-net --with-pci --without-dvd --without-sensors --without-ncurses --without-weather
 ```
+
+Affects \*BSD, I can add daemon and/or simple kernel module for parsing the drive temperature, are you interested in obtaining such information ?
 
 Affects only FreeBSD users with laptops, **--without-apm** will compile the program with acpi support to obtain the current battery life.
 
@@ -596,6 +601,71 @@ Alternative way to obtain data from the sensors:
 
 * lm\_sensors
 
+To read the drive temperature from S.M.A.R.T:
+
+* hddtemp
+
+Try running hddtemp to see if it detects your drive, depending if it has temperature sensor in first place:
+
+```bash
+sudo hddtemp /dev/sda
+
+WARNING: Drive /dev/sda doesn't appear in the database of supported drives
+WARNING: But using a common value, it reports something.
+WARNING: Note that the temperature shown could be wrong.
+WARNING: See --help, --debug and --drivebase options.
+WARNING: And don't forget you can add your drive to hddtemp.db
+/dev/sda: Corsair Force GT:  23°C or °F
+```
+
+The message is pretty clear "don't forget to add your drive to hddtemp.db", first run the debug command to see which field is responsible to report your drive temperature, it should be in the range of 190 - 200:
+
+```bash
+# Copy the Model: line
+
+sudo hddtemp --debug /dev/sda
+
+================= hddtemp 0.3-beta15 ==================
+Model: Corsair Force GT
+
+field(1)         = 0
+field(5)         = 0
+field(9)         = 253
+field(12)        = 237
+field(171)       = 0
+field(172)       = 0
+field(174)       = 147
+field(177)       = 1
+field(181)       = 0
+field(182)       = 0
+field(187)       = 0
+field(194)       = 22
+field(195)       = 0
+field(196)       = 0
+field(201)       = 0
+field(204)       = 0
+field(230)       = 100
+field(231)       = 0
+field(233)       = 130
+field(234)       = 216
+field(241)       = 216
+field(242)       = 151
+```
+
+Open up **/usr/share/hddtemp/hddtemp.db** and append the Model: line that you copied earlier with the correct field that reports your drive temperature.
+
+```bash
+"Corsair Force GT" 194 C "Corsair Force GT 120GB SSD"
+```
+
+Next run hddtemp in daemon mode so we can request the temperature back:
+
+```bash
+sudo hddtemp -d /dev/sda
+```
+
+Open up your browser and navigate to 127.0.0.1:7634 and you'll get instant temperature report back to you.
+
 Linux camp end.
 
 To get the sound volume level:
@@ -715,55 +785,3 @@ use **--without-colours** to skip the following step:
 As top priority:
 
 It would be great if I had \*BSD compatible usb wifi dongle to add wifi options in pinky-bar.
-
----
-
-With the help from the gcc documentation, this wish list option has been solved.
-
-~~Per core/thread CPU frequency detection: Can add it at any time if there is enough demand, but needs some consideration first.~~
-
-~~The kernels cpu frequency governor "performance" will always run at the highest possible clock rate regardless of it's use/idle. The only side effect of this is higher temps when on idle (true if the cpu has multiple cores and or threads).~~
-
-~~The "powersaving" governor will always run at the lowest possible clock rate regardless of it's use/idle. The side effect - slower machine no matter what you do.~~
-
-~~The "ondemand" governor does what it says - ondemand scaling. With it you get the best performance when you need to, powersaving and lower temps when on idle.~~
-
-~~For example I manually turn off the cpu frequency governor in my kernel builds, which sets it to performance.~~
-
-~~The cpu frequency detection is easy, but it poses a roadblock by assuming that the "ondemand" is set and/or is enabled in the user kernel.~~
-
-~~Decision 1: On a multicore/thread cpu, the detection for each core/thread will produce up to 8 digit number, thus 4 core and 4 thread cpu will produce: 1234.5678 1234.5678 1234.5678 1234.5678 1234.5678 1234.5678 1234.5678 1234.5678, without including MHz for each core/thread, which will take a lot of space in the final statusbar output. This way the user will know for how long and which core/thread is under some load.~~
-
-~~Decision 2: On other hand it will be lame on a multi core/thread system to show the overall (not per core/thread) cpu frequency that have been summed up, which will beat the purpose of cpu frequency detection in first place, as the user will not be aware that some core/thread is running at full cpu clock speed as the load will be spread equally when summing the numbers up.~~
-
----
-
-GPU temperature, voltage, fan(s) and used RAM: hard, but not impossible.
-
-It would be nice to have decent gpu temperature, voltage, fan(s) speed and used RAM detection regarding SLI, single and dual gpu cards that doesn't require X, MESA and **/sys/kernel/debug/dri**
-
-Using assembly is strongly no-go.
-
----
-
-[Currently played filename in VLC](https://github.com/videolan/vlc/blob/master/src/libvlc.c): easy to be added.
-
-Unless MPRIS is replaced with sockets, I am not willing to add dbus as dependency to pinky-bar.
-
-```cpp
-// The "MPRIS_BUS_NAME" macro from libvlc
-dbus_message_new_method_call(
-  "org.mpris.MediaPlayer2.vlc",
-  "/org/mpris/MediaPlayer2",
-  "org.mpris.MediaPlayer2.Player",
-  "Metadata");
-// results in:  'xesam:url': <'file:///home/frost/music/Summer_Sixteen.mp3'> 
-```
-
----
-
-Show the idle time in seconds/minutes: easy to be added via [XScreenSaverQueryInfo](http://linux.die.net/man/3/xscreensaverqueryinfo), but will discriminate the users that have compiled the program **--without-x11**.
-
----
-
-Show the CapsLock/NumLock/ScrollLock indicator status for keyboard without LEDs: easy to be added via [XkbGetIndicatorState](http://linux.die.net/man/3/xkbgetindicatorstate), but will discriminate the users that have compiled the program **--without-x11**.

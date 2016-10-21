@@ -25,7 +25,9 @@ AC_DEFUN([TEST_WEATHER],[
   CURL_LIBS=""
   API_KEY=\""g0tm1lf"\"
   API_TOWN=\""Venus,The nearby planet"\"
+  DRIVE_PORT=\""7634"\"
   WITH_WEATHER=0
+  WITH_DRIVETEMP=0
 
   AC_ARG_WITH([weather],
     AS_HELP_STRING([--with-weather],
@@ -34,7 +36,14 @@ AC_DEFUN([TEST_WEATHER],[
     [with_weather=no]
   )
 
-  AS_IF([test "x$with_weather" = "xyes"], [
+  AC_ARG_WITH([drivetemp],
+    AS_HELP_STRING([--with-drivetemp],
+      [Read the drive temperature from S.M.A.R.T]),
+    [],
+    [with_drivetemp=no]
+  )
+
+  AS_IF([test "x$with_weather" = "xyes" || test "x$with_drivetemp" = "xyes"], [
     CHECK_CFLAGZ([-O0])
 
     AC_CHECK_HEADERS([curl/curl.h], [
@@ -68,16 +77,35 @@ AC_DEFUN([TEST_WEATHER],[
       API_TOWN=\""${api_town}"\"
     fi
 
-    WITH_WEATHER=1
-    AC_DEFINE_UNQUOTED([API_KEY],[$API_KEY],[weather api key])
-    AC_DEFINE_UNQUOTED([API_TOWN],[$API_TOWN],[weather api town])
+    ifdef([LINUKS],[
+      AC_ARG_VAR(drive_port, [TCP port to listen to])
+
+      AS_IF([test "x$with_drivetemp" = "xyes"],[
+        WITH_DRIVETEMP=1
+
+        if [[ ! -z "${drive_port}" ]]
+        then
+          DRIVE_PORT=\""${drive_port}"\"
+        fi
+      ])
+
+      AC_DEFINE_UNQUOTED([DRIVE_PORT],[$DRIVE_PORT],[TCP port to listen to])
+    ],[
+    ])
+
+    AS_IF([test "x$with_weather" = "xyes"],[
+      WITH_WEATHER=1
+      AC_DEFINE_UNQUOTED([API_KEY],[$API_KEY],[weather api key])
+      AC_DEFINE_UNQUOTED([API_TOWN],[$API_TOWN],[weather api town])
+    ])
 
   ])
 
   AC_SUBST(CURL_LIBS)
   AC_DEFINE_UNQUOTED([WITH_WEATHER],[$WITH_WEATHER],[Santa is here])
+  AC_DEFINE_UNQUOTED([WITH_DRIVETEMP],[$WITH_DRIVETEMP],[Gettin hot in here])
 
-  AS_IF([test "x$with_weather" = "xyes"], [
+  AS_IF([test "x$with_weather" = "xyes" || test "x$with_drivetemp" = "xyes"], [
     AC_LINK_IFELSE([
       AC_LANG_SOURCE([[
         #include <stdio.h>
