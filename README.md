@@ -141,8 +141,8 @@ It's up to you to decide which features suit you best.
 | --with-weather | --without-weather   | The temperature outside  (some details must be provided)                                   |
 | api\_town='London,uk'              | | Town and country code to use for temperature monitoring                                    |
 | api\_key='123458976'               | | API key obtained after registering yourself in the weather website                         |
-| --with-drivetemp | --without-drivetemp   | Read the drive temperature from S.M.A.R.T (linux only)                                 |
 | --with-smartemp | --without-smartemp   | Read the drive temperature from S.M.A.R.T cross-platform available                       |
+| --with-drivetemp | --without-drivetemp   | Read the drive temperature from S.M.A.R.T (linux only)                                 |
 | drive\_port='1234'  |                | Different TCP port to listen to for the drive temperature, default one is 7634             |
 | --with-colours | --without-colours   | Colorize the output data.                                                                  |
 | icons=/tmp     |                     | xbm icons that can be used by dzen2 for example. Discarded when **--with-x11** is used     |
@@ -166,6 +166,8 @@ The pci and sensors configure options will be discarded in \*BSD. If you supplie
 Affects only linux, **--with-pci** and or **--with-sensors** will substitute -O0 flag to mitigate bugs in GCC caused by -O2 optimizations. -O0 will optimize the compiled binary for file size, while -O2 will optimize it for speed. So don't be shocked to find out that **--without-pci --without-sensors** will cause the compiled binary to double it's size. If things doesn't improve with upcomining GCC releases I will temporary drop -O2.
 
 Affects only linux users with wifi/wireless chipsets, run `lsmod|grep 802` and see whether your chipset uses cfg80211/mac80211. If that's so you can rely on libnl and enable **--with-libnl** configure options, otherwise your chipset probably still uses we/wext, so type **--without-libnl**.
+
+Affects only linux users, **--with-drivetemp** pretty much locks you down to hddtemp. You can adjust the perl one liner script at the end of this README and compile the program **--with-smartemp**, so you can switch between hddtemp and smartmontools at any time without the need recompile pinkybar with different options. **--with-smartemp** only cares for the existance of /tmp/pinkytemp file.
 
 **--with-weather** is using [dis url](http://openweathermap.org/current), register yourself there, create a new [API key](https://home.openweathermap.org/api\_keys) and supply them like dis to **configure**.
 
@@ -600,11 +602,9 @@ Alternative way to obtain data from the sensors:
 
 * lm\_sensors
 
-To read the drive temperature from S.M.A.R.T:
+To read the drive temperature from S.M.A.R.T **--with-drivetemp**:
 
 * hddtemp
-
-Then pass **--with-drivetemp** to configure.
 
 Try running hddtemp to see if it detects your drive, depending if it has temperature sensor in first place:
 
@@ -709,12 +709,10 @@ finish:
 
 Linux camp end.
 
-To read the drive temperature from S.M.A.R.T:
+To read the drive temperature from S.M.A.R.T **--with-smartemp**:
 
 * smartmontools
 * perl (for the "one line" script below)
-
-Then pass **--with-smartemp** to configure.
 
 Execute the following command as root `visudo` and append:
 

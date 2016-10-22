@@ -640,18 +640,18 @@ T}@T{
 API key obtained after registering yourself in the weather website
 T}
 T{
-\[en]with\-drivetemp
-T}@T{
-\[en]without\-drivetemp
-T}@T{
-Read the drive temperature from S.M.A.R.T (linux only)
-T}
-T{
 \[en]with\-smartemp
 T}@T{
 \[en]without\-smartemp
 T}@T{
 Read the drive temperature from S.M.A.R.T cross\-platform available
+T}
+T{
+\[en]with\-drivetemp
+T}@T{
+\[en]without\-drivetemp
+T}@T{
+Read the drive temperature from S.M.A.R.T (linux only)
 T}
 T{
 drive_port=`1234'
@@ -712,10 +712,6 @@ compiled with/without:
 \f[]
 .fi
 .PP
-Affects *BSD, I can add daemon and/or simple kernel module for parsing
-the drive temperature, are you interested in obtaining such information
-?
-.PP
 Affects only FreeBSD users with laptops, \f[B]\[en]without\-apm\f[] will
 compile the program with acpi support to obtain the current battery
 life.
@@ -746,6 +742,15 @@ cfg80211/mac80211.
 If that's so you can rely on libnl and enable \f[B]\[en]with\-libnl\f[]
 configure options, otherwise your chipset probably still uses we/wext,
 so type \f[B]\[en]without\-libnl\f[].
+.PP
+Affects only linux users, \f[B]\[en]with\-drivetemp\f[] pretty much
+locks you down to hddtemp.
+You can adjust the perl one liner script at the end of this README and
+compile the program \f[B]\[en]with\-smartemp\f[], so you can switch
+between hddtemp and smartmontools at any time without the need recompile
+pinkybar with different options.
+\f[B]\[en]with\-smartemp\f[] only cares for the existance of
+/tmp/pinkytemp file.
 .PP
 \f[B]\[en]with\-weather\f[] is using dis
 url (http://openweathermap.org/current), register yourself there, create
@@ -1295,11 +1300,10 @@ Alternative way to obtain data from the sensors:
 .IP \[bu] 2
 lm_sensors
 .PP
-To read the drive temperature from S.M.A.R.T:
+To read the drive temperature from S.M.A.R.T
+\f[B]\[en]with\-drivetemp\f[]:
 .IP \[bu] 2
 hddtemp
-.PP
-Then pass \f[B]\[en]with\-drivetemp\f[] to configure.
 .PP
 Try running hddtemp to see if it detects your drive, depending if it has
 temperature sensor in first place:
@@ -1423,13 +1427,12 @@ finish:
 .PP
 Linux camp end.
 .PP
-To read the drive temperature from S.M.A.R.T:
+To read the drive temperature from S.M.A.R.T
+\f[B]\[en]with\-smartemp\f[]:
 .IP \[bu] 2
 smartmontools
 .IP \[bu] 2
 perl (for the \[lq]one line\[rq] script below)
-.PP
-Then pass \f[B]\[en]with\-smartemp\f[] to configure.
 .PP
 Execute the following command as root \f[C]visudo\f[] and append:
 .IP
