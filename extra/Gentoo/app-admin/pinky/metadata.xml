@@ -21,5 +21,6 @@
 		<flag name="weather">The temperature outside</flag>
 		<flag name="mpd">To see the currently played song name</flag>
 		<flag name="drivetemp">Read the drive temperature from S.M.A.R.T</flag>
+		<flag name="smartemp">Read the drive temperature from S.M.A.R.T</flag>
 	</use>
 </pkgmetadata>
