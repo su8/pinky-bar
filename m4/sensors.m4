@@ -100,7 +100,6 @@ AC_DEFUN([TEST_SENSORS],[
 
   AS_IF([test "x$with_smartemp" = "xyes"], [
     WITH_SMARTEMP=1
-    m4_define([GOT_SMARTEMP],[NowFreeze])
   ])
 
 
