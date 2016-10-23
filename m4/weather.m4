@@ -43,6 +43,13 @@ AC_DEFUN([TEST_WEATHER],[
     [with_drivetemp=no]
   )
 
+  AC_ARG_WITH([smartemp],
+    AS_HELP_STRING([--with-smartemp],
+      [Read the drive temperature from S.M.A.R.T]),
+    [],
+    [with_smartemp=no]
+  )
+
   AS_IF([test "x$with_weather" = "xyes" || test "x$with_drivetemp" = "xyes"], [
     CHECK_CFLAGZ([-O0])
 

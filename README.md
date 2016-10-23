@@ -192,27 +192,14 @@ make
 make install
 ```
 
-To see the currently played song name add **--with-mpd** to configure.
-
-To disable the colours you can add **--without-colours** to configure.
-
-Put the following in your **xinitrc** or the script used to start dwm.
-
-```bash
-# Execute the "statusbar" program every 5 secs
-while true; do
-  # scroll a few lines up to see the rest options
-  "$HOME/.cache/bin/pinkybar" -LTrspkvfmdVt
-  sleep 5
-done &
-```
+Copy the code from extra/scripts/dwm.sh or `exec` it from **xinitrc** or the script used to start dwm.
 
 ## Installation for xmonad (or other WM)
 
 ```bash
 # Copy the xbm icons
 mkdir -p --mode=700 $HOME/.xmonad/icons
-cp -r xbm_icons/*.xbm $HOME/.xmonad/icons
+cp -r extra/xbm_icons/*.xbm $HOME/.xmonad/icons
 
 bash bootstrap distro
 
@@ -224,18 +211,7 @@ make
 make install
 ```
 
-To see the currently played song name add **--with-mpd** to configure.
-
-Put the following in your **xinitrc** or the script used to start xmonad.
-
-```bash
-# Execute the "statusbar" program every 2 secs
-while true; do
-  # scroll a few lines up to see the rest options
-  "$HOME/.cache/bin/pinkybar" -LTrspkvfmdVt
-  sleep 2
-done | dzen2 -w 1800 -x 130 -ta r -fn '-*-dejavusans-*-r-*-*-11-*-*-*-*-*-*-*' &
-```
+Copy the code from extra/scripts/xmonad.sh or `exec` it from **xinitrc** or the script used to start xmonad.
 
 ## Installation in FreeBSD
 
@@ -269,8 +245,7 @@ make
 make install
 ```
 
-Send a request to the FreeBSD mail list and request the OpenBSD sensors API to be ported.
-
+Send a request to the FreeBSD mailing list and request the OpenBSD sensors API to be ported.
 
 ## Installation in OpenBSD
 
@@ -305,128 +280,7 @@ make all ncurses
 make install
 ```
 
-Put the following in your shell config as function or alias.
-
-```bash
-pinky() {
-  location="${HOME}/.cache/bin"
-
-  while true; do
-    # scroll a few lines up to see the rest options
-    "${location}"/pinkybar -LTrspkvfmdVt
-    sleep 2
-  done | "${location}"/ncurses
-}
-```
-
-Test it:
-
-```bash
-pinky  # Press CTRL + C to stop the program
-```
-
-Put the following in **~/.Xresources**
-
-```bash
-! Xft --------------------------------------------------------------------
-Xft.dpi:        96
-Xft.antialias:  true
-Xft.rgba:       rgb
-Xft.hinting:    true
-Xft.hintstyle:  hintslight
-Xft.autohint:   false
-Xft.lcdfilter:  lcddefault
-
-
-! urxvt conf --------------------------------------------------------------------
-URxvt.buffered                  : true
-URxvt.cursorBlink               : false
-URxvt.cursorUnderline           : false
-URxvt.pointerBlank              : false
-URxvt.geometry                  : 80x24
-URxvt.font                      : xft:DejaVu Sans Mono:bold:pixelsize=11
-URxvt.boldfont                  : xft:DejaVu Sans Mono:bold:pixelsize=11
-URxvt.letterSpace               : -1
-URxvt.termName                  : rxvt-256color
-URxvt.iso14755                  : false
-URxvt.iso14755_52               : false
-URxvt.cursorColor               : #ffffff
-URxvt.colorIT                   : #87af5f
-URxvt.colorBD                   : #d7d7d7
-URxvt.colorUL                   : #87afd7
-URxvt.urgentOnBell              : false
-URxvt.mapAlert                  : false
-URxvt.visualBell                : false
-URxvt.saveLines                 : 10000
-URxvt.scrollBar                 : false
-URxvt.scrollBar_right           : false
-URxvt.scrollBar_floating        : false
-URxvt.scrollstyle               : rxvt
-URxvt.Depth                     : 32
-URxvt.loginShell                : false
-URxvt.insecure                  : false
-URxvt.pastableTabs              : false
-URxvt.utmpInhibit               : false
-URxvt.reverseVideo              : false
-URxvt.skipBuiltinGlyphs         : true
-
-
-! urxvt colours --------------------------------------------------------------------
-*.foreground:   #c5c8c6
-*.background:   #222222
-*.cursorColor:  #ffffff
-
-! black
-*.color0:       #222222
-*.color8:       #373b41
-
-! red
-*.color1:       #ef2929
-*.color9:       #ef2929
-
-! green
-*.color2:       #8ae234
-*.color10:      #8ae234
-
-! yellow
-*.color3:       #c2a000
-*.color11:      #fce94d
-
-! blue
-*.color4:       #5f819d
-*.color12:      #81a2be
-
-! magenta
-*.color5:       #85678f
-*.color13:      #a97fa8
-
-! cyan
-*.color6:       #5e8d87
-*.color14:      #34e2e2
-
-! white
-*.color7:       #ffffff
-*.color15:      #ffffff
-
-
-! xterm conf -----------------------------------------------------------
-XTerm.vt100.geometry:   80x24
-XTerm*faceName:     DejaVu Sans Book
-XTerm*faceSize:     9
-XTerm*toolBar:      off
-
-xterm*termName: xterm-256color
-XTerm*locale: true
-xterm*cursorColor: #FFFFFF
-xterm*toolBar: false
-xterm*scrollBar: false
-xterm*rightScrollBar: false
-xterm*background: #222222
-xterm*foreground: #999999
-xterm*faceName: DejaVu Sans Book:pixelsize=12
-xterm*allowBoldFonts: false
-xterm*geometry: 80x24
-```
+Copy the code from extra/scripts/pinky-curses.sh and extra/misc/.Xresources
 
 Force your non xterm/urxvt terminal emulator to use the newer xterm/urxvt colours. You'll have to kill Xorg (simply logout and log back in), experienced people are using xrdb instead killing Xorg each time they do changes to such files.
 
@@ -507,69 +361,7 @@ After editing the wrong prototype I managed to stumbled upon a bug in OpenBSD's 
 
 **Warning !!! OpenBSD users !!!**
 
-The majority of SCN\* macros differs from their PRI\* cousins. When you define unsigned int you should always follow the C standards that made it clear what format specifier unsigned int should use, unfortunately the majority of OpenBSD's own libc SCN\* macros managed not to follow the standard. "hu" and "hhu" are not unsigned int format specifiers, tried to get in touch with OpenBSD devs, reported this bug but no one responded.
-
-If they wanted to use specific integer type, then they should define it as such earlier. 8 bit integer is the smallest integer type in existance and for sure it cannot represent the 32 bit UINT\_MAX number. glibc uses the maximum unsigned char and signed char for all int8\_t, int\_least8\_t, int\_fast8\_t and uint8\_t, uint\_least8\_t, uint\_fast8\_t , and yes glibc defines corrent PRI\* and SCN\* format specifier macros to match that integer type.
-
-It's not like to mistake the float format specifier with the "double" one.
-
-It's dirty trick to let the complier do the conversion for you to lower the integer type and not follow the standards to define it as such earlier.
-
-You'll be the judge in here, read the following code and try to understand what my intentions are:
-
-```cpp
-unsigned long long int small_int = 240;
-
-printf("%hhu\n", small_int);
-```
-
-What I've done wrong in the above example by following the OpenBSD "standard" ? Way to go OpenBSD !
-
-```cpp
-/* machine/_types.h */
-typedef	unsigned int		__uint32_t;
-
-typedef	__uint32_t		__uint_fast8_t;
-typedef	__uint32_t		__uint_fast16_t;
-
-/* stdint.h */
-typedef	__uint_fast8_t		uint_fast8_t;
-typedef	__uint_fast16_t		uint_fast16_t;
-
-/* inttypes.h */
-#define	PRIuFAST8		"u"		/* uint_fast8_t */
-#define	SCNuFAST8		"hhu"		/* uint_fast8_t */
-
-#define	PRIuFAST16		"u"		/* uint_fast16_t */
-#define	SCNuFAST16		"hu"		/* uint_fast16_t */
-```
-
-The bug was submitted and have not been added to marc.info
-
-```cpp
-/* test.c
-egcc -Wall -Wextra -std=c99 -pedantic -Wconversion -O2 test.c -o /tmp/test
- */
-#include <stdio.h>
-#include <stdlib.h>
-#include <inttypes.h>
-
-int main(void) {
-  char acc[] = "Remaining: 99000";
-  uint_fast8_t cur = 0, started = 99000;
-
-  printf("%s\n", acc);
-  if (EOF == (sscanf(acc, "%*s %"SCNuFAST8, &cur))) {
-    return EXIT_FAILURE;
-  }
-  printf("%s " "%"PRIuFAST8 " %s " "%"PRIuFAST8 "\n",
-   "Started with: $", started,
-   "The current balance now: $", cur
-  );
-
-  return EXIT_SUCCESS;
-}
-```
+The majority of SCN\* macros differs from their PRI\* cousins. And I cannot guarantee the accuracy of fixed width integers when OpenBSD own libc managed to use different format specifiers. Read extra/misc/openbsd\_bugs.md for more details.
 
 ## Opt-in requirements
 
@@ -667,52 +459,13 @@ sudo hddtemp -d /dev/sda
 
 Open up your browser and navigate to 127.0.0.1:7634 and you'll get instant temperature report back to you.
 
-The "init" lock-in for those of you that cannot choose between udev or eudev puts me in position not rely on libatasmart, regardless how neat the library is.
-
-```cpp
-/* gcc -Wall -Wextra -O2 skdump.c -latasmart -o test */
-#include <stdio.h>
-#include <string.h>
-#include <errno.h>
-
-#include <atasmart.h>
-
-int main(void) {
-  uint64_t mkelvin = 0;
-  const char *device = "/dev/sda";
-  SkDisk *d = NULL;
-
-  if (-1 == (sk_disk_open(device, &d))) {
-    fprintf(stderr, "Failed to open disk %s: %s\n", device, strerror(errno));
-    return 1;
-  }
-
-  if (-1 == (sk_disk_smart_read_data(d))) {
-    fprintf(stderr, "Failed to read SMART data: %s\n", strerror(errno));
-    goto finish;
-  }
-
-  if (-1 == (sk_disk_smart_get_temperature(d, &mkelvin))) {
-    fprintf(stderr, "Failed to get temperature: %s\n", strerror(errno));
-    goto finish;
-  }
-
-  printf("%llu\n", (unsigned long long)mkelvin);
-
-finish:
-  if (NULL != d) {
-    sk_disk_free(d);
-  }
-  return 0;
-}
-```
+The "init" lock-in for those of you that cannot choose between udev or eudev puts me in position not rely on libatasmart, regardless how neat the library is. There is stripped example program in extra/misc/skdump.c if you are curious to check and test libatasmart.
 
 Linux camp end.
 
 To read the drive temperature from S.M.A.R.T **--with-smartemp**:
 
 * smartmontools
-* perl (for the "one line" script below)
 
 Execute the following command as root `visudo` and append:
 
@@ -721,22 +474,7 @@ Execute the following command as root `visudo` and append:
 frost ALL=NOPASSWD:/usr/sbin/smartctl
 ```
 
-Put the following code in xinitrc or the script used to start your DE/WM.
-
-```bash
-while true; do
-  sudo smartctl -a /dev/sda | \
-    perl -Mstrict -Mwarnings -ne '
-      my ($fifed_txt) = $_;
-      my @arr = split(" ", $fifed_txt);
-
-      if ($arr[1] and lc $arr[1] eq "temperature_celsius") {
-        printf("%d\n",(($arr[9] and $arr[9] =~ /\d+/) ? $arr[9] : 0));
-      }' > /tmp/pinkytemp
-
-  sleep 20
-done &
-```
+Copy the code from extra/scripts/drive-temperature.sh or `exec` it from **xinitrc** or the script used to start your DE/WM.
 
 To get the sound volume level:
 
@@ -785,49 +523,7 @@ The "soundcloud" alternative that is supported in cmus and your mpd client will 
 
 The FreeBSD users will notice that "mpd" is named "musicpd".
 
-Here's an example of my **/etc/mpd.conf** (linux)
-
-```nginx
-music_directory "/home/frost/music"
-playlist_directory "/home/frost/music"
-db_file "/tmp/mpddb"
-log_file "/tmp/mpdlog"
-state_file "/tmp/mpdstate"
-pid_file "/tmp/mpdpid"
-log_level "default"
-user "mpd"
-
-audio_output {
-  type "alsa"
-  name "My sound card"
-  mixer_type "software"
-}
-
-port "6600"
-bind_to_address "127.0.0.1"
-```
-
-FreeBSD conf, same as the Linux one, you'll have to add the "musicpd" daemon user on your own:
-
-```nginx
-user "musicpd"
-
-audio_output {
-  type "oss"
-  name "My sound card"
-  mixer_type "software"
-}
-```
-
-OpenBSD conf, same as the FreeBSD one, just replace audio\_output with:
-
-```nginx
-audio_output {
-  type "ao"
-  name "My sound card"
-  mixer_type "software"
-}
-```
+If you've never used mpd before copy the example configuration from extra/mpd according to your OS.
 
 Keep an eye on the **log file size** if you are using raspberry pi (or equivalent device) that streams the music, make sure that it's deleted automatically if it exceeds some pre-defined size.
 

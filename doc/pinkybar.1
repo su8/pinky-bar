@@ -1,5 +1,5 @@
 .\"t
-.TH "pinkybar" "1" "Oktoberfest 13, 2016" "manual" ""
+.TH "pinkybar" "1" "Oktoberfest 23, 2016" "manual" ""
 .SH NAME
 .PP
 This man page is converted from markdown, and some information might not
@@ -784,32 +784,15 @@ make\ install
 \f[]
 .fi
 .PP
-To see the currently played song name add \f[B]\[en]with\-mpd\f[] to
-configure.
-.PP
-To disable the colours you can add \f[B]\[en]without\-colours\f[] to
-configure.
-.PP
-Put the following in your \f[B]xinitrc\f[] or the script used to start
-dwm.
-.IP
-.nf
-\f[C]
-#\ Execute\ the\ "statusbar"\ program\ every\ 5\ secs
-while\ true;\ do
-\ \ #\ scroll\ a\ few\ lines\ up\ to\ see\ the\ rest\ options
-\ \ "$HOME/.cache/bin/pinkybar"\ \-LTrspkvfmdVt
-\ \ sleep\ 5
-done\ &
-\f[]
-.fi
+Copy the code from extra/scripts/dwm.sh or \f[C]exec\f[] it from
+\f[B]xinitrc\f[] or the script used to start dwm.
 .SS Installation for xmonad (or other WM)
 .IP
 .nf
 \f[C]
 #\ Copy\ the\ xbm\ icons
 mkdir\ \-p\ \-\-mode=700\ $HOME/.xmonad/icons
-cp\ \-r\ xbm_icons/*.xbm\ $HOME/.xmonad/icons
+cp\ \-r\ extra/xbm_icons/*.xbm\ $HOME/.xmonad/icons
 
 bash\ bootstrap\ distro
 
@@ -822,22 +805,8 @@ make\ install
 \f[]
 .fi
 .PP
-To see the currently played song name add \f[B]\[en]with\-mpd\f[] to
-configure.
-.PP
-Put the following in your \f[B]xinitrc\f[] or the script used to start
-xmonad.
-.IP
-.nf
-\f[C]
-#\ Execute\ the\ "statusbar"\ program\ every\ 2\ secs
-while\ true;\ do
-\ \ #\ scroll\ a\ few\ lines\ up\ to\ see\ the\ rest\ options
-\ \ "$HOME/.cache/bin/pinkybar"\ \-LTrspkvfmdVt
-\ \ sleep\ 2
-done\ |\ dzen2\ \-w\ 1800\ \-x\ 130\ \-ta\ r\ \-fn\ \[aq]\-*\-dejavusans\-*\-r\-*\-*\-11\-*\-*\-*\-*\-*\-*\-*\[aq]\ &
-\f[]
-.fi
+Copy the code from extra/scripts/xmonad.sh or \f[C]exec\f[] it from
+\f[B]xinitrc\f[] or the script used to start xmonad.
 .SS Installation in FreeBSD
 .PP
 FreeBSD has no other way than using the module specific convention to
@@ -882,8 +851,8 @@ make\ install
 \f[]
 .fi
 .PP
-Send a request to the FreeBSD mail list and request the OpenBSD sensors
-API to be ported.
+Send a request to the FreeBSD mailing list and request the OpenBSD
+sensors API to be ported.
 .SS Installation in OpenBSD
 .PP
 Before even executing the \f[B]bootstrap\f[] script, you'll have to do
@@ -921,134 +890,8 @@ make\ install
 \f[]
 .fi
 .PP
-Put the following in your shell config as function or alias.
-.IP
-.nf
-\f[C]
-pinky()\ {
-\ \ location="${HOME}/.cache/bin"
-
-\ \ while\ true;\ do
-\ \ \ \ #\ scroll\ a\ few\ lines\ up\ to\ see\ the\ rest\ options
-\ \ \ \ "${location}"/pinkybar\ \-LTrspkvfmdVt
-\ \ \ \ sleep\ 2
-\ \ done\ |\ "${location}"/ncurses
-}
-\f[]
-.fi
-.PP
-Test it:
-.IP
-.nf
-\f[C]
-pinky\ \ #\ Press\ CTRL\ +\ C\ to\ stop\ the\ program
-\f[]
-.fi
-.PP
-Put the following in \f[B]~/.Xresources\f[]
-.IP
-.nf
-\f[C]
-!\ Xft\ \-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-
-Xft.dpi:\ \ \ \ \ \ \ \ 96
-Xft.antialias:\ \ true
-Xft.rgba:\ \ \ \ \ \ \ rgb
-Xft.hinting:\ \ \ \ true
-Xft.hintstyle:\ \ hintslight
-Xft.autohint:\ \ \ false
-Xft.lcdfilter:\ \ lcddefault
-
-
-!\ urxvt\ conf\ \-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-
-URxvt.buffered\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ :\ true
-URxvt.cursorBlink\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ :\ false
-URxvt.cursorUnderline\ \ \ \ \ \ \ \ \ \ \ :\ false
-URxvt.pointerBlank\ \ \ \ \ \ \ \ \ \ \ \ \ \ :\ false
-URxvt.geometry\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ :\ 80x24
-URxvt.font\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ :\ xft:DejaVu\ Sans\ Mono:bold:pixelsize=11
-URxvt.boldfont\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ :\ xft:DejaVu\ Sans\ Mono:bold:pixelsize=11
-URxvt.letterSpace\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ :\ \-1
-URxvt.termName\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ :\ rxvt\-256color
-URxvt.iso14755\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ :\ false
-URxvt.iso14755_52\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ :\ false
-URxvt.cursorColor\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ :\ #ffffff
-URxvt.colorIT\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ :\ #87af5f
-URxvt.colorBD\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ :\ #d7d7d7
-URxvt.colorUL\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ :\ #87afd7
-URxvt.urgentOnBell\ \ \ \ \ \ \ \ \ \ \ \ \ \ :\ false
-URxvt.mapAlert\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ :\ false
-URxvt.visualBell\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ :\ false
-URxvt.saveLines\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ :\ 10000
-URxvt.scrollBar\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ :\ false
-URxvt.scrollBar_right\ \ \ \ \ \ \ \ \ \ \ :\ false
-URxvt.scrollBar_floating\ \ \ \ \ \ \ \ :\ false
-URxvt.scrollstyle\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ :\ rxvt
-URxvt.Depth\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ :\ 32
-URxvt.loginShell\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ :\ false
-URxvt.insecure\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ :\ false
-URxvt.pastableTabs\ \ \ \ \ \ \ \ \ \ \ \ \ \ :\ false
-URxvt.utmpInhibit\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ :\ false
-URxvt.reverseVideo\ \ \ \ \ \ \ \ \ \ \ \ \ \ :\ false
-URxvt.skipBuiltinGlyphs\ \ \ \ \ \ \ \ \ :\ true
-
-
-!\ urxvt\ colours\ \-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-
-*.foreground:\ \ \ #c5c8c6
-*.background:\ \ \ #222222
-*.cursorColor:\ \ #ffffff
-
-!\ black
-*.color0:\ \ \ \ \ \ \ #222222
-*.color8:\ \ \ \ \ \ \ #373b41
-
-!\ red
-*.color1:\ \ \ \ \ \ \ #ef2929
-*.color9:\ \ \ \ \ \ \ #ef2929
-
-!\ green
-*.color2:\ \ \ \ \ \ \ #8ae234
-*.color10:\ \ \ \ \ \ #8ae234
-
-!\ yellow
-*.color3:\ \ \ \ \ \ \ #c2a000
-*.color11:\ \ \ \ \ \ #fce94d
-
-!\ blue
-*.color4:\ \ \ \ \ \ \ #5f819d
-*.color12:\ \ \ \ \ \ #81a2be
-
-!\ magenta
-*.color5:\ \ \ \ \ \ \ #85678f
-*.color13:\ \ \ \ \ \ #a97fa8
-
-!\ cyan
-*.color6:\ \ \ \ \ \ \ #5e8d87
-*.color14:\ \ \ \ \ \ #34e2e2
-
-!\ white
-*.color7:\ \ \ \ \ \ \ #ffffff
-*.color15:\ \ \ \ \ \ #ffffff
-
-
-!\ xterm\ conf\ \-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-
-XTerm.vt100.geometry:\ \ \ 80x24
-XTerm*faceName:\ \ \ \ \ DejaVu\ Sans\ Book
-XTerm*faceSize:\ \ \ \ \ 9
-XTerm*toolBar:\ \ \ \ \ \ off
-
-xterm*termName:\ xterm\-256color
-XTerm*locale:\ true
-xterm*cursorColor:\ #FFFFFF
-xterm*toolBar:\ false
-xterm*scrollBar:\ false
-xterm*rightScrollBar:\ false
-xterm*background:\ #222222
-xterm*foreground:\ #999999
-xterm*faceName:\ DejaVu\ Sans\ Book:pixelsize=12
-xterm*allowBoldFonts:\ false
-xterm*geometry:\ 80x24
-\f[]
-.fi
+Copy the code from extra/scripts/pinky\-curses.sh and
+extra/misc/.Xresources
 .PP
 Force your non xterm/urxvt terminal emulator to use the newer
 xterm/urxvt colours.
@@ -1173,94 +1016,9 @@ OpenBSD's own libc.
 \f[B]Warning !!! OpenBSD users !!!\f[]
 .PP
 The majority of SCN* macros differs from their PRI* cousins.
-When you define unsigned int you should always follow the C standards
-that made it clear what format specifier unsigned int should use,
-unfortunately the majority of OpenBSD's own libc SCN* macros managed not
-to follow the standard.
-\[lq]hu\[rq] and \[lq]hhu\[rq] are not unsigned int format specifiers,
-tried to get in touch with OpenBSD devs, reported this bug but no one
-responded.
-.PP
-If they wanted to use specific integer type, then they should define it
-as such earlier.
-8 bit integer is the smallest integer type in existance and for sure it
-cannot represent the 32 bit UINT_MAX number.
-glibc uses the maximum unsigned char and signed char for all int8_t,
-int_least8_t, int_fast8_t and uint8_t, uint_least8_t, uint_fast8_t , and
-yes glibc defines corrent PRI* and SCN* format specifier macros to match
-that integer type.
-.PP
-It's not like to mistake the float format specifier with the
-\[lq]double\[rq] one.
-.PP
-It's dirty trick to let the complier do the conversion for you to lower
-the integer type and not follow the standards to define it as such
-earlier.
-.PP
-You'll be the judge in here, read the following code and try to
-understand what my intentions are:
-.IP
-.nf
-\f[C]
-unsigned\ long\ long\ int\ small_int\ =\ 240;
-
-printf("%hhu\\n",\ small_int);
-\f[]
-.fi
-.PP
-What I've done wrong in the above example by following the OpenBSD
-\[lq]standard\[rq] ?
-Way to go OpenBSD !
-.IP
-.nf
-\f[C]
-/*\ machine/_types.h\ */
-typedef\ unsigned\ int\ \ \ \ \ \ \ \ __uint32_t;
-
-typedef\ __uint32_t\ \ \ \ \ \ __uint_fast8_t;
-typedef\ __uint32_t\ \ \ \ \ \ __uint_fast16_t;
-
-/*\ stdint.h\ */
-typedef\ __uint_fast8_t\ \ \ \ \ \ uint_fast8_t;
-typedef\ __uint_fast16_t\ \ \ \ \ uint_fast16_t;
-
-/*\ inttypes.h\ */
-#define\ PRIuFAST8\ \ \ \ \ \ \ "u"\ \ \ \ \ /*\ uint_fast8_t\ */
-#define\ SCNuFAST8\ \ \ \ \ \ \ "hhu"\ \ \ \ \ \ \ /*\ uint_fast8_t\ */
-
-#define\ PRIuFAST16\ \ \ \ \ \ "u"\ \ \ \ \ /*\ uint_fast16_t\ */
-#define\ SCNuFAST16\ \ \ \ \ \ "hu"\ \ \ \ \ \ \ \ /*\ uint_fast16_t\ */
-\f[]
-.fi
-.PP
-The bug was submitted and have not been added to marc.info
-.IP
-.nf
-\f[C]
-/*\ test.c
-egcc\ \-Wall\ \-Wextra\ \-std=c99\ \-pedantic\ \-Wconversion\ \-O2\ test.c\ \-o\ /tmp/test
-\ */
-#include\ <stdio.h>
-#include\ <stdlib.h>
-#include\ <inttypes.h>
-
-int\ main(void)\ {
-\ \ char\ acc[]\ =\ "Remaining:\ 99000";
-\ \ uint_fast8_t\ cur\ =\ 0,\ started\ =\ 99000;
-
-\ \ printf("%s\\n",\ acc);
-\ \ if\ (EOF\ ==\ (sscanf(acc,\ "%*s\ %"SCNuFAST8,\ &cur)))\ {
-\ \ \ \ return\ EXIT_FAILURE;
-\ \ }
-\ \ printf("%s\ "\ "%"PRIuFAST8\ "\ %s\ "\ "%"PRIuFAST8\ "\\n",
-\ \ \ "Started\ with:\ $",\ started,
-\ \ \ "The\ current\ balance\ now:\ $",\ cur
-\ \ );
-
-\ \ return\ EXIT_SUCCESS;
-}
-\f[]
-.fi
+And I cannot guarantee the accuracy of fixed width integers when OpenBSD
+own libc managed to use different format specifiers.
+Read extra/misc/openbsd_bugs.md for more details.
 .SS Opt\-in requirements
 .PP
 Linux camp:
@@ -1384,46 +1142,8 @@ instant temperature report back to you.
 The \[lq]init\[rq] lock\-in for those of you that cannot choose between
 udev or eudev puts me in position not rely on libatasmart, regardless
 how neat the library is.
-.IP
-.nf
-\f[C]
-/*\ gcc\ \-Wall\ \-Wextra\ \-O2\ skdump.c\ \-latasmart\ \-o\ test\ */
-#include\ <stdio.h>
-#include\ <string.h>
-#include\ <errno.h>
-
-#include\ <atasmart.h>
-
-int\ main(void)\ {
-\ \ uint64_t\ mkelvin\ =\ 0;
-\ \ const\ char\ *device\ =\ "/dev/sda";
-\ \ SkDisk\ *d\ =\ NULL;
-
-\ \ if\ (\-1\ ==\ (sk_disk_open(device,\ &d)))\ {
-\ \ \ \ fprintf(stderr,\ "Failed\ to\ open\ disk\ %s:\ %s\\n",\ device,\ strerror(errno));
-\ \ \ \ return\ 1;
-\ \ }
-
-\ \ if\ (\-1\ ==\ (sk_disk_smart_read_data(d)))\ {
-\ \ \ \ fprintf(stderr,\ "Failed\ to\ read\ SMART\ data:\ %s\\n",\ strerror(errno));
-\ \ \ \ goto\ finish;
-\ \ }
-
-\ \ if\ (\-1\ ==\ (sk_disk_smart_get_temperature(d,\ &mkelvin)))\ {
-\ \ \ \ fprintf(stderr,\ "Failed\ to\ get\ temperature:\ %s\\n",\ strerror(errno));
-\ \ \ \ goto\ finish;
-\ \ }
-
-\ \ printf("%llu\\n",\ (unsigned\ long\ long)mkelvin);
-
-finish:
-\ \ if\ (NULL\ !=\ d)\ {
-\ \ \ \ sk_disk_free(d);
-\ \ }
-\ \ return\ 0;
-}
-\f[]
-.fi
+There is stripped example program in extra/misc/skdump.c if you are
+curious to check and test libatasmart.
 .PP
 Linux camp end.
 .PP
@@ -1431,8 +1151,6 @@ To read the drive temperature from S.M.A.R.T
 \f[B]\[en]with\-smartemp\f[]:
 .IP \[bu] 2
 smartmontools
-.IP \[bu] 2
-perl (for the \[lq]one line\[rq] script below)
 .PP
 Execute the following command as root \f[C]visudo\f[] and append:
 .IP
@@ -1443,25 +1161,8 @@ frost\ ALL=NOPASSWD:/usr/sbin/smartctl
 \f[]
 .fi
 .PP
-Put the following code in xinitrc or the script used to start your
-DE/WM.
-.IP
-.nf
-\f[C]
-while\ true;\ do
-\ \ sudo\ smartctl\ \-a\ /dev/sda\ |\ \\
-\ \ \ \ perl\ \-Mstrict\ \-Mwarnings\ \-ne\ \[aq]
-\ \ \ \ \ \ my\ ($fifed_txt)\ =\ $_;
-\ \ \ \ \ \ my\ \@arr\ =\ split("\ ",\ $fifed_txt);
-
-\ \ \ \ \ \ if\ ($arr[1]\ and\ lc\ $arr[1]\ eq\ "temperature_celsius")\ {
-\ \ \ \ \ \ \ \ printf("%d\\n",(($arr[9]\ and\ $arr[9]\ =~\ /\\d+/)\ ?\ $arr[9]\ :\ 0));
-\ \ \ \ \ \ }\[aq]\ >\ /tmp/pinkytemp
-
-\ \ sleep\ 20
-done\ &
-\f[]
-.fi
+Copy the code from extra/scripts/drive\-temperature.sh or \f[C]exec\f[]
+it from \f[B]xinitrc\f[] or the script used to start your DE/WM.
 .PP
 To get the sound volume level:
 .IP \[bu] 2
@@ -1526,56 +1227,8 @@ interested to listen.
 The FreeBSD users will notice that \[lq]mpd\[rq] is named
 \[lq]musicpd\[rq].
 .PP
-Here's an example of my \f[B]/etc/mpd.conf\f[] (linux)
-.IP
-.nf
-\f[C]
-music_directory\ "/home/frost/music"
-playlist_directory\ "/home/frost/music"
-db_file\ "/tmp/mpddb"
-log_file\ "/tmp/mpdlog"
-state_file\ "/tmp/mpdstate"
-pid_file\ "/tmp/mpdpid"
-log_level\ "default"
-user\ "mpd"
-
-audio_output\ {
-\ \ type\ "alsa"
-\ \ name\ "My\ sound\ card"
-\ \ mixer_type\ "software"
-}
-
-port\ "6600"
-bind_to_address\ "127.0.0.1"
-\f[]
-.fi
-.PP
-FreeBSD conf, same as the Linux one, you'll have to add the
-\[lq]musicpd\[rq] daemon user on your own:
-.IP
-.nf
-\f[C]
-user\ "musicpd"
-
-audio_output\ {
-\ \ type\ "oss"
-\ \ name\ "My\ sound\ card"
-\ \ mixer_type\ "software"
-}
-\f[]
-.fi
-.PP
-OpenBSD conf, same as the FreeBSD one, just replace audio_output with:
-.IP
-.nf
-\f[C]
-audio_output\ {
-\ \ type\ "ao"
-\ \ name\ "My\ sound\ card"
-\ \ mixer_type\ "software"
-}
-\f[]
-.fi
+If you've never used mpd before copy the example configuration from
+extra/mpd according to your OS.
 .PP
 Keep an eye on the \f[B]log file size\f[] if you are using raspberry pi
 (or equivalent device) that streams the music, make sure that it's

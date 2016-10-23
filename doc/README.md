@@ -1,7 +1,3 @@
-\_pinkybar is zsh completion. This file will not be installed automatically.
-
-pinkybar.1 is the man page.
-
 To re-create the man page you'll have to install the whole pandoc suite and invoke the following commands:
 
 ```bash

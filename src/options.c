@@ -27,6 +27,7 @@
 #include "prototypes/net.h"
 #include "prototypes/options.h"
 #include "prototypes/weather.h"
+#include "prototypes/smart.h"
 
 /* Because we ran out of a-z A-Z options,
  * only long ones will be supported from now on.
@@ -60,6 +61,7 @@ static const struct argp_option options[] = {
   { .name = "drivetotal",   .key = 'n',                .doc = "The total drive storage."                                 },
   { .name = "drivefree",    .key = 'N',                .doc = "The free drive storage."                                  },
   { .name = "driveavail",   .key = 'O',                .doc = "The available drive storage."                             },
+  { .name = "drivetemp",    .key = DRIVETEMP,          .doc = "Read the drive temperature from S.M.A.R.T"                },
   { .name = "dvdstr",       .key = 'z',                .doc = "The vendor and model name of your cdrom/dvdrom."          },
   { .name = "battery",      .key = 'g',                .doc = "The remaining battery charge."                            },
   { .name = "packages",     .key = 'p',                .doc = "The number of installed packages."                        },
@@ -87,10 +89,6 @@ static const struct argp_option options[] = {
   { .name = "statio",       .key = 'S', .arg = "sda",  .doc = "Read and written MBs to the drive so far."                },
 
 
-#if WITH_SMARTEMP == 1
-  { .name = "drivetemp",    .key = DRIVETEMP,          .doc = "Read the drive temperature from S.M.A.R.T"                },
-#endif /* WITH_SMARTEMP */
-
 #if WITH_WEATHER == 1
   { .name = "weather",      .key = 'q',                .doc = "The temperature outside."                                 },
 #endif /* WITH_WEATHER */
@@ -117,11 +115,6 @@ static const struct argp_option options[] = {
   { .name = "iplink",       .key = 'e', .arg = "eth0", .doc = "The NIC link speed (useful for wireless/wifi)."           },
   { .name = "nicinfo",      .key = 'G', .arg = "eth0", .doc = "The NIC vendor and model."                                },
   { .name = "wifiname",     .key = 'h', .arg = "eth0", .doc = "The name of currently connected wireless/wifi network."   },
-
-#if WITH_DRIVETEMP == 1
-  { .name = "drivetemp",    .key = DRIVETEMP,          .doc = "Read the drive temperature from S.M.A.R.T"                },
-#endif /* WITH_DRIVETEMP */
-
 #endif /* __linux__ */
 
 #if defined(__FreeBSD__) || defined(__OpenBSD__)
@@ -227,10 +220,7 @@ parse_opt(int key, char *arg, struct argp_state *state) {
 
     NEW_ARG_LABEL('S', char statio[VLA], statio, FMT_STATIO, STATIO_STR);
 
-
-#if WITH_SMARTEMP == 1
     NEW_LABEL(DRIVETEMP, char drivetemp[VLA], drivetemp, FMT_TEMP);
-#endif /* WITH_SMARTEMP */
 
 
 #if WITH_WEATHER == 1
@@ -280,11 +270,6 @@ parse_opt(int key, char *arg, struct argp_state *state) {
     NEW_ARG_LABEL('G', char nic_info[VLA], nic_info, FMT_KERN);
 
     NEW_NET_LABEL('e', char link_speed[VLA], link_speed, 7, FMT_KERN);
-
-#if WITH_DRIVETEMP == 1
-    NEW_LABEL(DRIVETEMP, char drivetemp[VLA], drivetemp, FMT_TEMP);
-#endif /* WITH_DRIVETEMP */
-
 #endif /* __linux__ */
 
 

@@ -33,20 +33,11 @@
 
 #include <sys/sysinfo.h>
 
-#if WITH_DRIVETEMP == 1
-#include <ctype.h>
-#include <curl/curl.h>
-#endif /* WITH_DRIVETEMP */
-
 #if defined(HAVE_SENSORS_SENSORS_H)
 #include <sensors/sensors.h>
 #endif /* HAVE_SENSORS_SENSORS_H */
 
 #include "include/headers.h"
-
-#if WITH_DRIVETEMP == 1
-static size_t read_temp_data_cb(char *, size_t size, size_t nmemb, char *);
-#endif /* WITH_DRIVETEMP */
 
 void 
 get_ram(char *str1, uint8_t num) {
@@ -90,7 +81,7 @@ get_ram(char *str1, uint8_t num) {
 
 void
 get_ssd_model(char *str1, char *str2) {
-  FILE *fp;
+  FILE *fp = NULL;
   char model[VLA];
   FILL_ARR(model, "%s%s%s", "/sys/block/", str2, "/device/model");
 
@@ -379,81 +370,3 @@ get_battery(char *str1) {
   FILL_UINT_ARR(str1,
     ((0 != total) ? ((used * 100) / total) : 0));
 }
-
-
-#if WITH_DRIVETEMP == 1
-/*
- * The data that we parse:
- * |/dev/sda|Corsair Force GT|24|C| */
-static size_t
-read_temp_data_cb(char *data, size_t size, size_t nmemb, char *str1) {
-  static uint8_t one_run = 0, cols = 0;
-  char *ptr = data;
-  size_t sz = size * nmemb, x = 0;
-
-  if (0 == one_run) {
-    for (; *ptr; ptr++, x++) {
-      if ((x+4) < sz) {
-
-        if ('|' == *ptr) {
-          ++cols;
-          if (('C' == *(ptr+3) || 'C' == *(ptr+4)) && 3 == cols) {
-            if (0 != (isdigit((unsigned char) *(ptr+1)))) {
-              *str1++ = *(ptr+1);
-              if (0 != (isdigit((unsigned char) *(ptr+2)))) {
-                *str1++ = *(ptr+2);
-              }
-            }
-            *str1 = '\0';
-            break;
-          }
-        }
-
-      }
-    }
-
-    one_run = 1;
-    if ('\0' != *str1) {
-      *str1++ = '\0';
-    }
-  }
-
-  return sz;
-}
-
-
-/* Most of the time it takes 32 bytes to complete,
- * except sometimes the connection gets terminated
- * when only 31 bytes was received, so we dont check
- * the curl_easy_perform return value for that purpose.
- * Due to that, the call back function is called twice to
- * finish the left 1 byte, but we already have parsed the 
- * drive temperature.
-*/
-void 
-get_drivetemp(char *str1) {
-  const char *da_url = "http://127.0.0.1:" DRIVE_PORT;
-  CURL *curl = NULL;
-
-  FILL_STR_ARR(1, str1, "0");
-  curl_global_init(CURL_GLOBAL_ALL);
-
-  if (NULL == (curl = curl_easy_init())) {
-    goto error;
-  }
-
-  curl_easy_setopt(curl, CURLOPT_URL, da_url);
-  curl_easy_setopt(curl, CURLOPT_TIMEOUT, 5L);
-  curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, read_temp_data_cb);
-  curl_easy_setopt(curl, CURLOPT_WRITEDATA, str1);
-
-  curl_easy_perform(curl);
-
-error:
-  if (NULL != curl) {
-    curl_easy_cleanup(curl);
-  }
-  curl_global_cleanup();
-  return;
-}
-#endif /* WITH_DRIVETEMP */

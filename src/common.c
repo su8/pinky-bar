@@ -472,23 +472,3 @@ split_n_index(char *str1) {
   }
   *str1 = '\0';
 }
-
-
-#if WITH_SMARTEMP == 1
-void
-get_drivetemp(char *str1) {
-  FILE *fp = NULL;
-  uint_fast16_t temp = 0;
-  const char *pinkytemp = "/tmp/pinkytemp";
-
-  FILL_STR_ARR(1, str1, "0");
-
-  if (NULL == (fp = fopen(pinkytemp, "r"))) {
-    return;
-  }
-  CHECK_FSCANF(fp, SCAN_UFINT, &temp);
-  CLOSE_X(fp);
-
-  FILL_ARR(str1, UFINT, temp);
-}
-#endif /* WITH_SMARTEMP */

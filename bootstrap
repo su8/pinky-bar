@@ -148,7 +148,7 @@ _gen_files() {
   main_makefile=('
     SUBDIRS = src
 
-    dist_man_MANS = extra/pinkybar.1
+    dist_man_MANS = doc/pinkybar.1
 
     # To satisfy make dist
     EXTRA_DIST =      \
@@ -157,7 +157,7 @@ _gen_files() {
       README.md       \
       .gitignore      \
       m4              \
-      xbm_icons       \
+      doc             \
       extra
 
 # uses tabs
@@ -175,6 +175,7 @@ ncurses:
     'options.c'
     'net.c'
     'weather.c'
+    'smart.c'
 
     'prototypes/cpu.h'
     'prototypes/common.h'
@@ -183,6 +184,7 @@ ncurses:
     'prototypes/functions.h'
     'prototypes/options.h'
     'prototypes/weather.h'
+    'prototypes/smart.h'
 
     'include/headers.h'
     'include/options_constants.h'

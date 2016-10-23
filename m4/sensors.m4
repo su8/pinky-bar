@@ -23,20 +23,12 @@ dnl the variable 'SENSORS_LIBS' if the user enabled
 dnl the --with-sensors switch
 AC_DEFUN([TEST_SENSORS],[
   SENSORS_LIBS=""
-  WITH_SMARTEMP=0
 
   AC_ARG_WITH([sensors],
     AS_HELP_STRING([--with-sensors],
       [lm sensors linker flag to obtain voltage, mobo temp and fans]),
     [],
     [with_sensors=no]
-  )
-
-  AC_ARG_WITH([smartemp],
-    AS_HELP_STRING([--with-smartemp],
-      [Read the drive temperature from S.M.A.R.T]),
-    [],
-    [with_smartemp=no]
   )
 
   ifdef([LINUKS],[
@@ -98,13 +90,7 @@ AC_DEFUN([TEST_SENSORS],[
   ],[
   ])
 
-  AS_IF([test "x$with_smartemp" = "xyes"], [
-    WITH_SMARTEMP=1
-  ])
-
-
   AC_SUBST(SENSORS_LIBS)
-  AC_DEFINE_UNQUOTED([WITH_SMARTEMP],[$WITH_SMARTEMP],[Read the drive temperature from S.M.A.R.T])
 
   ifdef([LINUKS],[
     AS_IF([test "x$with_sensors" = "xyes"], [
