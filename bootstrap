@@ -179,7 +179,7 @@ ncurses:
     'weather.c'
     'smart.c'
     'perl.c'
-    'python2.c'
+    'python.c'
 
     'prototypes/cpu.h'
     'prototypes/common.h'
@@ -190,7 +190,7 @@ ncurses:
     'prototypes/weather.h'
     'prototypes/smart.h'
     'prototypes/perl.h'
-    'prototypes/python2.h'
+    'prototypes/python.h'
 
     'include/headers.h'
     'include/options_constants.h'

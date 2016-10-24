@@ -26,9 +26,13 @@
 
 #endif /* WITH_PYTHON */
 
-#include "prototypes/python2.h"
+#include "prototypes/python3.h"
 
 #if WITH_PYTHON == 1
+/*
+ * Huge thanks to:
+ *  https://wiki.blender.org/index.php/Dev:2.5/Source/Python/API/Py3.1_Migration
+*/
 void
 get_python(char *str1) {
   PyObject *pName = NULL, *pModule = NULL;
@@ -41,10 +45,11 @@ get_python(char *str1) {
   if (NULL == pathz) {
     return;
   }
-  snprintf(pathz, 499, "%s:%s", Py_GetPath(), UZER_PAHT);
+  snprintf(pathz, 499, "%s:%s", (char *)Py_GetPath(), UZER_PAHT);
 
   Py_Initialize();
-  PySys_SetPath(pathz);
+  Py_SetPath((wchar_t *)pathz);
+  py_SetPythonHome((wchar_t *)pathz)
 
   pName = PyString_FromString((char *)UZER_ZCRIPT2);
   if (NULL == pName) {
@@ -64,8 +69,7 @@ get_python(char *str1) {
 
   pValue = PyObject_CallObject(pFunc, NULL);
   if (NULL != pValue) {
-    FILL_STR_ARR(1, str1,
-      PyString_Check(pValue) ? PyString_AsString(pValue) : "0");
+    FILL_STR_ARR(1, str1, PyUnicode_AsUTF8(pValue));
   }
 
 error:

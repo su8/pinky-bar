@@ -29,7 +29,7 @@
 #include "prototypes/weather.h"
 #include "prototypes/smart.h"
 #include "prototypes/perl.h"
-#include "prototypes/python2.h"
+#include "prototypes/python.h"
 
 /* Because we ran out of a-z A-Z options,
  * only long ones will be supported from now on.

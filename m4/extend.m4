@@ -26,6 +26,7 @@ AC_DEFUN([TEST_PERL],[
   PERL_CF=""
   WITH_PERL=0
   UZER_ZCRIPT=""
+  PYTHC=""
 
   AC_ARG_WITH([perl],
     AS_HELP_STRING([--with-perl],
@@ -67,34 +68,59 @@ dnl --with-python switch
 AC_DEFUN([TEST_PYTHON],[
   PYTHON_LZ=""
   PYTHON_CF=""
+  WITH_PYTHON2=0
   WITH_PYTHON=0
   UZER_ZCRIPT2="none"
   UZER_PAHT="none"
 
-  AC_ARG_WITH([python],
-    AS_HELP_STRING([--with-python],
+  AC_ARG_WITH([python2],
+    AS_HELP_STRING([--with-python2],
       [Extend the program via python scripts]),
     [],
-    [with_python=no]
+    [with_python2=no]
   )
 
-  AS_IF([test "x$with_python" = "xyes"], [
+  AC_ARG_WITH([python3],
+    AS_HELP_STRING([--with-python3],
+      [Extend the program via python scripts]),
+    [],
+    [with_python3=no]
+  )
+
+  AC_ARG_VAR(python_script, [user python script])
+  if [[ ! -z "${python_script}" ]]
+  then
+    dnl  ... PYTHONPATH ...
+    dnl modulez_paht=`python2 -c 'import sys;print(":".join([x for x in sys.path]))'`
+
+    just_script="${python_script##*/}"
+    UZER_ZCRIPT2=\""${just_script%.*}"\"
+    UZER_PAHT=\""${python_script%/*}"\"
+  fi
+
+  AC_ARG_VAR(python3_config, [python config])
+  if [[ ! -z "${python3_config}" ]]
+  then
+    PYTHC="${python3_config}"
+  fi
+
+  AS_IF([test "x$with_python2" = "xyes"], [
     CHECK_CFLAGZ([-O0])
     AC_PATH_PROG(PYFON, python-config-2.7)
 
     PYTHON_LZ=`$PYFON --ldflags`
     PYTHON_CF=`$PYFON --cflags`
 
-    AC_ARG_VAR(python_script, [user python script])
-    if [[ ! -z "${python_script}" ]]
-    then
-      dnl  ... PYTHONPATH ...
-      dnl modulez_paht=`python2 -c 'import sys;print(":".join([x for x in sys.path]))'`
+    WITH_PYTHON=1
+    WITH_PYTHON2=1
+  ])
 
-      just_script="${python_script##*/}"
-      UZER_ZCRIPT2=\""${just_script%.*}"\"
-      UZER_PAHT=\""${python_script%/*}"\"
-    fi
+  AS_IF([test "x$with_python3" = "xyes"], [
+    CHECK_CFLAGZ([-O0])
+    AC_PATH_PROG(PYFON, $PYTHC)
+
+    PYTHON_LZ=`$PYFON --ldflags`
+    PYTHON_CF=`$PYFON --cflags`
 
     WITH_PYTHON=1
   ])
@@ -102,6 +128,7 @@ AC_DEFUN([TEST_PYTHON],[
   AC_SUBST(PYTHON_LZ)
   AC_SUBST(PYTHON_CF)
   AC_DEFINE_UNQUOTED([WITH_PYTHON],[$WITH_PYTHON],[Extend the program via python scripts])
+  AC_DEFINE_UNQUOTED([WITH_PYTHON2],[$WITH_PYTHON2],[Extend the program via python scripts])
   AC_DEFINE_UNQUOTED([UZER_ZCRIPT2],[$UZER_ZCRIPT2],[Extend the program via python scripts])
   AC_DEFINE_UNQUOTED([UZER_PAHT],[$UZER_PAHT],[Extend the program via python scripts])
 

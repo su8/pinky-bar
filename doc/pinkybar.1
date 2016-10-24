@@ -652,11 +652,26 @@ The location where your perl script resides, must be combined
 \f[B]\[en]with\-perl\f[]
 T}
 T{
-\[en]with\-python
+\[en]with\-python2
 T}@T{
-\[en]without\-python
+\[en]without\-python2
 T}@T{
-Extend pinkybar with your own crafted scripts written in python
+Extend pinkybar with your own crafted scripts written in python2
+T}
+T{
+\[en]with\-python3
+T}@T{
+\[en]without\-python3
+T}@T{
+Extend pinkybar with your own crafted scripts written in python3
+T}
+T{
+python3_config=python\-config\-3.4
+T}@T{
+T}@T{
+Since python3 offers variety of versions, you need to specify the
+executable config file, so we can determine the correct CFLAGS and
+LDFLAGS for this version.
 T}
 T{
 python_script=/tmp/pinky.py
@@ -753,7 +768,7 @@ compiled with/without:
 .IP
 .nf
 \f[C]
-\-\-without\-alsa\ \-\-without\-x11\ \-\-without\-mpd\ \-\-with\-colours\ \-\-with\-net\ \-\-with\-pci\ \-\-without\-dvd\ \-\-without\-sensors\ \-\-without\-ncurses\ \-\-without\-weather\ \-\-without\-drivetemp\ \-\-without\-smartemp\ \-\-without\-perl\ \-\-without\-python
+\-\-without\-alsa\ \-\-without\-x11\ \-\-without\-mpd\ \-\-with\-colours\ \-\-with\-net\ \-\-with\-pci\ \-\-without\-dvd\ \-\-without\-sensors\ \-\-without\-ncurses\ \-\-without\-weather\ \-\-without\-drivetemp\ \-\-without\-smartemp\ \-\-without\-perl\ \-\-without\-python2\ \-\-without\-python3
 \f[]
 .fi
 .PP
@@ -1213,13 +1228,40 @@ To extend pinkybar with your own crafted perl or python
 script/program/chewbacca:
 .IP \[bu] 2
 perl
+.PP
+or
 .IP \[bu] 2
 python == 2.7
+.PP
+or
+.IP \[bu] 2
+python >= 3.3 (requires \[lq]hacks\[rq] which are not newbie friendly)
 .PP
 Have a look at extra/scripts/pinky{.py,.pl}, they serve as examples how
 to write the most basic scripts in order to extend pinkybar in python
 and/or perl.
 You can use both languages simultaneously.
+.PP
+python3 wants \f[C]PYTHONPATH\f[] to be exported, you should copy it to
+your shell configuration file, so it's set right after you boot your
+toaster:
+.IP
+.nf
+\f[C]
+python3\ \-c\ \[aq]import\ sys;print(":".join([x\ for\ x\ in\ sys.path]))\[aq]
+export\ PYTHONPATH=...\ :/including/the/path/to/your/script
+
+#\ On\ other\ hand\ to\ compile\ the\ program\ with\ python2,\ you\ should\ `unset`
+#\ this\ environment\ variable
+
+#~/pypi\ >\ python3\ \-c\ \[aq]import\ sys;print(":".join([x\ for\ x\ in\ sys.path]))\[aq]\ \ \ \ \ \ \ \ \ \ \ \ \ 
+#:/usr/lib64/python34.zip:/usr/lib64/python3.4:/usr/lib64/python3.4/plat\-linux:/usr/lib64/python3.4/lib\-dynload:/usr/lib64/python3.4/site\-packages
+
+#~/pypi\ >\ export\ PYTHONPATH=/usr/lib64/python34.zip:/usr/lib64/python3.4:/usr/lib64/python3.4/plat\-linux:/usr/lib64/python3.4/lib\-dynload:/usr/lib64/python3.4/site\-packages:/home/frost/pypi
+
+#\ ./configure\ ...\ \-\-with\-python2\ python_script=\[aq]/home/frost/pypi/multi.py\[aq]
+\f[]
+.fi
 .PP
 To get the sound volume level:
 .IP \[bu] 2

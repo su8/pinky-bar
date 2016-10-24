@@ -144,8 +144,10 @@ It's up to you to decide which features suit you best.
 | --with-ncurses | --without-ncurses   | Output the data to the terminal using the ncurses library, can be colorized                |
 | --with-perl    | --without-perl      | Extend pinkybar with your own crafted scripts written in perl                              |
 | perl\_script=/tmp/pinky.pl   |       | The location where your perl script resides, must be combined **--with-perl**              |
-| --with-python  | --without-python    | Extend pinkybar with your own crafted scripts written in python                            |
-| python\_script=/tmp/pinky.py   |       | The location where your python script resides, must be combined **--with-python**          |
+| --with-python2  | --without-python2  | Extend pinkybar with your own crafted scripts written in python2                           |
+| --with-python3  | --without-python3  | Extend pinkybar with your own crafted scripts written in python3                           |
+| python3\_config=python-config-3.4   |     | Since python3 offers variety of versions, you need to specify the executable config file, so we can determine the correct CFLAGS and LDFLAGS for this version. |
+| python\_script=/tmp/pinky.py   |     | The location where your python script resides, must be combined **--with-python**          |
 | --with-weather | --without-weather   | The temperature outside  (some details must be provided)                                   |
 | api\_town='London,uk'              | | Town and country code to use for temperature monitoring                                    |
 | api\_key='123458976'               | | API key obtained after registering yourself in the weather website                         |
@@ -162,7 +164,7 @@ It's up to you to decide which features suit you best.
 By default, if **no** options are passed, the program will be compiled with/without:
 
 ```bash
---without-alsa --without-x11 --without-mpd --with-colours --with-net --with-pci --without-dvd --without-sensors --without-ncurses --without-weather --without-drivetemp --without-smartemp --without-perl --without-python
+--without-alsa --without-x11 --without-mpd --with-colours --with-net --with-pci --without-dvd --without-sensors --without-ncurses --without-weather --without-drivetemp --without-smartemp --without-perl --without-python2 --without-python3
 ```
 
 Affects only FreeBSD users with laptops, **--without-apm** will compile the program with acpi support to obtain the current battery life.
@@ -487,9 +489,33 @@ Copy the code from extra/scripts/drive-temperature.sh or `exec` it from **xinitr
 To extend pinkybar with your own crafted perl or python script/program/chewbacca:
 
 * perl
+
+or
+
 * python == 2.7
 
+or
+
+* python >= 3.3 (requires "hacks" which are not newbie friendly)
+
 Have a look at extra/scripts/pinky{.py,.pl}, they serve as examples how to write the most basic scripts in order to extend pinkybar in python and/or perl. You can use both languages simultaneously.
+
+python3 wants `PYTHONPATH` to be exported, you should copy it to your shell configuration file, so it's set right after you boot your toaster:
+
+```bash
+python3 -c 'import sys;print(":".join([x for x in sys.path]))'
+export PYTHONPATH=... :/including/the/path/to/your/script
+
+# On other hand to compile the program with python2, you should `unset`
+# this environment variable
+
+#~/pypi > python3 -c 'import sys;print(":".join([x for x in sys.path]))'             
+#:/usr/lib64/python34.zip:/usr/lib64/python3.4:/usr/lib64/python3.4/plat-linux:/usr/lib64/python3.4/lib-dynload:/usr/lib64/python3.4/site-packages
+
+#~/pypi > export PYTHONPATH=/usr/lib64/python34.zip:/usr/lib64/python3.4:/usr/lib64/python3.4/plat-linux:/usr/lib64/python3.4/lib-dynload:/usr/lib64/python3.4/site-packages:/home/frost/pypi
+
+# ./configure ... --with-python2 python_script='/home/frost/pypi/multi.py'
+```
 
 To get the sound volume level:
 
