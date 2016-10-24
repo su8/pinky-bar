@@ -13,7 +13,7 @@ HOMEPAGE="https://gitlab.com/void0/pinky-bar"
 
 LICENSE="GPL-2"
 SLOT="0"
-IUSE="x11 alsa +net libnl +pci dvd sensors ncurses +colours weather mpd drivetemp smartemp perl"
+IUSE="x11 alsa +net libnl +pci dvd sensors ncurses +colours weather mpd drivetemp smartemp perl python2"
 
 DEPEND="
 	sys-devel/m4
@@ -34,6 +34,7 @@ RDEPEND="
 	mpd? ( media-sound/mpd media-libs/libmpdclient )
 	drivetemp? ( app-admin/hddtemp )
 	smartemp? ( sys-apps/smartmontools )
+	python2? ( dev-lang/python:2.7= )
 "
 REQUIRED_USE="
 	x11? ( !ncurses )
@@ -49,6 +50,9 @@ pkg_setup() {
 		einfo 'To specify other country and town youll have to supply them as variable.'
 		einfo 'Here is how: # TWN="London,uk" USE="weather" emerge -a ...'
 	fi
+	# if use python2
+	# then
+	# fi
 }
 
 src_prepare() {
@@ -77,7 +81,9 @@ src_configure() {
 		$(use_with drivetemp) \
 		$(use_with smartemp) \
 		$(use_with perl) \
+		$(use_with python2) \
 		perl_script='/usr/share/pinkysc/pinky.pl' \
+		python_script='/usr/share/pinkysc/pinky.py' \
 		api_town="${TWN:-London,uk}" \
 		api_key='28459ae16e4b3a7e5628ff21f4907b6f' \
 		icons='/usr/share/icons/xbm_icons'
@@ -94,10 +100,10 @@ src_install() {
 		doins "${S}"/extra/xbm_icons/*
 	fi
 
-	if use perl
+	if use perl || use python2
 	then
 		insinto /usr/share/pinkysc
-		doins "${S}"/extra/scripts/pinky.pl
+		doins "${S}"/extra/scripts/pinky.{py,pl}
 	fi
 
 	emake DESTDIR="${D}" install
@@ -109,6 +115,9 @@ pkg_postinst() {
 
 	use perl && \
 		einfo 'The perl script resides in /usr/share/pinkysc/pinky.pl'
+
+	use python2 && \
+		einfo 'The python2 script resides in /usr/share/pinkysc/pinky.py'
 
 	einfo 'Please read the program man page'
 }

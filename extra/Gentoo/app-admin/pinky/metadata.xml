@@ -23,5 +23,6 @@
 		<flag name="drivetemp">Read the drive temperature from S.M.A.R.T</flag>
 		<flag name="smartemp">Read the drive temperature from S.M.A.R.T</flag>
 		<flag name="perl">Extend pinkybar with your own crafted scripts written in perl, stored in /usr/share/pinkysc/pinky.pl</flag>
+		<flag name="python2">Extend pinkybar with your own crafted scripts written in python, stored in /usr/share/pinkysc/pinky.py</flag>
 	</use>
 </pkgmetadata>
