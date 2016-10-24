@@ -33,9 +33,18 @@ void
 get_python(char *str1) {
   PyObject *pName = NULL, *pModule = NULL;
   PyObject *pFunc = NULL, *pValue = NULL;
+  char *pathz = NULL;
+
+  FILL_STR_ARR(1, str1, "0");
+
+  pathz = (char *)malloc(500);
+  if (NULL == pathz) {
+    return;
+  }
+  snprintf(pathz, 499, "%s:%s", Py_GetPath(), UZER_PAHT);
 
   Py_Initialize();
-  PySys_SetPath((char *)UZER_PAHT);
+  PySys_SetPath(pathz);
 
   pName = PyString_FromString((char *)UZER_ZCRIPT2);
   if (NULL == pName) {
@@ -60,6 +69,9 @@ get_python(char *str1) {
   }
 
 error:
+  if (NULL != pathz) {
+    free(pathz);
+  }
   if (NULL != pValue) {
     Py_XDECREF(pValue);
   }

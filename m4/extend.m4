@@ -68,8 +68,8 @@ AC_DEFUN([TEST_PYTHON],[
   PYTHON_LZ=""
   PYTHON_CF=""
   WITH_PYTHON=0
-  UZER_ZCRIPT2=""
-  UZER_PAHT=""
+  UZER_ZCRIPT2="none"
+  UZER_PAHT="none"
 
   AC_ARG_WITH([python],
     AS_HELP_STRING([--with-python],
@@ -89,11 +89,11 @@ AC_DEFUN([TEST_PYTHON],[
     if [[ ! -z "${python_script}" ]]
     then
       dnl  ... PYTHONPATH ...
-      modulez_paht=`python2 -c 'import sys;print(":".join([x for x in sys.path]))'`
+      dnl modulez_paht=`python2 -c 'import sys;print(":".join([x for x in sys.path]))'`
 
       just_script="${python_script##*/}"
       UZER_ZCRIPT2=\""${just_script%.*}"\"
-      UZER_PAHT=\""${python_script%/*}${modulez_paht}"\"
+      UZER_PAHT=\""${python_script%/*}"\"
     fi
 
     WITH_PYTHON=1
