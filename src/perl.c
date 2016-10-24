@@ -36,9 +36,13 @@ static void xs_init (pTHX);
 static void call_user_subroutine(char *);
 EXTERN_C void boot_DynaLoader (pTHX_ CV* cv);
 
+/* Update with:
+ *  perl -MExtUtils::Embed -e xsinit -- -o sample.c
+*/
 EXTERN_C void
 xs_init(pTHX) {
-  char *file = __FILE__;
+  static const char file[] = __FILE__;
+  dXSUB_SYS;
   /* DynaLoader is a special case */
   newXS("DynaLoader::boot_DynaLoader", boot_DynaLoader, file);
   /* newXS("Socket::bootstrap", boot_Socket, file); */
@@ -46,41 +50,46 @@ xs_init(pTHX) {
 
 static void
 call_user_subroutine(char *str1) {
-   SV *sva = NULL;
-   STRLEN len = 0;
+  SV *sva = NULL;
+  STRLEN len = 0;
 
-   dSP;                            /* initialize stack pointer      */
-   ENTER;                          /* everything created after here */
-   SAVETMPS;                       /* ...is a temporary variable.   */
+  dSP;                            /* initialize stack pointer      */
+  ENTER;                          /* everything created after here */
+  SAVETMPS;                       /* ...is a temporary variable.   */
 
-   PUSHMARK(SP);                   /* remember the stack pointer    */
-   PUTBACK;                        /* make local stack pointer global */
+  PUSHMARK(SP);                   /* remember the stack pointer    */
+  PUTBACK;                        /* make local stack pointer global */
 
-   call_pv("uzer_func", G_SCALAR); /* call the function             */
-   SPAGAIN;                        /* refresh stack pointer         */
-                                 
+  call_pv("uzer_func", G_SCALAR); /* call the function             */
+  SPAGAIN;                        /* refresh stack pointer         */
 
-   sva = POPs;                     /* pop the return value from stack */
-   if (NULL != sva) {
-    FILL_STR_ARR(1, str1, (char *)SvPV(sva, len));
-   }
+  sva = POPs;                     /* pop the return value from stack */
+  if (NULL != sva) {
+    FILL_STR_ARR(1, str1, (char *)SvPV(sva, len)); /* SvPVutf8 needs some testing */
+  }
 
-   PUTBACK;
-   FREETMPS;                       /* free that return value        */
-   LEAVE;                          /* ...and the XPUSHed "mortal" args.*/
+  PUTBACK;
+  FREETMPS;                       /* free that return value        */
+  LEAVE;                          /* ...and the XPUSHed "mortal" args.*/
 }
 
 
+/* Docs:
+ *  http://perldoc.perl.org/perlembed.html
+ *  http://perldoc.perl.org/perlcall.html
+ *  http://docstore.mik.ua/orelly/perl/prog3/ch21_04.htm
+ */
 void 
 get_perl(char *str1) {
-  const char *my_argv[] = { "", UZER_ZCRIPT };
+  /* The 4th arg to perl_parse is not const */
+  char *my_argv[] = { "", UZER_ZCRIPT };
   static PerlInterpreter *my_perl = NULL;
 
   PERL_SYS_INIT3((int *)NULL, (char ***)NULL, (char ***)NULL);
 
   my_perl = perl_alloc();
   if (NULL == (my_perl)) {
-    return -1;
+    return;
   }
   *str1 = '\0';
 
