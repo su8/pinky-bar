@@ -147,7 +147,7 @@ It's up to you to decide which features suit you best.
 | --with-python2  | --without-python2  | Extend pinkybar with your own crafted scripts written in python2                           |
 | --with-python3  | --without-python3  | Extend pinkybar with your own crafted scripts written in python3                           |
 | python3\_config=python-config-3.4   |     | Since python3 offers variety of versions, you need to specify the executable config file, so we can determine the correct CFLAGS and LDFLAGS for this version. |
-| python\_script=/tmp/pinky.py   |     | The location where your python script resides, must be combined **--with-python**          |
+| python\_script=/tmp/pinky.py   |     | The location where your python script resides, must be combined either **--with-python2** or **--with-python3**          |
 | --with-weather | --without-weather   | The temperature outside  (some details must be provided)                                   |
 | api\_town='London,uk'              | | Town and country code to use for temperature monitoring                                    |
 | api\_key='123458976'               | | API key obtained after registering yourself in the weather website                         |
