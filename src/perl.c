@@ -1,5 +1,5 @@
 /*
-   10/07/2016
+   10/24/2016
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -85,13 +85,13 @@ get_perl(char *str1) {
   char *my_argv[] = { "", UZER_ZCRIPT };
   static PerlInterpreter *my_perl = NULL;
 
+  FILL_STR_ARR(1, str1, "0");
   PERL_SYS_INIT3((int *)NULL, (char ***)NULL, (char ***)NULL);
 
   my_perl = perl_alloc();
   if (NULL == (my_perl)) {
     return;
   }
-  *str1 = '\0';
 
   perl_construct(my_perl);
   perl_parse(my_perl, xs_init, 2, my_argv, (char **)NULL);
