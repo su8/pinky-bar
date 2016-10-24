@@ -56,3 +56,53 @@ AC_DEFUN([TEST_PERL],[
   AC_DEFINE_UNQUOTED([UZER_ZCRIPT],[$UZER_ZCRIPT],[Extend the program via perl scripts])
 
 ])
+
+
+dnl TEST_python() function in configure.ac
+dnl
+dnl Substitute python related linker and
+dnl cflags to the variables PYTHON_CF and
+dnl PYTHON_LZ if the user enabled the
+dnl --with-python switch
+AC_DEFUN([TEST_PYTHON],[
+  PYTHON_LZ=""
+  PYTHON_CF=""
+  WITH_PYTHON=0
+  UZER_ZCRIPT2=""
+  UZER_PAHT=""
+
+  AC_ARG_WITH([python],
+    AS_HELP_STRING([--with-python],
+      [Extend the program via python scripts]),
+    [],
+    [with_python=no]
+  )
+
+  AS_IF([test "x$with_python" = "xyes"], [
+    CHECK_CFLAGZ([-O0])
+    AC_PATH_PROG(PYFON, python-config-2.7)
+
+    PYTHON_LZ=`$PYFON --ldflags`
+    PYTHON_CF=`$PYFON --cflags`
+
+    AC_ARG_VAR(python_script, [user python script])
+    if [[ ! -z "${python_script}" ]]
+    then
+      dnl  ... PYTHONPATH ...
+      modulez_paht=`python2 -c 'import sys;print(":".join([x for x in sys.path]))'`
+
+      just_script="${python_script##*/}"
+      UZER_ZCRIPT2=\""${just_script%.*}"\"
+      UZER_PAHT=\""${python_script%/*}${modulez_paht}"\"
+    fi
+
+    WITH_PYTHON=1
+  ])
+
+  AC_SUBST(PYTHON_LZ)
+  AC_SUBST(PYTHON_CF)
+  AC_DEFINE_UNQUOTED([WITH_PYTHON],[$WITH_PYTHON],[Extend the program via python scripts])
+  AC_DEFINE_UNQUOTED([UZER_ZCRIPT2],[$UZER_ZCRIPT2],[Extend the program via python scripts])
+  AC_DEFINE_UNQUOTED([UZER_PAHT],[$UZER_PAHT],[Extend the program via python scripts])
+
+])

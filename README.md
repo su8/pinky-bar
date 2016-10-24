@@ -19,7 +19,7 @@ Please note that the program won't detect fans connected via molex connetor(s) o
 
 The program is smart enough to detect whether some of your fan(s) blades are spinning, or the particular fan have been removed. Hold down some of your fan blades and you'll see that the program won't include this fan and it's RPM, release the blades and you'll see the fan and it's RPM in the statusbar. Try simulating real fan hardware failure by holding down all system fan blades and watch what the program will show you, just try not to slice your cheesy fingers open in the process.
 
-If any of the 50+ options doesn't satisfy you, you can extend pinky-bar with your own crafted perl script.
+If any of the 50+ options doesn't satisfy you, you can extend pinky-bar with your own crafted perl/python script.
 
 If you compile your kernel from source code make sure to include your cpu and motherboard sensors as **modules** and not inlined.
 
@@ -73,6 +73,7 @@ The order of supplied options will dictate how, where and what system informatio
 | -u           | --kernarch  | The machine architecture                                           |
 | -k           | --kernel    | Combined kernel name and version                                   |
 |              | --perl      | Extend pinkybar with your scripts written in perl, learn more from the Opt-in section.     |
+|              | --python    | Extend pinkybar with your scripts written in python, learn more from the Opt-in section.     |
 | -q           | --weather   | Show the temperature outside (some details must be provided)       |
 | -U           | --uptime    | The system uptime                                                  |
 | -w           | --loadavg   | The system average load for past 1, 5 and 15 minutes               |
@@ -143,6 +144,8 @@ It's up to you to decide which features suit you best.
 | --with-ncurses | --without-ncurses   | Output the data to the terminal using the ncurses library, can be colorized                |
 | --with-perl    | --without-perl      | Extend pinkybar with your own crafted scripts written in perl                              |
 | perl\_script=/tmp/pinky.pl   |       | The location where your perl script resides, must be combined **--with-perl**              |
+| --with-python  | --without-python    | Extend pinkybar with your own crafted scripts written in python                            |
+| python\_script=/tmp/pinky.py   |       | The location where your python script resides, must be combined **--with-python**          |
 | --with-weather | --without-weather   | The temperature outside  (some details must be provided)                                   |
 | api\_town='London,uk'              | | Town and country code to use for temperature monitoring                                    |
 | api\_key='123458976'               | | API key obtained after registering yourself in the weather website                         |
@@ -159,7 +162,7 @@ It's up to you to decide which features suit you best.
 By default, if **no** options are passed, the program will be compiled with/without:
 
 ```bash
---without-alsa --without-x11 --without-mpd --with-colours --with-net --with-pci --without-dvd --without-sensors --without-ncurses --without-weather --without-drivetemp --without-smartemp --without-perl
+--without-alsa --without-x11 --without-mpd --with-colours --with-net --with-pci --without-dvd --without-sensors --without-ncurses --without-weather --without-drivetemp --without-smartemp --without-perl --without-python
 ```
 
 Affects only FreeBSD users with laptops, **--without-apm** will compile the program with acpi support to obtain the current battery life.
@@ -481,11 +484,12 @@ frost ALL=NOPASSWD:/usr/sbin/smartctl
 
 Copy the code from extra/scripts/drive-temperature.sh or `exec` it from **xinitrc** or the script used to start your DE/WM.
 
-To extend pinkybar with your own crafted perl script:
+To extend pinkybar with your own crafted perl or python script/program/chewbacca:
 
 * perl
+* python == 2.7
 
-Have a look at extra/scripts/pinky.pl, it serves as example how to write the most basic script in order to extend pinkybar.
+Have a look at extra/scripts/pinky{.py,.pl}, they serve as examples how to write the most basic scripts in order to extend pinkybar in python and/or perl. You can use both languages simultaneously.
 
 To get the sound volume level:
 

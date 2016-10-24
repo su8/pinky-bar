@@ -26,7 +26,7 @@ blades and watch what the program will show you, just try not to slice
 your cheesy fingers open in the process.
 .PP
 If any of the 50+ options doesn't satisfy you, you can extend pinky\-bar
-with your own crafted perl script.
+with your own crafted perl/python script.
 .PP
 If you compile your kernel from source code make sure to include your
 cpu and motherboard sensors as \f[B]modules\f[] and not inlined.
@@ -283,6 +283,13 @@ T}@T{
 \[en]perl
 T}@T{
 Extend pinkybar with your scripts written in perl, learn more from the
+Opt\-in section.
+T}
+T{
+T}@T{
+\[en]python
+T}@T{
+Extend pinkybar with your scripts written in python, learn more from the
 Opt\-in section.
 T}
 T{
@@ -645,6 +652,20 @@ The location where your perl script resides, must be combined
 \f[B]\[en]with\-perl\f[]
 T}
 T{
+\[en]with\-python
+T}@T{
+\[en]without\-python
+T}@T{
+Extend pinkybar with your own crafted scripts written in python
+T}
+T{
+python_script=/tmp/pinky.py
+T}@T{
+T}@T{
+The location where your python script resides, must be combined
+\f[B]\[en]with\-python\f[]
+T}
+T{
 \[en]with\-weather
 T}@T{
 \[en]without\-weather
@@ -732,7 +753,7 @@ compiled with/without:
 .IP
 .nf
 \f[C]
-\-\-without\-alsa\ \-\-without\-x11\ \-\-without\-mpd\ \-\-with\-colours\ \-\-with\-net\ \-\-with\-pci\ \-\-without\-dvd\ \-\-without\-sensors\ \-\-without\-ncurses\ \-\-without\-weather\ \-\-without\-drivetemp\ \-\-without\-smartemp\ \-\-without\-perl
+\-\-without\-alsa\ \-\-without\-x11\ \-\-without\-mpd\ \-\-with\-colours\ \-\-with\-net\ \-\-with\-pci\ \-\-without\-dvd\ \-\-without\-sensors\ \-\-without\-ncurses\ \-\-without\-weather\ \-\-without\-drivetemp\ \-\-without\-smartemp\ \-\-without\-perl\ \-\-without\-python
 \f[]
 .fi
 .PP
@@ -1188,12 +1209,17 @@ frost\ ALL=NOPASSWD:/usr/sbin/smartctl
 Copy the code from extra/scripts/drive\-temperature.sh or \f[C]exec\f[]
 it from \f[B]xinitrc\f[] or the script used to start your DE/WM.
 .PP
-To extend pinkybar with your own crafted perl script:
+To extend pinkybar with your own crafted perl or python
+script/program/chewbacca:
 .IP \[bu] 2
 perl
+.IP \[bu] 2
+python == 2.7
 .PP
-Have a look at extra/scripts/pinky.pl, it serves as example how to write
-the most basic script in order to extend pinkybar.
+Have a look at extra/scripts/pinky{.py,.pl}, they serve as examples how
+to write the most basic scripts in order to extend pinkybar in python
+and/or perl.
+You can use both languages simultaneously.
 .PP
 To get the sound volume level:
 .IP \[bu] 2

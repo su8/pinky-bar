@@ -29,6 +29,7 @@
 #include "prototypes/weather.h"
 #include "prototypes/smart.h"
 #include "prototypes/perl.h"
+#include "prototypes/python2.h"
 
 /* Because we ran out of a-z A-Z options,
  * only long ones will be supported from now on.
@@ -39,6 +40,7 @@ enum {
   KERNODE,
   DRIVETEMP,
   PERLSCRIPT,
+  PYTHONSCRIPT,
   BULLSHIFT
 };
 const char *argp_program_version = PACKAGE_STRING;
@@ -93,6 +95,10 @@ static const struct argp_option options[] = {
 #if WITH_PERL == 1
   { .name = "perl",         .key = PERLSCRIPT,         .doc = "Extend the program with perl, read README."               },
 #endif /* WITH_PERL */
+
+#if WITH_PYTHON == 1
+  { .name = "python",       .key = PYTHONSCRIPT,       .doc = "Extend the program with python, read README."             },
+#endif /* WITH_PYTHON */
 
 #if WITH_WEATHER == 1
   { .name = "weather",      .key = 'q',                .doc = "The temperature outside."                                 },
@@ -231,6 +237,11 @@ parse_opt(int key, char *arg, struct argp_state *state) {
 #if WITH_PERL == 1
     NEW_LABEL(PERLSCRIPT, char perl[VLA], perl, FMT_KERN);
 #endif /* WITH_PERL */
+
+
+#if WITH_PYTHON == 1
+    NEW_LABEL(PYTHONSCRIPT, char python[VLA], python, FMT_KERN);
+#endif /* WITH_PYTHON */
 
 
 #if WITH_WEATHER == 1
