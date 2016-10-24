@@ -33,6 +33,7 @@
 #if WITH_PERL == 1
 /* EXTERN_C void boot_Socket (pTHX_ CV* cv); */
 static void xs_init (pTHX);
+static void call_user_subroutine(char *);
 EXTERN_C void boot_DynaLoader (pTHX_ CV* cv);
 
 EXTERN_C void
@@ -43,7 +44,7 @@ xs_init(pTHX) {
   /* newXS("Socket::bootstrap", boot_Socket, file); */
 }
 
-void
+static void
 call_user_subroutine(char *str1) {
    SV *sva = NULL;
    STRLEN len = 0;

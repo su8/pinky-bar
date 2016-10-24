@@ -22,7 +22,6 @@
 
 #if WITH_PERL == 1
 void get_perl(char *);
-void call_user_subroutine(char *);
 #endif /* WITH_PERL */
 
 #endif /* PERL_H_ */

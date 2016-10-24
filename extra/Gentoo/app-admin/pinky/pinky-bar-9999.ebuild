@@ -13,7 +13,7 @@ HOMEPAGE="https://gitlab.com/void0/pinky-bar"
 
 LICENSE="GPL-2"
 SLOT="0"
-IUSE="x11 alsa +net libnl +pci dvd sensors ncurses +colours weather mpd drivetemp smartemp"
+IUSE="x11 alsa +net libnl +pci dvd sensors ncurses +colours weather mpd drivetemp smartemp perl"
 
 DEPEND="
 	sys-devel/m4
@@ -76,9 +76,11 @@ src_configure() {
 		$(use_with mpd) \
 		$(use_with drivetemp) \
 		$(use_with smartemp) \
+		$(use_with perl) \
+		perl_script='/usr/share/pinkysc/pinky.pl' \
 		api_town="${TWN:-London,uk}" \
 		api_key='28459ae16e4b3a7e5628ff21f4907b6f' \
-		icons=/usr/share/icons/xbm_icons
+		icons='/usr/share/icons/xbm_icons'
 }
 
 src_compile() {
@@ -89,7 +91,13 @@ src_install() {
 	if use colours && ! use x11 && ! use ncurses
 	then
 		insinto /usr/share/icons/xbm_icons
-		doins "${S}"/xbm_icons/*
+		doins "${S}"/extra/xbm_icons/*
+	fi
+
+	if use perl
+	then
+		insinto /usr/share/pinkysc
+		doins "${S}"/extra/scripts/pinky.pl
 	fi
 
 	emake DESTDIR="${D}" install
@@ -98,6 +106,9 @@ src_install() {
 pkg_postinst() {
 	use ncurses && \
 		einfo 'You can combine the output from this program with pinky-curses'
+
+	use perl && \
+		einfo 'The perl script resides in /usr/share/pinkysc/pinky.pl'
 
 	einfo 'Please read the program man page'
 }

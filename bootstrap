@@ -205,7 +205,7 @@ ncurses:
     '$(MPD_LIBS) $(PCI_LIBS)'
     '$(DVD_LIBS) $(SENSORS_LIBS)'
     '$(CURL_LIBS) $(LIBNL_LZ)'
-    '$(PERL_LIBS)'
+    '$(PERL_LZ)'
   )
 
   # Do not pass more definitions to AM_CFLAGS

@@ -17,11 +17,12 @@ dnl MA 02110-1301, USA.
 
 dnl TEST_PERL() function in configure.ac
 dnl
-dnl Substitute perl related linker flags to the
-dnl 'PERL_LIBS' if the user enabled the
+dnl Substitute perl related linker and
+dnl cflags to the variables PERL_CF and
+dnl PERL_LZ if the user enabled the
 dnl --with-perl switch
 AC_DEFUN([TEST_PERL],[
-  PERL_LIBS=""
+  PERL_LZ=""
   PERL_CF=""
   WITH_PERL=0
   UZER_ZCRIPT=""
@@ -37,7 +38,7 @@ AC_DEFUN([TEST_PERL],[
     CHECK_CFLAGZ([-O0])
     AC_PATH_PROG(PERL, perl)
 
-    PERL_LIBS=`$PERL -MExtUtils::Embed -e ldopts`
+    PERL_LZ=`$PERL -MExtUtils::Embed -e ldopts`
     PERL_CF=`$PERL -MExtUtils::Embed -e ccopts`
 
     AC_ARG_VAR(perl_script, [user perl script])
@@ -45,10 +46,11 @@ AC_DEFUN([TEST_PERL],[
     then
       UZER_ZCRIPT=\""${perl_script}"\"
     fi
+
     WITH_PERL=1
   ])
 
-  AC_SUBST(PERL_LIBS)
+  AC_SUBST(PERL_LZ)
   AC_SUBST(PERL_CF)
   AC_DEFINE_UNQUOTED([WITH_PERL],[$WITH_PERL],[Extend the program via perl scripts])
   AC_DEFINE_UNQUOTED([UZER_ZCRIPT],[$UZER_ZCRIPT],[Extend the program via perl scripts])
