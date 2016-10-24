@@ -28,6 +28,7 @@
 #include "prototypes/options.h"
 #include "prototypes/weather.h"
 #include "prototypes/smart.h"
+#include "prototypes/perl.h"
 
 /* Because we ran out of a-z A-Z options,
  * only long ones will be supported from now on.
@@ -37,6 +38,7 @@ enum {
   NICDRV = CHAR_MAX + 1,
   KERNODE,
   DRIVETEMP,
+  PERLSCRIPT,
   BULLSHIFT
 };
 const char *argp_program_version = PACKAGE_STRING;
@@ -88,6 +90,9 @@ static const struct argp_option options[] = {
   { .name = "iplookup",     .key = 'E', .arg = "site", .doc = "Mini website IP lookup."                                  },
   { .name = "statio",       .key = 'S', .arg = "sda",  .doc = "Read and written MBs to the drive so far."                },
 
+#if WITH_PERL == 1
+  { .name = "perl",         .key = PERLSCRIPT,         .doc = "Extend the program with perl, read README."               },
+#endif /* WITH_PERL */
 
 #if WITH_WEATHER == 1
   { .name = "weather",      .key = 'q',                .doc = "The temperature outside."                                 },
@@ -221,6 +226,11 @@ parse_opt(int key, char *arg, struct argp_state *state) {
     NEW_ARG_LABEL('S', char statio[VLA], statio, FMT_STATIO, STATIO_STR);
 
     NEW_LABEL(DRIVETEMP, char drivetemp[VLA], drivetemp, FMT_TEMP);
+
+
+#if WITH_PERL == 1
+    NEW_LABEL(PERLSCRIPT, char perl[VLA], perl, FMT_KERN);
+#endif /* WITH_PERL */
 
 
 #if WITH_WEATHER == 1

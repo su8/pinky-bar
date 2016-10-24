@@ -70,6 +70,7 @@ The order of supplied options will dictate how, where and what system informatio
 | -R           | --kernver   | The kernel version                                                 |
 | -u           | --kernarch  | The machine architecture                                           |
 | -k           | --kernel    | Combined kernel name and version                                   |
+|              | --perl      | Extend pinkybar with your scripts written in perl, learn more from the Opt-in section.     |
 | -q           | --weather   | Show the temperature outside (some details must be provided)       |
 | -U           | --uptime    | The system uptime                                                  |
 | -w           | --loadavg   | The system average load for past 1, 5 and 15 minutes               |
@@ -138,12 +139,14 @@ It's up to you to decide which features suit you best.
 | --with-sensors | --without-sensors   | Alternative way to get the sensors values (linux only)                                     |
 | --with-apm     | --without-apm       | APM power and resource management for laptops (FreeBSD only)                               |
 | --with-ncurses | --without-ncurses   | Output the data to the terminal using the ncurses library, can be colorized                |
+| --with-perl    | --without-perl      | Extend pinkybar with your own crafted scripts written in perl                              |
+| perl\_script=/tmp/pinky.pl   |       | The location where your perl script resides, must be combined **--with-perl**              |
 | --with-weather | --without-weather   | The temperature outside  (some details must be provided)                                   |
 | api\_town='London,uk'              | | Town and country code to use for temperature monitoring                                    |
 | api\_key='123458976'               | | API key obtained after registering yourself in the weather website                         |
 | --with-smartemp | --without-smartemp   | Read the drive temperature from S.M.A.R.T cross-platform available                       |
 | --with-drivetemp | --without-drivetemp   | Read the drive temperature from S.M.A.R.T (linux only)                                 |
-| drive\_port='1234'  |                | Different TCP port to listen to for the drive temperature, default one is 7634             |
+| drive\_port='1234'  |                | Different TCP port to listen to for the drive temperature, default one is 7634, must be combined **with-drivetemp**             |
 | --with-colours | --without-colours   | Colorize the output data.                                                                  |
 | icons=/tmp     |                     | xbm icons that can be used by dzen2 for example. Discarded when **--with-x11** is used     |
 | --with-mpd     | --without-mpd       | To see the currently played song name (if any).                                            |
@@ -154,7 +157,7 @@ It's up to you to decide which features suit you best.
 By default, if **no** options are passed, the program will be compiled with/without:
 
 ```bash
---without-alsa --without-x11 --without-mpd --with-colours --with-net --with-pci --without-dvd --without-sensors --without-ncurses --without-weather --without-drivetemp --without-smartemp
+--without-alsa --without-x11 --without-mpd --with-colours --with-net --with-pci --without-dvd --without-sensors --without-ncurses --without-weather --without-drivetemp --without-smartemp --without-perl
 ```
 
 Affects only FreeBSD users with laptops, **--without-apm** will compile the program with acpi support to obtain the current battery life.
@@ -475,6 +478,12 @@ frost ALL=NOPASSWD:/usr/sbin/smartctl
 ```
 
 Copy the code from extra/scripts/drive-temperature.sh or `exec` it from **xinitrc** or the script used to start your DE/WM.
+
+To extend pinkybar with your own crafted perl script:
+
+* perl
+
+Have a look at extra/scripts/pinky.pl, it serves as example how to write the most basic script in order to extend pinkybar.
 
 To get the sound volume level:
 

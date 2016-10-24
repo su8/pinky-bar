@@ -276,6 +276,13 @@ T}@T{
 Combined kernel name and version
 T}
 T{
+T}@T{
+\[en]perl
+T}@T{
+Extend pinkybar with your scripts written in perl, learn more from the
+Opt\-in section.
+T}
+T{
 \-q
 T}@T{
 \[en]weather
@@ -621,6 +628,20 @@ Output the data to the terminal using the ncurses library, can be
 colorized
 T}
 T{
+\[en]with\-perl
+T}@T{
+\[en]without\-perl
+T}@T{
+Extend pinkybar with your own crafted scripts written in perl
+T}
+T{
+perl_script=/tmp/pinky.pl
+T}@T{
+T}@T{
+The location where your perl script resides, must be combined
+\f[B]\[en]with\-perl\f[]
+T}
+T{
 \[en]with\-weather
 T}@T{
 \[en]without\-weather
@@ -658,7 +679,7 @@ drive_port=`1234'
 T}@T{
 T}@T{
 Different TCP port to listen to for the drive temperature, default one
-is 7634
+is 7634, must be combined \f[B]with\-drivetemp\f[]
 T}
 T{
 \[en]with\-colours
@@ -708,7 +729,7 @@ compiled with/without:
 .IP
 .nf
 \f[C]
-\-\-without\-alsa\ \-\-without\-x11\ \-\-without\-mpd\ \-\-with\-colours\ \-\-with\-net\ \-\-with\-pci\ \-\-without\-dvd\ \-\-without\-sensors\ \-\-without\-ncurses\ \-\-without\-weather\ \-\-without\-drivetemp\ \-\-without\-smartemp
+\-\-without\-alsa\ \-\-without\-x11\ \-\-without\-mpd\ \-\-with\-colours\ \-\-with\-net\ \-\-with\-pci\ \-\-without\-dvd\ \-\-without\-sensors\ \-\-without\-ncurses\ \-\-without\-weather\ \-\-without\-drivetemp\ \-\-without\-smartemp\ \-\-without\-perl
 \f[]
 .fi
 .PP
@@ -1163,6 +1184,13 @@ frost\ ALL=NOPASSWD:/usr/sbin/smartctl
 .PP
 Copy the code from extra/scripts/drive\-temperature.sh or \f[C]exec\f[]
 it from \f[B]xinitrc\f[] or the script used to start your DE/WM.
+.PP
+To extend pinkybar with your own crafted perl script:
+.IP \[bu] 2
+perl
+.PP
+Have a look at extra/scripts/pinky.pl, it serves as example how to write
+the most basic script in order to extend pinkybar.
 .PP
 To get the sound volume level:
 .IP \[bu] 2

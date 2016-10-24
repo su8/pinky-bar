@@ -126,6 +126,7 @@ _gen_files() {
   TEST_SENSORS
   TEST_TYPEZ
   TEST_WEATHER
+  TEST_PERL
   TEST_CFLAGZ
 
   # Definitions
@@ -176,6 +177,7 @@ ncurses:
     'net.c'
     'weather.c'
     'smart.c'
+    'perl.c'
 
     'prototypes/cpu.h'
     'prototypes/common.h'
@@ -185,6 +187,7 @@ ncurses:
     'prototypes/options.h'
     'prototypes/weather.h'
     'prototypes/smart.h'
+    'prototypes/perl.h'
 
     'include/headers.h'
     'include/options_constants.h'
@@ -202,12 +205,13 @@ ncurses:
     '$(MPD_LIBS) $(PCI_LIBS)'
     '$(DVD_LIBS) $(SENSORS_LIBS)'
     '$(CURL_LIBS) $(LIBNL_LZ)'
+    '$(PERL_LIBS)'
   )
 
   # Do not pass more definitions to AM_CFLAGS
   # Think of the line limit
   src_makefile=('AM_CFLAGS = '${amCF}' \
-    -I/usr/local/include $(LIBNL_CF)
+    -I/usr/local/include $(LIBNL_CF) $(PERL_CF)
 
     bin_PROGRAMS = '${progName}'
 
