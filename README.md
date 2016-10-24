@@ -514,7 +514,7 @@ export PYTHONPATH=... :/including/the/path/to/your/script
 
 #~/pypi > export PYTHONPATH=/usr/lib64/python34.zip:/usr/lib64/python3.4:/usr/lib64/python3.4/plat-linux:/usr/lib64/python3.4/lib-dynload:/usr/lib64/python3.4/site-packages:/home/frost/pypi
 
-# ./configure ... --with-python2 python_script='/home/frost/pypi/multi.py'
+# ./configure ... --with-python3 python_script='/home/frost/pypi/multi.py' python3_config='python-config-3.4'
 ```
 
 To get the sound volume level:
