@@ -17,7 +17,7 @@
 
 
 # Your script should always return a single string.
-# Read line the above line again.
+# Read the above line again.
 #
 # pinky-bar will always call uzer_func,
 # you can write other subroutines/functions

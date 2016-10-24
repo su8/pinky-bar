@@ -52,6 +52,7 @@ static void
 call_user_subroutine(char *str1) {
   SV *sva = NULL;
   STRLEN len = 0;
+  int count = 0;
 
   dSP;                            /* initialize stack pointer      */
   ENTER;                          /* everything created after here */
@@ -60,15 +61,17 @@ call_user_subroutine(char *str1) {
   PUSHMARK(SP);                   /* remember the stack pointer    */
   PUTBACK;                        /* make local stack pointer global */
 
-  call_pv("uzer_func", G_SCALAR); /* call the function             */
+  count = call_pv("uzer_func", G_SCALAR); /* call the function      */
   SPAGAIN;                        /* refresh stack pointer         */
 
-  sva = POPs;                     /* pop the return value from stack */
-  if (NULL != sva) {
-    FILL_STR_ARR(1, str1, (char *)SvPV(sva, len)); /* SvPVutf8 needs some testing */
+  if (1 == count) {                 /* the Adder returned 1 item */
+    sva = POPs;                     /* pop the return value from stack */
+    if (NULL != sva) {
+      FILL_STR_ARR(1, str1, (char *)SvPV(sva, len)); /* SvPVutf8 needs some testing */
+    }
   }
 
-  PUTBACK;
+  PUTBACK;                        /* leave the Perl stack in a consistent state */
   FREETMPS;                       /* free that return value        */
   LEAVE;                          /* ...and the XPUSHed "mortal" args.*/
 }
