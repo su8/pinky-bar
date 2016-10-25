@@ -146,14 +146,13 @@ It's up to you to decide which features suit you best.
 | perl\_script=/tmp/pinky.pl   |       | The location where your perl script resides, must be combined **--with-perl**              |
 | --with-python2  | --without-python2  | Extend pinkybar with your own crafted scripts written in python2                           |
 | --with-python3  | --without-python3  | Extend pinkybar with your own crafted scripts written in python3                           |
-| python3\_config=python-config-3.4   |     | Since python3 offers variety of versions, you need to specify the executable config file, so we can determine the correct CFLAGS and LDFLAGS for this version. |
-| python\_script=/tmp/pinky.py   |     | The location where your python script resides, must be combined either **--with-python2** or **--with-python3**          |
+| python\_script=/tmp/pinky.py   |     | The location where your python script resides, must be combined either **--with-python2** or **--with-python3** |
 | --with-weather | --without-weather   | The temperature outside  (some details must be provided)                                   |
 | api\_town='London,uk'              | | Town and country code to use for temperature monitoring                                    |
 | api\_key='123458976'               | | API key obtained after registering yourself in the weather website                         |
 | --with-smartemp | --without-smartemp   | Read the drive temperature from S.M.A.R.T cross-platform available                       |
 | --with-drivetemp | --without-drivetemp   | Read the drive temperature from S.M.A.R.T (linux only)                                 |
-| drive\_port='1234'  |                | Different TCP port to listen to for the drive temperature, default one is 7634, must be combined **with-drivetemp**             |
+| drive\_port='1234'  |                | Different TCP port to listen to for the drive temperature, default one is 7634, must be combined **with-drivetemp**   |
 | --with-colours | --without-colours   | Colorize the output data.                                                                  |
 | icons=/tmp     |                     | xbm icons that can be used by dzen2 for example. Discarded when **--with-x11** is used     |
 | --with-mpd     | --without-mpd       | To see the currently played song name (if any).                                            |
@@ -514,7 +513,7 @@ export PYTHONPATH=... :/including/the/path/to/your/script
 
 #~/pypi > export PYTHONPATH=/usr/lib64/python34.zip:/usr/lib64/python3.4:/usr/lib64/python3.4/plat-linux:/usr/lib64/python3.4/lib-dynload:/usr/lib64/python3.4/site-packages:/home/frost/pypi
 
-# ./configure ... --with-python3 python_script='/home/frost/pypi/multi.py' python3_config='python-config-3.4'
+# ./configure ... --with-python3 python_script='/home/frost/pypi/multi.py'
 ```
 
 To get the sound volume level:
