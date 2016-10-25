@@ -90,9 +90,6 @@ AC_DEFUN([TEST_PYTHON],[
   AC_ARG_VAR(python_script, [user python script])
   if [[ ! -z "${python_script}" ]]
   then
-    dnl  ... PYTHONPATH ...
-    dnl modulez_paht=`python2 -c 'import sys;print(":".join([x for x in sys.path]))'`
-
     just_script="${python_script##*/}"
     UZER_ZCRIPT2=\""${just_script%.*}"\"
     UZER_PAHT=\""${python_script%/*}"\"
@@ -102,19 +99,24 @@ AC_DEFUN([TEST_PYTHON],[
     CHECK_CFLAGZ([-O0])
 
     AS_IF([test "x$with_python2" = "xyes"], [
+      AM_PATH_PYTHON([2],[])
       WITH_PYTHON2=1
-      AC_PATH_PROG(PYFON, python-config-PYFON2)
-    ])
-    AS_IF([test "x$with_python3" = "xyes"], [
-      AC_PATH_PROG(PYFON, python-config-PYFON3)
     ])
 
-    PYTHON_LZ=`$PYFON --ldflags`
-    PYTHON_CF=`$PYFON --cflags`
+    AS_IF([test "x$with_python3" = "xyes"], [
+      AM_PATH_PYTHON([3],[])
+    ])
 
     WITH_PYTHON=1
+    PYTHON_LZ=`python-config-$PYTHON_VERSION --ldflags`
+    PYTHON_CF=`python-config-$PYTHON_VERSION --cflags`
 
+    if test -z "${PYTHON_CF}" || test -z "${PYTHON_LZ}"
+    then
+      ERR([Couldnt determine CFLAGS and LDFLAGS for the requested python version.])
+    fi
   ])
+
 
   AC_SUBST(PYTHON_LZ)
   AC_SUBST(PYTHON_CF)
