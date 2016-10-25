@@ -21,6 +21,15 @@
 #define PYTHON_H_
 
 #if WITH_PYTHON == 1
+
+#if WITH_PYTHON2 == 1
+#define PYFON_ZTR PyString_AsString
+#else
+#define PYFON_ZTR PyUnicode_AsUTF8
+#endif /* WITH_PYTHON2 */
+
+#define RET_PY_STR(x) (NULL != PYFON_ZTR(x) ? PYFON_ZTR(x) : "0")
+
 void get_python(char *);
 #endif /* WITH_PYTHON */
 

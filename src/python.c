@@ -75,18 +75,10 @@ get_python(char *str1) {
 
   pValue = PyObject_CallObject(pFunc, NULL);
   if (NULL != pValue) {
-#if WITH_PYTHON2 == 1
-    FILL_STR_ARR(1, str1,
-      PyString_Check(pValue) ? PyString_AsString(pValue) : "0");
-#else
-    FILL_STR_ARR(1, str1, PyUnicode_AsUTF8(pValue));
-#endif /* WITH_PYTHON2 */
+    FILL_STR_ARR(1, str1, RET_PY_STR(pValue));
   }
 
 error:
-  if (NULL != pathz) {
-    free(pathz);
-  }
   if (NULL != pValue) {
     Py_XDECREF(pValue);
   }
@@ -95,6 +87,9 @@ error:
   }
   if (NULL != pModule) {
     Py_XDECREF(pModule);
+  }
+  if (NULL != pathz) {
+    free(pathz);
   }
 
   Py_Finalize();

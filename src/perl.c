@@ -64,8 +64,8 @@ call_user_subroutine(char *str1) {
   count = call_pv("uzer_func", G_SCALAR); /* call the function      */
   SPAGAIN;                        /* refresh stack pointer         */
 
-  if (1 == count) {                 /* the Adder returned 1 item */
-    sva = POPs;                     /* pop the return value from stack */
+  if (1 == count) {               /* the Adder returned 1 item */
+    sva = POPs;                   /* pop the return value from stack */
     if (NULL != sva) {
       FILL_STR_ARR(1, str1, (char *)SvPV(sva, len)); /* SvPVutf8 needs some testing */
     }
@@ -92,7 +92,8 @@ get_perl(char *str1) {
   PERL_SYS_INIT3((int *)NULL, (char ***)NULL, (char ***)NULL);
 
   my_perl = perl_alloc();
-  if (NULL == (my_perl)) {
+  if (NULL == my_perl) {
+    PERL_SYS_TERM();
     return;
   }
 
