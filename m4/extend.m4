@@ -37,7 +37,13 @@ AC_DEFUN([TEST_PERL],[
 
   AS_IF([test "x$with_perl" = "xyes"], [
     CHECK_CFLAGZ([-O0])
-    AC_PATH_PROG(PERL, perl)
+
+    AC_PATH_PROG(PERL,perl)
+    if [[ -z "${PERL}" ]]
+    then
+      ERR([Couldnt find perl.])
+    fi
+
 
     PERL_LZ=`$PERL -MExtUtils::Embed -e ldopts`
     PERL_CF=`$PERL -MExtUtils::Embed -e ccopts`
@@ -48,6 +54,19 @@ AC_DEFUN([TEST_PERL],[
       UZER_ZCRIPT=\""${perl_script}"\"
     fi
 
+    m4_foreach([LiB], [
+        perl_construct,
+        perl_parse,
+        perl_run,
+        perl_destruct,
+        perl_alloc,
+        perl_free
+      ],[
+        AC_CHECK_LIB(perl,LiB,[],[
+          MISSING_FUNC()
+        ])
+    ])
+
     WITH_PERL=1
   ])
 
@@ -55,6 +74,38 @@ AC_DEFUN([TEST_PERL],[
   AC_SUBST(PERL_CF)
   AC_DEFINE_UNQUOTED([WITH_PERL],[$WITH_PERL],[Extend the program via perl scripts])
   AC_DEFINE_UNQUOTED([UZER_ZCRIPT],[$UZER_ZCRIPT],[Extend the program via perl scripts])
+
+
+  dnl AS_IF([test "x$with_perl" = "xyes"], [
+  dnl   AC_LINK_IFELSE([
+  dnl     AC_LANG_SOURCE([[
+  dnl       #include <stdio.h>
+  dnl       #include <string.h>
+  dnl       #include <EXTERN.h>
+  dnl       #include <perl.h>
+  dnl       int main(void) {
+  dnl         static PerlInterpreter *my_perl = NULL;
+  dnl         PERL_SYS_INIT3((int *)NULL, (char ***)NULL, (char ***)NULL);
+  dnl         my_perl = perl_alloc();
+  dnl         if (NULL == my_perl) {
+  dnl           PERL_SYS_TERM();
+  dnl           return -1;
+  dnl         }
+  dnl         perl_construct(my_perl);
+  dnl         perl_parse(my_perl, NULL, 0, (char **)NULL, (char **)NULL);
+  dnl         PL_exit_flags |= PERL_EXIT_DESTRUCT_END;
+  dnl         perl_run(my_perl);
+  dnl         perl_destruct(my_perl);
+  dnl         perl_free(my_perl);
+  dnl         PERL_SYS_TERM();
+  dnl         return 0;
+  dnl       }
+  dnl     ]])
+  dnl   ],[],[
+  dnl       LINK_FAILED([perl])
+  dnl     ]
+  dnl   )
+  dnl ])
 
 ])
 
@@ -99,22 +150,40 @@ AC_DEFUN([TEST_PYTHON],[
     CHECK_CFLAGZ([-O0])
 
     AS_IF([test "x$with_python2" = "xyes"], [
-      AM_PATH_PYTHON([2],[])
+      AM_PATH_PYTHON([2],[
+      ],[
+        ERR([Couldnt determine CFLAGS and LDFLAGS for the requested python version.])
+      ])
       WITH_PYTHON2=1
     ])
 
     AS_IF([test "x$with_python3" = "xyes"], [
-      AM_PATH_PYTHON([3],[])
+      AM_PATH_PYTHON([3],[
+      ],[
+        ERR([Couldnt determine CFLAGS and LDFLAGS for the requested python version.])
+      ])
     ])
+
 
     WITH_PYTHON=1
     PYTHON_LZ=`python-config-$PYTHON_VERSION --ldflags`
     PYTHON_CF=`python-config-$PYTHON_VERSION --cflags`
 
-    if test -z "${PYTHON_CF}" || test -z "${PYTHON_LZ}"
-    then
-      ERR([Couldnt determine CFLAGS and LDFLAGS for the requested python version.])
-    fi
+    dnl m4_define([testveR],[python$PYTHON_VERSION])
+    dnl m4_foreach([LiB], [
+    dnl     Py_GetPath,
+    dnl     Py_Initialize,
+    dnl     PyImport_Import,
+    dnl     PyObject_GetAttrString,
+    dnl     PyCallable_Check,
+    dnl     PyObject_CallObject,
+    dnl     Py_Finalize
+    dnl   ],[
+    dnl     AC_CHECK_LIB(testveR,LiB,[],[
+    dnl       MISSING_FUNC()
+    dnl     ])
+    dnl ])
+
   ])
 
 
@@ -124,5 +193,29 @@ AC_DEFUN([TEST_PYTHON],[
   AC_DEFINE_UNQUOTED([WITH_PYTHON2],[$WITH_PYTHON2],[Extend the program via python scripts])
   AC_DEFINE_UNQUOTED([UZER_ZCRIPT2],[$UZER_ZCRIPT2],[Extend the program via python scripts])
   AC_DEFINE_UNQUOTED([UZER_PAHT],[$UZER_PAHT],[Extend the program via python scripts])
+
+  dnl AS_IF([test "x$with_python2" = "xyes" || test "x$with_python3" = "xyes"], [
+  dnl   AC_CHECK_HEADERS([testveR/Python.h],[],[
+  dnl     MISSING_HEADER()
+  dnl   ])
+
+  dnl   AC_LINK_IFELSE([
+  dnl     AC_LANG_SOURCE([[
+  dnl       #include <stdio.h>
+  dnl       #include <string.h>
+  dnl       #include <Python.h>
+  dnl       int main(void) {
+  dnl         Py_Initialize();
+  dnl         PyRun_SimpleString("from time import time,ctime\n"
+  dnl                            "print(ctime(time()))\n");
+  dnl         Py_Finalize();
+  dnl         return 0;
+  dnl       }
+  dnl     ]])
+  dnl   ],[],[
+  dnl       LINK_FAILED([python])
+  dnl     ]
+  dnl   )
+  dnl ])
 
 ])
