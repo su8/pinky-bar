@@ -13,7 +13,7 @@ HOMEPAGE="https://gitlab.com/void0/pinky-bar"
 
 LICENSE="GPL-2"
 SLOT="0"
-IUSE="x11 alsa +net libnl +pci dvd sensors ncurses +colours weather mpd drivetemp smartemp perl python2"
+IUSE="x11 alsa +net libnl +pci dvd sensors ncurses +colours weather mpd drivetemp drivetemp-light smartemp perl python2"
 
 DEPEND="
 	sys-devel/m4
@@ -32,7 +32,8 @@ RDEPEND="
 	ncurses? ( sys-libs/ncurses )
 	weather? ( net-misc/curl app-arch/gzip )
 	mpd? ( media-sound/mpd media-libs/libmpdclient )
-	drivetemp? ( app-admin/hddtemp )
+	drivetemp? ( net-misc/curl app-admin/hddtemp )
+	drivetemp-light? ( app-admin/hddtemp )
 	smartemp? ( sys-apps/smartmontools )
 	python2? ( dev-lang/python:2.7= )
 "
@@ -40,7 +41,9 @@ REQUIRED_USE="
 	x11? ( !ncurses )
 	ncurses? ( !x11 )
 	drivetemp? ( !smartemp )
+	drivetemp-light? ( !smartemp )
 	smartemp? ( !drivetemp )
+	smartemp? ( !drivetemp-light )
 "
 
 pkg_setup() {
@@ -50,9 +53,6 @@ pkg_setup() {
 		einfo 'To specify other country and town youll have to supply them as variable.'
 		einfo 'Here is how: # TWN="London,uk" USE="weather" emerge -a ...'
 	fi
-	# if use python2
-	# then
-	# fi
 }
 
 src_prepare() {
@@ -79,6 +79,7 @@ src_configure() {
 		$(use_with weather) \
 		$(use_with mpd) \
 		$(use_with drivetemp) \
+		$(use_with drivetemp-light) \
 		$(use_with smartemp) \
 		$(use_with perl) \
 		$(use_with python2) \

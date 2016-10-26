@@ -21,6 +21,7 @@
 		<flag name="weather">The temperature outside</flag>
 		<flag name="mpd">To see the currently played song name</flag>
 		<flag name="drivetemp">Read the drive temperature from S.M.A.R.T</flag>
+		<flag name="drivetemp-light">Read the drive temperature from S.M.A.R.T light version</flag>
 		<flag name="smartemp">Read the drive temperature from S.M.A.R.T</flag>
 		<flag name="perl">Extend pinkybar with your own crafted scripts written in perl, stored in /usr/share/pinkysc/pinky.pl</flag>
 		<flag name="python2">Extend pinkybar with your own crafted scripts written in python, stored in /usr/share/pinkysc/pinky.py</flag>

@@ -141,6 +141,12 @@
     exit_with_err(ERR, CANNOT_CLOSE); \
   }
 
+#define CLOSE_FD2(fd, res) \
+  if (-1 == (close(fd))) { \
+    freeaddrinfo(res); \
+    exit_with_err(ERR, CANNOT_CLOSE); \
+  }
+
 /* How many fans to try for detection */
 #define MAX_FANS 20
 

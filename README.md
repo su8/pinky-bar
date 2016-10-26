@@ -151,8 +151,9 @@ It's up to you to decide which features suit you best.
 | api\_town='London,uk'              | | Town and country code to use for temperature monitoring                                    |
 | api\_key='123458976'               | | API key obtained after registering yourself in the weather website                         |
 | --with-smartemp | --without-smartemp   | Read the drive temperature from S.M.A.R.T cross-platform available                       |
-| --with-drivetemp | --without-drivetemp   | Read the drive temperature from S.M.A.R.T (linux only)                                 |
-| drive\_port='1234'  |                | Different TCP port to listen to for the drive temperature, default one is 7634, must be combined **with-drivetemp**   |
+| --with-drivetemp | --without-drivetemp   | Read the drive temperature from S.M.A.R.T (linux only) uses curl                       |
+| --with-drivetemp-light | --without-drivetemp-light   | Read the drive temperature from S.M.A.R.T (linux only) light version       |
+| drive\_port='1234'  |                | Different TCP port to listen to for the drive temperature, default one is 7634, must be combined **with-drivetemp** or **with-drivetemp-light**   |
 | --with-colours | --without-colours   | Colorize the output data.                                                                  |
 | icons=/tmp     |                     | xbm icons that can be used by dzen2 for example. Discarded when **--with-x11** is used     |
 | --with-mpd     | --without-mpd       | To see the currently played song name (if any).                                            |
@@ -406,6 +407,21 @@ Alternative way to obtain data from the sensors:
 To read the drive temperature from S.M.A.R.T **--with-drivetemp**:
 
 * hddtemp
+* curl
+
+To read the drive temperature from S.M.A.R.T **--with-drivetemp-light**:
+
+* hddtemp
+
+The "light" version does not rely on curl, and will not force -O0 CFLAGS.
+
+```bash
+# --with-drivetemp-light
+0.00s user 0.00s system 15% cpu 0.006
+
+# --with-drivetemp
+0.01s user 0.00s system 72% cpu 0.008
+```
 
 Try running hddtemp to see if it detects your drive, depending if it has temperature sensor in first place:
 

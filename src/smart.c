@@ -19,17 +19,25 @@
 
 #include "config.h" /* Auto-generated */
 
-#if defined(__linux__) && WITH_DRIVETEMP == 1
+#if defined(__linux__)
+#if WITH_DRIVETEMP == 1 || WITH_DRIVETEMP_LIGHT == 1
 #include <ctype.h>
+
+#if WITH_DRIVETEMP_LIGHT == 1
+#include <netdb.h>
+#include <sys/socket.h>
+#else
 #include <curl/curl.h>
-#endif /* __linux__ && WITH_DRIVETEMP */
+#endif /* WITH_DRIVETEMP_LIGHT */
+
+#endif /* WITH_DRIVETEMP || WITH_DRIVETEMP_LIGHT */
+#endif /* __linux__ */
 
 #include "include/headers.h"
 #include "prototypes/smart.h"
 
-#if defined(__linux__) && WITH_DRIVETEMP == 1
+#if defined(__linux__) && (WITH_DRIVETEMP == 1 || WITH_DRIVETEMP_LIGHT == 1)
 static size_t read_temp_data_cb(char *, size_t size, size_t nmemb, char *);
-
 /*
  * The data that we parse:
  * |/dev/sda|Corsair Force GT|24|C| */
@@ -68,8 +76,10 @@ read_temp_data_cb(char *data, size_t size, size_t nmemb, char *str1) {
 
   return sz;
 }
+#endif /* WITH_DRIVETEMP || WITH_DRIVETEMP_LIGHT */
 
 
+#if defined(__linux__) && WITH_DRIVETEMP == 1
 /* Most of the time it takes 32 bytes to complete,
  * except sometimes the connection gets terminated
  * when only 31 bytes was received, so we dont check
@@ -105,6 +115,73 @@ error:
   return;
 }
 
+
+#elif defined(__linux__) && WITH_DRIVETEMP_LIGHT == 1
+/*
+ * hddtemp/daemon.c
+ * void daemon_send_msg(struct disk *ldisks, int cfd) {
+ *   struct disk * dsk;
+ *   daemon_update(ldisks, 0);
+ *   for(dsk = ldisks; dsk; dsk = dsk->next) {
+ *     char msg[128];
+ *
+ * We know what the max msg size might be.
+*/
+void
+get_drivetemp(char *str1) {
+  struct addrinfo *rp = NULL, *result = NULL, hints;
+  int sock = 0, got_conn = 0;
+  char buf[VLA];
+  bool got_data = false;
+  ssize_t len = 0;
+
+  FILL_STR_ARR(1, str1, "0");
+  memset(&hints, 0, sizeof(hints));
+
+  hints.ai_family = AF_INET;
+  hints.ai_socktype = SOCK_STREAM;
+
+  if (0 != (getaddrinfo("127.0.0.1", DRIVE_PORT, &hints, &result))) {
+    FUNC_FAILED("getaddrinfo()");
+  }
+
+  for (rp = result; NULL != rp; rp = rp->ai_next) {
+    sock = socket(rp->ai_family, rp->ai_socktype, rp->ai_protocol);
+    if (-1 == sock) {
+      continue;
+    }
+    if (NULL == rp->ai_addr) {
+      CLOSE_FD2(sock, result);
+      continue;
+    }
+    got_conn = connect(sock, rp->ai_addr, rp->ai_addrlen);
+    if (0 == got_conn) {
+     /* len, bytes received or -1 on err
+      * We intentionally do not call
+      * recv() in a loop, read the
+      * comment in the curl version
+      * of get_drivetemp
+      */
+      len = recv(sock, buf, sizeof(buf), 0);
+      got_data = true;
+      break;
+    }
+  }
+
+  if (true == got_data) {
+    CLOSE_FD2(sock, result);
+    if (0 < len) {
+      /* the 3rd arg is dummy placeholder */
+      read_temp_data_cb(buf, (size_t)len, 1, str1);
+    }
+  }
+
+  if (NULL != result) {
+    freeaddrinfo(result);
+  }
+}
+
+
 #else
 
 void
@@ -114,7 +191,6 @@ get_drivetemp(char *str1) {
   const char *pinkytemp = "/tmp/pinkytemp";
 
   FILL_STR_ARR(1, str1, "0");
-
   if (NULL == (fp = fopen(pinkytemp, "r"))) {
     return;
   }
@@ -123,9 +199,9 @@ get_drivetemp(char *str1) {
 #pragma GCC diagnostic ignored "-Wunused-result"
   CHECK_FSCANF(fp, SCAN_UFINT, &temp);
 #pragma GCC diagnostic pop
-
   CLOSE_X(fp);
 
   FILL_ARR(str1, UFINT, temp);
 }
-#endif /* __linux__ && WITH_DRIVETEMP */
+
+#endif /* __linux__ && WITH_DRIVETEMP || __linux__ && WITH_DRIVETEMP_LIGHT || with smartemp */

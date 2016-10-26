@@ -666,14 +666,6 @@ T}@T{
 Extend pinkybar with your own crafted scripts written in python3
 T}
 T{
-python3_config=python\-config\-3.4
-T}@T{
-T}@T{
-Since python3 offers variety of versions, you need to specify the
-executable config file, so we can determine the correct CFLAGS and
-LDFLAGS for this version.
-T}
-T{
 python_script=/tmp/pinky.py
 T}@T{
 T}@T{
@@ -711,14 +703,22 @@ T{
 T}@T{
 \[en]without\-drivetemp
 T}@T{
-Read the drive temperature from S.M.A.R.T (linux only)
+Read the drive temperature from S.M.A.R.T (linux only) uses curl
+T}
+T{
+\[en]with\-drivetemp\-light
+T}@T{
+\[en]without\-drivetemp\-light
+T}@T{
+Read the drive temperature from S.M.A.R.T (linux only) light version
 T}
 T{
 drive_port=`1234'
 T}@T{
 T}@T{
 Different TCP port to listen to for the drive temperature, default one
-is 7634, must be combined \f[B]with\-drivetemp\f[]
+is 7634, must be combined \f[B]with\-drivetemp\f[] or
+\f[B]with\-drivetemp\-light\f[]
 T}
 T{
 \[en]with\-colours
@@ -1122,6 +1122,26 @@ To read the drive temperature from S.M.A.R.T
 \f[B]\[en]with\-drivetemp\f[]:
 .IP \[bu] 2
 hddtemp
+.IP \[bu] 2
+curl
+.PP
+To read the drive temperature from S.M.A.R.T
+\f[B]\[en]with\-drivetemp\-light\f[]:
+.IP \[bu] 2
+hddtemp
+.PP
+The \[lq]light\[rq] version does not rely on curl, and will not force
+\-O0 CFLAGS.
+.IP
+.nf
+\f[C]
+#\ \-\-with\-drivetemp\-light
+0.00s\ user\ 0.00s\ system\ 15%\ cpu\ 0.006
+
+#\ \-\-with\-drivetemp
+0.01s\ user\ 0.00s\ system\ 72%\ cpu\ 0.008
+\f[]
+.fi
 .PP
 Try running hddtemp to see if it detects your drive, depending if it has
 temperature sensor in first place:
@@ -1259,7 +1279,7 @@ export\ PYTHONPATH=...\ :/including/the/path/to/your/script
 
 #~/pypi\ >\ export\ PYTHONPATH=/usr/lib64/python34.zip:/usr/lib64/python3.4:/usr/lib64/python3.4/plat\-linux:/usr/lib64/python3.4/lib\-dynload:/usr/lib64/python3.4/site\-packages:/home/frost/pypi
 
-#\ ./configure\ ...\ \-\-with\-python3\ python_script=\[aq]/home/frost/pypi/multi.py\[aq]\ python3_config=\[aq]python\-config\-3.4\[aq]
+#\ ./configure\ ...\ \-\-with\-python3\ python_script=\[aq]/home/frost/pypi/multi.py\[aq]
 \f[]
 .fi
 .PP
