@@ -54,18 +54,18 @@ AC_DEFUN([TEST_PERL],[
       UZER_ZCRIPT=\""${perl_script}"\"
     fi
 
-    m4_foreach([LiB], [
-        perl_construct,
-        perl_parse,
-        perl_run,
-        perl_destruct,
-        perl_alloc,
-        perl_free
-      ],[
-        AC_CHECK_LIB(perl,LiB,[],[
-          MISSING_FUNC()
-        ])
-    ])
+    dnl m4_foreach([LiB], [
+    dnl     perl_construct,
+    dnl     perl_parse,
+    dnl     perl_run,
+    dnl     perl_destruct,
+    dnl     perl_alloc,
+    dnl     perl_free
+    dnl   ],[
+    dnl     AC_CHECK_LIB(perl,LiB,[],[
+    dnl       MISSING_FUNC()
+    dnl     ])
+    dnl ])
 
     WITH_PERL=1
   ])
