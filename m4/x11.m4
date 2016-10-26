@@ -28,7 +28,7 @@ AC_DEFUN([TEST_X11],[
     AS_HELP_STRING([--with-x11],
       [X11 linker flag for dwm support]),
     [],
-    [with_x11=yes]
+    [with_x11=no]
   )
 
   AS_IF([test "x$with_x11" = "xyes"], [
@@ -55,7 +55,7 @@ AC_DEFUN([TEST_X11],[
     AS_HELP_STRING([--with-colours],
       [Colorize the output]),
     [],
-    [with_colours=yes]
+    [with_colours=no]
   )
   AS_IF([test "x$with_colours" = "xyes"], [
     WITH_COLOURS=1

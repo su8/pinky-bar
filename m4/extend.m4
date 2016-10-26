@@ -123,6 +123,7 @@ AC_DEFUN([TEST_PYTHON],[
   WITH_PYTHON=0
   UZER_ZCRIPT2="none"
   UZER_PAHT="none"
+  curpycfver="none"
 
   AC_ARG_WITH([python2],
     AS_HELP_STRING([--with-python2],
@@ -164,12 +165,49 @@ AC_DEFUN([TEST_PYTHON],[
       ])
     ])
 
+    dnl What a python versioning mess.
+    dnl We have to check back and forth different scenarious
+    dnl to make sure we can find appropriate CFLAGS and LDFLAGS
+    dnl for the requested python version.
+    dnl When there is only 1 python version installed the file
+    dnl naming is one, when there are 2 or more different
+    dnl python version installed, the file naming is other.
+    dnl Still reading or get bored ?
+    m4_define([testveR],[python$PYTHON_VERSION])
+    m4_define([testveR2],[python-config-$PYTHON_VERSION])
+
+    dnl First check whether python and python-9.9 exist
+    AC_PATH_PROG(pyvf1,testveR,no)
+    AC_PATH_PROG(pyvf2,python,no)
+
+    dnl Next check whether python-config and python-config-9.9 exist
+    AC_PATH_PROG(pycf1,testveR2,no)
+    AC_PATH_PROG(pycf2,python-config,no)
+
+    dnl Check whether any of the python versions was found
+    AS_IF([test "x$pycf1" = "xno" && test "x$pycf2" = "xno"], [
+      ERR([Couldnt find python])
+    ])
+
+    dnl Check whether any of the python-config versions was found
+    AS_IF([test "x$pyvf1" = "xno" && test "x$pyvf2" = "xno"], [
+      ERR([Couldnt find python-config])
+    ])
+
+    dnl We firts check for the python-config-9.9 version
+    AS_IF([test "x$pycf1" != "xno"], [
+      curpycfver="${pycf1}"
+    ])
+
+    dnl We now know that python-config is the only version available
+    AS_IF([test "x$pycf2" != "xno" && test "x$curpycfver" = "xnone"], [
+      curpycfver="${pycf2}"
+    ])
 
     WITH_PYTHON=1
-    PYTHON_LZ=`python-config-$PYTHON_VERSION --ldflags`
-    PYTHON_CF=`python-config-$PYTHON_VERSION --cflags`
+    PYTHON_LZ=`${curpycfver} --ldflags`
+    PYTHON_CF=`${curpycfver} --cflags`
 
-    dnl m4_define([testveR],[python$PYTHON_VERSION])
     dnl m4_foreach([LiB], [
     dnl     Py_GetPath,
     dnl     Py_Initialize,
