@@ -185,12 +185,12 @@ AC_DEFUN([TEST_PYTHON],[
     AC_PATH_PROG(pycf2,python-config,no)
 
     dnl Check whether any of the python versions was found
-    AS_IF([test "x$pycf1" = "xno" && test "x$pycf2" = "xno"], [
+    AS_IF([test "x$pyvf1" = "xno" && test "x$pyvf2" = "xno"], [
       ERR([Couldnt find python])
     ])
 
     dnl Check whether any of the python-config versions was found
-    AS_IF([test "x$pyvf1" = "xno" && test "x$pyvf2" = "xno"], [
+    AS_IF([test "x$pycf1" = "xno" && test "x$pycf2" = "xno"], [
       ERR([Couldnt find python-config])
     ])
 

@@ -768,7 +768,7 @@ compiled with/without:
 .IP
 .nf
 \f[C]
-\-\-without\-alsa\ \-\-without\-x11\ \-\-without\-mpd\ \-\-with\-colours\ \-\-with\-net\ \-\-with\-pci\ \-\-without\-dvd\ \-\-without\-sensors\ \-\-without\-ncurses\ \-\-without\-weather\ \-\-without\-drivetemp\ \-\-without\-smartemp\ \-\-without\-perl\ \-\-without\-python2\ \-\-without\-python3
+\-\-with\-net\ \-\-with\-pci\ \-\-without\-alsa\ \-\-without\-x11\ \-\-without\-mpd\ \-\-without\-colours\ \-\-without\-dvd\ \-\-without\-sensors\ \-\-without\-ncurses\ \-\-without\-weather\ \-\-without\-drivetemp\ \-\-without\-smartemp\ \-\-without\-perl\ \-\-without\-python2\ \-\-without\-python3
 \f[]
 .fi
 .PP
@@ -1231,6 +1231,9 @@ To read the drive temperature from S.M.A.R.T
 \f[B]\[en]with\-smartemp\f[]:
 .IP \[bu] 2
 smartmontools
+.PP
+smartmontools are not mandatory in OpenBSD, \f[C]atactl\f[] does the
+same job.
 .PP
 Execute the following command as root \f[C]visudo\f[] and append:
 .IP
