@@ -76,7 +76,7 @@ read_temp_data_cb(char *data, size_t size, size_t nmemb, char *str1) {
 
   return sz;
 }
-#endif /* WITH_DRIVETEMP || WITH_DRIVETEMP_LIGHT */
+#endif /* __linux__ && (WITH_DRIVETEMP || WITH_DRIVETEMP_LIGHT) */
 
 
 #if defined(__linux__) && WITH_DRIVETEMP == 1
@@ -132,7 +132,7 @@ get_drivetemp(char *str1) {
   struct addrinfo *rp = NULL, *result = NULL, hints;
   int sock = 0, got_conn = 0;
   char buf[VLA];
-  bool got_data = false;
+  bool got_conn = false;
   ssize_t len = 0;
 
   FILL_STR_ARR(1, str1, "0");
@@ -163,12 +163,13 @@ get_drivetemp(char *str1) {
       * of get_drivetemp
       */
       len = recv(sock, buf, sizeof(buf), 0);
-      got_data = true;
+      got_conn = true;
       break;
     }
+    CLOSE_FD2(sock, result);
   }
 
-  if (true == got_data) {
+  if (true == got_conn) {
     CLOSE_FD2(sock, result);
     if (0 < len) {
       /* the 3rd arg is dummy placeholder */
