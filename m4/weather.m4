@@ -58,6 +58,8 @@ AC_DEFUN([TEST_WEATHER],[
     [with_smartemp=no]
   )
 
+  AC_ARG_VAR(drive_port, [TCP port to listen to])
+
   AS_IF([test "x$with_drivetemp" = "xyes" && test "x$with_drivetemp_light" = "xyes"],[
     with_drivetemp=no
   ])
@@ -66,17 +68,15 @@ AC_DEFUN([TEST_WEATHER],[
     AS_IF([test "x$with_drivetemp_light" = "xyes"],[
       WITH_DRIVETEMP_LIGHT=1
     ])
-
-    AC_ARG_VAR(drive_port, [TCP port to listen to])
-
     AS_IF([test "x$with_drivetemp" = "xyes"],[
       WITH_DRIVETEMP=1
-
-      if [[ ! -z "${drive_port}" ]]
-      then
-        DRIVE_PORT=\""${drive_port}"\"
-      fi
     ])
+
+    if [[ ! -z "${drive_port}" ]]
+    then
+      DRIVE_PORT=\""${drive_port}"\"
+    fi
+
   ],[
   ])
 

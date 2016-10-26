@@ -130,7 +130,7 @@ error:
 void
 get_drivetemp(char *str1) {
   struct addrinfo *rp = NULL, *result = NULL, hints;
-  int sock = 0, got_conn = 0;
+  int sock = 0;
   char buf[VLA];
   bool got_conn = false;
   ssize_t len = 0;
@@ -154,8 +154,7 @@ get_drivetemp(char *str1) {
       CLOSE_FD2(sock, result);
       continue;
     }
-    got_conn = connect(sock, rp->ai_addr, rp->ai_addrlen);
-    if (0 == got_conn) {
+    if (0 == (connect(sock, rp->ai_addr, rp->ai_addrlen))) {
      /* len, bytes received or -1 on err
       * We intentionally do not call
       * recv() in a loop, read the
