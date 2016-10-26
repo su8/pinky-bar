@@ -19,17 +19,22 @@
 
 # Edit /dev/sda according to
 # your operating system drive naming
-# convetion
+# convention
 
+# To use atactl replace "smartctl" with
+# atactl sd0 readattr 
+# replace $arr[9] with $arr[3]
 while true; do
-  sudo smartctl -a /dev/sda | \
+  sudo smartctl -a /dev/sd0a | \
     perl -Mstrict -Mwarnings -ne '
-      my ($fifed_txt) = $_;
-      my @arr = split(" ", $fifed_txt);
+      my @arr = split(" ", $_);
+      my $tempnum = 0;
 
-      if ($arr[1] and lc $arr[1] eq "temperature_celsius") {
-        printf("%d\n",(($arr[9] and $arr[9] =~ /\d+/) ? $arr[9] : 0));
+      if ($arr[1] and lc $arr[1] =~ /temperature/i) {
+        $tempnum = $arr[9] || 0;
+        printf("%d\n",$tempnum);
       }' > /tmp/pinkytemp
 
   sleep 20
+
 done &

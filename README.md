@@ -492,6 +492,8 @@ To read the drive temperature from S.M.A.R.T **--with-smartemp**:
 
 * smartmontools
 
+smartmontools are not mandatory in OpenBSD, `atactl` does the same job.
+
 Execute the following command as root `visudo` and append:
 
 ```bash
