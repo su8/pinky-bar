@@ -74,6 +74,75 @@ AC_DEFUN([TEST_WEATHER],[
       ],[],[
         MISSING_HEADER()
       ])
+
+      NOTIFY([drivetemp-light])
+      AC_COMPILE_IFELSE([
+        AC_LANG_SOURCE([[
+          #include <stdio.h>
+          #include <string.h>
+          #include <stdlib.h>
+          #include <stdbool.h>
+          #include <unistd.h>
+          #include <netdb.h>
+          #include <sys/socket.h>
+
+          #define CLOSE_FD2(fd, res) \
+            if (-1 == (close(fd))) { \
+              freeaddrinfo(res); \
+              exit(EXIT_FAILURE); \
+            }
+
+          int main(void) {
+            struct addrinfo *rp = NULL, *result = NULL, hints;
+            int sock = 0;
+            char buf[200];
+            bool got_conn = false;
+            ssize_t len = 0;
+
+            memset(&hints, 0, sizeof(hints));
+
+            hints.ai_family = AF_INET;
+            hints.ai_socktype = SOCK_STREAM;
+
+            if (0 != (getaddrinfo("127.0.0.1", "7634", &hints, &result))) {
+              return EXIT_FAILURE;
+            }
+
+            for (rp = result; NULL != rp; rp = rp->ai_next) {
+              sock = socket(rp->ai_family, rp->ai_socktype, rp->ai_protocol);
+              if (-1 == sock) {
+                continue;
+              }
+              if (NULL == rp->ai_addr) {
+                CLOSE_FD2(sock, result);
+                continue;
+              }
+              if (0 == (connect(sock, rp->ai_addr, rp->ai_addrlen))) {
+                len = recv(sock, buf, sizeof(buf), 0);
+                got_conn = true;
+                break;
+              }
+              CLOSE_FD2(sock, result);
+            }
+
+            if (true == got_conn) {
+              CLOSE_FD2(sock, result);
+              if (0 < len) {
+                printf("%s\n", buf);
+              }
+            }
+
+            if (NULL != result) {
+              freeaddrinfo(result);
+            }
+            return EXIT_SUCCESS;
+          }
+        ]])
+      ],[],[
+        COMPILE_FAILED([drivetemp-light])
+        ]
+      )
+
     ])
 
     AS_IF([test "x$with_drivetemp" = "xyes"],[
