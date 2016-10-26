@@ -67,7 +67,15 @@ AC_DEFUN([TEST_WEATHER],[
   ifdef([LINUKS],[
     AS_IF([test "x$with_drivetemp_light" = "xyes"],[
       WITH_DRIVETEMP_LIGHT=1
+
+      AC_CHECK_HEADERS([  \
+        sys/socket.h      \
+        netdb.h           \
+      ],[],[
+        MISSING_HEADER()
+      ])
     ])
+
     AS_IF([test "x$with_drivetemp" = "xyes"],[
       WITH_DRIVETEMP=1
     ])
