@@ -13,7 +13,7 @@ HOMEPAGE="https://gitlab.com/void0/pinky-bar"
 
 LICENSE="GPL-2"
 SLOT="0"
-IUSE="x11 alsa +net libnl +pci dvd sensors ncurses +colours weather mpd drivetemp drivetemp-light smartemp perl python2"
+IUSE="x11 alsa +net libnl +pci dvd sensors ncurses colours weather mpd drivetemp drivetemp-light smartemp perl python2"
 
 DEPEND="
 	sys-devel/m4

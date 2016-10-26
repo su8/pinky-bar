@@ -164,7 +164,7 @@ It's up to you to decide which features suit you best.
 By default, if **no** options are passed, the program will be compiled with/without:
 
 ```bash
---without-alsa --without-x11 --without-mpd --with-colours --with-net --with-pci --without-dvd --without-sensors --without-ncurses --without-weather --without-drivetemp --without-smartemp --without-perl --without-python2 --without-python3
+--with-net --with-pci --without-alsa --without-x11 --without-mpd --without-colours --without-dvd --without-sensors --without-ncurses --without-weather --without-drivetemp --without-smartemp --without-perl --without-python2 --without-python3
 ```
 
 Affects only FreeBSD users with laptops, **--without-apm** will compile the program with acpi support to obtain the current battery life.
