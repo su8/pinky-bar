@@ -273,6 +273,10 @@ ls /usr/local/bin/autoconf-*
 export AUTOCONF_VERSION=2.69
 export AUTOMAKE_VERSION=1.15
 
+# uncomment if you'll use --with-x11 option
+# export CFLAGS='-I/usr/local/include -I/usr/X11R6/include'
+# export LDFLAGS='-L/usr/local/lib -L/usr/X11R6/lib'
+
 # Your call, gcc or llvm ?
 pkg_add gcc
 ```

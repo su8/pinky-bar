@@ -73,7 +73,6 @@ _gen_files() {
       ;;
   esac
 
-
   # to strip get_packs() at compile time,
   # also instead using more hard-coded macros
   # let the shell enumerate them for us
