@@ -370,7 +370,7 @@ parse_konf(char *combined) {
     exit_with_err(ERR, "~/.pinky doesn't exist.");
   }
 
-  while (NULL != (fgets(buf, VLA-1, fp))) {
+  while (NULL != (fgets(buf, 99, fp))) {
     if (EOF == (sscanf(buf, "%[^\n]", temp))) {
       CLOSE_X(fp);
       exit_with_err(ERR, "your config contains mistakes.");

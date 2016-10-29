@@ -359,6 +359,8 @@ Use one option per line, do not add any '   spa' 'ce   '.
 --mobotemp
 ```
 
+Execute the program without supplying any command line options and it will parse the configuration file.
+
 ---
 
 ## Linux Mandatory requirements
