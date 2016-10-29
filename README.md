@@ -143,12 +143,9 @@ It's up to you to decide which features suit you best.
 | --with-apm     | --without-apm       | APM power and resource management for laptops (FreeBSD only)                               |
 | --with-ncurses | --without-ncurses   | Output the data to the terminal using the ncurses library, can be colorized                |
 | --with-perl    | --without-perl      | Extend pinkybar with your own crafted scripts written in perl                              |
-| perl\_script=/tmp/pinky.pl   |       | The location where your perl script resides, must be combined **--with-perl**              |
 | --with-python2  | --without-python2  | Extend pinkybar with your own crafted scripts written in python2                           |
 | --with-python3  | --without-python3  | Extend pinkybar with your own crafted scripts written in python3                           |
-| python\_script=/tmp/pinky.py   |     | The location where your python script resides, must be combined either **--with-python2** or **--with-python3** |
 | --with-weather | --without-weather   | The temperature outside  (some details must be provided)                                   |
-| api\_town='London,uk'              | | Town and country code to use for temperature monitoring                                    |
 | api\_key='123458976'               | | API key obtained after registering yourself in the weather website                         |
 | --with-smartemp | --without-smartemp   | Read the drive temperature from S.M.A.R.T cross-platform available                       |
 | --with-drivetemp | --without-drivetemp   | Read the drive temperature from S.M.A.R.T (linux only) uses curl                       |
@@ -273,10 +270,6 @@ ls /usr/local/bin/autoconf-*
 export AUTOCONF_VERSION=2.69
 export AUTOMAKE_VERSION=1.15
 
-# uncomment if you'll use --with-x11 option
-# export CFLAGS='-I/usr/local/include -I/usr/X11R6/include'
-# export LDFLAGS='-L/usr/local/lib -L/usr/X11R6/lib'
-
 # Your call, gcc or llvm ?
 pkg_add gcc
 ```
@@ -338,6 +331,33 @@ Cannot list the \*BSD flavours as "distros", so they deserve own options:
 
 - [x] freebsd
 - [x] openbsd
+
+
+---
+
+## Using configuration file
+
+**~/.pinky** is the location of the configuration file. It uses the same short and long command line options.
+
+I do advise you to use the long options syntax.
+
+If any option depends on argument, don't put any space between the option and the argument.
+
+Use one option per line, do not add any '   spa' 'ce   '.
+
+```bash
+--weather=London,uk
+--coresload
+--cputemp
+--ramperc
+--driveperc
+--packages
+--kernel
+--voltage
+--fans
+--mobo
+--mobotemp
+```
 
 ---
 
@@ -521,21 +541,21 @@ or
 
 Have a look at extra/scripts/pinky{.py,.pl}, they serve as examples how to write the most basic scripts in order to extend pinkybar in python and/or perl. You can use both languages simultaneously.
 
-python3 wants `PYTHONPATH` to be exported, you should copy it to your shell configuration file, so it's set right after you boot your toaster:
+If you choosed to use python >= 3.3, don't forget to update the PYTHONPATH whenever your python version is updated, as the env var will point to older version. Play safe and stick to python 2.7
+
+python wants `PYTHONPATH` to be exported, you should copy it to your shell configuration file, so it's set right after you boot your toaster:
 
 ```bash
+# python2
+export PYTHONPATH=/the/path/to/your/script
+
+# python3
 python3 -c 'import sys;print(":".join([x for x in sys.path]))'
 export PYTHONPATH=... :/including/the/path/to/your/script
 
-# On other hand to compile the program with python2, you should `unset`
-# this environment variable
-
-#~/pypi > python3 -c 'import sys;print(":".join([x for x in sys.path]))'             
-#:/usr/lib64/python34.zip:/usr/lib64/python3.4:/usr/lib64/python3.4/plat-linux:/usr/lib64/python3.4/lib-dynload:/usr/lib64/python3.4/site-packages
-
-#~/pypi > export PYTHONPATH=/usr/lib64/python34.zip:/usr/lib64/python3.4:/usr/lib64/python3.4/plat-linux:/usr/lib64/python3.4/lib-dynload:/usr/lib64/python3.4/site-packages:/home/frost/pypi
-
-# ./configure ... --with-python3 python_script='/home/frost/pypi/multi.py'
+# Execute pinkybar and supply the name of your
+# script without the .py file extension
+pinkybar --python my_script
 ```
 
 To get the sound volume level:

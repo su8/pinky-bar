@@ -645,13 +645,6 @@ T}@T{
 Extend pinkybar with your own crafted scripts written in perl
 T}
 T{
-perl_script=/tmp/pinky.pl
-T}@T{
-T}@T{
-The location where your perl script resides, must be combined
-\f[B]\[en]with\-perl\f[]
-T}
-T{
 \[en]with\-python2
 T}@T{
 \[en]without\-python2
@@ -666,24 +659,11 @@ T}@T{
 Extend pinkybar with your own crafted scripts written in python3
 T}
 T{
-python_script=/tmp/pinky.py
-T}@T{
-T}@T{
-The location where your python script resides, must be combined either
-\f[B]\[en]with\-python2\f[] or \f[B]\[en]with\-python3\f[]
-T}
-T{
 \[en]with\-weather
 T}@T{
 \[en]without\-weather
 T}@T{
 The temperature outside (some details must be provided)
-T}
-T{
-api_town=`London,uk'
-T}@T{
-T}@T{
-Town and country code to use for temperature monitoring
 T}
 T{
 api_key=`123458976'
@@ -1022,6 +1002,35 @@ options:
 [x] openbsd
 .PP
    *   *   *   *   *
+.SS Using configuration file
+.PP
+\f[B]~/.pinky\f[] is the location of the configuration file.
+It uses the same short and long command line options.
+.PP
+I do advise you to use the long options syntax.
+.PP
+If any option depends on argument, don't put any space between the
+option and the argument.
+.PP
+Use one option per line, do not add any `spa' `ce'.
+.IP
+.nf
+\f[C]
+\-\-weather=London,uk
+\-\-coresload
+\-\-cputemp
+\-\-ramperc
+\-\-driveperc
+\-\-packages
+\-\-kernel
+\-\-voltage
+\-\-fans
+\-\-mobo
+\-\-mobotemp
+\f[]
+.fi
+.PP
+   *   *   *   *   *
 .SS Linux Mandatory requirements
 .IP \[bu] 2
 gcc/clang
@@ -1265,24 +1274,27 @@ to write the most basic scripts in order to extend pinkybar in python
 and/or perl.
 You can use both languages simultaneously.
 .PP
-python3 wants \f[C]PYTHONPATH\f[] to be exported, you should copy it to
+If you choosed to use python >= 3.3, don't forget to update the
+PYTHONPATH whenever your python version is updated, as the env var will
+point to older version.
+Play safe and stick to python 2.7
+.PP
+python wants \f[C]PYTHONPATH\f[] to be exported, you should copy it to
 your shell configuration file, so it's set right after you boot your
 toaster:
 .IP
 .nf
 \f[C]
+#\ python2
+export\ PYTHONPATH=/the/path/to/your/script
+
+#\ python3
 python3\ \-c\ \[aq]import\ sys;print(":".join([x\ for\ x\ in\ sys.path]))\[aq]
 export\ PYTHONPATH=...\ :/including/the/path/to/your/script
 
-#\ On\ other\ hand\ to\ compile\ the\ program\ with\ python2,\ you\ should\ `unset`
-#\ this\ environment\ variable
-
-#~/pypi\ >\ python3\ \-c\ \[aq]import\ sys;print(":".join([x\ for\ x\ in\ sys.path]))\[aq]\ \ \ \ \ \ \ \ \ \ \ \ \ 
-#:/usr/lib64/python34.zip:/usr/lib64/python3.4:/usr/lib64/python3.4/plat\-linux:/usr/lib64/python3.4/lib\-dynload:/usr/lib64/python3.4/site\-packages
-
-#~/pypi\ >\ export\ PYTHONPATH=/usr/lib64/python34.zip:/usr/lib64/python3.4:/usr/lib64/python3.4/plat\-linux:/usr/lib64/python3.4/lib\-dynload:/usr/lib64/python3.4/site\-packages:/home/frost/pypi
-
-#\ ./configure\ ...\ \-\-with\-python3\ python_script=\[aq]/home/frost/pypi/multi.py\[aq]
+#\ Execute\ pinkybar\ and\ supply\ the\ name\ of\ your
+#\ script\ without\ the\ .py\ file\ extension
+pinkybar\ \-\-python\ my_script
 \f[]
 .fi
 .PP

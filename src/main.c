@@ -22,19 +22,19 @@
 #include "prototypes/options.h"
 
 int main(int argc, char *argv[]) {
+  char combined[WHOLE_MAIN_ARR_LEN];
+  char *all = combined;
 
-  if (1 == argc) {
-    FPRINTF("%s\n", "Try --help or --usage for more information.");
-    return EXIT_FAILURE;
-  }
   if (-1 == (sysconf(_SC_CLK_TCK))) {
     FPRINTF("%s\n", "Error: sysconf() failed");
     return EXIT_FAILURE;
   }
 
-  char combined[WHOLE_MAIN_ARR_LEN];
-  char *all = combined;
-  parse_opts(argc, argv, all);
+  if (1 == argc) {
+    parse_konf(all);
+  } else {
+    parse_opts(argc, argv, all);
+  }
 
   if ('\0' != combined[0]) {
 #if defined (HAVE_X11_XLIB_H)

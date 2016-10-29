@@ -21,7 +21,7 @@
 #define PERL_H_
 
 #if WITH_PERL == 1
-void get_perl(char *);
+void get_perl(char *, char *);
 #endif /* WITH_PERL */
 
 #endif /* PERL_H_ */

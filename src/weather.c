@@ -131,9 +131,11 @@ read_curl_data_cb(char *data, size_t size, size_t nmemb, char *str1) {
    https://github.com/curl/curl/tree/master/docs/examples
 */
 void 
-get_weather(char *str1) {
-  const char *da_url = "http://api.openweathermap.org/data/2.5/weather?q="
-    API_TOWN "&units=metric&APPID=" API_KEY;
+get_weather(char *str1, char *str2) {
+  const char *da_url = "http://api.openweathermap.org/data/2.5/weather?q=";
+  char temp[VLA];
+
+  FILL_ARR(temp, "%s%s%s%s", da_url, str2, "&units=metric&APPID=", API_KEY);
 
   CURL *curl = NULL;
   CURLcode res;
@@ -145,7 +147,7 @@ get_weather(char *str1) {
     goto error;
   }
 
-  curl_easy_setopt(curl, CURLOPT_URL, da_url);
+  curl_easy_setopt(curl, CURLOPT_URL, temp);
   curl_easy_setopt(curl, CURLOPT_ACCEPT_ENCODING, "gzip");
   curl_easy_setopt(curl, CURLOPT_TIMEOUT, 20L);
   curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, read_curl_data_cb);

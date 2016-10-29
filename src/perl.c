@@ -83,9 +83,9 @@ call_user_subroutine(char *str1) {
  *  http://docstore.mik.ua/orelly/perl/prog3/ch21_04.htm
  */
 void 
-get_perl(char *str1) {
+get_perl(char *str1, char *str2) {
   /* The 4th arg to perl_parse is not const */
-  char *my_argv[] = { "", UZER_ZCRIPT };
+  char *my_argv[] = { "", str2 };
   static PerlInterpreter *my_perl = NULL;
 
   FILL_STR_ARR(1, str1, "0");

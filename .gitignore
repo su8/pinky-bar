@@ -15,6 +15,7 @@ src/pinky_curses
 *.xz
 *.pdc
 *.pyo
+__pycache__
 
 
 

@@ -93,15 +93,15 @@ static const struct argp_option options[] = {
   { .name = "statio",       .key = 'S', .arg = "sda",  .doc = "Read and written MBs to the drive so far."                },
 
 #if WITH_PERL == 1
-  { .name = "perl",         .key = PERLSCRIPT,         .doc = "Extend the program with perl, read README."               },
+  { .name = "perl",  .key = PERLSCRIPT, .arg = "script", .doc = "Extend the program with perl, read README."             },
 #endif /* WITH_PERL */
 
 #if WITH_PYTHON == 1
-  { .name = "python",       .key = PYTHONSCRIPT,       .doc = "Extend the program with python, read README."             },
+  { .name = "python",  .key = PYTHONSCRIPT, .arg = "script", .doc = "Extend the program with python, read README."       },
 #endif /* WITH_PYTHON */
 
 #if WITH_WEATHER == 1
-  { .name = "weather",      .key = 'q',                .doc = "The temperature outside."                                 },
+  { .name = "weather", .key = 'q', .arg = "London,uk", .doc = "The temperature outside."                                 },
 #endif /* WITH_WEATHER */
 
 #if defined(HAVE_MPD_CLIENT_H)
@@ -235,17 +235,17 @@ parse_opt(int key, char *arg, struct argp_state *state) {
 
 
 #if WITH_PERL == 1
-    NEW_LABEL(PERLSCRIPT, char perl[VLA], perl, FMT_KERN);
+    NEW_ARG_LABEL(PERLSCRIPT, char perl[VLA], perl, FMT_KERN);
 #endif /* WITH_PERL */
 
 
 #if WITH_PYTHON == 1
-    NEW_LABEL(PYTHONSCRIPT, char python[VLA], python, FMT_KERN);
+    NEW_ARG_LABEL(PYTHONSCRIPT, char python[VLA], python, FMT_KERN);
 #endif /* WITH_PYTHON */
 
 
 #if WITH_WEATHER == 1
-    NEW_LABEL('q', char weather[VLA], weather, OUT_STR YELLOW STR_SPEC" ");
+    NEW_ARG_LABEL('q', char weather[VLA], weather, OUT_STR YELLOW STR_SPEC" ");
 #endif /* WITH_WEATHER */
 
 
@@ -339,16 +339,48 @@ parse_opt(int key, char *arg, struct argp_state *state) {
   return EXIT_SUCCESS;
 }
 
+static const struct argp arg_parser = {
+  .parser = parse_opt,
+  .options = options,
+  .doc = doc
+};
+
 
 void
 parse_opts(int argc, char *argv[], char *combined) {
   struct arguments arguments;
   arguments.all = combined;
 
-  static const struct argp arg_parser = {
-    .parser = parse_opt,
-    .options = options,
-    .doc = doc
-  };
   argp_parse(&arg_parser, argc, argv, ARGP_IN_ORDER, NULL, &arguments);
+}
+
+
+void
+parse_konf(char *combined) {
+  FILE *fp = NULL;
+  char *ello[] = { PACKAGE_NAME, NULL };
+  char buf[100], conf[50], temp[100];
+  char *ptr = NULL;
+
+  struct arguments arguments;
+  arguments.all = combined;
+
+  FILL_ARR(conf, "%s%s", getenv("HOME"), "/.pinky");
+  if (NULL == (fp = fopen(conf, "r"))) {
+    exit_with_err(ERR, "~/.pinky doesn't exist.");
+  }
+
+  while (NULL != (fgets(buf, VLA-1, fp))) {
+    if (EOF == (sscanf(buf, "%[^\n]", temp))) {
+      CLOSE_X(fp);
+      exit_with_err(ERR, "your config contains mistakes.");
+    }
+    ptr = temp;
+    while (0 != (isspace((unsigned char) *ptr))) {
+      ptr++;
+    }
+    ello[1] = ptr;
+    argp_parse(&arg_parser, 2, ello, ARGP_IN_ORDER, NULL, &arguments);
+  }
+  CLOSE_X(fp);
 }

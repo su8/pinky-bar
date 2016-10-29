@@ -30,7 +30,7 @@
 
 #define RET_PY_STR(x) (NULL != PYFON_ZTR(x) ? PYFON_ZTR(x) : "0")
 
-void get_python(char *);
+void get_python(char *, char *);
 #endif /* WITH_PYTHON */
 
 #endif /* PYTHON_H_ */

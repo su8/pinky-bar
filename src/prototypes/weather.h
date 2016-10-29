@@ -21,7 +21,7 @@
 #define WEATHER_H_
 
 #if WITH_WEATHER == 1
-void get_weather(char *);
+void get_weather(char *, char *);
 #endif /* WITH_WEATHER */
 
 #endif /* WEATHER_H_ */

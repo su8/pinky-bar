@@ -276,8 +276,7 @@ void
 get_statio(char *str1, char *str2) {
   struct diskstats *ds = NULL;
   int mib[] = { CTL_HW, HW_DISKSTATS };
-  uint_least16_t x = 0;
-  size_t len = 0, drivez = 0;
+  size_t len = 0, drivez = 0, x = 0;
 
   FILL_STR_ARR(1, str1, "Null");
   SYSCTLVAL(mib, 2, NULL, &len);

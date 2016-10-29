@@ -34,28 +34,18 @@
  *  https://wiki.blender.org/index.php/Dev:2.5/Source/Python/API/Py3.1_Migration
 */
 void
-get_python(char *str1) {
+get_python(char *str1, char *str2) {
   PyObject *pName = NULL, *pModule = NULL;
   PyObject *pFunc = NULL, *pValue = NULL;
-  char *pathz = NULL;
 
   FILL_STR_ARR(1, str1, "0");
-
-  pathz = (char *)malloc(500);
-  if (NULL == pathz) {
-    return;
-  }
-  snprintf(pathz, 499, "%s:%s", (char *)Py_GetPath(), UZER_PAHT);
 
   Py_Initialize();
 
 #if WITH_PYTHON2 == 1
-  PySys_SetPath(pathz);
-  pName = PyString_FromString((char *)UZER_ZCRIPT2);
+  pName = PyString_FromString(str2);
 #else
-  Py_SetPath((wchar_t *)pathz);
-  Py_SetPythonHome((wchar_t *)pathz);
-  pName = PyUnicode_DecodeFSDefault((char *)UZER_ZCRIPT2);
+  pName = PyUnicode_DecodeFSDefault(str2);
 #endif /* WITH_PYTHON2 */
 
   if (NULL == pName) {
@@ -87,9 +77,6 @@ error:
   }
   if (NULL != pModule) {
     Py_XDECREF(pModule);
-  }
-  if (NULL != pathz) {
-    free(pathz);
   }
 
   Py_Finalize();

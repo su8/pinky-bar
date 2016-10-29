@@ -24,7 +24,6 @@ dnl the --with-weather switch
 AC_DEFUN([TEST_WEATHER],[
   CURL_LIBS=""
   API_KEY=\""g0tm1lf"\"
-  API_TOWN=\""Venus,The nearby planet"\"
   DRIVE_PORT=\""7634"\"
   WITH_WEATHER=0
   WITH_DRIVETEMP=0
@@ -59,6 +58,8 @@ AC_DEFUN([TEST_WEATHER],[
   )
 
   AC_ARG_VAR(drive_port, [TCP port to listen to])
+
+  AC_ARG_VAR(api_key, [weather api key])
 
   AS_IF([test "x$with_drivetemp" = "xyes" && test "x$with_drivetemp_light" = "xyes"],[
     with_drivetemp=no
@@ -179,22 +180,14 @@ AC_DEFUN([TEST_WEATHER],[
         ])
     ])
 
-    AC_ARG_VAR(api_key, [weather api key])
     if [[ ! -z "${api_key}" ]]
     then
       API_KEY=\""${api_key}"\"
     fi
 
-    AC_ARG_VAR(api_town, [weather api town])
-    if [[ ! -z "${api_town}" ]]
-    then
-      API_TOWN=\""${api_town}"\"
-    fi
-
     AS_IF([test "x$with_weather" = "xyes"],[
       WITH_WEATHER=1
       AC_DEFINE_UNQUOTED([API_KEY],[$API_KEY],[weather api key])
-      AC_DEFINE_UNQUOTED([API_TOWN],[$API_TOWN],[weather api town])
     ])
 
   ])

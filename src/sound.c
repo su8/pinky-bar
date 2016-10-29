@@ -203,7 +203,7 @@ void
 get_song(char *str1, int8_t num) {
   FILE *fp = NULL;
   static bool got_stream = false;
-  char buf[100], temp[100], *ptr;
+  char *ptr = NULL, buf[100], temp[100];
   const char *tagz[] = { "artist", "title", "album", "date" };
   const char *idx_tagz = ((6 != num) ? tagz[num-2] : "ohsnap");
 

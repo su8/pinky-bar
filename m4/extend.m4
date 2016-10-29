@@ -25,7 +25,6 @@ AC_DEFUN([TEST_PERL],[
   PERL_LZ=""
   PERL_CF=""
   WITH_PERL=0
-  UZER_ZCRIPT=""
   PYTHC=""
 
   AC_ARG_WITH([perl],
@@ -44,15 +43,8 @@ AC_DEFUN([TEST_PERL],[
       ERR([Couldnt find perl.])
     fi
 
-
     PERL_LZ=`$PERL -MExtUtils::Embed -e ldopts`
     PERL_CF=`$PERL -MExtUtils::Embed -e ccopts`
-
-    AC_ARG_VAR(perl_script, [user perl script])
-    if [[ ! -z "${perl_script}" ]]
-    then
-      UZER_ZCRIPT=\""${perl_script}"\"
-    fi
 
     dnl m4_foreach([LiB], [
     dnl     perl_construct,
@@ -73,8 +65,6 @@ AC_DEFUN([TEST_PERL],[
   AC_SUBST(PERL_LZ)
   AC_SUBST(PERL_CF)
   AC_DEFINE_UNQUOTED([WITH_PERL],[$WITH_PERL],[Extend the program via perl scripts])
-  AC_DEFINE_UNQUOTED([UZER_ZCRIPT],[$UZER_ZCRIPT],[Extend the program via perl scripts])
-
 
   dnl AS_IF([test "x$with_perl" = "xyes"], [
   dnl   AC_LINK_IFELSE([
@@ -121,8 +111,6 @@ AC_DEFUN([TEST_PYTHON],[
   PYTHON_CF=""
   WITH_PYTHON2=0
   WITH_PYTHON=0
-  UZER_ZCRIPT2="none"
-  UZER_PAHT="none"
   curpycfver="none"
 
   AC_ARG_WITH([python2],
@@ -138,14 +126,6 @@ AC_DEFUN([TEST_PYTHON],[
     [],
     [with_python3=no]
   )
-
-  AC_ARG_VAR(python_script, [user python script])
-  if [[ ! -z "${python_script}" ]]
-  then
-    just_script="${python_script##*/}"
-    UZER_ZCRIPT2=\""${just_script%.*}"\"
-    UZER_PAHT=\""${python_script%/*}"\"
-  fi
 
   AS_IF([test "x$with_python2" = "xyes" || test "x$with_python3" = "xyes"], [
     CHECK_CFLAGZ([-O0])
@@ -229,14 +209,11 @@ AC_DEFUN([TEST_PYTHON],[
   AC_SUBST(PYTHON_CF)
   AC_DEFINE_UNQUOTED([WITH_PYTHON],[$WITH_PYTHON],[Extend the program via python scripts])
   AC_DEFINE_UNQUOTED([WITH_PYTHON2],[$WITH_PYTHON2],[Extend the program via python scripts])
-  AC_DEFINE_UNQUOTED([UZER_ZCRIPT2],[$UZER_ZCRIPT2],[Extend the program via python scripts])
-  AC_DEFINE_UNQUOTED([UZER_PAHT],[$UZER_PAHT],[Extend the program via python scripts])
 
   dnl AS_IF([test "x$with_python2" = "xyes" || test "x$with_python3" = "xyes"], [
   dnl   AC_CHECK_HEADERS([testveR/Python.h],[],[
   dnl     MISSING_HEADER()
   dnl   ])
-
   dnl   AC_LINK_IFELSE([
   dnl     AC_LANG_SOURCE([[
   dnl       #include <stdio.h>
