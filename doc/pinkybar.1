@@ -323,7 +323,7 @@ T{
 T}@T{
 \[en]weather
 T}@T{
-Show the temperature outside (some details must be provided)
+Show the temperature outside [argument \- London,uk]
 T}
 T{
 \-U
@@ -695,7 +695,8 @@ T{
 api_key=`123458976'
 T}@T{
 T}@T{
-API key obtained after registering yourself in the weather website
+API key obtained after registering yourself in the weather website, must
+be combined \f[B]\[en]with\-weather\f[]
 T}
 T{
 \[en]with\-smartemp
@@ -770,11 +771,11 @@ T}
 .TE
 .PP
 By default, if \f[B]no\f[] options are passed, the program will be
-compiled with/without:
+compiled with:
 .IP
 .nf
 \f[C]
-\-\-with\-net\ \-\-with\-pci\ \-\-without\-alsa\ \-\-without\-x11\ \-\-without\-mpd\ \-\-without\-colours\ \-\-without\-dvd\ \-\-without\-sensors\ \-\-without\-ncurses\ \-\-without\-weather\ \-\-without\-drivetemp\ \-\-without\-smartemp\ \-\-without\-perl\ \-\-without\-python2\ \-\-without\-python3
+\-\-with\-net\ \-\-with\-pci
 \f[]
 .fi
 .PP
@@ -786,21 +787,6 @@ life.
 the options syntax stays as is.
 .PP
 The pci and sensors configure options will be discarded in *BSD.
-If you supplied \f[B]\[en]with\-alsa\f[] and \f[B]\[en]with\-oss\f[] or
-used the port package with the ncurses dialogue, alsa will have higher
-precedence over OSS.
-By default the port package will have OSS selected and alsa unselected.
-.PP
-Affects only linux, \f[B]\[en]with\-pci\f[] and or
-\f[B]\[en]with\-sensors\f[] will substitute \-O0 flag to mitigate bugs
-in GCC caused by \-O2 optimizations.
-\-O0 will optimize the compiled binary for file size, while \-O2 will
-optimize it for speed.
-So don't be shocked to find out that \f[B]\[en]without\-pci
-\[en]without\-sensors\f[] will cause the compiled binary to double it's
-size.
-If things doesn't improve with upcomining GCC releases I will temporary
-drop \-O2.
 .PP
 Affects only linux users with wifi/wireless chipsets, run
 \f[C]lsmod|grep\ 802\f[] and see whether your chipset uses
@@ -818,10 +804,9 @@ pinkybar with different options.
 \f[B]\[en]with\-smartemp\f[] only cares for the existance of
 /tmp/pinkytemp file.
 .PP
-\f[B]\[en]with\-weather\f[] is using dis
+\f[B]\[en]with\-weather\f[] is using this
 url (http://openweathermap.org/current), register yourself there, create
-a new API key (https://home.openweathermap.org/api_keys) and supply them
-like dis to \f[B]configure\f[].
+a new API key (https://home.openweathermap.org/api_keys).
 .PP
 Don't just rush to register yourself, read carefully what the
 \[lq]Free\[rq] account limits are and take in account how often the
@@ -834,7 +819,7 @@ I'm not responsible if you exceeded the limits, you've been warned.
 #\ curl\ \[aq]http://api.openweathermap.org/data/2.5/weather?q=London,uk&units=metric&APPID=28459ae16e4b3a7e5628ff21f4907b6f\[aq]
 
 #\ what\ to\ pass\ to\ configure
-\-\-with\-weather\ api_town=\[aq]London,uk\[aq]\ api_key=\[aq]28459ae16e4b3a7e5628ff21f4907b6f\[aq]
+\-\-with\-weather\ api_key=\[aq]28459ae16e4b3a7e5628ff21f4907b6f\[aq]
 \f[]
 .fi
 .PP
@@ -844,7 +829,7 @@ I'm not responsible if you exceeded the limits, you've been warned.
 .nf
 \f[C]
 bash\ bootstrap\ distro
-\&./configure\ \-\-prefix=$HOME/.cache\ \-\-with\-x11\ \-\-with\-alsa
+\&./configure\ \-\-prefix=$HOME/.cache\ \-\-with\-x11
 make
 make\ install
 \f[]
@@ -863,7 +848,7 @@ cp\ \-r\ extra/xbm_icons/*.xbm\ $HOME/.xmonad/icons
 bash\ bootstrap\ distro
 
 #\ disable\ X11,\ point\ the\ location\ to\ the\ icons
-\&./configure\ \-\-prefix=$HOME/.cache\ \-\-without\-x11\ \-\-with\-alsa\ icons=$HOME/.xmonad/icons
+\&./configure\ \-\-prefix=$HOME/.cache\ \-\-without\-x11\ icons=$HOME/.xmonad/icons
 
 #\ compile\ \[aq]n\ install
 make
@@ -979,6 +964,7 @@ pinky\-bar is no longer tied to Window Managers only.
 With the addition of \[lq]without colours\[rq], the output can be shown
 in any program, just bear in mind that the more options you've supplied
 the more system information will be shown.
+The tmux status bar in action:
 .PP
 [IMAGE: image (img/pic4.png)]
 .PP
@@ -1038,7 +1024,7 @@ I do advise you to use the long options syntax.
 If any option depends on argument, don't put any space between the
 option and the argument.
 .PP
-Use one option per line, do not add any `spa' `ce'.
+Use one option per line.
 .IP
 .nf
 \f[C]
@@ -1108,7 +1094,7 @@ export\ CFLAGS=\[aq]\-I/usr/local/include\[aq]
 \f[]
 .fi
 .PP
-After editing the wrong prototype I managed to stumbled upon a bug in
+After editing the wrong prototype I managed to stumble upon a bug in
 OpenBSD's own libc.
 .PP
 \f[B]Warning !!! OpenBSD users !!!\f[]

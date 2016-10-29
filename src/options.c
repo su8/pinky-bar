@@ -358,7 +358,7 @@ parse_opts(int argc, char *argv[], char *combined) {
 void
 parse_konf(char *combined) {
   FILE *fp = NULL;
-  char *ello[] = { PACKAGE_NAME, NULL };
+  char *ello[] = { "pinkybar", NULL };
   char buf[100], conf[50], temp[100];
   char *ptr = NULL;
 

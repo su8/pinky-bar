@@ -89,7 +89,7 @@ The order of supplied options will dictate how, where and what system informatio
 | -k           | --kernel    | Combined kernel name and version                                   |
 |              | --perl      | Extend pinkybar with your scripts written in perl, learn more from the Opt-in section.     |
 |              | --python    | Extend pinkybar with your scripts written in python, learn more from the Opt-in section.     |
-| -q           | --weather   | Show the temperature outside (some details must be provided)       |
+| -q           | --weather   | Show the temperature outside [argument - London,uk]                |
 | -U           | --uptime    | The system uptime                                                  |
 | -w           | --loadavg   | The system average load for past 1, 5 and 15 minutes               |
 | -v           | --voltage   | The system voltage                                                 |
@@ -161,7 +161,7 @@ It's up to you to decide which features suit you best.
 | --with-python2  | --without-python2  | Extend pinkybar with your own crafted scripts written in python2                           |
 | --with-python3  | --without-python3  | Extend pinkybar with your own crafted scripts written in python3                           |
 | --with-weather | --without-weather   | The temperature outside  (some details must be provided)                                   |
-| api\_key='123458976'               | | API key obtained after registering yourself in the weather website                         |
+| api\_key='123458976'               | | API key obtained after registering yourself in the weather website, must be combined **--with-weather**  |
 | --with-smartemp | --without-smartemp   | Read the drive temperature from S.M.A.R.T cross-platform available                       |
 | --with-drivetemp | --without-drivetemp   | Read the drive temperature from S.M.A.R.T (linux only) uses curl                       |
 | --with-drivetemp-light | --without-drivetemp-light   | Read the drive temperature from S.M.A.R.T (linux only) light version       |
@@ -173,25 +173,23 @@ It's up to you to decide which features suit you best.
 | mobo\_sensor='dev.aibs.0'  |         | FreeBSD motherboard sensor module name to use in the sysctl calls. Read the FreeBSD installation below  |
 | cpu\_sensor='dev.cpu.0.temperature' |  | FreeBSD cpu temperature module name to use in the sysctl calls . Read the FreeBSD installation below  |
 
-By default, if **no** options are passed, the program will be compiled with/without:
+By default, if **no** options are passed, the program will be compiled with:
 
 ```bash
---with-net --with-pci --without-alsa --without-x11 --without-mpd --without-colours --without-dvd --without-sensors --without-ncurses --without-weather --without-drivetemp --without-smartemp --without-perl --without-python2 --without-python3
+--with-net --with-pci
 ```
 
 Affects only FreeBSD users with laptops, **--without-apm** will compile the program with acpi support to obtain the current battery life.
 
 **--without-mpd** will compile the program with cmus support, the options syntax stays as is.
 
-The pci and sensors configure options will be discarded in \*BSD. If you supplied **--with-alsa** and **--with-oss** or used the port package with the ncurses dialogue, alsa will have higher precedence over OSS. By default the port package will have OSS selected and alsa unselected.
-
-Affects only linux, **--with-pci** and or **--with-sensors** will substitute -O0 flag to mitigate bugs in GCC caused by -O2 optimizations. -O0 will optimize the compiled binary for file size, while -O2 will optimize it for speed. So don't be shocked to find out that **--without-pci --without-sensors** will cause the compiled binary to double it's size. If things doesn't improve with upcomining GCC releases I will temporary drop -O2.
+The pci and sensors configure options will be discarded in \*BSD.
 
 Affects only linux users with wifi/wireless chipsets, run `lsmod|grep 802` and see whether your chipset uses cfg80211/mac80211. If that's so you can rely on libnl and enable **--with-libnl** configure options, otherwise your chipset probably still uses we/wext, so type **--without-libnl**.
 
 Affects only linux users, **--with-drivetemp** pretty much locks you down to hddtemp. You can adjust the perl one liner script at the end of this README and compile the program **--with-smartemp**, so you can switch between hddtemp and smartmontools at any time without the need recompile pinkybar with different options. **--with-smartemp** only cares for the existance of /tmp/pinkytemp file.
 
-**--with-weather** is using [dis url](http://openweathermap.org/current), register yourself there, create a new [API key](https://home.openweathermap.org/api\_keys) and supply them like dis to **configure**.
+**--with-weather** is using [this url](http://openweathermap.org/current), register yourself there, create a new [API key](https://home.openweathermap.org/api\_keys).
 
 Don't just rush to register yourself, read carefully what the "Free" account limits are and take in account how often the program should call their api service. I'm not responsible if you exceeded the limits, you've been warned.
 
@@ -200,7 +198,7 @@ Don't just rush to register yourself, read carefully what the "Free" account lim
 # curl 'http://api.openweathermap.org/data/2.5/weather?q=London,uk&units=metric&APPID=28459ae16e4b3a7e5628ff21f4907b6f'
 
 # what to pass to configure
---with-weather api_town='London,uk' api_key='28459ae16e4b3a7e5628ff21f4907b6f'
+--with-weather api_key='28459ae16e4b3a7e5628ff21f4907b6f'
 ```
 
 ---
@@ -209,7 +207,7 @@ Don't just rush to register yourself, read carefully what the "Free" account lim
 
 ```bash
 bash bootstrap distro
-./configure --prefix=$HOME/.cache --with-x11 --with-alsa
+./configure --prefix=$HOME/.cache --with-x11
 make
 make install
 ```
@@ -226,7 +224,7 @@ cp -r extra/xbm_icons/*.xbm $HOME/.xmonad/icons
 bash bootstrap distro
 
 # disable X11, point the location to the icons
-./configure --prefix=$HOME/.cache --without-x11 --with-alsa icons=$HOME/.xmonad/icons
+./configure --prefix=$HOME/.cache --without-x11 icons=$HOME/.xmonad/icons
 
 # compile 'n install
 make
@@ -315,7 +313,7 @@ while true; do echo "^BOh ^Mhello ^Ydear";sleep 1;done | ./pinky_curses
 
 ## Installation for anything else
 
-pinky-bar is no longer tied to Window Managers only. With the addition of "without colours", the output can be shown in any program, just bear in mind that the more options you've supplied the more system information will be shown.
+pinky-bar is no longer tied to Window Managers only. With the addition of "without colours", the output can be shown in any program, just bear in mind that the more options you've supplied the more system information will be shown. The tmux status bar in action:
 
 ![](img/pic4.png)
 
@@ -358,7 +356,7 @@ I do advise you to use the long options syntax.
 
 If any option depends on argument, don't put any space between the option and the argument.
 
-Use one option per line, do not add any '   spa' 'ce   '.
+Use one option per line.
 
 ```bash
 --weather=London,uk
@@ -408,7 +406,7 @@ export LDFLAGS='-L/usr/local/lib'
 export CFLAGS='-I/usr/local/include'
 ```
 
-After editing the wrong prototype I managed to stumbled upon a bug in OpenBSD's own libc.
+After editing the wrong prototype I managed to stumble upon a bug in OpenBSD's own libc.
 
 **Warning !!! OpenBSD users !!!**
 
