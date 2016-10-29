@@ -31,9 +31,24 @@ If you compile your kernel from source code make sure to include your cpu and mo
 
 ---
 
-## Bandwidth measurment
+## Table of Contents
 
-pinky-bar supplies bandwitdh/network throughput measurment to satisfy those users that pay for overpriced 3G/mobile internet, and want to monitor every single megabit/megabyte.
+- [Program Options](#program-options)
+- [Configure Options](#gnu-build-system-configure-options)
+- [Installation for dwm](#installation-for-dwm)
+- [Installation for xmonad/other WM](#installation-for-xmonad-or-other-wm)
+- [Installation in FreeBSD](#installation-in-freebsd)
+- [Installation in OpenBSD](#installation-in-openbsd)
+- [pinky curses installation](#pinky-curses-installation)
+- [Installation for anything else](#installation-for-anything-else)
+- [Using configuration file](#using-configuration-file)
+- [Linux Requirements](#linux-mandatory-requirements)
+- [BSD Requirements](#bsd-mandatory-requirements)
+- [Opt-in Requirements](#opt-in-requirements)
+- [WM Requirements](#wm-specific-requirements)
+- [Wish list](#wish-list)
+
+---
 
 ## Program options
 
