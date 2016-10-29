@@ -371,9 +371,9 @@ parse_konf(char *combined) {
   }
 
   while (NULL != (fgets(buf, 99, fp))) {
-    if (EOF == (sscanf(buf, "%[^\n]", temp))) {
+    if (EOF == (sscanf(buf, "%s", temp))) {
       CLOSE_X(fp);
-      exit_with_err(ERR, "your config contains mistakes.");
+      exit_with_err(ERR, "empty line(s) detected.");
     }
     ptr = temp;
     while (0 != (isspace((unsigned char) *ptr))) {
