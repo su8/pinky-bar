@@ -87,6 +87,7 @@ get_perl(char *str1, char *str2) {
   /* The 4th arg to perl_parse is not const */
   char *my_argv[] = { "", str2 };
   static PerlInterpreter *my_perl = NULL;
+  int status = 0;
 
   FILL_STR_ARR(1, str1, "0");
   PERL_SYS_INIT3((int *)NULL, (char ***)NULL, (char ***)NULL);
@@ -98,12 +99,20 @@ get_perl(char *str1, char *str2) {
   }
 
   perl_construct(my_perl);
-  perl_parse(my_perl, xs_init, 2, my_argv, (char **)NULL);
   PL_exit_flags |= PERL_EXIT_DESTRUCT_END;
-  perl_run(my_perl);
 
+  status = perl_parse(my_perl, xs_init, 2, my_argv, (char **)NULL);
+  if (0 != status) {
+    goto error;
+  }
+
+  status = perl_run(my_perl);
+  if (0 != status) {
+    goto error;
+  }
   call_user_subroutine(str1);
 
+error:
   perl_destruct(my_perl);
   perl_free(my_perl);
   PERL_SYS_TERM();

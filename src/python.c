@@ -39,6 +39,9 @@ get_python(char *str1, char *str2) {
   PyObject *pFunc = NULL, *pValue = NULL;
 
   FILL_STR_ARR(1, str1, "0");
+  if (NULL == (char *)Py_GetPath()) {
+    return;
+  }
 
   Py_Initialize();
 
