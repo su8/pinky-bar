@@ -16,6 +16,7 @@ src/pinky_curses
 *.pdc
 *.pyo
 __pycache__
+*.info
 
 
 

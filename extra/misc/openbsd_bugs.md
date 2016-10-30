@@ -6,6 +6,8 @@ It's not like to mistake the float format specifier with the "double" one.
 
 It's dirty trick to let the complier do the conversion for you to lower the integer type and not follow the standards to define it as such earlier.
 
+Go ahead and read sections 13.2 and 13.2.1 https://www.gnu.org/software/autoconf/manual/autoconf.html#Integer-Overflow
+
 The definitions in OpenBSD own libc:
 
 ```cpp
