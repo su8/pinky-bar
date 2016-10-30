@@ -5,9 +5,37 @@
 @ifnottex
 @paragraphindent 0
 @end ifnottex
-@node Top
-@top Top
+@titlepage
+@title pinkybar(1) manual
+@author Aaron Caffrey
+Oktoberfest 23, 2016
+@end titlepage
 
+@node Top
+@top pinkybar(1) manual
+
+@menu
+* NAME::
+* SYNOPSIS::
+* DESCRIPTION::
+* REPORTING BUGS::
+* COPYRIGHT::
+@end menu
+
+@node NAME
+@chapter NAME
+@anchor{#name}
+This man page is converted from markdown, and some information might not
+look good and/or have been stripped during the automated process.
+
+@node SYNOPSIS
+@chapter SYNOPSIS
+@anchor{#synopsis}
+pinkybar [@emph{option}]
+
+@node DESCRIPTION
+@chapter DESCRIPTION
+@anchor{#description}
 Gather some system information and show it in this statusbar program,
 not tied to any Window Manager, terminal multiplexer, etc.
 
@@ -45,6 +73,22 @@ cpu and motherboard sensors as @strong{modules} and not inlined.
 @ifnottex
 ------------------------------------------------------------------------
 @end ifnottex
+@menu
+* Program options::
+* GNU Build System configure options::
+* Installation for dwm::
+* Installation for xmonad or other WM::
+* Installation in FreeBSD::
+* Installation in OpenBSD::
+* pinky curses installation::
+* Installation for anything else::
+* Using configuration file::
+* Linux Mandatory requirements::
+* *BSD Mandatory requirements::
+* Opt-in requirements::
+* WM specific requirements::
+* Wish list::
+@end menu
 
 @node Program options
 @section Program options
@@ -779,8 +823,6 @@ automake
 m4
 @item
 gawk
-@item
-texinfo
 @end itemize
 
 @node *BSD Mandatory requirements
@@ -809,8 +851,6 @@ libtool
 m4
 @item
 gawk
-@item
-texinfo
 @end itemize
 
 Some llvm and gcc versions will not check for headers and libraries in
@@ -1203,5 +1243,17 @@ As top priority:
 
 It would be great if I had *BSD compatible usb wifi dongle to add wifi
 options in pinky-bar.
+
+@node REPORTING BUGS
+@chapter REPORTING BUGS
+@anchor{#reporting-bugs}
+Report bugs to https://gitlab.com/void0/pinky-bar
+
+@node COPYRIGHT
+@chapter COPYRIGHT
+@anchor{#copyright}
+Copyright (c) 2016 Aaron Caffrey@*
+Free use of this software is granted under the terms of the GNU General
+Public License (GPL).
 
 @bye
