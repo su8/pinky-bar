@@ -31,3 +31,4 @@ __pycache__
 !extra/zsh/_pinkybar
 !doc/man_template.pdc
 !extra/Gentoo/app-admin/pinky/*
+!doc/Makefile

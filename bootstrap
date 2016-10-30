@@ -162,9 +162,13 @@ _gen_files() {
       doc             \
       extra
 
-# uses tabs
+# using 1 tab
 ncurses:
 	@cd src && $(MAKE) ncurses
+
+# using 1 tab
+man:
+	@cd doc && $(MAKE) man
   ')
 
 
