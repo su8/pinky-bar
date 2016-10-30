@@ -994,6 +994,8 @@ If any option depends on argument, don't put any space between the
 option and the argument.
 .PP
 Use one option per line.
+Contrary to your shell, the \[lq]parser\[rq] won't expand ~/my_script.pl
+to point to /home/sweethome/my_script.pl
 .IP
 .nf
 \f[C]
@@ -1008,6 +1010,7 @@ Use one option per line.
 \-\-fans
 \-\-mobo
 \-\-mobotemp
+\-\-perl=/home/sweethome/my_script.pl
 \f[]
 .fi
 .PP
@@ -1258,7 +1261,8 @@ to write the most basic scripts in order to extend pinkybar in python
 and/or perl.
 You can use both languages simultaneously.
 .PP
-Please, please do \f[B]NOT\f[] export or set PYTHONPATH on it own line.
+Please, please do \f[B]NOT\f[] export or set PYTHONPATH on it's own
+line.
 .PP
 \f[C]WRONG\f[]:
 .IP

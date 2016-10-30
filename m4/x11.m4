@@ -23,6 +23,7 @@ dnl substitute the linker flags -lX11 to the
 dnl the variable 'X_LIBS' if they are available.
 AC_DEFUN([TEST_X11],[
   X_LIBS=""
+  WITH_COLOURS=0
 
   AC_ARG_WITH([x11],
     AS_HELP_STRING([--with-x11],
@@ -30,6 +31,19 @@ AC_DEFUN([TEST_X11],[
     [],
     [with_x11=no]
   )
+
+  AC_ARG_WITH([colours],
+    AS_HELP_STRING([--with-colours],
+      [Colorize the output]),
+    [],
+    [with_colours=no]
+  )
+
+  AC_ARG_VAR(icons, [path to xbm icons for non-dwm WM])
+
+  AS_IF([test "x$with_colours" = "xyes"], [
+    WITH_COLOURS=1
+  ])
 
   AS_IF([test "x$with_x11" = "xyes"], [
     AC_CHECK_HEADERS([X11/Xlib.h], [
@@ -50,20 +64,7 @@ AC_DEFUN([TEST_X11],[
     ])
   ])
 
-  WITH_COLOURS=0
-  AC_ARG_WITH([colours],
-    AS_HELP_STRING([--with-colours],
-      [Colorize the output]),
-    [],
-    [with_colours=no]
-  )
-  AS_IF([test "x$with_colours" = "xyes"], [
-    WITH_COLOURS=1
-  ])
-  AC_DEFINE_UNQUOTED([WITH_COLOURS],[$WITH_COLOURS],[Colorize the output])
-
   dnl xbm icons for non-dwm window manager
-  AC_ARG_VAR(icons, [path to xbm icons for non-dwm WM])
   if [[ ! -z "${icons}" ]]
   then
     dnl Da stupid shell expansion only works on "UNQUOTED"
@@ -72,6 +73,7 @@ AC_DEFUN([TEST_X11],[
   fi
 
   AC_SUBST(X_LIBS)
+  AC_DEFINE_UNQUOTED([WITH_COLOURS],[$WITH_COLOURS],[Colorize the output])
 
   AS_IF([test "x$with_x11" = "xyes"], [
     AC_LINK_IFELSE([

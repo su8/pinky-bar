@@ -356,7 +356,7 @@ I do advise you to use the long options syntax.
 
 If any option depends on argument, don't put any space between the option and the argument.
 
-Use one option per line.
+Use one option per line. Contrary to your shell, the "parser" won't expand ~/my\_script.pl to point to /home/sweethome/my\_script.pl
 
 ```bash
 --weather=London,uk
@@ -370,6 +370,7 @@ Use one option per line.
 --fans
 --mobo
 --mobotemp
+--perl=/home/sweethome/my_script.pl
 ```
 
 Execute the program without supplying any command line options and it will parse the configuration file.
@@ -556,7 +557,7 @@ or
 
 Have a look at extra/scripts/pinky{.py,.pl}, they serve as examples how to write the most basic scripts in order to extend pinkybar in python and/or perl. You can use both languages simultaneously.
 
-Please, please do **NOT** export or set PYTHONPATH on it own line.
+Please, please do **NOT** export or set PYTHONPATH on it's own line.
 
 `WRONG`:
 

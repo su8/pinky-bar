@@ -37,14 +37,13 @@ AC_DEFUN([TEST_PERL],[
   AS_IF([test "x$with_perl" = "xyes"], [
     CHECK_CFLAGZ([-O0])
 
-    AC_PATH_PROG(PERL,perl)
-    if [[ -z "${PERL}" ]]
-    then
+    AC_PATH_PROG(perlcf,perl,no)
+    AS_IF([test "x$perlcf" = "xno"], [
       ERR([Couldnt find perl.])
-    fi
+    ])
 
-    PERL_LZ=`$PERL -MExtUtils::Embed -e ldopts`
-    PERL_CF=`$PERL -MExtUtils::Embed -e ccopts`
+    PERL_LZ=`$perlcf -MExtUtils::Embed -e ldopts`
+    PERL_CF=`$perlcf -MExtUtils::Embed -e ccopts`
 
     dnl m4_foreach([LiB], [
     dnl     perl_construct,
@@ -133,7 +132,7 @@ AC_DEFUN([TEST_PYTHON],[
     AS_IF([test "x$with_python2" = "xyes"], [
       AM_PATH_PYTHON([2],[
       ],[
-        ERR([Couldnt determine CFLAGS and LDFLAGS for the requested python version.])
+        ERR([Couldnt find any python 2 version.])
       ])
       WITH_PYTHON2=1
     ])
@@ -141,7 +140,7 @@ AC_DEFUN([TEST_PYTHON],[
     AS_IF([test "x$with_python3" = "xyes"], [
       AM_PATH_PYTHON([3],[
       ],[
-        ERR([Couldnt determine CFLAGS and LDFLAGS for the requested python version.])
+        ERR([Couldnt find any python 3 version.])
       ])
     ])
 

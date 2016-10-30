@@ -44,6 +44,13 @@ AC_DEFUN([TEST_NET],[
     [with_net=yes]
   )
 
+  AC_ARG_WITH([libnl],
+    AS_HELP_STRING([--with-libnl],
+      [wifi funcs]),
+    [],
+    [with_libnl=no]
+  )
+
   AS_IF([test "x$with_net" = "xno"], [
     WITH_NET=0
   ])
@@ -82,13 +89,6 @@ AC_DEFUN([TEST_NET],[
       ],[],[
         MISSING_HEADER()
       ])
-
-      AC_ARG_WITH([libnl],
-        AS_HELP_STRING([--with-libnl],
-          [wifi funcs]),
-        [],
-        [with_libnl=no]
-      )
 
       AS_IF([test "x$with_libnl" = "xyes"], [
 

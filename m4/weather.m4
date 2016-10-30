@@ -58,7 +58,6 @@ AC_DEFUN([TEST_WEATHER],[
   )
 
   AC_ARG_VAR(drive_port, [TCP port to listen to])
-
   AC_ARG_VAR(api_key, [weather api key])
 
   AS_IF([test "x$with_drivetemp" = "xyes" && test "x$with_drivetemp_light" = "xyes"],[

@@ -36,7 +36,7 @@ AC_DEFUN([TEST_MPD],[
       MPD_LIBS="-lmpdclient"
       ],[
         ERR_MUST_INSTALL([libmpdclient])
-      ])
+    ])
 
     m4_foreach([LiB], [
         mpd_connection_new          ,
