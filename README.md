@@ -548,29 +548,51 @@ To extend pinkybar with your own crafted perl or python script/program/chewbacca
 
 or
 
-* python == 2.7
+* python == 2.7 (--with-python2)
 
 or
 
-* python >= 3.3 (requires "hacks" which are not newbie friendly)
+* python >= 3.3 (--with-python3)
 
 Have a look at extra/scripts/pinky{.py,.pl}, they serve as examples how to write the most basic scripts in order to extend pinkybar in python and/or perl. You can use both languages simultaneously.
 
-If you choosed to use python >= 3.3, don't forget to update the PYTHONPATH whenever your python version is updated, as the env var will point to older version. Play safe and stick to python 2.7
+Please, please do **NOT** export or set PYTHONPATH on it own line.
 
-python wants `PYTHONPATH` to be exported, you should copy it to your shell configuration file, so it's set right after you boot your toaster:
+`WRONG`:
 
 ```bash
+export PYTHONPATH=/meh
+pinkybar --python my_script
+```
+
+`WRONG`:
+
+```bash
+PYTHONPATH=/meh
+pinkybar --python my_script
+```
+
+Correct PYTHONPATH usage:
+
+```bash
+# ~/chewbacca is the path where pinky.py resides
+# ~/chewbacca/pinky.py
+
 # python2
-export PYTHONPATH=/the/path/to/your/script
+PYTHONPATH=~/chewbacca ~/pinkybar --python pinky
 
 # python3
-python3 -c 'import sys;print(":".join([x for x in sys.path]))'
-export PYTHONPATH=... :/including/the/path/to/your/script
+# executed only once
+fuNky=$(python3 -c 'import sys;print(":".join([x for x in sys.path]))')
 
-# Execute pinkybar and supply the name of your
-# script without the .py file extension
-pinkybar --python my_script
+# executed in a loop
+PYTHONPATH=$fuNky:~/chewbacca ~/pinkybar --python pinky
+```
+
+And if you compiled the program **--with-perl**:
+
+```bash
+~/pinkybar --perl ~/chewbacca/pinky.pl
 ```
 
 To get the sound volume level:

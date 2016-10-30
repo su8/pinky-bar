@@ -44,7 +44,7 @@ enum {
   BULLSHIFT
 };
 const char *argp_program_version = PACKAGE_STRING;
-const char *argp_program_bug_address = "https://gitlab.com/void0/pinky-bar ";
+const char *argp_program_bug_address = "https://notabug.org/void0/pinky-bar ";
 static const char doc[] = "Statusbar program for anything (Window Manager, terminal multiplexer, etc..)";
 static const struct argp_option options[] = {
   { .doc = "Available options:" },
