@@ -348,9 +348,9 @@ static const struct argp arg_parser = {
 
 void
 parse_opts(int argc, char *argv[], char *combined) {
-  struct arguments arguments;
-  arguments.all = combined;
-
+  struct arguments arguments = {
+    .all = combined
+  };
   argp_parse(&arg_parser, argc, argv, ARGP_IN_ORDER, NULL, &arguments);
 }
 
@@ -358,14 +358,14 @@ parse_opts(int argc, char *argv[], char *combined) {
 void
 parse_konf(char *combined) {
   FILE *fp = NULL;
-  char *ello[] = { "pinkybar", NULL };
-  char buf[100], conf[50], temp[100];
   char *ptr = NULL;
+  char *ello[] = { (char *)"pinkybar", NULL };
+  char buf[100], conf[50], temp[100];
+  struct arguments arguments = {
+    .all = combined
+  };
 
-  struct arguments arguments;
-  arguments.all = combined;
-
-  FILL_ARR(conf, "%s%s", getenv("HOME"), "/.pinky");
+  snprintf(conf, 49, "%s%s", getenv("HOME"), "/.pinky");
   if (NULL == (fp = fopen(conf, "r"))) {
     exit_with_err(ERR, "~/.pinky doesn't exist.");
   }
