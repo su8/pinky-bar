@@ -31,12 +31,18 @@ define stay_portable
 	$(shell perl -Mstrict -Mwarnings -e $(1))
 endef
 
+# The BSD sed version
+# do require ''
 define reflace
-	@sed -i -e $(1) $(2)
+	@sed -i $(2) -e $(1)
+endef
+
+define reflace2
+	@sed -i $(3) -e 's|$(1)|$(2)|g'
 endef
 
 define reflace3
-	@sed -i -e 's|$(1)|$(2)|g' -e 's|$(3)|$(4)|g' $(5)
+	@sed -i $(5) -e 's|$(1)|$(2)|g' -e 's|$(3)|$(4)|g'
 endef
 
 
@@ -75,5 +81,6 @@ endif
 all:
 	$(call reflace,'10s|.*|$(DEFTITS)|g',configure.ac)
 	$(call reflace3,{amCF},$(AMCF),{srcFiles},$(SRCTOAPPEND),src/Makefile.am)
+	$(call reflace2,{bzdlibs},$(BSDLIBS),src/Makefile.am)
 
 .PHONY: all

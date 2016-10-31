@@ -274,7 +274,7 @@ Before even executing the **bootstrap** script, you'll have to do this:
 ```bash
 # To detect the newer compiler that you are
 # about to install
-sed -i 's/#AC_PROG_CC(/AC_PROG_CC(/g' konfigure.skel
+sed -i 's/#AC_PROG_CC(/AC_PROG_CC(/g' configure.ac
 
 ls /usr/local/bin/automake-*
 ls /usr/local/bin/autoconf-*
@@ -398,6 +398,9 @@ Execute the program without supplying any command line options and it will parse
 * libtool
 * m4
 * gawk
+* sed
+* perl
+* gnu make
 
 Some llvm and gcc versions will not check for headers and libraries in /usr/local, if that's the case for you, you should export the following environment variables:
 

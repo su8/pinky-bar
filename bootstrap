@@ -24,7 +24,7 @@
 cp -r Makefile.skel Makefile
 cp -r src/Makefail.skel src/Makefile.am
 
-make ARG1="$1"
+gmake ARG1="$1"
 
 rm -f Makefile
 autoreconf --install --force

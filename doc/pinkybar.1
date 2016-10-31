@@ -882,7 +882,7 @@ this:
 \f[C]
 #\ To\ detect\ the\ newer\ compiler\ that\ you\ are
 #\ about\ to\ install
-sed\ \-i\ \[aq]s/#AC_PROG_CC(/AC_PROG_CC(/g\[aq]\ konfigure.skel
+sed\ \-i\ \[aq]s/#AC_PROG_CC(/AC_PROG_CC(/g\[aq]\ configure.ac
 
 ls\ /usr/local/bin/automake\-*
 ls\ /usr/local/bin/autoconf\-*
@@ -1052,6 +1052,12 @@ libtool
 m4
 .IP \[bu] 2
 gawk
+.IP \[bu] 2
+sed
+.IP \[bu] 2
+perl
+.IP \[bu] 2
+gnu make
 .PP
 Some llvm and gcc versions will not check for headers and libraries in
 /usr/local, if that's the case for you, you should export the following

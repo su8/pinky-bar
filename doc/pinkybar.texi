@@ -654,7 +654,7 @@ this:
 @verbatim
 # To detect the newer compiler that you are
 # about to install
-sed -i 's/#AC_PROG_CC(/AC_PROG_CC(/g' bootstrap
+sed -i 's/#AC_PROG_CC(/AC_PROG_CC(/g' configure.ac
 
 ls /usr/local/bin/automake-*
 ls /usr/local/bin/autoconf-*
@@ -832,8 +832,6 @@ gawk
 @item
 gcc/clang
 @item
-bash
-@item
 autoconf
 @item
 automake
@@ -851,6 +849,12 @@ libtool
 m4
 @item
 gawk
+@item
+sed
+@item
+perl
+@item
+gnu make
 @end itemize
 
 Some llvm and gcc versions will not check for headers and libraries in
