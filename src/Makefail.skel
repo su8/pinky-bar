@@ -8,4 +8,30 @@ ncurses_SOURCES  = ncurses.c
 ncurses_LDADD    = -lncurses
 
 pinkybar_LDADD = $(X_LIBS) $(ALSA_LIBS) $(MPD_LIBS) $(PCI_LIBS) $(DVD_LIBS) $(SENSORS_LIBS) $(CURL_LIBS) $(LIBNL_LZ) $(PERL_LZ) $(PYTHON_LZ) 
-pinkybar_SOURCES = {srcFiles}
+pinkybar_SOURCES = main.c           \
+    cpu.c                           \
+    common.c                        \
+    sound.c                         \
+    options.c                       \
+    net.c                           \
+    weather.c                       \
+    smart.c                         \
+    perl.c                          \
+    python.c                        \
+    prototypes/cpu.h                \
+    prototypes/common.h             \
+    prototypes/sound.h              \
+    prototypes/net.h                \
+    prototypes/functions.h          \
+    prototypes/options.h            \
+    prototypes/weather.h            \
+    prototypes/smart.h              \
+    prototypes/perl.h               \
+    prototypes/python.h             \
+    include/headers.h               \
+    include/options_constants.h     \
+    include/functions_constants.h   \
+    include/non_x11_colours.h       \
+    include/x11_colours.h           \
+    include/options_generator.h     \
+    {srcFiles}

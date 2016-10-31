@@ -15,6 +15,14 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
 # MA 02110-1301, USA.
 
+# The GNU/Make use in here is to
+# the cover our back and do most of
+# the heavy lifting for us.
+# When dealing with different operating
+# systems the things get pretty ugly quickly.
+# I did learned my lesson with the previous bash
+# bootstrap script.
+#
 # perl and sed are distributed
 # out of the box in linux and *BSD.
 
@@ -31,6 +39,10 @@ define reflace2
 	@sed -i -e 's|$(1)||g' -e 's|$(2)||g' $(3)
 endef
 
+define reflace3
+	@sed -i -e 's|$(1)|$(2)|g' -e 's|$(3)|$(4)|g' $(5)
+endef
+
 define stripem
 	$(foreach x,$($1),$(if $(findstring $2,$x),,$x))
 endef
@@ -43,19 +55,6 @@ AMCF :=
 SRCTOAPPEND :=
 OSENTERED := $(strip $(call stay_portable,'print uc "${ARG1}";'))
 DEFTITS := m4_define\(\[OSENTERED\], \[$(OSENTERED)\]\)
-
-
-# strip {linux,freebsd,openbsd}_functions.c
-# {freebzd,openbzd}.h and ncurses.c
-# The perl equivalent isnt any shorter
-# either.
-dirz := src/include src/prototypes src
-filez := $(foreach x,$(dirz),$(wildcard $(x)/*))
-
-DA_FILES := $(call stripem,filez,linux)
-DA_FILES := $(call stripem,DA_FILES,free)
-DA_FILES := $(call stripem,DA_FILES,open)
-DA_FILES := $(call stripem,DA_FILES,ncur)
 
 
 # make ARG1=bar logic
@@ -83,8 +82,6 @@ endif
 
 all:
 	$(call reflace,{defTits},$(DEFTITS),configure.ac)
-	$(call reflace,{amCF},$(AMCF),src/Makefile.am)
-	$(call reflace,{srcFiles},$(SRCTOAPPEND)$(DA_FILES),src/Makefile.am)
-	$(call reflace2,src/,src/include,src/Makefile.am)
+	$(call reflace3,{amCF},$(AMCF),{srcFiles},$(SRCTOAPPEND),src/Makefile.am)
 
 .PHONY: all

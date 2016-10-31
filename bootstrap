@@ -18,6 +18,8 @@
 # Trying to stay as portable as we can,
 # so even the most broken shell to be able
 # to parse and execute this script.
+#
+# Please don't try to fix the "cp" calls
 
 cp -r Makefile.skel Makefile
 cp -r src/Makefail.skel src/Makefile.am
