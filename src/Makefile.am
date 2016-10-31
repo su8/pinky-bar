@@ -1,0 +1,37 @@
+AM_CFLAGS =  -D_DEFAULT_SOURCE -L/usr/local/lib \
+  -I/usr/local/include $(LIBNL_CF) $(PERL_CF) $(PYTHON_CF)
+
+bin_PROGRAMS = pinkybar
+
+EXTRA_PROGRAMS   = ncurses
+ncurses_SOURCES  = ncurses.c
+ncurses_LDADD    = -lncurses
+
+pinkybar_LDADD = $(X_LIBS) $(ALSA_LIBS) $(MPD_LIBS) $(PCI_LIBS) $(DVD_LIBS) $(SENSORS_LIBS) $(CURL_LIBS) $(LIBNL_LZ) $(PERL_LZ) $(PYTHON_LZ)  -largp -ldevstat
+pinkybar_SOURCES = main.c           \
+    cpu.c                           \
+    common.c                        \
+    sound.c                         \
+    options.c                       \
+    net.c                           \
+    weather.c                       \
+    smart.c                         \
+    perl.c                          \
+    python.c                        \
+    prototypes/cpu.h                \
+    prototypes/common.h             \
+    prototypes/sound.h              \
+    prototypes/net.h                \
+    prototypes/functions.h          \
+    prototypes/options.h            \
+    prototypes/weather.h            \
+    prototypes/smart.h              \
+    prototypes/perl.h               \
+    prototypes/python.h             \
+    include/headers.h               \
+    include/options_constants.h     \
+    include/functions_constants.h   \
+    include/non_x11_colours.h       \
+    include/x11_colours.h           \
+    include/options_generator.h     \
+     freebsd_functions.c include/freebzd.h

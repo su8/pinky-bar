@@ -34,11 +34,11 @@ define reflace
 endef
 
 define reflace2
-	$(shell perl -Mstrict -Mwarnings -pi -e 's/$(1)/$(2)/g;' $(3))
+	$(shell perl -Mstrict -Mwarnings -pi -e 's|$(1)|$(2)|;' $(3))
 endef
 
 define reflace3
-	$(shell perl -Mstrict -Mwarnings -pi -e 's/$(1)/$(2)/g;s/$(3)/$(4)/g;' $(5))
+	$(shell perl -Mstrict -Mwarnings -pi -e 's|$(1)|$(2)|;s|$(3)|$(4)|;' $(5))
 endef
 
 
