@@ -572,7 +572,8 @@ you've been warned.
 @anchor{#installation-for-dwm}
 
 @verbatim
-bash bootstrap distro
+chmod +x bootstrap
+./bootstrap distro
 ./configure --prefix=$HOME/.cache --with-x11
 make
 make install
@@ -590,7 +591,8 @@ Copy the code from extra/scripts/dwm.sh or @code{exec} it from
 mkdir -p --mode=700 $HOME/.xmonad/icons
 cp -r extra/xbm_icons/*.xbm $HOME/.xmonad/icons
 
-bash bootstrap distro
+chmod +x bootstrap
+./bootstrap distro
 
 # disable X11, point the location to the icons
 ./configure --prefix=$HOME/.cache --without-x11 icons=$HOME/.xmonad/icons
@@ -636,7 +638,9 @@ Do the same for your cpu temperature, copy and paste the variable as is.
 @strong{dev.cpu.0.temperature} below is provied as example.
 
 @verbatim
-bash bootstrap freebsd
+sed -i 's/@sed/@gsed/g' Makefile.skel
+chmod +x bootstrap
+./bootstrap freebsd
 ./configure --prefix=$HOME/.cache --with-x11 --without-alsa --with-oss mobo_sensor='dev.aibs.0' cpu_sensor='dev.cpu.0.temperature'
 make
 make install
@@ -655,6 +659,7 @@ this:
 # To detect the newer compiler that you are
 # about to install
 sed -i 's/#AC_PROG_CC(/AC_PROG_CC(/g' configure.ac
+sed -i 's/@sed/@gsed/g' Makefile.skel
 
 ls /usr/local/bin/automake-*
 ls /usr/local/bin/autoconf-*
@@ -672,7 +677,8 @@ pkg_add gcc
 @anchor{#pinky-curses-installation}
 
 @verbatim
-bash bootstrap distro
+chmod +x bootstrap
+./bootstrap distro
 
 # disable X11, enable the colours and ncurses opts.
 ./configure --prefix=$HOME/.cache --without-x11 --with-alsa --with-colours --with-ncurses
@@ -712,7 +718,8 @@ information will be shown. The tmux status bar in action:
 The installation steps:
 
 @verbatim
-bash bootstrap distro
+chmod +x bootstrap
+./bootstrap distro
 ./configure --prefix=$HOME/.cache --without-x11 --without-colours
 make
 make install
@@ -850,11 +857,11 @@ m4
 @item
 gawk
 @item
-sed
+gsed
 @item
 perl
 @item
-gnu make
+gmake
 @end itemize
 
 Some llvm and gcc versions will not check for headers and libraries in

@@ -206,7 +206,8 @@ Don't just rush to register yourself, read carefully what the "Free" account lim
 ## Installation for dwm
 
 ```bash
-bash bootstrap distro
+chmod +x bootstrap
+./bootstrap distro
 ./configure --prefix=$HOME/.cache --with-x11
 make
 make install
@@ -221,7 +222,8 @@ Copy the code from extra/scripts/dwm.sh or `exec` it from **xinitrc** or the scr
 mkdir -p --mode=700 $HOME/.xmonad/icons
 cp -r extra/xbm_icons/*.xbm $HOME/.xmonad/icons
 
-bash bootstrap distro
+chmod +x bootstrap
+./bootstrap distro
 
 # disable X11, point the location to the icons
 ./configure --prefix=$HOME/.cache --without-x11 icons=$HOME/.xmonad/icons
@@ -259,7 +261,9 @@ Copy only 'dev.MODULE.NUMBER' (if there is any number at all) and paste it into 
 Do the same for your cpu temperature, copy and paste the variable as is. **dev.cpu.0.temperature** below is provied as example.
 
 ```bash
-bash bootstrap freebsd
+sed -i 's/@sed/@gsed/g' Makefile.skel
+chmod +x bootstrap
+./bootstrap freebsd
 ./configure --prefix=$HOME/.cache --with-x11 --without-alsa --with-oss mobo_sensor='dev.aibs.0' cpu_sensor='dev.cpu.0.temperature'
 make
 make install
@@ -275,6 +279,7 @@ Before even executing the **bootstrap** script, you'll have to do this:
 # To detect the newer compiler that you are
 # about to install
 sed -i 's/#AC_PROG_CC(/AC_PROG_CC(/g' configure.ac
+sed -i 's/@sed/@gsed/g' Makefile.skel
 
 ls /usr/local/bin/automake-*
 ls /usr/local/bin/autoconf-*
@@ -290,7 +295,8 @@ pkg_add gcc
 ## pinky curses installation
 
 ```bash
-bash bootstrap distro
+chmod +x bootstrap
+./bootstrap distro
 
 # disable X11, enable the colours and ncurses opts.
 ./configure --prefix=$HOME/.cache --without-x11 --with-alsa --with-colours --with-ncurses
@@ -320,7 +326,8 @@ pinky-bar is no longer tied to Window Managers only. With the addition of "witho
 The installation steps:
 
 ```bash
-bash bootstrap distro
+chmod +x bootstrap
+./bootstrap distro
 ./configure --prefix=$HOME/.cache --without-x11 --without-colours
 make
 make install
@@ -398,9 +405,9 @@ Execute the program without supplying any command line options and it will parse
 * libtool
 * m4
 * gawk
-* sed
+* gsed
 * perl
-* gnu make
+* gmake
 
 Some llvm and gcc versions will not check for headers and libraries in /usr/local, if that's the case for you, you should export the following environment variables:
 

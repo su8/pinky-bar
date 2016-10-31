@@ -34,15 +34,15 @@ endef
 # The BSD sed version
 # do require ''
 define reflace
-	@sed -i $(2) -e $(1)
+	@sed -i -e $(1) $(2)
 endef
 
 define reflace2
-	@sed -i $(3) -e 's|$(1)|$(2)|g'
+	@sed -i -e 's|$(1)|$(2)|g' $(3)
 endef
 
 define reflace3
-	@sed -i $(5) -e 's|$(1)|$(2)|g' -e 's|$(3)|$(4)|g'
+	@sed -i -e 's|$(1)|$(2)|g' -e 's|$(3)|$(4)|g' $(5)
 endef
 
 
