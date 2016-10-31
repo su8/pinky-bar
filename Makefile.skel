@@ -29,16 +29,20 @@ define stay_portable
 	$(shell perl -Mstrict -Mwarnings -e $(1))
 endef
 
+define stay_portable2
+	$(shell perl -Mstrict -Mwarnings -pi -e $(1) $(2))
+endef
+
 define reflace
-	$(shell perl -Mstrict -Mwarnings -pi -e 'if ($$. == 10) { $$_=""; print "$(1)","\n"; }' $(2))
+	$(call stay_portable2,'if ($$. == 10) {$$_="";print "$(1)\n";}',$(2))
 endef
 
 define reflace2
-	$(shell perl -Mstrict -Mwarnings -pi -e 's|$(1)|$(2)|;' $(3))
+	$(call stay_portable2,'s|$(1)|$(2)|;',$(3))
 endef
 
 define reflace3
-	$(shell perl -Mstrict -Mwarnings -pi -e 's|$(1)|$(2)|;s|$(3)|$(4)|;' $(5))
+	$(call stay_portable2,'s|$(1)|$(2)|;s|$(3)|$(4)|;',$(5))
 endef
 
 
