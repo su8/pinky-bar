@@ -32,19 +32,11 @@ define stay_portable
 endef
 
 define reflace
-	@sed -i 's|$(1)|$(2)|g' $(3)
-endef
-
-define reflace2
-	@sed -i -e 's|$(1)||g' -e 's|$(2)||g' $(3)
+	@sed -i -e $(1) $(2)
 endef
 
 define reflace3
 	@sed -i -e 's|$(1)|$(2)|g' -e 's|$(3)|$(4)|g' $(5)
-endef
-
-define stripem
-	$(foreach x,$($1),$(if $(findstring $2,$x),,$x))
 endef
 
 
@@ -81,7 +73,7 @@ endif
 
 
 all:
-	$(call reflace,{defTits},$(DEFTITS),configure.ac)
+	$(call reflace,'10s|.*|$(DEFTITS)|g',configure.ac)
 	$(call reflace3,{amCF},$(AMCF),{srcFiles},$(SRCTOAPPEND),src/Makefile.am)
 
 .PHONY: all

@@ -7,7 +7,7 @@ AC_CONFIG_HEADERS([src/config.h])
 AM_INIT_AUTOMAKE([1.13 -Wall no-define foreign subdir-objects dist-xz no-dist-gzip std-options])
 
 AM_SILENT_RULES([yes])
-{defTits}
+{sed will replace this line}
 
 # With the addition of more runtime compile and
 # link tests, this option is no longer necessary.

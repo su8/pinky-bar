@@ -23,7 +23,6 @@
 
 cp -r Makefile.skel Makefile
 cp -r src/Makefail.skel src/Makefile.am
-cp -r konfigure.skel configure.ac
 
 make ARG1="$1"
 
