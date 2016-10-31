@@ -1,0 +1,90 @@
+# 10/29/2016
+
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 2 of the License, or
+# (at your option) any later version.
+
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+
+# You should have received a copy of the GNU General Public License
+# along with this program; if not, write to the Free Software
+# Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
+# MA 02110-1301, USA.
+
+# perl and sed are distributed
+# out of the box in linux and *BSD.
+
+# The "macros"
+define stay_portable
+	$(shell perl -Mstrict -Mwarnings -e $(1))
+endef
+
+define reflace
+	@sed -i 's|$(1)|$(2)|g' $(3)
+endef
+
+define reflace2
+	@sed -i -e 's|$(1)||g' -e 's|$(2)||g' $(3)
+endef
+
+define stripem
+	$(foreach x,$($1),$(if $(findstring $2,$x),,$x))
+endef
+
+
+BSDCF := -D_DEFAULT_SOURCE -L/usr/local/lib
+POSIXCF := -D_POSIX_C_SOURCE=200112L
+BSDLIBS :=
+AMCF :=
+SRCTOAPPEND :=
+OSENTERED := $(strip $(call stay_portable,'print uc "${ARG1}";'))
+DEFTITS := m4_define\(\[OSENTERED\], \[$(OSENTERED)\]\)
+
+
+# strip {linux,freebsd,openbsd}_functions.c
+# {freebzd,openbzd}.h and ncurses.c
+# The perl equivalent isnt any shorter
+# either.
+dirz := src/include src/prototypes src
+filez := $(foreach x,$(dirz),$(wildcard $(x)/*))
+
+DA_FILES := $(call stripem,filez,linux)
+DA_FILES := $(call stripem,DA_FILES,free)
+DA_FILES := $(call stripem,DA_FILES,open)
+DA_FILES := $(call stripem,DA_FILES,ncur)
+
+
+# make ARG1=bar logic
+ifeq ($(findstring FREE,$(OSENTERED)),FREE)
+	BSDLIBS += -largp -ldevstat
+	AMCF += $(BSDCF)
+	DEFTITS += m4_define\(\[FREEBZD\], \[tits\]\)
+	SRCTOAPPEND += freebsd_functions.c include/freebzd.h
+
+else
+	ifeq ($(findstring OPEN,$(OSENTERED)),OPEN)
+		BSDLIBS += -largp -lossaudio
+		AMCF += $(BSDCF)
+		DEFTITS += m4_define\(\[OPENBZD\], \[forSure\]\)
+		SRCTOAPPEND += openbsd_functions.c include/openbzd.h
+
+	else
+		AMCF += $(POSIXCF)
+		DEFTITS += m4_define\(\[LINUKS\], \[cryMeAriver\]\)
+		SRCTOAPPEND += linux_functions.c
+
+	endif
+endif
+
+
+all:
+	$(call reflace,{defTits},$(DEFTITS),configure.ac)
+	$(call reflace,{amCF},$(AMCF),src/Makefile.am)
+	$(call reflace,{srcFiles},$(SRCTOAPPEND)$(DA_FILES),src/Makefile.am)
+	$(call reflace2,src/,src/include,src/Makefile.am)
+
+.PHONY: all

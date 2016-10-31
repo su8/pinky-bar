@@ -17,16 +17,16 @@
 
 define pandora_snap
 	-sed -e '15r ../README.md' 'man_template.pdc' | \
-		sed -e '15,48d' | pandoc -s -S $(1)
+		sed -e '15,48d' | pandoc -s -S $(1) - -o pinkybar.$(2)
 endef
 
 man:
-	$(call pandora_snap,-f markdown -t man - -o pinkybar.1)
+	$(call pandora_snap,-f markdown -t man,1)
 
 info: pinkybar.info
 
 pinkybar.info:
-	$(call pandora_snap,- -o pinkybar.texi)
+	$(call pandora_snap, ,texi)
 	-sed -i '2i @setfilename pinkybar.info' pinkybar.texi
 	$(MAKEINFO) --no-validate --no-warn --force pinkybar.texi
 

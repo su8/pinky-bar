@@ -140,4 +140,6 @@ AC_DEFUN([TEST_CFLAGZ],[
 
   LIBS=''
   AC_SUBST(LIBS)
+
+  AC_DEFINE_UNQUOTED([OSENTERED],[1],[da monster])
 ])

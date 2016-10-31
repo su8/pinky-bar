@@ -1,0 +1,22 @@
+bases = archlinux debian gentoo slackware rhel frugalware angstrom freebsd openbsd
+bsdCF = -D_DEFAULT_SOURCE -L/usr/local/lib
+posixCF = -D_POSIX_C_SOURCE=200112L
+bsdLibs =
+amCF =
+
+
+SOURCES = $(wildcard ../../src/*.c)
+
+info: $(SOURCES)
+	-for x in $?; do \
+		-echo "$$x"; \
+	done;
+
+inf:
+	@echo $(SOURCES)
+
+meow:
+	-for x in $(bases); do \
+		echo "$$x"; done
+
+.PHONY: info inf meow

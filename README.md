@@ -274,7 +274,7 @@ Before even executing the **bootstrap** script, you'll have to do this:
 ```bash
 # To detect the newer compiler that you are
 # about to install
-sed -i 's/#AC_PROG_CC(/AC_PROG_CC(/g' bootstrap
+sed -i 's/#AC_PROG_CC(/AC_PROG_CC(/g' konfigure.skel
 
 ls /usr/local/bin/automake-*
 ls /usr/local/bin/autoconf-*
@@ -389,7 +389,6 @@ Execute the program without supplying any command line options and it will parse
 ## \*BSD Mandatory requirements
 
 * gcc/clang
-* bash
 * autoconf
 * automake
 * autoconf-wrapper

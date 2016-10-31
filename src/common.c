@@ -209,47 +209,47 @@ get_packs(char *str1) {
   uint_fast16_t packages = 0;
   FILE *pkgs_file = NULL;
 
-#if DISTRO == ARCHLINUX
+#if defined(ARCHLINUX)
   packages = glob_packages("/var/lib/pacman/local/*");
 
-#elif DISTRO == FRUGALWARE
+#elif defined(FRUGALWARE)
 
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wunused-result"
   CHECK_POPEN(pkgs_file, "pacman-g2 -Q 2> /dev/null | wc -l", &packages);
 #pragma GCC diagnostic pop
 
-#elif DISTRO == DEBIAN
+#elif defined(DEBIAN)
   packages = glob_packages("/var/lib/dpkg/info/*.list");
 
-#elif DISTRO == SLACKWARE
+#elif defined(SLACKWARE)
   packages = glob_packages("/var/log/packages/*");
 
-#elif DISTRO == GENTOO
+#elif defined(GENTOO)
   packages = glob_packages("/var/db/pkg/*/*");
 
-#elif DISTRO == RHEL
+#elif defined(RHEL)
 
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wunused-result"
   CHECK_POPEN(pkgs_file, "rpm -qa 2> /dev/null | wc -l", &packages);
 #pragma GCC diagnostic pop
 
-#elif DISTRO == ANGSTROM
+#elif defined(ANGSTROM)
 
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wunused-result"
   CHECK_POPEN(pkgs_file, "opkg list-installed 2> /dev/null | wc -l", &packages);
 #pragma GCC diagnostic pop
 
-#elif DISTRO == FREEBSD
+#elif defined(FREEBSD)
 
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wunused-result"
   CHECK_POPEN(pkgs_file, "pkg info | wc -l", &packages);
 #pragma GCC diagnostic pop
 
-#elif DISTRO == OPENBSD
+#elif defined(OPENBSD)
 
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wunused-result"
