@@ -1,6 +1,4 @@
-Makefile.in
-src/Makefile.in
-src/Makefile.am
+Makefil*
 auto*
 conf*
 aclocal.m4
@@ -31,6 +29,7 @@ __pycache__
 
 !configure.ac
 !Makefile.am
+!Makefile.skel
 !extra/FreeBSD/Makefile
 !extra/zsh/_pinkybar
 !doc/man_template.pdc
