@@ -866,7 +866,6 @@ Do the same for your cpu temperature, copy and paste the variable as is.
 .IP
 .nf
 \f[C]
-sed\ \-i\ \[aq]s/\@sed/\@gsed/g\[aq]\ Makefile.skel
 chmod\ +x\ bootstrap
 \&./bootstrap\ freebsd
 \&./configure\ \-\-prefix=$HOME/.cache\ \-\-with\-x11\ \-\-without\-alsa\ \-\-with\-oss\ mobo_sensor=\[aq]dev.aibs.0\[aq]\ cpu_sensor=\[aq]dev.cpu.0.temperature\[aq]
@@ -887,7 +886,6 @@ this:
 #\ To\ detect\ the\ newer\ compiler\ that\ you\ are
 #\ about\ to\ install
 sed\ \-i\ \[aq]s/#AC_PROG_CC(/AC_PROG_CC(/g\[aq]\ configure.ac
-sed\ \-i\ \[aq]s/\@sed/\@gsed/g\[aq]\ Makefile.skel
 
 ls\ /usr/local/bin/automake\-*
 ls\ /usr/local/bin/autoconf\-*

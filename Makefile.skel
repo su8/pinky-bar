@@ -26,23 +26,9 @@
 # perl and sed are distributed
 # out of the box in linux and *BSD.
 
-# The "macros"
+
 define stay_portable
 	$(shell perl -Mstrict -Mwarnings -e $(1))
-endef
-
-# The BSD sed version
-# do require ''
-define reflace
-	@sed -i -e $(1) $(2)
-endef
-
-define reflace2
-	@sed -i -e 's|$(1)|$(2)|g' $(3)
-endef
-
-define reflace3
-	@sed -i -e 's|$(1)|$(2)|g' -e 's|$(3)|$(4)|g' $(5)
 endef
 
 
@@ -51,6 +37,7 @@ POSIXCF := -D_POSIX_C_SOURCE=200112L
 BSDLIBS :=
 AMCF :=
 SRCTOAPPEND :=
+SEDEXE := gsed
 OSENTERED := $(strip $(call stay_portable,'print uc "${ARG1}";'))
 DEFTITS := m4_define\(\[OSENTERED\], \[$(OSENTERED)\]\)
 
@@ -73,9 +60,23 @@ else
 		AMCF += $(POSIXCF)
 		DEFTITS += m4_define\(\[LINUKS\], \[cryMeAriver\]\)
 		SRCTOAPPEND += linux_functions.c
+		SEDEXE := sed
 
 	endif
 endif
+
+
+define reflace
+	@$(SEDEXE) -i -e $(1) $(2)
+endef
+
+define reflace2
+	@$(SEDEXE) -i -e 's|$(1)|$(2)|g' $(3)
+endef
+
+define reflace3
+	@$(SEDEXE) -i -e 's|$(1)|$(2)|g' -e 's|$(3)|$(4)|g' $(5)
+endef
 
 
 all:

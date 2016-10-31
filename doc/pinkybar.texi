@@ -638,7 +638,6 @@ Do the same for your cpu temperature, copy and paste the variable as is.
 @strong{dev.cpu.0.temperature} below is provied as example.
 
 @verbatim
-sed -i 's/@sed/@gsed/g' Makefile.skel
 chmod +x bootstrap
 ./bootstrap freebsd
 ./configure --prefix=$HOME/.cache --with-x11 --without-alsa --with-oss mobo_sensor='dev.aibs.0' cpu_sensor='dev.cpu.0.temperature'
@@ -659,7 +658,6 @@ this:
 # To detect the newer compiler that you are
 # about to install
 sed -i 's/#AC_PROG_CC(/AC_PROG_CC(/g' configure.ac
-sed -i 's/@sed/@gsed/g' Makefile.skel
 
 ls /usr/local/bin/automake-*
 ls /usr/local/bin/autoconf-*

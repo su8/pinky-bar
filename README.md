@@ -261,7 +261,6 @@ Copy only 'dev.MODULE.NUMBER' (if there is any number at all) and paste it into 
 Do the same for your cpu temperature, copy and paste the variable as is. **dev.cpu.0.temperature** below is provied as example.
 
 ```bash
-sed -i 's/@sed/@gsed/g' Makefile.skel
 chmod +x bootstrap
 ./bootstrap freebsd
 ./configure --prefix=$HOME/.cache --with-x11 --without-alsa --with-oss mobo_sensor='dev.aibs.0' cpu_sensor='dev.cpu.0.temperature'
@@ -279,7 +278,6 @@ Before even executing the **bootstrap** script, you'll have to do this:
 # To detect the newer compiler that you are
 # about to install
 sed -i 's/#AC_PROG_CC(/AC_PROG_CC(/g' configure.ac
-sed -i 's/@sed/@gsed/g' Makefile.skel
 
 ls /usr/local/bin/automake-*
 ls /usr/local/bin/autoconf-*
