@@ -403,7 +403,6 @@ Execute the program without supplying any command line options and it will parse
 * libtool
 * m4
 * gawk
-* gsed
 * perl
 * gmake
 

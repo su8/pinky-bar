@@ -855,8 +855,6 @@ m4
 @item
 gawk
 @item
-gsed
-@item
 perl
 @item
 gmake
