@@ -572,7 +572,7 @@ you've been warned.
 @anchor{#installation-for-dwm}
 
 @verbatim
-perl portable_sed.pl "distro"
+perl set.pl "distro"
 autoreconf --install --force
 
 ./configure --prefix=$HOME/.cache --with-x11
@@ -592,7 +592,7 @@ Copy the code from extra/scripts/dwm.sh or @code{exec} it from
 mkdir -p --mode=700 $HOME/.xmonad/icons
 cp -r extra/xbm_icons/*.xbm $HOME/.xmonad/icons
 
-perl portable_sed.pl "distro"
+perl set.pl "distro"
 autoreconf --install --force
 
 # disable X11, point the location to the icons
@@ -639,7 +639,7 @@ Do the same for your cpu temperature, copy and paste the variable as is.
 @strong{dev.cpu.0.temperature} below is provied as example.
 
 @verbatim
-perl portable_sed.pl "distro"
+perl set.pl "distro"
 autoreconf --install --force
 
 ./configure --prefix=$HOME/.cache --with-x11 --without-alsa --with-oss mobo_sensor='dev.aibs.0' cpu_sensor='dev.cpu.0.temperature'
@@ -677,7 +677,7 @@ pkg_add gcc
 @anchor{#pinky-curses-installation}
 
 @verbatim
-perl portable_sed.pl "distro"
+perl set.pl "distro"
 autoreconf --install --force
 
 # disable X11, enable the colours and ncurses opts.
@@ -718,7 +718,7 @@ information will be shown. The tmux status bar in action:
 The installation steps:
 
 @verbatim
-perl portable_sed.pl "distro"
+perl set.pl "distro"
 autoreconf --install --force
 
 ./configure --prefix=$HOME/.cache --without-x11 --without-colours

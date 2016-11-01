@@ -206,7 +206,7 @@ Don't just rush to register yourself, read carefully what the "Free" account lim
 ## Installation for dwm
 
 ```bash
-perl portable_sed.pl "distro"
+perl set.pl "distro"
 autoreconf --install --force
 
 ./configure --prefix=$HOME/.cache --with-x11
@@ -223,7 +223,7 @@ Copy the code from extra/scripts/dwm.sh or `exec` it from **xinitrc** or the scr
 mkdir -p --mode=700 $HOME/.xmonad/icons
 cp -r extra/xbm_icons/*.xbm $HOME/.xmonad/icons
 
-perl portable_sed.pl "distro"
+perl set.pl "distro"
 autoreconf --install --force
 
 # disable X11, point the location to the icons
@@ -262,7 +262,7 @@ Copy only 'dev.MODULE.NUMBER' (if there is any number at all) and paste it into 
 Do the same for your cpu temperature, copy and paste the variable as is. **dev.cpu.0.temperature** below is provied as example.
 
 ```bash
-perl portable_sed.pl "distro"
+perl set.pl "distro"
 autoreconf --install --force
 
 ./configure --prefix=$HOME/.cache --with-x11 --without-alsa --with-oss mobo_sensor='dev.aibs.0' cpu_sensor='dev.cpu.0.temperature'
@@ -295,7 +295,7 @@ pkg_add gcc
 ## pinky curses installation
 
 ```bash
-perl portable_sed.pl "distro"
+perl set.pl "distro"
 autoreconf --install --force
 
 # disable X11, enable the colours and ncurses opts.
@@ -326,7 +326,7 @@ pinky-bar is no longer tied to Window Managers only. With the addition of "witho
 The installation steps:
 
 ```bash
-perl portable_sed.pl "distro"
+perl set.pl "distro"
 autoreconf --install --force
 
 ./configure --prefix=$HOME/.cache --without-x11 --without-colours

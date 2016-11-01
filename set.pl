@@ -51,8 +51,8 @@ sub reflace_configure {
   my ($new) = @_;
   my $filename = "configure.ac";
 
-  my $derefs = re_read(\$filename);
-  my @arr = split("\n", $$derefs);
+  my $refs = re_read(\$filename);
+  my @arr = split("\n", $$refs);
   $arr[9] = $$new;
   my $concatArr = join("\n", @arr);
 
@@ -61,15 +61,15 @@ sub reflace_configure {
 }
 
 sub reflace_many {
-  my ($ag1,$ag2,$ag3,$ag4,$ag5,$ag6,$filename) = @_;
+  my ($arr,$filename) = @_;
   my $derefFilename = $$filename;
   my $concatArr = re_read(\$derefFilename);
-  my $derefs = $$concatArr;
+  my @arr2 = @$arr;
+  my ($x,$arrLen,$derefs) = (0,$#arr2,$$concatArr);
 
-  $derefs =~ s/$ag1/$$ag2/g;
-  $derefs =~ s/$ag3/$$ag4/g;
-  $derefs =~ s/$ag5/$$ag6/g;
-
+  for (; $x <= $arrLen; $x++) {
+    $derefs =~ s/${$arr2[$x][0]}/${$arr2[$x][1]}/g;
+  }
   re_write(\$derefFilename,\$derefs);
   return;
 }
@@ -85,39 +85,44 @@ sub reflace_single {
   return;
 }
 
-my ($amCF, $srcToAppend, $bsdLibs) = ("", "", "");
-my $osEntered = $ARGV[0] ? uc $ARGV[0] : die "No OS/Distro supplied.";
 
-my $srcMake = "src/Makefile.am";
-my $defTits = "m4_define([cuRos],[$osEntered])";
-my $bsdCF = "-D_DEFAULT_SOURCE -L/usr/local/lib";
-my $posixCF = "-D_POSIX_C_SOURCE=200112L";
+{
+  my ($amCF, $srcToAppend, $bsdLibs) = ("", "", "");
+  my $osEntered = $ARGV[0] ? uc $ARGV[0] : die "No OS/Distro supplied.";
 
-if ($osEntered eq "FREEBSD") {
-  $bsdLibs = "-largp -ldevstat";
-  $amCF = \$bsdCF;
-  $defTits = "$defTits m4_define([FREEBZD], [tits])";
-  $srcToAppend = "freebsd_functions.c include/freebzd.h";
+  my $srcMake = "src/Makefile.am";
+  my $defTits = "m4_define([cuRos],[$osEntered])";
+  my $bsdCF = "-D_DEFAULT_SOURCE -L/usr/local/lib";
+  my $posixCF = "-D_POSIX_C_SOURCE=200112L";
+  my ($amStr, $srcStr, $bsdStr) = ("{amCF}","{srcFiles}","{bzdlibs}");
+
+  if ($osEntered eq "FREEBSD") {
+    $bsdLibs = "-largp -ldevstat";
+    $amCF = \$bsdCF;
+    $defTits = "$defTits m4_define([FREEBZD], [tits])";
+    $srcToAppend = "freebsd_functions.c include/freebzd.h";
+  }
+  elsif ($osEntered eq "OPENBSD") {
+    $bsdLibs = "-largp -lossaudio";
+    $amCF = \$bsdCF;
+    $defTits = "$defTits m4_define([OPENBZD], [forSure])";
+    $srcToAppend = "openbsd_functions.c include/openbzd.h";
+  }
+  else {
+    $amCF = \$posixCF;
+    $defTits = "$defTits m4_define([LINUKS], [cryMeAriver])";
+    $srcToAppend = "linux_functions.c";
+  }
+
+  copy("src/Makefail.skel",$srcMake)
+    or die "Could not copy src/Makefail.skel $!";
+
+  reflace_configure(\$defTits);
+
+  my @hugeArr = (
+    [\$amStr, \$$amCF],
+    [\$srcStr, \$srcToAppend],
+    [\$bsdStr, \$bsdLibs]
+  );
+  reflace_many(\@hugeArr,\$srcMake);
 }
-elsif ($osEntered eq "OPENBSD") {
-  $bsdLibs = "-largp -lossaudio";
-  $amCF = \$bsdCF;
-  $defTits = "$defTits m4_define([OPENBZD], [forSure])";
-  $srcToAppend = "openbsd_functions.c include/openbzd.h";
-}
-else {
-  $amCF = \$posixCF;
-  $defTits = "$defTits m4_define([LINUKS], [cryMeAriver])";
-  $srcToAppend = "linux_functions.c";
-}
-
-copy("src/Makefail.skel",$srcMake)
-  or die "Could not copy src/Makefail.skel $!";
-
-reflace_configure(\$defTits);
-reflace_many(
-  "{amCF}", \$$amCF,
-  "{srcFiles}", \$srcToAppend,
-  "{bzdlibs}", \$bsdLibs,
-  \$srcMake
-);
