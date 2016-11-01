@@ -104,7 +104,7 @@ else {
 }
 
 copy("src/Makefail.skel","src/Makefile.am")
-  or die "Coudl not copy src/Makefail.skel $!";
+  or die "Could not copy src/Makefail.skel $!";
 
 reflace_configure("$defTits");
 reflace_many(
