@@ -22,10 +22,11 @@ use File::Copy;
 
 sub re_read {
   my ($filename) = @_;
+  my $derefs = $$filename;
   my $fh;
 
-  open($fh, '<:encoding(UTF-8)', $filename)
-    or die "Could not open file '$filename' $!";
+  open($fh, '<:encoding(UTF-8)', $derefs)
+    or die "Could not open file '$derefs' $!";
   local $/ = undef; # <--- slurp mode
   my $concatArr = <$fh>;
   close($fh);
@@ -35,10 +36,11 @@ sub re_read {
 
 sub re_write {
   my ($filename,$concatArr) = @_;
+  my $derefs = $$filename;
   my $fh;
 
-  open($fh, '>:encoding(UTF-8)', $filename) 
-    or die "Could not open file '$filename' $!";
+  open($fh, '>:encoding(UTF-8)', $derefs) 
+    or die "Could not open file '$derefs' $!";
 
   print $fh $$concatArr;
   close($fh);
@@ -49,70 +51,73 @@ sub reflace_configure {
   my ($new) = @_;
   my $filename = "configure.ac";
 
-  my $derefs = re_read($filename);
+  my $derefs = re_read(\$filename);
   my @arr = split("\n", $$derefs);
-  $arr[9] = $new;
+  $arr[9] = $$new;
   my $concatArr = join("\n", @arr);
 
-  re_write($filename,\$concatArr);
+  re_write(\$filename,\$concatArr);
   return;
 }
 
 sub reflace_many {
   my ($ag1,$ag2,$ag3,$ag4,$ag5,$ag6,$filename) = @_;
-  my $concatArr = re_read($filename);
+  my $derefFilename = $$filename;
+  my $concatArr = re_read(\$derefFilename);
   my $derefs = $$concatArr;
 
-  $derefs =~ s/$ag1/$ag2/g;
-  $derefs =~ s/$ag3/$ag4/g;
-  $derefs =~ s/$ag5/$ag6/g;
+  $derefs =~ s/$ag1/$$ag2/g;
+  $derefs =~ s/$ag3/$$ag4/g;
+  $derefs =~ s/$ag5/$$ag6/g;
 
-  re_write($filename,\$derefs);
+  re_write(\$derefFilename,\$derefs);
   return;
 }
 
 sub reflace_single {
   my ($ag1,$ag2,$filename) = @_;
-  my $concatArr = re_read($filename);
+  my $derefFilename = $$filename;
+  my $concatArr = re_read(\$derefFilename);
   my $derefs = $$concatArr;
 
-  $derefs =~ s/$ag1/$ag2/g;
-  re_write($filename,\$derefs);
+  $derefs =~ s/$$ag1/$$ag2/g;
+  re_write(\$derefFilename,\$derefs);
   return;
 }
 
 my ($amCF, $srcToAppend, $bsdLibs) = ("", "", "");
 my $osEntered = $ARGV[0] ? uc $ARGV[0] : die "No OS/Distro supplied.";
 
+my $srcMake = "src/Makefile.am";
 my $defTits = "m4_define([cuRos],[$osEntered])";
 my $bsdCF = "-D_DEFAULT_SOURCE -L/usr/local/lib";
 my $posixCF = "-D_POSIX_C_SOURCE=200112L";
 
 if ($osEntered eq "FREEBSD") {
   $bsdLibs = "-largp -ldevstat";
-  $amCF = $bsdCF;
+  $amCF = \$bsdCF;
   $defTits = "$defTits m4_define([FREEBZD], [tits])";
   $srcToAppend = "freebsd_functions.c include/freebzd.h";
 }
 elsif ($osEntered eq "OPENBSD") {
   $bsdLibs = "-largp -lossaudio";
-  $amCF = $bsdCF;
+  $amCF = \$bsdCF;
   $defTits = "$defTits m4_define([OPENBZD], [forSure])";
   $srcToAppend = "openbsd_functions.c include/openbzd.h";
 }
 else {
-  $amCF = $posixCF;
+  $amCF = \$posixCF;
   $defTits = "$defTits m4_define([LINUKS], [cryMeAriver])";
   $srcToAppend = "linux_functions.c";
 }
 
-copy("src/Makefail.skel","src/Makefile.am")
+copy("src/Makefail.skel",$srcMake)
   or die "Could not copy src/Makefail.skel $!";
 
-reflace_configure("$defTits");
+reflace_configure(\$defTits);
 reflace_many(
-  "{amCF}", $amCF,
-  "{srcFiles}", $srcToAppend,
-  "{bzdlibs}", $bsdLibs,
-  "src/Makefile.am"
+  "{amCF}", \$$amCF,
+  "{srcFiles}", \$srcToAppend,
+  "{bzdlibs}", \$bsdLibs,
+  \$srcMake
 );
