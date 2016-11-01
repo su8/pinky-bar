@@ -797,8 +797,11 @@ I'm not responsible if you exceeded the limits, you've been warned.
 .IP
 .nf
 \f[C]
-chmod\ +x\ bootstrap
-\&./bootstrap\ distro
+#\ The\ first\ two\ commands\ are\ essential
+cp\ \-r\ src/Makefail.skel\ src/Makefile.am
+perl\ portable_sed.pl\ "distro"
+autoreconf\ \-\-install\ \-\-force
+
 \&./configure\ \-\-prefix=$HOME/.cache\ \-\-with\-x11
 make
 make\ install
@@ -815,8 +818,10 @@ Copy the code from extra/scripts/dwm.sh or \f[C]exec\f[] it from
 mkdir\ \-p\ \-\-mode=700\ $HOME/.xmonad/icons
 cp\ \-r\ extra/xbm_icons/*.xbm\ $HOME/.xmonad/icons
 
-chmod\ +x\ bootstrap
-\&./bootstrap\ distro
+#\ The\ first\ two\ commands\ are\ essential
+cp\ \-r\ src/Makefail.skel\ src/Makefile.am
+perl\ portable_sed.pl\ "distro"
+autoreconf\ \-\-install\ \-\-force
 
 #\ disable\ X11,\ point\ the\ location\ to\ the\ icons
 \&./configure\ \-\-prefix=$HOME/.cache\ \-\-without\-x11\ icons=$HOME/.xmonad/icons
@@ -866,8 +871,11 @@ Do the same for your cpu temperature, copy and paste the variable as is.
 .IP
 .nf
 \f[C]
-chmod\ +x\ bootstrap
-\&./bootstrap\ freebsd
+#\ The\ first\ two\ commands\ are\ essential
+cp\ \-r\ src/Makefail.skel\ src/Makefile.am
+perl\ portable_sed.pl\ "distro"
+autoreconf\ \-\-install\ \-\-force
+
 \&./configure\ \-\-prefix=$HOME/.cache\ \-\-with\-x11\ \-\-without\-alsa\ \-\-with\-oss\ mobo_sensor=\[aq]dev.aibs.0\[aq]\ cpu_sensor=\[aq]dev.cpu.0.temperature\[aq]
 make
 make\ install
@@ -902,8 +910,10 @@ pkg_add\ gcc
 .IP
 .nf
 \f[C]
-chmod\ +x\ bootstrap
-\&./bootstrap\ distro
+#\ The\ first\ two\ commands\ are\ essential
+cp\ \-r\ src/Makefail.skel\ src/Makefile.am
+perl\ portable_sed.pl\ "distro"
+autoreconf\ \-\-install\ \-\-force
 
 #\ disable\ X11,\ enable\ the\ colours\ and\ ncurses\ opts.
 \&./configure\ \-\-prefix=$HOME/.cache\ \-\-without\-x11\ \-\-with\-alsa\ \-\-with\-colours\ \-\-with\-ncurses
@@ -945,8 +955,11 @@ The installation steps:
 .IP
 .nf
 \f[C]
-chmod\ +x\ bootstrap
-\&./bootstrap\ distro
+#\ The\ first\ two\ commands\ are\ essential
+cp\ \-r\ src/Makefail.skel\ src/Makefile.am
+perl\ portable_sed.pl\ "distro"
+autoreconf\ \-\-install\ \-\-force
+
 \&./configure\ \-\-prefix=$HOME/.cache\ \-\-without\-x11\ \-\-without\-colours
 make
 make\ install

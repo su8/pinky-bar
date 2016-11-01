@@ -1,4 +1,4 @@
-# 10/29/2016
+# 11/01/2016
 
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -15,12 +15,6 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
 # MA 02110-1301, USA.
 
-# Neither GNU make, GNU sed, bash
-# are used outside linux. No need
-# to add more deps. than necessary.
-# perl is installed out of the box
-# in any desktop system. 
-
 use strict;
 use warnings;
 
@@ -30,62 +24,60 @@ sub re_read {
 
   open($fh, '<:encoding(UTF-8)', $filename)
     or die "Could not open file '$filename' $!";
-  my @arr = <$fh>;
+  local $/ = undef; # <--- slurp mode
+  my $concatArr = <$fh>;
   close($fh);
 
-  return @arr;
+  return $concatArr;
 }
 
 sub re_write {
-  my ($filename, $arr) = @_;
+  my ($filename,$concatArr) = @_;
   my $fh;
 
   open($fh, '>:encoding(UTF-8)', $filename) 
     or die "Could not open file '$filename' $!";
 
-  print $fh @$arr;
+  print $fh $concatArr;
   close($fh);
+  return;
 }
 
 sub reflace_configure {
   my ($new) = @_;
-  my ($x,$filename) = (0, "configure.ac");
-  my @arr = re_read($filename);
+  my $filename = "configure.ac";
 
-  for (@arr) {
-    if (9 == $x) {
-      $_ = "$new\n";
-      last;
-    }
-    $x++;
-  }
-  re_write($filename,\@arr);
+  my @arr = split("\n", re_read($filename));
+  $arr[9] = $new;
+  my $concatArr = join("\n", @arr);
+
+  re_write($filename,$concatArr);
+  return;
 }
 
 sub reflace_many {
   my ($ag1,$ag2,$ag3,$ag4,$ag5,$ag6,$filename) = @_;
-  my @arr = re_read($filename);
+  my $concatArr = re_read($filename);
 
-  for (@arr) {
-    s/$ag1/$ag2/g;
-    s/$ag3/$ag4/g;
-    s/$ag5/$ag6/g;
-  }
-  re_write($filename,\@arr);
+  $concatArr =~ s/$ag1/$ag2/g;
+  $concatArr =~ s/$ag3/$ag4/g;
+  $concatArr =~ s/$ag5/$ag6/g;
+
+  re_write($filename,$concatArr);
+  return;
 }
 
 sub reflace_single {
   my ($ag1,$ag2,$filename) = @_;
-  my @arr = re_read($filename);
+  my $concatArr = re_read($filename);
 
-  for (@arr) {
-    s/$ag1/$ag2/g;
-  }
-  re_write($filename,\@arr);
+  $concatArr =~ s/$ag1/$ag2/g;
+  re_write($filename,$concatArr);
+  return;
 }
 
 my ($amCF, $srcToAppend, $bsdLibs) = ("", "", "");
-my $osEntered = uc $ARGV[0];
+my $osEntered = $ARGV[0] ? uc $ARGV[0] : die "No OS/Distro supplied.";
 
 my $defTits = "m4_define([cuRos],[$osEntered])";
 my $bsdCF = "-D_DEFAULT_SOURCE -L/usr/local/lib";
