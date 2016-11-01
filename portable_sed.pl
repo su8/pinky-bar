@@ -30,7 +30,7 @@ sub re_read {
   my $concatArr = <$fh>;
   close($fh);
 
-  return $concatArr;
+  return \$concatArr;
 }
 
 sub re_write {
@@ -49,7 +49,8 @@ sub reflace_configure {
   my ($new) = @_;
   my $filename = "configure.ac";
 
-  my @arr = split("\n", re_read($filename));
+  my $derefs = re_read($filename);
+  my @arr = split("\n", $$derefs);
   $arr[9] = $new;
   my $concatArr = join("\n", @arr);
 
@@ -60,21 +61,23 @@ sub reflace_configure {
 sub reflace_many {
   my ($ag1,$ag2,$ag3,$ag4,$ag5,$ag6,$filename) = @_;
   my $concatArr = re_read($filename);
+  my $derefs = $$concatArr;
 
-  $concatArr =~ s/$ag1/$ag2/g;
-  $concatArr =~ s/$ag3/$ag4/g;
-  $concatArr =~ s/$ag5/$ag6/g;
+  $derefs =~ s/$ag1/$ag2/g;
+  $derefs =~ s/$ag3/$ag4/g;
+  $derefs =~ s/$ag5/$ag6/g;
 
-  re_write($filename,$concatArr);
+  re_write($filename,$derefs);
   return;
 }
 
 sub reflace_single {
   my ($ag1,$ag2,$filename) = @_;
   my $concatArr = re_read($filename);
+  my $derefs = $$concatArr;
 
-  $concatArr =~ s/$ag1/$ag2/g;
-  re_write($filename,$concatArr);
+  $derefs =~ s/$ag1/$ag2/g;
+  re_write($filename,$derefs);
   return;
 }
 
