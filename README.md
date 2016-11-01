@@ -390,6 +390,7 @@ Execute the program without supplying any command line options and it will parse
 * automake
 * m4
 * gawk
+* perl
 
 ## \*BSD Mandatory requirements
 
@@ -404,7 +405,6 @@ Execute the program without supplying any command line options and it will parse
 * m4
 * gawk
 * perl
-* gmake
 
 Some llvm and gcc versions will not check for headers and libraries in /usr/local, if that's the case for you, you should export the following environment variables:
 
