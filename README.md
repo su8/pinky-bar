@@ -206,8 +206,6 @@ Don't just rush to register yourself, read carefully what the "Free" account lim
 ## Installation for dwm
 
 ```bash
-# The first two commands are essential
-cp -r src/Makefail.skel src/Makefile.am
 perl portable_sed.pl "distro"
 autoreconf --install --force
 
@@ -225,8 +223,6 @@ Copy the code from extra/scripts/dwm.sh or `exec` it from **xinitrc** or the scr
 mkdir -p --mode=700 $HOME/.xmonad/icons
 cp -r extra/xbm_icons/*.xbm $HOME/.xmonad/icons
 
-# The first two commands are essential
-cp -r src/Makefail.skel src/Makefile.am
 perl portable_sed.pl "distro"
 autoreconf --install --force
 
@@ -266,8 +262,6 @@ Copy only 'dev.MODULE.NUMBER' (if there is any number at all) and paste it into 
 Do the same for your cpu temperature, copy and paste the variable as is. **dev.cpu.0.temperature** below is provied as example.
 
 ```bash
-# The first two commands are essential
-cp -r src/Makefail.skel src/Makefile.am
 perl portable_sed.pl "distro"
 autoreconf --install --force
 
@@ -301,8 +295,6 @@ pkg_add gcc
 ## pinky curses installation
 
 ```bash
-# The first two commands are essential
-cp -r src/Makefail.skel src/Makefile.am
 perl portable_sed.pl "distro"
 autoreconf --install --force
 
@@ -334,8 +326,6 @@ pinky-bar is no longer tied to Window Managers only. With the addition of "witho
 The installation steps:
 
 ```bash
-# The first two commands are essential
-cp -r src/Makefail.skel src/Makefile.am
 perl portable_sed.pl "distro"
 autoreconf --install --force
 

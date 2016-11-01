@@ -18,6 +18,8 @@
 use strict;
 use warnings;
 
+use File::Copy;
+
 sub re_read {
   my ($filename) = @_;
   my $fh;
@@ -101,10 +103,13 @@ else {
   $srcToAppend = "linux_functions.c";
 }
 
+copy("src/Makefail.skel","src/Makefile.am")
+  or die "Coudl not copy src/Makefail.skel $!";
+
 reflace_configure("$defTits");
 reflace_many(
-  "{amCF}", "$amCF",
-  "{srcFiles}", "$srcToAppend",
-  "{bzdlibs}", "$bsdLibs",
+  "{amCF}", $amCF,
+  "{srcFiles}", $srcToAppend,
+  "{bzdlibs}", $bsdLibs,
   "src/Makefile.am"
 );
