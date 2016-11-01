@@ -24,63 +24,85 @@
 use strict;
 use warnings;
 
-sub reflace {
-  my ($old,$new,$filename,$count) = @_;
+sub re_read {
+  my ($filename) = @_;
   my $fh;
-  my $x = 0;
 
   open($fh, '<:encoding(UTF-8)', $filename)
     or die "Could not open file '$filename' $!";
   my @arr = <$fh>;
   close($fh);
 
-  if (1 == $count) {
-    for (@arr) {
-      if (9 == $x) {
-        $_ = "$new\n";
-        last;
-      }
-      $x++;
-    }
-  }
-  else {
-    for (@arr) {
-      s/$old/$new/g;
-    }
-  }
+  return @arr;
+}
+
+sub re_write {
+  my ($filename, $arr) = @_;
+  my $fh;
 
   open($fh, '>:encoding(UTF-8)', $filename) 
     or die "Could not open file '$filename' $!";
-  print $fh @arr;
+
+  print $fh @$arr;
   close($fh);
 }
 
-my ($amCF, $srcToAppend, $BSDLIBS) = "";
+sub reflace_single {
+  my ($new,$filename) = @_;
+  my @arr = re_read($filename);
+  my $x = 0;
+
+  for (@arr) {
+    if (9 == $x) {
+      $_ = "$new\n";
+      last;
+    }
+    $x++;
+  }
+  re_write($filename,\@arr);
+}
+
+sub reflace_many {
+  my ($ag1,$ag2,$ag3,$ag4,$ag5,$ag6,$filename) = @_;
+  my @arr = re_read($filename);
+
+  for (@arr) {
+    s/$ag1/$ag2/g;
+    s/$ag3/$ag4/g;
+    s/$ag5/$ag6/g;
+  }
+  re_write($filename,\@arr);
+}
+
+my ($amCF, $srcToAppend, $bsdLibs) = ("", "", "");
 my $osEntered = uc $ARGV[0];
 
-my $defTits = "m4_define([OSENTERED],[$osEntered])";
+my $defTits = "m4_define([cuRos],[$osEntered])";
 my $bsdCF = "-D_DEFAULT_SOURCE -L/usr/local/lib";
 my $posixCF = "-D_POSIX_C_SOURCE=200112L";
 
 if ($osEntered eq "FREEBSD") {
-  $BSDLIBS = "-largp -ldevstat";
+  $bsdLibs = "-largp -ldevstat";
   $amCF = $bsdCF;
-  $defTits = "m4_define([FREEBZD], [tits])";
+  $defTits = "$defTits m4_define([FREEBZD], [tits])";
   $srcToAppend = "freebsd_functions.c include/freebzd.h";
 }
 elsif ($osEntered eq "OPENBSD") {
-  $BSDLIBS = "-largp -lossaudio";
+  $bsdLibs = "-largp -lossaudio";
   $amCF = $bsdCF;
-  $defTits = "m4_define([OPENBZD], [forSure])";
+  $defTits = "$defTits m4_define([OPENBZD], [forSure])";
   $srcToAppend = "openbsd_functions.c include/openbzd.h";
 }
 else {
   $amCF = $posixCF;
-  $defTits = "m4_define([LINUKS], [cryMeAriver])";
+  $defTits = "$defTits m4_define([LINUKS], [cryMeAriver])";
   $srcToAppend = "linux_functions.c";
 }
 
-reflace("", "$defTits", "configure.ac", 1);
-reflace("{amCF}", "$amCF", "src/Makefile.am", 0);
-reflace("{srcFiles}", "$srcToAppend", "src/Makefile.am", 0);
-reflace("{bzdlibs}", "$BSDLIBS", "src/Makefile.am", 0);
+reflace_single("$defTits", "configure.ac");
+reflace_many(
+  "{amCF}", "$amCF",
+  "{srcFiles}", "$srcToAppend",
+  "{bzdlibs}", "$bsdLibs",
+  "src/Makefile.am"
+);

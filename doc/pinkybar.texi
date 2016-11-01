@@ -828,6 +828,8 @@ automake
 m4
 @item
 gawk
+@item
+perl
 @end itemize
 
 @node *BSD Mandatory requirements
@@ -856,8 +858,6 @@ m4
 gawk
 @item
 perl
-@item
-gmake
 @end itemize
 
 Some llvm and gcc versions will not check for headers and libraries in
