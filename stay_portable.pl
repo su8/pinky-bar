@@ -47,10 +47,10 @@ sub re_write {
   close($fh);
 }
 
-sub reflace_single {
-  my ($new,$filename) = @_;
+sub reflace_configure {
+  my ($new) = @_;
+  my ($x,$filename) = (0, "configure.ac");
   my @arr = re_read($filename);
-  my $x = 0;
 
   for (@arr) {
     if (9 == $x) {
@@ -70,6 +70,16 @@ sub reflace_many {
     s/$ag1/$ag2/g;
     s/$ag3/$ag4/g;
     s/$ag5/$ag6/g;
+  }
+  re_write($filename,\@arr);
+}
+
+sub reflace_single {
+  my ($ag1,$ag2,$filename) = @_;
+  my @arr = re_read($filename);
+
+  for (@arr) {
+    s/$ag1/$ag2/g;
   }
   re_write($filename,\@arr);
 }
@@ -99,7 +109,7 @@ else {
   $srcToAppend = "linux_functions.c";
 }
 
-reflace_single("$defTits", "configure.ac");
+reflace_configure("$defTits");
 reflace_many(
   "{amCF}", "$amCF",
   "{srcFiles}", "$srcToAppend",
