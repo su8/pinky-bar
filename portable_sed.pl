@@ -40,7 +40,7 @@ sub re_write {
   open($fh, '>:encoding(UTF-8)', $filename) 
     or die "Could not open file '$filename' $!";
 
-  print $fh $concatArr;
+  print $fh $$concatArr;
   close($fh);
   return;
 }
@@ -54,7 +54,7 @@ sub reflace_configure {
   $arr[9] = $new;
   my $concatArr = join("\n", @arr);
 
-  re_write($filename,$concatArr);
+  re_write($filename,\$concatArr);
   return;
 }
 
@@ -67,7 +67,7 @@ sub reflace_many {
   $derefs =~ s/$ag3/$ag4/g;
   $derefs =~ s/$ag5/$ag6/g;
 
-  re_write($filename,$derefs);
+  re_write($filename,\$derefs);
   return;
 }
 
@@ -77,7 +77,7 @@ sub reflace_single {
   my $derefs = $$concatArr;
 
   $derefs =~ s/$ag1/$ag2/g;
-  re_write($filename,$derefs);
+  re_write($filename,\$derefs);
   return;
 }
 
