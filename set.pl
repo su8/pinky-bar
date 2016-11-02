@@ -19,6 +19,7 @@ use strict;
 use warnings;
 
 use File::Copy;
+use List::Util qw(any);
 
 sub re_read {
   my ($filename) = @_;
@@ -50,10 +51,12 @@ sub re_write {
 sub reflace_configure {
   my ($new) = @_;
   my $filename = "configure.ac";
-
   my $refs = re_read(\$filename);
   my @arr = split("\n", $$refs);
-  $arr[9] = $$new;
+
+  if ($arr[9]) {
+    $arr[9] = $$new;
+  }
   my $concatArr = join("\n", @arr);
 
   re_write(\$filename,\$concatArr);
@@ -89,6 +92,17 @@ sub reflace_single {
 {
   my ($amCF, $srcToAppend, $bsdLibs) = ("", "", "");
   my $osEntered = $ARGV[0] ? uc $ARGV[0] : die "No OS/Distro supplied.";
+
+  my @osArr = (
+    "ARCHLINUX","DEBIAN",
+    "GENTOO","SLACKWARE",
+    "RHEL","FRUGALWARE",
+    "ANGSTROM","FREEBSD","OPENBSD"
+  );
+  my $hasMatch = any { $_ eq $osEntered } @osArr;
+  if ($hasMatch eq "") {
+    die "Invalid OS/Distro supplied.";
+  }
 
   my $srcMake = "src/Makefile.am";
   my $defTits = "m4_define([cuRos],[$osEntered])";

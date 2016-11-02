@@ -28,8 +28,12 @@ __pycache__
 
 
 
-!configure.ac
 !Makefile.am
+src/Makefile.am
+
+
+
+!configure.ac
 !Makefile.skel
 !extra/FreeBSD/Makefile
 !extra/zsh/_pinkybar
