@@ -90,8 +90,13 @@ sub reflace_single {
 
 
 {
+
+  if (0 != $#ARGV) {
+    die "No OS/Distro supplied.";
+  }
+
   my ($amCF, $srcToAppend, $bsdLibs) = ("", "", "");
-  my $osEntered = $ARGV[0] ? uc $ARGV[0] : die "No OS/Distro supplied.";
+  my $osEntered = uc $ARGV[0];
 
   my @osArr = (
     "ARCHLINUX","DEBIAN",
