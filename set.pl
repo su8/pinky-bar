@@ -91,7 +91,7 @@ sub reflace_single {
 
 {
 
-  if (0 != $#ARGV) {
+  if (-1 == $#ARGV) {
     die "No OS/Distro supplied.";
   }
 
