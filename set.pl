@@ -51,8 +51,7 @@ sub re_write {
 sub reflace_configure {
   my ($new) = @_;
   my $filename = "configure.ac";
-  my $refs = re_read(\$filename);
-  my @arr = split("\n", $$refs);
+  my @arr = split("\n",${re_read(\$filename)});
 
   if ($arr[9]) {
     $arr[9] = $$new;
@@ -66,9 +65,9 @@ sub reflace_configure {
 sub reflace_many {
   my ($arr,$filename) = @_;
   my $derefFilename = $$filename;
-  my $concatArr = re_read(\$derefFilename);
   my @arr2 = @$arr;
-  my ($x,$arrLen,$derefs) = (0,$#arr2,$$concatArr);
+  my ($x,$arrLen) = (0,$#arr2);
+  my $derefs = ${re_read(\$derefFilename)};
 
   for (; $x <= $arrLen; $x++) {
     $derefs =~ s/${$arr2[$x][0]}/${$arr2[$x][1]}/g;
@@ -80,8 +79,7 @@ sub reflace_many {
 sub reflace_single {
   my ($ag1,$ag2,$filename) = @_;
   my $derefFilename = $$filename;
-  my $concatArr = re_read(\$derefFilename);
-  my $derefs = $$concatArr;
+  my $derefs = ${re_read(\$derefFilename)};
 
   $derefs =~ s/$$ag1/$$ag2/g;
   re_write(\$derefFilename,\$derefs);
@@ -95,9 +93,7 @@ sub reflace_single {
     die "No OS/Distro supplied.";
   }
 
-  my ($amCF, $srcToAppend, $bsdLibs) = ("", "", "");
   my $osEntered = uc $ARGV[0];
-
   my @osArr = (
     "ARCHLINUX","DEBIAN",
     "GENTOO","SLACKWARE",
@@ -114,6 +110,7 @@ sub reflace_single {
   my $bsdCF = "-D_DEFAULT_SOURCE -L/usr/local/lib";
   my $posixCF = "-D_POSIX_C_SOURCE=200112L";
   my ($amStr, $srcStr, $bsdStr) = ("{amCF}","{srcFiles}","{bzdlibs}");
+  my ($amCF, $srcToAppend, $bsdLibs) = ("", "", "");
 
   if ($osEntered eq "FREEBSD") {
     $bsdLibs = "-largp -ldevstat";
