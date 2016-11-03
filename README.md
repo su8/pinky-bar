@@ -294,6 +294,9 @@ pkg_add gcc
 
 ## pinky curses installation
 
+
+Step one, compile pinky-bar **--with-ncurses**, so the output to be formated in a way that pinky-curses can parse and colorize.
+
 ```bash
 perl set.pl "distro"
 autoreconf --install --force
@@ -302,26 +305,29 @@ autoreconf --install --force
 ./configure --prefix=$HOME/.cache --without-x11 --with-alsa --with-colours --with-ncurses
 
 # compile 'n install
-make all ncurses
+make
 make install
 ```
+
+Step two, compile and install pinky-curses - https://notabug.org/void0/pinky-curses
 
 Copy the code from extra/scripts/pinky-curses.sh and extra/misc/.Xresources
 
 Force your non xterm/urxvt terminal emulator to use the newer xterm/urxvt colours. You'll have to kill Xorg (simply logout and log back in), experienced people are using xrdb instead killing Xorg each time they do changes to such files.
 
-pinky\_curses is standalone program not tied to pinky-bar.
-
-```bash
-# ^B - Blue , ^M - Magenta , ^Y - Yellow
-while true; do echo "^BOh ^Mhello ^Ydear";sleep 1;done | ./pinky_curses
-```
-
 ## Installation for anything else
 
-pinky-bar is no longer tied to Window Managers only. With the addition of "without colours", the output can be shown in any program, just bear in mind that the more options you've supplied the more system information will be shown. The tmux status bar in action:
+pinky-bar is no longer tied to Window Managers only. With the addition of "without colours", the output can be shown in any program, just bear in mind that the more options you've supplied the more system information will be shown. 
+
+The tmux status bar in action:
 
 ![](img/pic4.png)
+
+I even wrote urxvt status line extension - https://notabug.org/void0/pinky-urxvt:
+
+![](https://notabug.org/void0/pinky-urxvt/raw/master/1.png)
+
+
 
 The installation steps:
 
