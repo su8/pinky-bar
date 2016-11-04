@@ -7,6 +7,7 @@
 - [Installation in FreeBSD](#installation-in-freebsd)
 - [Installation in OpenBSD](#installation-in-openbsd)
 - [pinky curses installation](#pinky-curses-installation)
+- [pinky urxvt](#pinky-urxvt)
 - [Installation for anything else](#installation-for-anything-else)
 - [Using configuration file](#using-configuration-file)
 - [Linux Requirements](#linux-mandatory-requirements)
@@ -294,7 +295,6 @@ pkg_add gcc
 
 ## pinky curses installation
 
-
 Step one, compile pinky-bar **--with-ncurses**, so the output to be formated in a way that pinky-curses can parse and colorize.
 
 ```bash
@@ -315,6 +315,18 @@ Copy the code from extra/scripts/pinky-curses.sh and extra/misc/.Xresources
 
 Force your non xterm/urxvt terminal emulator to use the newer xterm/urxvt colours. You'll have to kill Xorg (simply logout and log back in), experienced people are using xrdb instead killing Xorg each time they do changes to such files.
 
+## pinky urxvt
+
+What a coincidence, pinky-urxvt is my 3rd urxvt extension and 3rd member of the pinky family.
+
+The sole purpose of this urxvt extension is to make it easy for you to keep track of things that you are interested to monitor while hacking your way something in the terminal.
+
+Link - https://notabug.org/void0/pinky-urxvt
+
+![](https://notabug.org/void0/pinky-urxvt/raw/master/2.png)
+
+pinky-urxvt, and pinky-curses are not tied to pinky-bar.
+
 ## Installation for anything else
 
 pinky-bar is no longer tied to Window Managers only. With the addition of "without colours", the output can be shown in any program, just bear in mind that the more options you've supplied the more system information will be shown. 
@@ -322,12 +334,6 @@ pinky-bar is no longer tied to Window Managers only. With the addition of "witho
 The tmux status bar in action:
 
 ![](img/pic4.png)
-
-I even wrote urxvt status line extension - https://notabug.org/void0/pinky-urxvt:
-
-![](https://notabug.org/void0/pinky-urxvt/raw/master/1.png)
-
-
 
 The installation steps:
 

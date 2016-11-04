@@ -81,6 +81,7 @@ cpu and motherboard sensors as @strong{modules} and not inlined.
 * Installation in FreeBSD::
 * Installation in OpenBSD::
 * pinky curses installation::
+* pinky urxvt::
 * Installation for anything else::
 * Using configuration file::
 * Linux Mandatory requirements::
@@ -675,6 +676,8 @@ pkg_add gcc
 @node pinky curses installation
 @section pinky curses installation
 @anchor{#pinky-curses-installation}
+Step one, compile pinky-bar @strong{--with-ncurses}, so the output to be
+formated in a way that pinky-curses can parse and colorize.
 
 @verbatim
 perl set.pl "distro"
@@ -684,9 +687,12 @@ autoreconf --install --force
 ./configure --prefix=$HOME/.cache --without-x11 --with-alsa --with-colours --with-ncurses
 
 # compile 'n install
-make all ncurses
+make
 make install
 @end verbatim
+
+Step two, compile and install pinky-curses -
+https://notabug.org/void0/pinky-curses
 
 Copy the code from extra/scripts/pinky-curses.sh and
 extra/misc/.Xresources
@@ -696,12 +702,23 @@ xterm/urxvt colours. You'll have to kill Xorg (simply logout and log
 back in), experienced people are using xrdb instead killing Xorg each
 time they do changes to such files.
 
-pinky_curses is standalone program not tied to pinky-bar.
+@node pinky urxvt
+@section pinky urxvt
+@anchor{#pinky-urxvt}
+What a coincidence, pinky-urxvt is my 3rd urxvt extension and 3rd member
+of the pinky family.
 
-@verbatim
-# ^B - Blue , ^M - Magenta , ^Y - Yellow
-while true; do echo "^BOh ^Mhello ^Ydear";sleep 1;done | ./pinky_curses
-@end verbatim
+The sole purpose of this urxvt extension is to make it easy for you to
+keep track of things that you are interested to monitor while hacking
+your way something in the terminal.
+
+Link - https://notabug.org/void0/pinky-urxvt
+
+@float
+@image{https://notabug.org/void0/pinky-urxvt/raw/master/2,,,,png}
+@end float
+
+pinky-urxvt, and pinky-curses are not tied to pinky-bar.
 
 @node Installation for anything else
 @section Installation for anything else
@@ -709,7 +726,9 @@ while true; do echo "^BOh ^Mhello ^Ydear";sleep 1;done | ./pinky_curses
 pinky-bar is no longer tied to Window Managers only. With the addition
 of ``without colours'', the output can be shown in any program, just
 bear in mind that the more options you've supplied the more system
-information will be shown. The tmux status bar in action:
+information will be shown.
+
+The tmux status bar in action:
 
 @float
 @image{img/pic4,,,,png}
