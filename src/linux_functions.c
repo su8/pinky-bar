@@ -108,6 +108,7 @@ get_loadavg(char *str1) {
     (float)up.loads[2] / 65535.0f);
 }
 
+
 /* My inital attempt was to make this code FreeBSD exclusive as the
  * sensors parsing there is much more difficult than it is in linux.
  */

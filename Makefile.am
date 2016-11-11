@@ -16,7 +16,3 @@ EXTRA_DIST =      \
 	m4              \
 	doc             \
 	extra
-
-# using 1 tab
-ncurses:
-	@cd src && $(MAKE) ncurses

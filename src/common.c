@@ -317,8 +317,8 @@ get_uptime(char *str1) {
 void 
 get_taim(char *str1) {
   char time_str[VLA];
-  time_t t;
-  struct tm *taim;
+  time_t t = 0;
+  struct tm *taim = NULL;
 
   if (-1 == (t = time(NULL)) || 
       NULL == (taim = localtime(&t)) ||

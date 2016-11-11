@@ -615,7 +615,7 @@ T{
 T}@T{
 \[en]without\-sensors
 T}@T{
-Alternative way to get the sensors values (linux only)
+Alternative way to get data from the sensors (linux only)
 T}
 T{
 \[en]with\-apm
@@ -693,8 +693,8 @@ drive_port=`1234'
 T}@T{
 T}@T{
 Different TCP port to listen to for the drive temperature, default one
-is 7634, must be combined \f[B]with\-drivetemp\f[] or
-\f[B]with\-drivetemp\-light\f[]
+is 7634, must be combined \f[B]\[en]with\-drivetemp\f[] or
+\f[B]\[en]with\-drivetemp\-light\f[]
 T}
 T{
 \[en]with\-colours
@@ -840,8 +840,6 @@ into your system is no\-go.
 Be prepared to spend a minute or two to find out some system
 information.
 .PP
-Let's say you are using dwm:
-.PP
 Determine the motherboard sensor module name.
 .IP
 .nf
@@ -867,7 +865,7 @@ Do the same for your cpu temperature, copy and paste the variable as is.
 .IP
 .nf
 \f[C]
-perl\ set.pl\ "distro"
+perl\ set.pl\ "freebsd"
 autoreconf\ \-\-install\ \-\-force
 
 \&./configure\ \-\-prefix=$HOME/.cache\ \-\-with\-x11\ \-\-without\-alsa\ \-\-with\-oss\ mobo_sensor=\[aq]dev.aibs.0\[aq]\ cpu_sensor=\[aq]dev.cpu.0.temperature\[aq]
@@ -880,8 +878,7 @@ Send a request to the FreeBSD mailing list and request the OpenBSD
 sensors API to be ported.
 .SS Installation in OpenBSD
 .PP
-Before even executing the \f[B]bootstrap\f[] script, you'll have to do
-this:
+Before proceeding, you'll have to:
 .IP
 .nf
 \f[C]
@@ -898,6 +895,14 @@ export\ AUTOMAKE_VERSION=1.15
 
 #\ Your\ call,\ gcc\ or\ llvm\ ?
 pkg_add\ gcc
+
+#\ after\ that:
+perl\ set.pl\ "openbsd"
+autoreconf\ \-\-install\ \-\-force
+
+\&./configure\ \-\-prefix=$HOME/.cache\ \-\-without\-alsa\ \-\-with\-oss
+make
+make\ install
 \f[]
 .fi
 .SS pinky curses installation
@@ -922,14 +927,7 @@ make\ install
 Step two, compile and install pinky\-curses \-
 https://notabug.org/void0/pinky\-curses
 .PP
-Copy the code from extra/scripts/pinky\-curses.sh and
-extra/misc/.Xresources
-.PP
-Force your non xterm/urxvt terminal emulator to use the newer
-xterm/urxvt colours.
-You'll have to kill Xorg (simply logout and log back in), experienced
-people are using xrdb instead killing Xorg each time they do changes to
-such files.
+Copy the code from extra/scripts/pinky\-curses.sh
 .SS pinky urxvt
 .PP
 What a coincidence, pinky\-urxvt is my 3rd urxvt extension and 3rd
@@ -1372,8 +1370,6 @@ To see the currently played song name \f[B]\[en]with\-mpd\f[]:
 .PP
 Server side:
 .IP \[bu] 2
-libmpdclient
-.IP \[bu] 2
 mpd (can be build with soundcloud support)
 .PP
 Client side:
@@ -1423,10 +1419,8 @@ dwm compiled with statuscolor patch.
 The colours in use are specified in your dwm config.h
 .SS Wish list
 .PP
-As top priority:
-.PP
-It would be great if I had *BSD compatible usb wifi dongle to add wifi
-options in pinky\-bar.
+It would be great if I had *BSD compatible usb wifi dongle or wireless
+pci adapter to add wifi options in pinky\-bar.
 .SH REPORTING BUGS
 .PP
 Report bugs to https://gitlab.com/void0/pinky\-bar

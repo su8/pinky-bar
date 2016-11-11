@@ -1,3 +1,5 @@
+The code doesn't age, neither it has expiration date.
+
 ## Table of Contents
 
 - [Program Options](#program-options)
@@ -31,7 +33,6 @@ xmonad
 ncurses
 
 ![](img/pic6.png)
-
 
 Gather some system information and show it in this statusbar program, not tied to any Window Manager, terminal multiplexer, etc.
 
@@ -155,7 +156,7 @@ It's up to you to decide which features suit you best.
 | --with-libnl   | --without-libnl     | Enable the wifi related options regarding chipsets supporting the cfg80211/mac80211 modules (linux only).  |
 | --with-pci     | --without-pci       | To get the NIC vendor and model in linux                                                   |
 | --with-dvd     | --without-dvd       | To get the cdrom/dvdrom vendor and model                                                   |
-| --with-sensors | --without-sensors   | Alternative way to get the sensors values (linux only)                                     |
+| --with-sensors | --without-sensors   | Alternative way to get data from the sensors (linux only)                                  |
 | --with-apm     | --without-apm       | APM power and resource management for laptops (FreeBSD only)                               |
 | --with-ncurses | --without-ncurses   | Output the data to the terminal using the ncurses library, can be colorized                |
 | --with-perl    | --without-perl      | Extend pinkybar with your own crafted scripts written in perl                              |
@@ -166,7 +167,7 @@ It's up to you to decide which features suit you best.
 | --with-smartemp | --without-smartemp   | Read the drive temperature from S.M.A.R.T cross-platform available                       |
 | --with-drivetemp | --without-drivetemp   | Read the drive temperature from S.M.A.R.T (linux only) uses curl                       |
 | --with-drivetemp-light | --without-drivetemp-light   | Read the drive temperature from S.M.A.R.T (linux only) light version       |
-| drive\_port='1234'  |                | Different TCP port to listen to for the drive temperature, default one is 7634, must be combined **with-drivetemp** or **with-drivetemp-light**   |
+| drive\_port='1234'  |                | Different TCP port to listen to for the drive temperature, default one is 7634, must be combined **--with-drivetemp** or **--with-drivetemp-light**   |
 | --with-colours | --without-colours   | Colorize the output data.                                                                  |
 | icons=/tmp     |                     | xbm icons that can be used by dzen2 for example. Discarded when **--with-x11** is used     |
 | --with-mpd     | --without-mpd       | To see the currently played song name (if any).                                            |
@@ -241,8 +242,6 @@ Copy the code from extra/scripts/xmonad.sh or `exec` it from **xinitrc** or the 
 
 FreeBSD has no other way than using the module specific convention to query sysctl and obtain data from the sensors. Maintaining a list with all the possible module names and performing expensive sysctl calls in a loop to determine that X module is loaded into your system is no-go. Be prepared to spend a minute or two to find out some system information.
 
-Let's say you are using dwm:
-
 Determine the motherboard sensor module name.
 
 ```bash
@@ -263,7 +262,7 @@ Copy only 'dev.MODULE.NUMBER' (if there is any number at all) and paste it into 
 Do the same for your cpu temperature, copy and paste the variable as is. **dev.cpu.0.temperature** below is provied as example.
 
 ```bash
-perl set.pl "distro"
+perl set.pl "freebsd"
 autoreconf --install --force
 
 ./configure --prefix=$HOME/.cache --with-x11 --without-alsa --with-oss mobo_sensor='dev.aibs.0' cpu_sensor='dev.cpu.0.temperature'
@@ -275,7 +274,7 @@ Send a request to the FreeBSD mailing list and request the OpenBSD sensors API t
 
 ## Installation in OpenBSD
 
-Before even executing the **bootstrap** script, you'll have to do this:
+Before proceeding, you'll have to:
 
 ```bash
 # To detect the newer compiler that you are
@@ -291,6 +290,14 @@ export AUTOMAKE_VERSION=1.15
 
 # Your call, gcc or llvm ?
 pkg_add gcc
+
+# after that:
+perl set.pl "openbsd"
+autoreconf --install --force
+
+./configure --prefix=$HOME/.cache --without-alsa --with-oss
+make
+make install
 ```
 
 ## pinky curses installation
@@ -311,9 +318,7 @@ make install
 
 Step two, compile and install pinky-curses - https://notabug.org/void0/pinky-curses
 
-Copy the code from extra/scripts/pinky-curses.sh and extra/misc/.Xresources
-
-Force your non xterm/urxvt terminal emulator to use the newer xterm/urxvt colours. You'll have to kill Xorg (simply logout and log back in), experienced people are using xrdb instead killing Xorg each time they do changes to such files.
+Copy the code from extra/scripts/pinky-curses.sh
 
 ## pinky urxvt
 
@@ -364,7 +369,6 @@ Cannot list the \*BSD flavours as "distros", so they deserve own options:
 
 - [x] freebsd
 - [x] openbsd
-
 
 ---
 
@@ -648,7 +652,6 @@ To see the currently played song name **--with-mpd**:
 
   Server side:
 
-  * libmpdclient
   * mpd (can be build with soundcloud support)
 
   Client side:
@@ -689,6 +692,4 @@ use **--without-colours** to skip the following step:
 
 ## Wish list
 
-As top priority:
-
-It would be great if I had \*BSD compatible usb wifi dongle to add wifi options in pinky-bar.
+It would be great if I had \*BSD compatible usb wifi dongle or wireless pci adapter to add wifi options in pinky-bar.

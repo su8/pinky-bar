@@ -211,10 +211,7 @@ get_song(char *str1, int8_t num) {
     return;
   }
 
-  while (true) {
-    if (NULL == (fgets(buf, 99, fp))) {
-      break;
-    }
+  while (NULL != (fgets(buf, 99, fp))) {
     if (6 == num) {
       if ('f' == buf[0] && 'i' == buf[1] && 'l' == buf[2]) {
         CHECK_SSCANF(buf, "%*s %[^\n]", temp);

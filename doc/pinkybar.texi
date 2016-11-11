@@ -398,7 +398,7 @@ number of dependencies required to compile the program.
 
 It's up to you to decide which features suit you best.
 
-@multitable {cpu_sensor=`dev.cpu.0.temperature'} {--without-drivetemp-light} {Different TCP port to listen to for the drive temperature, default one is 7634, must be combined @strong{with-drivetemp} or @strong{with-drivetemp-light}} 
+@multitable {cpu_sensor=`dev.cpu.0.temperature'} {--without-drivetemp-light} {Different TCP port to listen to for the drive temperature, default one is 7634, must be combined @strong{--with-drivetemp} or @strong{--with-drivetemp-light}} 
 @headitem 
 To include
  @tab Not to include
@@ -435,7 +435,7 @@ cfg80211/mac80211 modules (linux only).
 @item 
 --with-sensors
  @tab --without-sensors
- @tab Alternative way to get the sensors values (linux only)
+ @tab Alternative way to get data from the sensors (linux only)
 @item 
 --with-apm
  @tab --without-apm
@@ -483,8 +483,8 @@ version
 drive_port=`1234'
  @tab 
  @tab Different TCP port to listen to for the drive temperature, default
-one is 7634, must be combined @strong{with-drivetemp} or
-@strong{with-drivetemp-light}
+one is 7634, must be combined @strong{--with-drivetemp} or
+@strong{--with-drivetemp-light}
 @item 
 --with-colours
  @tab --without-colours
@@ -616,8 +616,6 @@ all the possible module names and performing expensive sysctl calls in a
 loop to determine that X module is loaded into your system is no-go. Be
 prepared to spend a minute or two to find out some system information.
 
-Let's say you are using dwm:
-
 Determine the motherboard sensor module name.
 
 @verbatim
@@ -640,7 +638,7 @@ Do the same for your cpu temperature, copy and paste the variable as is.
 @strong{dev.cpu.0.temperature} below is provied as example.
 
 @verbatim
-perl set.pl "distro"
+perl set.pl "freebsd"
 autoreconf --install --force
 
 ./configure --prefix=$HOME/.cache --with-x11 --without-alsa --with-oss mobo_sensor='dev.aibs.0' cpu_sensor='dev.cpu.0.temperature'
@@ -654,8 +652,7 @@ sensors API to be ported.
 @node Installation in OpenBSD
 @section Installation in OpenBSD
 @anchor{#installation-in-openbsd}
-Before even executing the @strong{bootstrap} script, you'll have to do
-this:
+Before proceeding, you'll have to:
 
 @verbatim
 # To detect the newer compiler that you are
@@ -671,6 +668,14 @@ export AUTOMAKE_VERSION=1.15
 
 # Your call, gcc or llvm ?
 pkg_add gcc
+
+# after that:
+perl set.pl "openbsd"
+autoreconf --install --force
+
+./configure --prefix=$HOME/.cache --without-alsa --with-oss
+make
+make install
 @end verbatim
 
 @node pinky curses installation
@@ -694,13 +699,7 @@ make install
 Step two, compile and install pinky-curses -
 https://notabug.org/void0/pinky-curses
 
-Copy the code from extra/scripts/pinky-curses.sh and
-extra/misc/.Xresources
-
-Force your non xterm/urxvt terminal emulator to use the newer
-xterm/urxvt colours. You'll have to kill Xorg (simply logout and log
-back in), experienced people are using xrdb instead killing Xorg each
-time they do changes to such files.
+Copy the code from extra/scripts/pinky-curses.sh
 
 @node pinky urxvt
 @section pinky urxvt
@@ -1193,8 +1192,6 @@ Server side:
 
 @itemize
 @item
-libmpdclient
-@item
 mpd (can be build with soundcloud support)
 @end itemize
 
@@ -1268,10 +1265,8 @@ your dwm config.h
 @node Wish list
 @section Wish list
 @anchor{#wish-list}
-As top priority:
-
-It would be great if I had *BSD compatible usb wifi dongle to add wifi
-options in pinky-bar.
+It would be great if I had *BSD compatible usb wifi dongle or wireless
+pci adapter to add wifi options in pinky-bar.
 
 @node REPORTING BUGS
 @chapter REPORTING BUGS

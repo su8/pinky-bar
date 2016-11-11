@@ -47,33 +47,34 @@ read_temp_data_cb(char *data, size_t size, size_t nmemb, char *str1) {
   char *ptr = data;
   size_t sz = size * nmemb, x = 0;
 
-  if (0 == one_run) {
-    for (; *ptr; ptr++, x++) {
-      if ((x+4) < sz) {
+  if (0 != one_run) {
+    return sz;
+  }
 
-        if ('|' == *ptr) {
-          ++cols;
-          if (('C' == *(ptr+3) || 'C' == *(ptr+4)) && 3 == cols) {
-            if (0 != (isdigit((unsigned char) *(ptr+1)))) {
-              *str1++ = *(ptr+1);
-              if (0 != (isdigit((unsigned char) *(ptr+2)))) {
-                *str1++ = *(ptr+2);
-              }
+  for (; *ptr; ptr++, x++) {
+    if ((x+4) < sz) {
+
+      if ('|' == *ptr) {
+        ++cols;
+        if (('C' == *(ptr+3) || 'C' == *(ptr+4)) && 3 == cols) {
+          if (0 != (isdigit((unsigned char) *(ptr+1)))) {
+            *str1++ = *(ptr+1);
+            if (0 != (isdigit((unsigned char) *(ptr+2)))) {
+              *str1++ = *(ptr+2);
             }
-            *str1 = '\0';
-            break;
           }
+          *str1 = '\0';
+          break;
         }
-
       }
-    }
 
-    one_run = 1;
-    if ('\0' != *str1) {
-      *str1++ = '\0';
     }
   }
 
+  one_run = 1;
+  if ('\0' != *str1) {
+    *str1++ = '\0';
+  }
   return sz;
 }
 #endif /* __linux__ && (WITH_DRIVETEMP || WITH_DRIVETEMP_LIGHT) */
@@ -163,13 +164,13 @@ get_drivetemp(char *str1) {
       */
       len = recv(sock, buf, sizeof(buf), 0);
       got_conn = true;
+      CLOSE_FD2(sock, result);
       break;
     }
     CLOSE_FD2(sock, result);
   }
 
   if (true == got_conn) {
-    CLOSE_FD2(sock, result);
     if (0 < len) {
       /* the 3rd arg is dummy placeholder */
       read_temp_data_cb(buf, (size_t)len, 1, str1);
