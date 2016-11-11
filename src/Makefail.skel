@@ -3,10 +3,6 @@ AM_CFLAGS = {amCF} \
 
 bin_PROGRAMS = pinkybar
 
-EXTRA_PROGRAMS   = ncurses
-ncurses_SOURCES  = ncurses.c
-ncurses_LDADD    = -lncurses
-
 pinkybar_LDADD = $(X_LIBS) $(ALSA_LIBS) $(MPD_LIBS) $(PCI_LIBS) $(DVD_LIBS) $(SENSORS_LIBS) $(CURL_LIBS) $(LIBNL_LZ) $(PERL_LZ) $(PYTHON_LZ) {bzdlibs}
 pinkybar_SOURCES = main.c           \
     cpu.c                           \

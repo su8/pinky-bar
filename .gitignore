@@ -36,7 +36,8 @@ src/Makefile.am
 !configure.ac
 !Makefile.skel
 !extra/FreeBSD/Makefile
-!extra/zsh/_pinkybar
+!extra/bash_zsh/_pinkybar
+!extra/bash_zsh/pinkybar
 !doc/man_template.pdc
 !extra/Gentoo/app-admin/pinky/*
 !doc/Makefile

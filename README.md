@@ -101,7 +101,7 @@ The order of supplied options will dictate how, where and what system informatio
 | -V           | --volume    | The sound volume level                                             |
 | -t           | --time      | The current time                                                   |
 | -a           | --ipaddr    | The local ip address [argument - eth0]                             |
-| -b           | --bandwitdh | The consumed internet bandwidth so far [argument - eth0]           |
+| -b           | --bandwidth | The consumed internet bandwidth so far [argument - eth0]           |
 | -i           | --iface     | The current download and upload speed [argument - eth0]            |
 | -A           | --ipmac     | The NIC mac address [argument - eth0]                              |
 | -B           | --ipmask    | The NIC subnet mask [argument - eth0]                              |
