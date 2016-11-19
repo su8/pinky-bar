@@ -60,7 +60,7 @@ get_lua(char *str1, char *str2) {
   if (NULL == (L = luaL_newstate())) {
     return;
   }
-#endif /* LUA_VERSION_NUM == 501 */
+#endif /* LUA_VERSION_NUM < 501 */
 
   luaL_openlibs(L);
   if (0 != (luaL_loadfile(L, str2))) {

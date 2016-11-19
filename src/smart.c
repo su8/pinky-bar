@@ -133,7 +133,6 @@ get_drivetemp(char *str1) {
   struct addrinfo *rp = NULL, *result = NULL, hints;
   int sock = 0;
   char buf[VLA];
-  bool got_conn = false;
   ssize_t len = 0;
 
   FILL_STR_ARR(1, str1, "0");
@@ -163,18 +162,15 @@ get_drivetemp(char *str1) {
       * of get_drivetemp
       */
       len = recv(sock, buf, sizeof(buf), 0);
-      got_conn = true;
       CLOSE_FD2(sock, result);
+
+      if (0 < len) {
+        /* the 3rd arg is dummy placeholder */
+        read_temp_data_cb(buf, (size_t)len, 1, str1);
+      }
       break;
     }
     CLOSE_FD2(sock, result);
-  }
-
-  if (true == got_conn) {
-    if (0 < len) {
-      /* the 3rd arg is dummy placeholder */
-      read_temp_data_cb(buf, (size_t)len, 1, str1);
-    }
   }
 
   if (NULL != result) {
