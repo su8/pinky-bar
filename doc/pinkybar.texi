@@ -243,6 +243,10 @@ the Opt-in section.
  @tab Extend pinkybar with your scripts written in lua, learn more from
 the Opt-in section.
 @item 
+--R
+ @tab Extend pinkybar with your scripts written in R, learn more from
+the Opt-in section.
+@item 
 -q
  @tab --weather
  @tab Show the temperature outside [argument - London,uk]
@@ -473,6 +477,10 @@ colorized
 --with-python3
  @tab --without-python3
  @tab Extend pinkybar with your own crafted scripts written in python3
+@item 
+--with-r
+ @tab --without-r
+ @tab Extend pinkybar with your own crafted scripts written in R
 @item 
 --with-weather
  @tab --without-weather
@@ -1167,6 +1175,12 @@ Once done editing your script, you can byte-compile it:
 @verbatim
 luac -o pinky.luac pinky.lua
 ~/pinkybar --lua ~/chewbacca/pinky.luac # <-- .luac and not .lua
+@end verbatim
+
+@strong{--with-r}
+
+@verbatim
+~/pinkybar --R ~/chewbacca/pinky.R
 @end verbatim
 
 To get the sound volume level:
