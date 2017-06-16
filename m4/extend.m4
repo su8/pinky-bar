@@ -307,3 +307,40 @@ AC_DEFUN([TEST_RUBY],[
   AC_SUBST(RUBY_CF)
   AC_DEFINE_UNQUOTED([WITH_RUBY],[$WITH_RUBY],[Extend the program via ruby scripts])
 ])
+
+
+dnl TEST_R() function in configure.ac
+dnl
+dnl Substitute R related linker and
+dnl cflags to the variables R_CF and
+dnl R_LZ if the user enabled the
+dnl --with-r switch
+AC_DEFUN([TEST_R],[
+  R_LZ=""
+  R_CF=""
+  WITH_R=0
+
+  AC_ARG_WITH([r],
+    AS_HELP_STRING([--with-r],
+      [Extend the program via R scripts]),
+    [],
+    [with_r=no]
+  )
+
+  dnl For some reason libR is not
+  dnl detected by PKG_CHECK_MODULES(),
+  dnl but pkg-config manages to return
+  dnl correct cflags and libs for it.
+  AS_IF([test "x$with_r" = "xyes"], [
+    CHECK_CFLAGZ([-O0])
+
+    R_CF="-I/usr/lib64/R/include"
+    R_LZ="-L/usr/lib64/R/lib -lR"
+    WITH_R=1
+
+  ])
+
+  AC_SUBST(R_LZ)
+  AC_SUBST(R_CF)
+  AC_DEFINE_UNQUOTED([WITH_R],[$WITH_R],[Extend the program via R scripts])
+])

@@ -1,9 +1,9 @@
 AM_CFLAGS = {amCF} \
-  -I/usr/local/include $(LIBNL_CF) $(PERL_CF) $(PYTHON_CF) $(RUBY_CF)
+  -I/usr/local/include $(LIBNL_CF) $(PERL_CF) $(PYTHON_CF) $(RUBY_CF) $(R_CF)
 
 bin_PROGRAMS = pinkybar
 
-pinkybar_LDADD = $(X_LIBS) $(ALSA_LIBS) $(MPD_LIBS) $(PCI_LIBS) $(DVD_LIBS) $(SENSORS_LIBS) $(CURL_LIBS) $(LIBNL_LZ) $(PERL_LZ) $(LUA_LIBS) $(PYTHON_LZ) $(RUBY_LZ) {bzdlibs}
+pinkybar_LDADD = $(X_LIBS) $(ALSA_LIBS) $(MPD_LIBS) $(PCI_LIBS) $(DVD_LIBS) $(SENSORS_LIBS) $(CURL_LIBS) $(LIBNL_LZ) $(PERL_LZ) $(LUA_LIBS) $(PYTHON_LZ) $(RUBY_LZ) $(R_LZ) {bzdlibs}
 pinkybar_SOURCES = main.c           \
     cpu.c                           \
     common.c                        \
@@ -16,6 +16,7 @@ pinkybar_SOURCES = main.c           \
     lua.c                           \
     ruby.c                          \
     python.c                        \
+    R.c                             \
     prototypes/cpu.h                \
     prototypes/common.h             \
     prototypes/sound.h              \
@@ -28,6 +29,7 @@ pinkybar_SOURCES = main.c           \
     prototypes/lua.h                \
     prototypes/ruby.h               \
     prototypes/python.h             \
+    prototypes/R.h                  \
     include/headers.h               \
     include/options_constants.h     \
     include/functions_constants.h   \

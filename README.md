@@ -93,6 +93,7 @@ The order of supplied options will dictate how, where and what system informatio
 |              | --python    | Extend pinkybar with your scripts written in python, learn more from the Opt-in section.     |
 |              | --ruby      | Extend pinkybar with your scripts written in ruby, learn more from the Opt-in section.     |
 |              | --lua       | Extend pinkybar with your scripts written in lua, learn more from the Opt-in section.     |
+|              | --R         | Extend pinkybar with your scripts written in R, learn more from the Opt-in section.     |
 | -q           | --weather   | Show the temperature outside [argument - London,uk]                |
 | -U           | --uptime    | The system uptime                                                  |
 | -w           | --loadavg   | The system average load for past 1, 5 and 15 minutes               |
@@ -164,8 +165,9 @@ It's up to you to decide which features suit you best.
 | --with-perl    | --without-perl      | Extend pinkybar with your own crafted scripts written in perl                              |
 | --with-lua     | --without-lua       | Extend pinkybar with your own crafted scripts written in lua                               |
 | --with-ruby    | --without-ruby      | Extend pinkybar with your own crafted scripts written in ruby                              |
-| --with-python2  | --without-python2  | Extend pinkybar with your own crafted scripts written in python2                           |
-| --with-python3  | --without-python3  | Extend pinkybar with your own crafted scripts written in python3                           |
+| --with-python2 | --without-python2   | Extend pinkybar with your own crafted scripts written in python2                           |
+| --with-python3 | --without-python3   | Extend pinkybar with your own crafted scripts written in python3                           |
+| --with-r       | --without-r         | Extend pinkybar with your own crafted scripts written in R                                 |
 | --with-weather | --without-weather   | The temperature outside  (some details must be provided)                                   |
 | api\_key='123458976'               | | API key obtained after registering yourself in the weather website, must be combined **--with-weather**  |
 | --with-smartemp | --without-smartemp   | Read the drive temperature from S.M.A.R.T cross-platform available                       |
@@ -640,6 +642,12 @@ Once done editing your script, you can byte-compile it:
 ```bash
 luac -o pinky.luac pinky.lua
 ~/pinkybar --lua ~/chewbacca/pinky.luac # <-- .luac and not .lua
+```
+
+**--with-r**
+
+```bash
+~/pinkybar --R ~/chewbacca/pinky.R
 ```
 
 To get the sound volume level:

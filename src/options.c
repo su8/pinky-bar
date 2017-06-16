@@ -32,6 +32,7 @@
 #include "prototypes/lua.h"
 #include "prototypes/ruby.h"
 #include "prototypes/python.h"
+#include "prototypes/R.h"
 
 /* Because we ran out of a-z A-Z options,
  * only long ones will be supported from now on.
@@ -45,6 +46,7 @@ enum {
   PYTHONSCRIPT,
   LUASCRIPT,
   RUBYSCRIPT,
+  RSCRIPT,
   BULLSHIFT
 };
 const char *argp_program_version = PACKAGE_STRING;
@@ -111,6 +113,10 @@ static const struct argp_option options[] = {
 #if WITH_PYTHON == 1
   { .name = "python",  .key = PYTHONSCRIPT, .arg = "script", .doc = "Extend the program with python, read README."       },
 #endif /* WITH_PYTHON */
+
+#if WITH_R == 1
+  { .name = "R",  .key = RSCRIPT, .arg = "script", .doc = "Extend the program with R, read README."       },
+#endif /* WITH_R */
 
 #if WITH_WEATHER == 1
   { .name = "weather", .key = 'q', .arg = "London,uk", .doc = "The temperature outside."                                 },
@@ -264,6 +270,11 @@ parse_opt(int key, char *arg, struct argp_state *state) {
 #if WITH_PYTHON == 1
     NEW_ARG_LABEL(PYTHONSCRIPT, char python[VLA], python, FMT_KERN);
 #endif /* WITH_PYTHON */
+
+
+#if WITH_R == 1
+    NEW_ARG_LABEL(RSCRIPT, char r[VLA], r, FMT_KERN);
+#endif /* WITH_R */
 
 
 #if WITH_WEATHER == 1
