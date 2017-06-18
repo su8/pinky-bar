@@ -9,8 +9,6 @@ dist_man_MANS = doc/pinkybar.1
 
 # To satisfy make dist
 EXTRA_DIST =      \
-	src/ncurses.c   \
-	bootstrap       \
 	README.md       \
 	.gitignore      \
 	m4              \

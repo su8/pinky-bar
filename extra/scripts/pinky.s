@@ -26,7 +26,28 @@
 # Dont worry about the colorization, it's
 # handled by pinky-bar.
 
-uzer_func <- function() {
-  rett = sprintf("%s %d", "Hello", 123)
-  return <- rett
-}
+  .file	"common.c"
+	.section	.rodata.str1.1,"aMS",@progbits,1
+.LC0:
+	.string	"Hello World"
+	.section	.text.unlikely,"ax",@progbits
+.LCOLDB1:
+	.text
+.LHOTB1:
+	.p2align 4,,15
+	.globl	uzer_func
+	.type	uzer_func, @function
+uzer_func:
+.LFB0:
+	.cfi_startproc
+	movl	$.LC0, %eax
+	ret
+	.cfi_endproc
+.LFE0:
+	.size	uzer_func, .-uzer_func
+	.section	.text.unlikely
+.LCOLDE1:
+	.text
+.LHOTE1:
+	.ident	"GCC: (Gentoo 5.4.0-r3 p1.3, pie-0.6.5) 5.4.0"
+	.section	.note.GNU-stack,"",@progbits

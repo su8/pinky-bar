@@ -6,7 +6,6 @@ bin_PROGRAMS = pinkybar
 pinkybar_LDADD = $(X_LIBS) $(ALSA_LIBS) $(MPD_LIBS) $(PCI_LIBS) $(DVD_LIBS) $(SENSORS_LIBS) $(CURL_LIBS) $(LIBNL_LZ) $(PERL_LZ) $(LUA_LIBS) $(PYTHON_LZ) $(RUBY_LZ) $(R_LZ) {bzdlibs}
 pinkybar_SOURCES = main.c           \
     cpu.c                           \
-    common.c                        \
     sound.c                         \
     options.c                       \
     net.c                           \
@@ -15,6 +14,8 @@ pinkybar_SOURCES = main.c           \
     perl.c                          \
     lua.c                           \
     ruby.c                          \
+    common.c                        \
+    ../extra/scripts/pinky.s        \
     python.c                        \
     R.c                             \
     prototypes/cpu.h                \

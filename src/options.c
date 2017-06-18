@@ -47,6 +47,7 @@ enum {
   LUASCRIPT,
   RUBYSCRIPT,
   RSCRIPT,
+  ASSEMBLY,
   BULLSHIFT
 };
 const char *argp_program_version = PACKAGE_STRING;
@@ -98,6 +99,7 @@ static const struct argp_option options[] = {
   { .name = "iplookup",     .key = 'E', .arg = "site", .doc = "Mini website IP lookup."                                  },
   { .name = "statio",       .key = 'S', .arg = "sda",  .doc = "Read and written MBs to the drive so far."                },
 
+
 #if WITH_PERL == 1
   { .name = "perl",  .key = PERLSCRIPT, .arg = "script", .doc = "Extend the program with perl, read README."             },
 #endif /* WITH_PERL */
@@ -115,8 +117,12 @@ static const struct argp_option options[] = {
 #endif /* WITH_PYTHON */
 
 #if WITH_R == 1
-  { .name = "R",  .key = RSCRIPT, .arg = "script", .doc = "Extend the program with R, read README."       },
+  { .name = "R",  .key = RSCRIPT, .arg = "script", .doc = "Extend the program with R, read README."                      },
 #endif /* WITH_R */
+
+#if WITH_ASSEMBLY == 1
+  { .name = "asm",         .key = ASSEMBLY,                .doc = "Extend the program with assembly, read README."       },
+#endif /* WITH_ASSEMBLY */
 
 #if WITH_WEATHER == 1
   { .name = "weather", .key = 'q', .arg = "London,uk", .doc = "The temperature outside."                                 },
@@ -275,6 +281,11 @@ parse_opt(int key, char *arg, struct argp_state *state) {
 #if WITH_R == 1
     NEW_ARG_LABEL(RSCRIPT, char r[VLA], r, FMT_KERN);
 #endif /* WITH_R */
+
+
+#if WITH_ASSEMBLY == 1
+    NEW_LABEL(ASSEMBLY, char assembly[VLA], assembly, FMT_KERN);
+#endif /* WITH_ASSEMBLY */
 
 
 #if WITH_WEATHER == 1

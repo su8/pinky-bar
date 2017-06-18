@@ -344,3 +344,26 @@ AC_DEFUN([TEST_R],[
   AC_SUBST(R_CF)
   AC_DEFINE_UNQUOTED([WITH_R],[$WITH_R],[Extend the program via R scripts])
 ])
+
+
+dnl TEST_ASSEMBLY() function in configure.ac
+dnl
+dnl Check if the user enabled the
+dnl --with-assembly switch
+AC_DEFUN([TEST_ASSEMBLY],[
+  WITH_ASSEMBLY=0
+
+  AC_ARG_WITH([assembly],
+    AS_HELP_STRING([--with-assembly],
+      [Extend the program via assembly]),
+    [],
+    [with_assembly=no]
+  )
+
+  AS_IF([test "x$with_assembly" = "xyes"], [
+    WITH_ASSEMBLY=1
+
+  ])
+
+  AC_DEFINE_UNQUOTED([WITH_ASSEMBLY],[$WITH_ASSEMBLY],[Extend the program via assembly])
+])
