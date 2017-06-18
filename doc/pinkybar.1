@@ -25,8 +25,8 @@ Try simulating real fan hardware failure by holding down all system fan
 blades and watch what the program will show you, just try not to slice
 your cheesy fingers open in the process.
 .PP
-You can extend pinky\-bar with your own crafted perl/python/ruby/lua
-script.
+You can extend pinky\-bar with your own crafted
+perl/python/ruby/lua/R/assembly script.
 .PP
 If you compile your kernel from source code make sure to include your
 cpu and motherboard sensors as \f[B]modules\f[] and not inlined.
@@ -307,6 +307,12 @@ T}@T{
 T}@T{
 Extend pinkybar with your scripts written in R, learn more from the
 Opt\-in section.
+T}
+T{
+T}@T{
+\[en]asm
+T}@T{
+Extend pinkybar with assembly, learn more from the Opt\-in section.
 T}
 T{
 \-q
@@ -694,6 +700,13 @@ T}@T{
 \[en]without\-r
 T}@T{
 Extend pinkybar with your own crafted scripts written in R
+T}
+T{
+\[en]with\-assembly
+T}@T{
+\[en]without\-assembly
+T}@T{
+Extend pinkybar with assembly
 T}
 T{
 \[en]with\-weather
@@ -1316,11 +1329,15 @@ python >= 3.3 (\[en]with\-python3)
 lua >= 5.1
 .IP \[bu] 2
 ruby >= 2.0 and pkg\-config
+.IP \[bu] 2
+R
+.IP \[bu] 2
+assembly
 .PP
-Have a look at extra/scripts/pinky.{py,pl,ruby,lua}, they serve as
+Have a look at extra/scripts/pinky.{py,pl,ruby,lua,R,s}, they serve as
 examples how to write the most basic scripts in order to extend pinkybar
-in python/perl/ruby/lua.
-You can use the 3 languages simultaneously.
+in python/perl/ruby/lua/R/assembly.
+You can use all languages simultaneously.
 .PP
 Please, please do \f[B]NOT\f[] export or set PYTHONPATH on it's own
 line.
@@ -1404,6 +1421,16 @@ luac\ \-o\ pinky.luac\ pinky.lua
 ~/pinkybar\ \-\-R\ ~/chewbacca/pinky.R
 \f[]
 .fi
+.PP
+\f[B]\[en]with\-assembly\f[]
+.IP
+.nf
+\f[C]
+~/pinkybar\ \-\-asm
+\f[]
+.fi
+.PP
+   *   *   *   *   *
 .PP
 To get the sound volume level:
 .IP \[bu] 2
