@@ -33,6 +33,7 @@
 #include "prototypes/ruby.h"
 #include "prototypes/python.h"
 #include "prototypes/R.h"
+#include "prototypes/ecl.h"
 
 /* Because we ran out of a-z A-Z options,
  * only long ones will be supported from now on.
@@ -48,6 +49,7 @@ enum {
   RUBYSCRIPT,
   RSCRIPT,
   ASSEMBLY,
+  LISP,
   BULLSHIFT
 };
 const char *argp_program_version = PACKAGE_STRING;
@@ -123,6 +125,10 @@ static const struct argp_option options[] = {
 #if WITH_ASSEMBLY == 1
   { .name = "asm",         .key = ASSEMBLY,                .doc = "Extend the program with assembly, read README."       },
 #endif /* WITH_ASSEMBLY */
+
+#if WITH_ECL == 1
+  { .name = "lisp",         .key = LISP,   .arg = "script",    .doc = "Extend the program with lisp, read README."       },
+#endif /* WITH_ECL */
 
 #if WITH_WEATHER == 1
   { .name = "weather", .key = 'q', .arg = "London,uk", .doc = "The temperature outside."                                 },
@@ -286,6 +292,11 @@ parse_opt(int key, char *arg, struct argp_state *state) {
 #if WITH_ASSEMBLY == 1
     NEW_LABEL(ASSEMBLY, char assembly[VLA], assembly, FMT_KERN);
 #endif /* WITH_ASSEMBLY */
+
+
+#if WITH_ECL == 1
+    NEW_ARG_LABEL(LISP, char ecl[VLA], ecl, FMT_KERN);
+#endif /* WITH_ECL */
 
 
 #if WITH_WEATHER == 1

@@ -367,3 +367,32 @@ AC_DEFUN([TEST_ASSEMBLY],[
 
   AC_DEFINE_UNQUOTED([WITH_ASSEMBLY],[$WITH_ASSEMBLY],[Extend the program via assembly])
 ])
+
+
+dnl TEST_ECL() function in configure.ac
+dnl
+dnl Substitute ECL related linker
+dnl to the variable ECL_LIBS if
+dnl the user enabled the --with-r switch
+AC_DEFUN([TEST_ECL],[
+  ECL_LIBS=""
+  WITH_ECL=0
+
+  AC_ARG_WITH([lisp],
+    AS_HELP_STRING([--with-lisp],
+      [Extend the program via lisp scripts]),
+    [],
+    [with_lisp=no]
+  )
+
+  AS_IF([test "x$with_lisp" = "xyes"], [
+    CHECK_CFLAGZ([-O0])
+
+    ECL_LIBS="-lecl"
+    WITH_ECL=1
+
+  ])
+
+  AC_SUBST(ECL_LIBS)
+  AC_DEFINE_UNQUOTED([WITH_ECL],[$WITH_ECL],[Extend the program via lisp scripts])
+])

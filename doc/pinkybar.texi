@@ -52,7 +52,7 @@ all system fan blades and watch what the program will show you, just try
 not to slice your cheesy fingers open in the process.
 
 You can extend pinky-bar with your own crafted
-perl/python/ruby/lua/R/assembly script.
+perl/python/ruby/lua/R/assembly/lisp script.
 
 If you compile your kernel from source code make sure to include your
 cpu and motherboard sensors as @strong{modules} and not inlined.
@@ -249,6 +249,10 @@ the Opt-in section.
 @item 
 --asm
  @tab Extend pinkybar with assembly, learn more from the Opt-in section.
+@item 
+--lisp
+ @tab Extend pinkybar with your scripts written in lisp, learn more from
+the Opt-in section.
 @item 
 -q
  @tab --weather
@@ -488,6 +492,10 @@ colorized
 --with-assembly
  @tab --without-assembly
  @tab Extend pinkybar with assembly
+@item 
+--with-lisp
+ @tab --without-lisp
+ @tab Extend pinkybar with your own crafted scripts written in lisp
 @item 
 --with-weather
  @tab --without-weather
@@ -1120,13 +1128,15 @@ ruby >= 2.0 and pkg-config
 @item
 R
 @item
-assembly
+assembly (the @strong{as} program from binutils)
+@item
+ecl for lisp
 @end itemize
 
-Have a look at extra/scripts/pinky.@{py,pl,ruby,lua,R,s@}, they serve as
-examples how to write the most basic scripts in order to extend pinkybar
-in python/perl/ruby/lua/R/assembly. You can use all languages
-simultaneously.
+Have a look at extra/scripts/pinky.@{py,pl,ruby,lua,R,s,lisp@}, they
+serve as examples how to write the most basic scripts in order to extend
+pinkybar in python/perl/ruby/lua/R/assembly/lisp. You can use all
+languages simultaneously.
 
 Please, please do @strong{NOT} export or set PYTHONPATH on it's own
 line.
@@ -1199,6 +1209,12 @@ luac -o pinky.luac pinky.lua
 
 @verbatim
 ~/pinkybar --asm
+@end verbatim
+
+@strong{--with-lisp}
+
+@verbatim
+~/pinkybar --lisp ~/chewbacca/pinky.lisp
 @end verbatim
 
 @iftex
