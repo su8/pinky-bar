@@ -32,6 +32,8 @@
 #include "prototypes/ocaml.h"
 
 #if WITH_OCAML == 1
+/* Based on: 
+ *  https://github.com/gmcabrita/embed-ocaml-c */
 void
 get_ocaml(char *str1) {
   char *dummy[] = {(char *)"pinkybar", NULL};
