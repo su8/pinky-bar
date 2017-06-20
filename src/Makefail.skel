@@ -46,4 +46,4 @@ pinkybar_SOURCES = main.c           \
     {srcFiles}
 
 .ml.o:
-	ocamlc -output-obj pinky.ml -o pinky.o
+	ocamlc -output-obj $< -o $@
