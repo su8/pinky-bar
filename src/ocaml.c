@@ -43,6 +43,7 @@ get_ocaml(char *str1) {
   value *func = caml_named_value("uzer_func");
   if (NULL == func) {
     FILL_STR_ARR(1, str1, "0");
+    return;
   }
 
   res = caml_callback(*func, Val_unit);
