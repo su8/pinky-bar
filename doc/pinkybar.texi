@@ -52,7 +52,7 @@ all system fan blades and watch what the program will show you, just try
 not to slice your cheesy fingers open in the process.
 
 You can extend pinky-bar with your own crafted
-perl/python/ruby/lua/R/assembly/lisp script.
+perl/python/ruby/lua/R/assembly/lisp/ocaml script.
 
 If you compile your kernel from source code make sure to include your
 cpu and motherboard sensors as @strong{modules} and not inlined.
@@ -253,6 +253,10 @@ the Opt-in section.
 --lisp
  @tab Extend pinkybar with your scripts written in lisp, learn more from
 the Opt-in section.
+@item 
+--ocaml
+ @tab Extend pinkybar with your scripts written in ocaml, learn more
+from the Opt-in section.
 @item 
 -q
  @tab --weather
@@ -496,6 +500,10 @@ colorized
 --with-lisp
  @tab --without-lisp
  @tab Extend pinkybar with your own crafted scripts written in lisp
+@item 
+--with-ocaml
+ @tab --without-ocaml
+ @tab Extend pinkybar with your own crafted scripts written in ocaml
 @item 
 --with-weather
  @tab --without-weather
@@ -891,6 +899,10 @@ m4
 gawk
 @item
 perl
+@item
+ocaml
+@item
+@strong{as} from binutils
 @end itemize
 
 @node *BSD Mandatory requirements
@@ -919,6 +931,10 @@ m4
 gawk
 @item
 perl
+@item
+ocaml
+@item
+@strong{as} from binutils
 @end itemize
 
 Some llvm and gcc versions will not check for headers and libraries in
@@ -1131,11 +1147,13 @@ R
 assembly (the @strong{as} program from binutils)
 @item
 ecl for lisp
+@item
+ocaml
 @end itemize
 
 Have a look at extra/scripts/pinky.@{py,pl,ruby,lua,R,s,lisp@}, they
 serve as examples how to write the most basic scripts in order to extend
-pinkybar in python/perl/ruby/lua/R/assembly/lisp. You can use all
+pinkybar in python/perl/ruby/lua/R/assembly/lisp/ocaml. You can use all
 languages simultaneously.
 
 Please, please do @strong{NOT} export or set PYTHONPATH on it's own
@@ -1215,6 +1233,15 @@ luac -o pinky.luac pinky.lua
 
 @verbatim
 ~/pinkybar --lisp ~/chewbacca/pinky.lisp
+@end verbatim
+
+@strong{--with-ocaml}
+
+The source code resides in the @strong{src} folder under the name of
+@strong{pinky.ml}
+
+@verbatim
+~/pinkbar --ocaml
 @end verbatim
 
 @iftex

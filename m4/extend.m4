@@ -396,3 +396,37 @@ AC_DEFUN([TEST_ECL],[
   AC_SUBST(ECL_LIBS)
   AC_DEFINE_UNQUOTED([WITH_ECL],[$WITH_ECL],[Extend the program via lisp scripts])
 ])
+
+
+dnl TEST_OCAML() function in configure.ac
+dnl
+dnl Substitute OCAML related linker and
+dnl cflags to the variables OCAML_CF and
+dnl OCAML_LZ if the user enabled the
+dnl --with-ocaml switch
+AC_DEFUN([TEST_OCAML],[
+  OCAML_CF="-I`ocamlc -where` -lm -ldl"
+  OCAML_LZ="-L`ocamlc -where` -lcamlrun -lm -ldl -lcurses"
+  WITH_OCAML=0
+
+  AC_ARG_WITH([ocaml],
+    AS_HELP_STRING([--with-ocaml],
+      [Extend the program via ocaml scripts]),
+    [],
+    [with_ocaml=no]
+  )
+
+  AS_IF([test "x$with_ocaml" = "xyes"], [
+    CHECK_CFLAGZ([-O0])
+    WITH_OCAML=1
+  ])
+
+  AC_PATH_PROG(ocaml_prog,ocamlc,no)
+  AS_IF([test "x$ocaml_prog" = "xno"], [
+    AC_MSG_ERROR([Couldnt find ocamlc, is ocaml installed ?])
+  ])
+
+  AC_SUBST(OCAML_LZ)
+  AC_SUBST(OCAML_CF)
+  AC_DEFINE_UNQUOTED([WITH_OCAML],[$WITH_OCAML],[Extend the program via ocaml scripts])
+])

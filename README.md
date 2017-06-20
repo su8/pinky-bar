@@ -40,7 +40,7 @@ Please note that the program won't detect fans connected via molex connetor(s) o
 
 The program is smart enough to detect whether some of your fan(s) blades are spinning, or the particular fan have been removed. Hold down some of your fan blades and you'll see that the program won't include this fan and it's RPM, release the blades and you'll see the fan and it's RPM in the statusbar. Try simulating real fan hardware failure by holding down all system fan blades and watch what the program will show you, just try not to slice your cheesy fingers open in the process.
 
-You can extend pinky-bar with your own crafted perl/python/ruby/lua/R/assembly/lisp script.
+You can extend pinky-bar with your own crafted perl/python/ruby/lua/R/assembly/lisp/ocaml script.
 
 If you compile your kernel from source code make sure to include your cpu and motherboard sensors as **modules** and not inlined.
 
@@ -96,6 +96,7 @@ The order of supplied options will dictate how, where and what system informatio
 |              | --R         | Extend pinkybar with your scripts written in R, learn more from the Opt-in section.     |
 |              | --asm       | Extend pinkybar with assembly, learn more from the Opt-in section. |
 |              | --lisp      | Extend pinkybar with your scripts written in lisp, learn more from the Opt-in section.     |
+|              | --ocaml     | Extend pinkybar with your scripts written in ocaml, learn more from the Opt-in section.     |
 | -q           | --weather   | Show the temperature outside [argument - London,uk]                |
 | -U           | --uptime    | The system uptime                                                  |
 | -w           | --loadavg   | The system average load for past 1, 5 and 15 minutes               |
@@ -172,6 +173,7 @@ It's up to you to decide which features suit you best.
 | --with-r       | --without-r         | Extend pinkybar with your own crafted scripts written in R                                 |
 | --with-assembly| --without-assembly  | Extend pinkybar with assembly                                                              |
 | --with-lisp    | --without-lisp      | Extend pinkybar with your own crafted scripts written in lisp                              |
+| --with-ocaml   | --without-ocaml     | Extend pinkybar with your own crafted scripts written in ocaml                             |
 | --with-weather | --without-weather   | The temperature outside  (some details must be provided)                                   |
 | api\_key='123458976'               | | API key obtained after registering yourself in the weather website, must be combined **--with-weather**  |
 | --with-smartemp | --without-smartemp   | Read the drive temperature from S.M.A.R.T cross-platform available                       |
@@ -420,6 +422,8 @@ Execute the program without supplying any command line options and it will parse
 * m4
 * gawk
 * perl
+* ocaml
+* **as** from binutils
 
 ## \*BSD Mandatory requirements
 
@@ -434,6 +438,8 @@ Execute the program without supplying any command line options and it will parse
 * m4
 * gawk
 * perl
+* ocaml
+* **as** from binutils
 
 Some llvm and gcc versions will not check for headers and libraries in /usr/local, if that's the case for you, you should export the following environment variables:
 
@@ -588,8 +594,9 @@ To extend pinkybar with your own crafted perl/python/ruby/lua script:
 * R
 * assembly (the **as** program from binutils)
 * ecl for lisp
+* ocaml
 
-Have a look at extra/scripts/pinky.{py,pl,ruby,lua,R,s,lisp}, they serve as examples how to write the most basic scripts in order to extend pinkybar in python/perl/ruby/lua/R/assembly/lisp. You can use all languages simultaneously.
+Have a look at extra/scripts/pinky.{py,pl,ruby,lua,R,s,lisp}, they serve as examples how to write the most basic scripts in order to extend pinkybar in python/perl/ruby/lua/R/assembly/lisp/ocaml. You can use all languages simultaneously.
 
 Please, please do **NOT** export or set PYTHONPATH on it's own line.
 
@@ -669,6 +676,13 @@ luac -o pinky.luac pinky.lua
 ~/pinkybar --lisp ~/chewbacca/pinky.lisp
 ```
 
+**--with-ocaml**
+
+The source code resides in the **src** folder under the name of **pinky.ml**
+
+```bash
+~/pinkbar --ocaml
+```
 -----
 
 To get the sound volume level:

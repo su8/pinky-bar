@@ -1,10 +1,12 @@
 AM_CFLAGS = {amCF} \
-  -I/usr/local/include $(LIBNL_CF) $(PERL_CF) $(PYTHON_CF) $(RUBY_CF) $(R_CF)
+  -I/usr/local/include $(LIBNL_CF) $(PERL_CF) $(PYTHON_CF) $(RUBY_CF) $(R_CF) $(OCAML_CF)
 
 bin_PROGRAMS = pinkybar
 
-pinkybar_LDADD = $(X_LIBS) $(ALSA_LIBS) $(MPD_LIBS) $(PCI_LIBS) $(DVD_LIBS) $(SENSORS_LIBS) $(CURL_LIBS) $(LIBNL_LZ) $(PERL_LZ) $(LUA_LIBS) $(PYTHON_LZ) $(RUBY_LZ) $(R_LZ) $(ECL_LIBS) {bzdlibs}
+pinkybar_LDADD = $(X_LIBS) $(ALSA_LIBS) $(MPD_LIBS) $(PCI_LIBS) $(DVD_LIBS) $(SENSORS_LIBS) $(CURL_LIBS) $(LIBNL_LZ) $(PERL_LZ) $(LUA_LIBS) $(PYTHON_LZ) $(RUBY_LZ) $(R_LZ) $(ECL_LIBS) $(OCAML_LZ) {bzdlibs}
+
 pinkybar_SOURCES = main.c           \
+    ocaml.c                         \
     ecl.c                           \
     common.c                        \
     cpu.c                           \
@@ -16,6 +18,7 @@ pinkybar_SOURCES = main.c           \
     perl.c                          \
     lua.c                           \
     ruby.c                          \
+    pinky.ml                        \
     ../extra/scripts/pinky.s        \
     python.c                        \
     R.c                             \
@@ -33,6 +36,7 @@ pinkybar_SOURCES = main.c           \
     prototypes/ruby.h               \
     prototypes/python.h             \
     prototypes/R.h                  \
+    prototypes/ocaml.h              \
     include/headers.h               \
     include/options_constants.h     \
     include/functions_constants.h   \
@@ -40,3 +44,6 @@ pinkybar_SOURCES = main.c           \
     include/x11_colours.h           \
     include/options_generator.h     \
     {srcFiles}
+
+.ml.o:
+	ocamlc -output-obj pinky.ml -o pinky.o
