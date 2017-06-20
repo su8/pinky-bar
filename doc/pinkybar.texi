@@ -36,6 +36,10 @@ pinkybar [@emph{option}]
 @node DESCRIPTION
 @chapter DESCRIPTION
 @anchor{#description}
+@float
+@image{img/pic6,,,,png}
+@end float
+
 Gather some system information and show it in this statusbar program,
 not tied to any Window Manager, terminal multiplexer, etc.
 
@@ -88,6 +92,7 @@ cpu and motherboard sensors as @strong{modules} and not inlined.
 * *BSD Mandatory requirements::
 * Opt-in requirements::
 * WM specific requirements::
+* Go lang::
 * Wish list::
 @end menu
 
@@ -1373,6 +1378,62 @@ use @strong{--without-colours} to skip the following step:
 dwm compiled with statuscolor patch. The colours in use are specified in
 your dwm config.h
 @end itemize
+
+@iftex
+@bigskip@hrule@bigskip
+@end iftex
+@ifnottex
+------------------------------------------------------------------------
+@end ifnottex
+
+@node Go lang
+@section Go lang
+@anchor{#go-lang}
+By default I decided not to include Go lang, but this doesn't mean you
+cannot do it by hand:
+
+@verbatim
+/* test.c */
+#include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
+
+#include "hello.h"
+
+int main(void) {
+  HelloWorld();
+  return EXIT_SUCCESS;
+}
+@end verbatim
+
+@strong{hello.go}
+
+@verbatim
+package main
+
+import "fmt"
+import "C"
+
+//export HelloWorld
+func HelloWorld() {
+  fmt.Printf("Hello %d", 123)
+}
+
+func main() {}
+@end verbatim
+
+build it with:
+
+@verbatim
+go build -buildmode=c-archive hello.go
+gcc -pthread test.c hello.a -o test
+# test it with:
+./test
+@end verbatim
+
+Obviously the Go code should return string when you make it into
+standalone module. It's easy to add the above code into standalone
+module that can be used by pinky-bar.
 
 @node Wish list
 @section Wish list

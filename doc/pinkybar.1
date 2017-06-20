@@ -9,6 +9,8 @@ look good and/or have been stripped during the automated process.
 pinkybar [\f[I]option\f[]]
 .SH DESCRIPTION
 .PP
+[IMAGE: image (img/pic6.png)]
+.PP
 Gather some system information and show it in this statusbar program,
 not tied to any Window Manager, terminal multiplexer, etc.
 .PP
@@ -1579,6 +1581,62 @@ use \f[B]\[en]without\-colours\f[] to skip the following step:
 .IP \[bu] 2
 dwm compiled with statuscolor patch.
 The colours in use are specified in your dwm config.h
+.PP
+   *   *   *   *   *
+.SS Go lang
+.PP
+By default I decided not to include Go lang, but this doesn't mean you
+cannot do it by hand:
+.IP
+.nf
+\f[C]
+/*\ test.c\ */
+#include\ <stdio.h>
+#include\ <string.h>
+#include\ <stdlib.h>
+
+#include\ "hello.h"
+
+int\ main(void)\ {
+\ \ HelloWorld();
+\ \ return\ EXIT_SUCCESS;
+}
+\f[]
+.fi
+.PP
+\f[B]hello.go\f[]
+.IP
+.nf
+\f[C]
+package\ main
+
+import\ "fmt"
+import\ "C"
+
+//export\ HelloWorld
+func\ HelloWorld()\ {
+\ \ fmt.Printf("Hello\ %d",\ 123)
+}
+
+func\ main()\ {}
+\f[]
+.fi
+.PP
+build it with:
+.IP
+.nf
+\f[C]
+go\ build\ \-buildmode=c\-archive\ hello.go
+gcc\ \-pthread\ test.c\ hello.a\ \-o\ test
+#\ test\ it\ with:
+\&./test
+\f[]
+.fi
+.PP
+Obviously the Go code should return string when you make it into
+standalone module.
+It's easy to add the above code into standalone module that can be used
+by pinky\-bar.
 .SS Wish list
 .PP
 It would be great if I had *BSD compatible usb wifi dongle or wireless
