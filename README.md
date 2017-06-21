@@ -853,7 +853,7 @@ Compile to object code with `rustc --emit=obj lib.rs`
 ```c
 #include <stdio.h>
 
-extern char *hello();
+extern char *hello(void);
 extern void Rfree(char *);
 
 int main(void) {

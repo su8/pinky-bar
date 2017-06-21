@@ -1501,7 +1501,7 @@ Compile to object code with @code{rustc --emit=obj lib.rs}
 @verbatim
 #include <stdio.h>
 
-extern char *hello();
+extern char *hello(void);
 extern void Rfree(char *);
 
 int main(void) {
