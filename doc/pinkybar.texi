@@ -36,6 +36,8 @@ pinkybar [@emph{option}]
 @node DESCRIPTION
 @chapter DESCRIPTION
 @anchor{#description}
+ncurses
+
 @float
 @image{img/pic6,,,,png}
 @end float
@@ -93,6 +95,8 @@ cpu and motherboard sensors as @strong{modules} and not inlined.
 * Opt-in requirements::
 * WM specific requirements::
 * Go lang::
+* OCAML lang::
+* Rust lang::
 * Wish list::
 @end menu
 
@@ -905,8 +909,6 @@ gawk
 @item
 perl
 @item
-ocaml
-@item
 @strong{as} from binutils
 @end itemize
 
@@ -936,8 +938,6 @@ m4
 gawk
 @item
 perl
-@item
-ocaml
 @item
 @strong{as} from binutils
 @end itemize
@@ -1133,7 +1133,8 @@ frost ALL=NOPASSWD:/usr/sbin/smartctl
 Copy the code from extra/scripts/drive-temperature.sh or @code{exec} it
 from @strong{xinitrc} or the script used to start your DE/WM.
 
-To extend pinkybar with your own crafted perl/python/ruby/lua script:
+To extend pinkybar with your own crafted
+perl/python/ruby/lua/assembly/R/ocaml/lisp script:
 
 @itemize
 @item
@@ -1434,6 +1435,93 @@ gcc -pthread test.c hello.a -o test
 Obviously the Go code should return string when you make it into
 standalone module. It's easy to add the above code into standalone
 module that can be used by pinky-bar.
+
+@iftex
+@bigskip@hrule@bigskip
+@end iftex
+@ifnottex
+------------------------------------------------------------------------
+@end ifnottex
+
+@node OCAML lang
+@section OCAML lang
+@anchor{#ocaml-lang}
+Before invoking any of the installation commands you'll have to edit
+@strong{src/Makefail.skel} and append the following to the variable
+@strong{pinkybar_SOURCES}, so the ocaml program to be compiled:
+
+@verbatim
+pinky.ml \
+@end verbatim
+
+@iftex
+@bigskip@hrule@bigskip
+@end iftex
+@ifnottex
+------------------------------------------------------------------------
+@end ifnottex
+
+@node Rust lang
+@section Rust lang
+@anchor{#rust-lang}
+By default I decided not to include Rust lang, but this doesn't mean you
+cannot do it by hand:
+
+@strong{lib.rs}
+
+@verbatim
+#![crate_type = "staticlib"]
+
+extern crate libc;
+
+use libc::c_char;
+use std::ffi::CString;
+
+#[no_mangle]
+pub extern fn hello() -> *mut c_char {
+  let mut str = String::from("Hello World");
+
+  let c_str = CString::new(str).unwrap();
+  c_str.into_raw()
+}
+
+#[no_mangle]
+pub extern fn Rfree(s: *mut c_char) {
+  unsafe {
+    if s.is_null() { return }
+    CString::from_raw(s)
+  };
+}
+@end verbatim
+
+Compile to object code with @code{rustc --emit=obj lib.rs}
+
+@strong{test.c}
+
+@verbatim
+#include <stdio.h>
+
+extern char *hello();
+extern void Rfree(char *);
+
+int main(void) {
+  char *str = hello();
+
+  printf("%s\n", str);
+
+  Rfree(str);
+  return 0;
+}
+@end verbatim
+
+Compile with @code{gcc lib.o test.c -o test}
+
+@iftex
+@bigskip@hrule@bigskip
+@end iftex
+@ifnottex
+------------------------------------------------------------------------
+@end ifnottex
 
 @node Wish list
 @section Wish list

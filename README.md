@@ -17,6 +17,8 @@ The code doesn't age, neither it has expiration date.
 - [Opt-in Requirements](#opt-in-requirements)
 - [WM Requirements](#wm-specific-requirements)
 - [Go lang](#go-lang)
+- [OCAML lang](#ocaml-lang)
+- [Rust lang](#go-lang)
 - [Wish list](#wish-list)
 
 ---
@@ -423,7 +425,6 @@ Execute the program without supplying any command line options and it will parse
 * m4
 * gawk
 * perl
-* ocaml
 * **as** from binutils
 
 ## \*BSD Mandatory requirements
@@ -439,7 +440,6 @@ Execute the program without supplying any command line options and it will parse
 * m4
 * gawk
 * perl
-* ocaml
 * **as** from binutils
 
 Some llvm and gcc versions will not check for headers and libraries in /usr/local, if that's the case for you, you should export the following environment variables:
@@ -585,7 +585,7 @@ frost ALL=NOPASSWD:/usr/sbin/smartctl
 
 Copy the code from extra/scripts/drive-temperature.sh or `exec` it from **xinitrc** or the script used to start your DE/WM.
 
-To extend pinkybar with your own crafted perl/python/ruby/lua script:
+To extend pinkybar with your own crafted perl/python/ruby/lua/assembly/R/ocaml/lisp script:
 
 * perl
 * python == 2.7 (--with-python2)
@@ -684,6 +684,7 @@ The source code resides in the **src** folder under the name of **pinky.ml**
 ```bash
 ~/pinkbar --ocaml
 ```
+
 -----
 
 To get the sound volume level:
@@ -801,6 +802,73 @@ gcc -pthread test.c hello.a -o test
 ```
 
 Obviously the Go code should return string when you make it into standalone module. It's easy to add the above code into standalone module that can be used by pinky-bar.
+
+---
+
+## OCAML lang
+
+Before invoking any of the installation commands you'll have to edit **src/Makefail.skel** and append the following to the variable **pinkybar_SOURCES**, so the ocaml program to be compiled:
+
+```bash
+pinky.ml \
+```
+
+---
+
+## Rust lang
+
+By default I decided not to include Rust lang, but this doesn't mean you cannot do it by hand:
+
+**lib.rs**
+
+```rust
+#![crate_type = "staticlib"]
+
+extern crate libc;
+
+use libc::c_char;
+use std::ffi::CString;
+
+#[no_mangle]
+pub extern fn hello() -> *mut c_char {
+  let mut str = String::from("Hello World");
+
+  let c_str = CString::new(str).unwrap();
+  c_str.into_raw()
+}
+
+#[no_mangle]
+pub extern fn Rfree(s: *mut c_char) {
+  unsafe {
+    if s.is_null() { return }
+    CString::from_raw(s)
+  };
+}
+```
+
+Compile to object code with `rustc --emit=obj lib.rs`
+
+**test.c**
+
+```c
+#include <stdio.h>
+
+extern char *hello();
+extern void Rfree(char *);
+
+int main(void) {
+  char *str = hello();
+
+  printf("%s\n", str);
+
+  Rfree(str);
+  return 0;
+}
+```
+
+Compile with `gcc lib.o test.c -o test`
+
+---
 
 ## Wish list
 

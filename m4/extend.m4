@@ -405,8 +405,8 @@ dnl cflags to the variables OCAML_CF and
 dnl OCAML_LZ if the user enabled the
 dnl --with-ocaml switch
 AC_DEFUN([TEST_OCAML],[
-  OCAML_CF="-I`ocamlc -where` -lm -ldl"
-  OCAML_LZ="-L`ocamlc -where` -lcamlrun -lm -ldl -lcurses"
+  OCAML_CF=""
+  OCAML_LZ=""
   WITH_OCAML=0
 
   AC_ARG_WITH([ocaml],
@@ -419,12 +419,17 @@ AC_DEFUN([TEST_OCAML],[
   AS_IF([test "x$with_ocaml" = "xyes"], [
     CHECK_CFLAGZ([-O0])
     WITH_OCAML=1
+
+    OCAML_CF="-I`ocamlc -where` -lm -ldl"
+    OCAML_LZ="-L`ocamlc -where` -lcamlrun -lm -ldl -lcurses"
+
+    AC_PATH_PROG(ocaml_prog,ocamlc,no)
+    AS_IF([test "x$ocaml_prog" = "xno"], [
+      AC_MSG_ERROR([Couldnt find ocamlc, is ocaml installed ?])
+    ])
   ])
 
-  AC_PATH_PROG(ocaml_prog,ocamlc,no)
-  AS_IF([test "x$ocaml_prog" = "xno"], [
-    AC_MSG_ERROR([Couldnt find ocamlc, is ocaml installed ?])
-  ])
+
 
   AC_SUBST(OCAML_LZ)
   AC_SUBST(OCAML_CF)

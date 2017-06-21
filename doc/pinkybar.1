@@ -9,6 +9,8 @@ look good and/or have been stripped during the automated process.
 pinkybar [\f[I]option\f[]]
 .SH DESCRIPTION
 .PP
+ncurses
+.PP
 [IMAGE: image (img/pic6.png)]
 .PP
 Gather some system information and show it in this statusbar program,
@@ -1137,8 +1139,6 @@ gawk
 .IP \[bu] 2
 perl
 .IP \[bu] 2
-ocaml
-.IP \[bu] 2
 \f[B]as\f[] from binutils
 .SS *BSD Mandatory requirements
 .IP \[bu] 2
@@ -1163,8 +1163,6 @@ m4
 gawk
 .IP \[bu] 2
 perl
-.IP \[bu] 2
-ocaml
 .IP \[bu] 2
 \f[B]as\f[] from binutils
 .PP
@@ -1356,7 +1354,8 @@ frost\ ALL=NOPASSWD:/usr/sbin/smartctl
 Copy the code from extra/scripts/drive\-temperature.sh or \f[C]exec\f[]
 it from \f[B]xinitrc\f[] or the script used to start your DE/WM.
 .PP
-To extend pinkybar with your own crafted perl/python/ruby/lua script:
+To extend pinkybar with your own crafted
+perl/python/ruby/lua/assembly/R/ocaml/lisp script:
 .IP \[bu] 2
 perl
 .IP \[bu] 2
@@ -1637,6 +1636,80 @@ Obviously the Go code should return string when you make it into
 standalone module.
 It's easy to add the above code into standalone module that can be used
 by pinky\-bar.
+.PP
+   *   *   *   *   *
+.SS OCAML lang
+.PP
+Before invoking any of the installation commands you'll have to edit
+\f[B]src/Makefail.skel\f[] and append the following to the variable
+\f[B]pinkybar_SOURCES\f[], so the ocaml program to be compiled:
+.IP
+.nf
+\f[C]
+pinky.ml\ \\
+\f[]
+.fi
+.PP
+   *   *   *   *   *
+.SS Rust lang
+.PP
+By default I decided not to include Rust lang, but this doesn't mean you
+cannot do it by hand:
+.PP
+\f[B]lib.rs\f[]
+.IP
+.nf
+\f[C]
+#![crate_type\ =\ "staticlib"]
+
+extern\ crate\ libc;
+
+use\ libc::c_char;
+use\ std::ffi::CString;
+
+#[no_mangle]
+pub\ extern\ fn\ hello()\ \->\ *mut\ c_char\ {
+\ \ let\ mut\ str\ =\ String::from("Hello\ World");
+
+\ \ let\ c_str\ =\ CString::new(str).unwrap();
+\ \ c_str.into_raw()
+}
+
+#[no_mangle]
+pub\ extern\ fn\ Rfree(s:\ *mut\ c_char)\ {
+\ \ unsafe\ {
+\ \ \ \ if\ s.is_null()\ {\ return\ }
+\ \ \ \ CString::from_raw(s)
+\ \ };
+}
+\f[]
+.fi
+.PP
+Compile to object code with \f[C]rustc\ \-\-emit=obj\ lib.rs\f[]
+.PP
+\f[B]test.c\f[]
+.IP
+.nf
+\f[C]
+#include\ <stdio.h>
+
+extern\ char\ *hello();
+extern\ void\ Rfree(char\ *);
+
+int\ main(void)\ {
+\ \ char\ *str\ =\ hello();
+
+\ \ printf("%s\\n",\ str);
+
+\ \ Rfree(str);
+\ \ return\ 0;
+}
+\f[]
+.fi
+.PP
+Compile with \f[C]gcc\ lib.o\ test.c\ \-o\ test\f[]
+.PP
+   *   *   *   *   *
 .SS Wish list
 .PP
 It would be great if I had *BSD compatible usb wifi dongle or wireless

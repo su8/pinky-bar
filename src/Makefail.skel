@@ -18,7 +18,6 @@ pinkybar_SOURCES = main.c           \
     perl.c                          \
     lua.c                           \
     ruby.c                          \
-    pinky.ml                        \
     ../extra/scripts/pinky.s        \
     python.c                        \
     R.c                             \
