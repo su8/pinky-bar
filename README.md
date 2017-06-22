@@ -44,7 +44,7 @@ Please note that the program won't detect fans connected via molex connetor(s) o
 
 The program is smart enough to detect whether some of your fan(s) blades are spinning, or the particular fan have been removed. Hold down some of your fan blades and you'll see that the program won't include this fan and it's RPM, release the blades and you'll see the fan and it's RPM in the statusbar. Try simulating real fan hardware failure by holding down all system fan blades and watch what the program will show you, just try not to slice your cheesy fingers open in the process.
 
-You can extend pinky-bar with your own crafted perl/python/ruby/lua/R/assembly/lisp/ocaml script.
+You can extend pinky-bar with your own crafted perl/python/ruby/lua/R/assembly/lisp/ocaml/rust script.
 
 If you compile your kernel from source code make sure to include your cpu and motherboard sensors as **modules** and not inlined.
 
@@ -101,6 +101,7 @@ The order of supplied options will dictate how, where and what system informatio
 |              | --asm       | Extend pinkybar with assembly, learn more from the Opt-in section. |
 |              | --lisp      | Extend pinkybar with your scripts written in lisp, learn more from the Opt-in section.     |
 |              | --ocaml     | Extend pinkybar with your scripts written in ocaml, learn more from the Opt-in section.     |
+|              | --rust     | Extend pinkybar with your scripts written in rust, learn more from the Opt-in section.     |
 | -q           | --weather   | Show the temperature outside [argument - London,uk]                |
 | -U           | --uptime    | The system uptime                                                  |
 | -w           | --loadavg   | The system average load for past 1, 5 and 15 minutes               |
@@ -178,6 +179,7 @@ It's up to you to decide which features suit you best.
 | --with-assembly| --without-assembly  | Extend pinkybar with assembly                                                              |
 | --with-lisp    | --without-lisp      | Extend pinkybar with your own crafted scripts written in lisp                              |
 | --with-ocaml   | --without-ocaml     | Extend pinkybar with your own crafted scripts written in ocaml                             |
+| --with-rust    | --without-rust      | Extend pinkybar with your own crafted scripts written in rust                              |
 | --with-weather | --without-weather   | The temperature outside  (some details must be provided)                                   |
 | api\_key='123458976'               | | API key obtained after registering yourself in the weather website, must be combined **--with-weather**  |
 | --with-smartemp | --without-smartemp   | Read the drive temperature from S.M.A.R.T cross-platform available                       |
@@ -586,7 +588,7 @@ frost ALL=NOPASSWD:/usr/sbin/smartctl
 
 Copy the code from extra/scripts/drive-temperature.sh or `exec` it from **xinitrc** or the script used to start your DE/WM.
 
-To extend pinkybar with your own crafted perl/python/ruby/lua/assembly/R/ocaml/lisp script:
+To extend pinkybar with your own crafted perl/python/ruby/lua/assembly/R/ocaml/lisp/rust script:
 
 * perl
 * python == 2.7 (--with-python2)
@@ -597,8 +599,9 @@ To extend pinkybar with your own crafted perl/python/ruby/lua/assembly/R/ocaml/l
 * assembly (the **as** program from binutils)
 * ecl for lisp
 * ocaml
+* rust
 
-Have a look at extra/scripts/pinky.{py,pl,ruby,lua,R,s,lisp}, they serve as examples how to write the most basic scripts in order to extend pinkybar in python/perl/ruby/lua/R/assembly/lisp/ocaml. You can use all languages simultaneously.
+Have a look at extra/scripts/pinky.{py,pl,ruby,lua,R,s,lisp}, they serve as examples how to write the most basic scripts in order to extend pinkybar in python/perl/ruby/lua/R/assembly/lisp/ocaml/rust. You can use all languages simultaneously.
 
 Please, please do **NOT** export or set PYTHONPATH on it's own line.
 
@@ -684,6 +687,14 @@ The source code resides in the **src** folder under the name of **pinky.ml**
 
 ```bash
 ~/pinkbar --ocaml
+```
+
+**--with-rust**
+
+The source code resides in the **src** folder under the name of **pinky.rs**
+
+```bash
+~/pinkbar --rust
 ```
 
 -----
