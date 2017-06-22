@@ -19,6 +19,7 @@ The code doesn't age, neither it has expiration date.
 - [Go lang](#go-lang)
 - [OCAML lang](#ocaml-lang)
 - [Rust lang](#rust-lang)
+- [Assembly](#assembly)
 - [Wish list](#wish-list)
 
 ---
@@ -817,53 +818,25 @@ pinky.ml \
 
 ## Rust lang
 
-By default I decided not to include Rust lang, but this doesn't mean you cannot do it by hand:
+The source code that you should edit is in **src/pinky.rs**, but you'll have to edit **src/Makefail.skel** and add the following to:
 
-**lib.rs**
-
-```rust
-#![crate_type = "staticlib"]
-
-use std::os::raw::c_char;
-use std::ffi::CString;
-
-#[no_mangle]
-pub extern fn hello() -> *mut c_char {
-  let mut str = String::from("Hello World");
-
-  let c_str = CString::new(str).unwrap();
-  c_str.into_raw()
-}
-
-#[no_mangle]
-pub extern fn Rfree(s: *mut c_char) {
-  unsafe {
-    if s.is_null() { return }
-    CString::from_raw(s)
-  };
-}
+```bash
+pinkybar_LDADD = pinky.a
 ```
 
-Compile with `rustc --crate-type=staticlib lib.rs`
-
-**test.c**
-
-```c
-#include <stdio.h>
-
-extern char *hello(void);
-extern void Rfree(char *);
-
-int main(void) {
-  char *str = hello();
-  printf("%s\n", str);
-  Rfree(str);
-}
-```
-
-Compile with `gcc liblib.a test.c -o test -lpthread -ldl`
+Make sure that you do not use Assembly in the same time.
 
 ---
+
+## Assembly
+
+The source code that you should edit is in **extra/scripts/pinky.s**, but you'll have to edit **src/Makefail.skel** and add the following to:
+
+```bash
+pinkybar_SOURCES = extra/scripts/pinky.s
+```
+
+Make sure that you do not use Rust in the same time.
 
 ## Wish list
 

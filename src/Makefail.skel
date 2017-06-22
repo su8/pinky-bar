@@ -3,8 +3,7 @@ AM_CFLAGS = {amCF} \
 
 bin_PROGRAMS = pinkybar
 
-pinkybar_LDADD = $(X_LIBS) $(ALSA_LIBS) $(MPD_LIBS) $(PCI_LIBS) $(DVD_LIBS) $(SENSORS_LIBS) $(CURL_LIBS) $(LIBNL_LZ) $(PERL_LZ) $(LUA_LIBS) $(PYTHON_LZ) $(RUBY_LZ) $(R_LZ) $(ECL_LIBS) $(OCAML_LZ) {bzdlibs}
-
+pinkybar_LDADD = $(X_LIBS) $(ALSA_LIBS) $(MPD_LIBS) $(PCI_LIBS) $(DVD_LIBS) $(SENSORS_LIBS) $(CURL_LIBS) $(LIBNL_LZ) $(PERL_LZ) $(LUA_LIBS) $(PYTHON_LZ) $(RUBY_LZ) $(R_LZ) $(ECL_LIBS) $(OCAML_LZ) $(RUST_LIBS) {bzdlibs}
 pinkybar_SOURCES = main.c           \
     ocaml.c                         \
     ecl.c                           \
@@ -18,7 +17,7 @@ pinkybar_SOURCES = main.c           \
     perl.c                          \
     lua.c                           \
     ruby.c                          \
-    ../extra/scripts/pinky.s        \
+    rust.c                          \
     python.c                        \
     R.c                             \
     prototypes/ecl.h                \
@@ -46,3 +45,6 @@ pinkybar_SOURCES = main.c           \
 
 .ml.o:
 	ocamlc -output-obj $< -o $@
+
+pinky.a:
+	rustc --crate-type=staticlib pinky.rs -o pinky.a

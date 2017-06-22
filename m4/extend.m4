@@ -371,9 +371,9 @@ AC_DEFUN([TEST_ASSEMBLY],[
 
 dnl TEST_ECL() function in configure.ac
 dnl
-dnl Substitute ECL related linker
+dnl Substitute ECL related linker flags
 dnl to the variable ECL_LIBS if
-dnl the user enabled the --with-r switch
+dnl the user enabled the --with-lisp switch
 AC_DEFUN([TEST_ECL],[
   ECL_LIBS=""
   WITH_ECL=0
@@ -435,3 +435,34 @@ AC_DEFUN([TEST_OCAML],[
   AC_SUBST(OCAML_CF)
   AC_DEFINE_UNQUOTED([WITH_OCAML],[$WITH_OCAML],[Extend the program via ocaml scripts])
 ])
+
+
+dnl TEST_RUST() function in configure.ac
+dnl
+dnl Substitute ECL related linker flags
+dnl to the variable ECL_LIBS if
+dnl the user enabled the --with-rust switch
+AC_DEFUN([TEST_RUST],[
+  RUST_LIBS=""
+  WITH_RUST=0
+
+  AC_ARG_WITH([rust],
+    AS_HELP_STRING([--with-rust],
+      [Extend the program via rust scripts]),
+    [],
+    [with_rust=no]
+  )
+
+  AS_IF([test "x$with_rust" = "xyes"], [
+    CHECK_CFLAGZ([-O0])
+
+    RUST_LIBS="-lpthread -ldl"
+    WITH_RUST=1
+
+  ])
+
+  AC_SUBST(RUST_LIBS)
+  AC_DEFINE_UNQUOTED([WITH_RUST],[$WITH_RUST],[Extend the program via rust scripts])
+])
+
+

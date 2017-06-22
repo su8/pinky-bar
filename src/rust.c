@@ -1,5 +1,5 @@
 /*
-   06/16/2017
+   06/22/2017
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -17,11 +17,24 @@
    MA 02110-1301, USA.
 */
 
-#ifndef R_H_
-#define R_H_
+#include "config.h" /* Auto-generated */
 
-#if WITH_R == 1
-void get_r(char *, char *);
-#endif /* WITH_R */
+#if WITH_RUST == 1
+#include "include/headers.h"
+#endif /* WITH_RUST */
 
-#endif /* R_H_ */
+#include "prototypes/rust.h"
+
+#if WITH_RUST == 1
+extern char *uzer_func(void);
+extern void Rfree(char *);
+
+void
+get_rust(char *str1) {
+  char *str = uzer_func();
+  FILL_STR_ARR(1, str1, str);
+  Rfree(str);
+}
+#else
+char *rust9;
+#endif /* WITH_RUST */

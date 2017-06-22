@@ -35,6 +35,7 @@
 #include "prototypes/R.h"
 #include "prototypes/ecl.h"
 #include "prototypes/ocaml.h"
+#include "prototypes/rust.h"
 
 /* Because we ran out of a-z A-Z options,
  * only long ones will be supported from now on.
@@ -52,6 +53,7 @@ enum {
   ASSEMBLY,
   LISP,
   OCAML,
+  RUST,
   BULLSHIFT
 };
 const char *argp_program_version = PACKAGE_STRING;
@@ -133,8 +135,12 @@ static const struct argp_option options[] = {
 #endif /* WITH_ECL */
 
 #if WITH_OCAML == 1
-  { .name = "ocaml",         .key = OCAML,                     .doc = "Extend the program with lisp, read README."       },
+  { .name = "ocaml",         .key = OCAML,                     .doc = "Extend the program with ocaml, read README."       },
 #endif /* WITH_OCAML */
+
+#if WITH_RUST == 1
+  { .name = "rust",         .key = RUST,                     .doc = "Extend the program with rust, read README."       },
+#endif /* WITH_RUST */
 
 #if WITH_WEATHER == 1
   { .name = "weather", .key = 'q', .arg = "London,uk", .doc = "The temperature outside."                                 },
@@ -304,9 +310,15 @@ parse_opt(int key, char *arg, struct argp_state *state) {
     NEW_ARG_LABEL(LISP, char ecl[VLA], ecl, FMT_KERN);
 #endif /* WITH_ECL */
 
+
 #if WITH_OCAML == 1
     NEW_LABEL(OCAML, char ocaml[VLA], ocaml, FMT_KERN);
 #endif /* WITH_OCAML */
+
+
+#if WITH_RUST == 1
+    NEW_LABEL(RUST, char rust[VLA], rust, FMT_KERN);
+#endif /* WITH_RUST */
 
 
 #if WITH_WEATHER == 1

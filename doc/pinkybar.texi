@@ -97,6 +97,7 @@ cpu and motherboard sensors as @strong{modules} and not inlined.
 * Go lang::
 * OCAML lang::
 * Rust lang::
+* Assembly::
 * Wish list::
 @end menu
 
@@ -1464,52 +1465,14 @@ pinky.ml \
 @node Rust lang
 @section Rust lang
 @anchor{#rust-lang}
-By default I decided not to include Rust lang, but this doesn't mean you
-cannot do it by hand:
-
-@strong{lib.rs}
+The source code that you should edit is in @strong{src/pinky.rs}, but
+you'll have to edit @strong{src/Makefail.skel} and add the following to:
 
 @verbatim
-#![crate_type = "staticlib"]
-
-use std::os::raw::c_char;
-use std::ffi::CString;
-
-#[no_mangle]
-pub extern fn hello() -> *mut c_char {
-  let mut str = String::from("Hello World");
-
-  let c_str = CString::new(str).unwrap();
-  c_str.into_raw()
-}
-
-#[no_mangle]
-pub extern fn Rfree(s: *mut c_char) {
-  unsafe {
-    if s.is_null() { return }
-    CString::from_raw(s)
-  };
-}
+pinkybar_LDADD = pinky.a
 @end verbatim
 
-Compile with @code{rustc --crate-type=staticlib lib.rs}
-
-@strong{test.c}
-
-@verbatim
-#include <stdio.h>
-
-extern char *hello(void);
-extern void Rfree(char *);
-
-int main(void) {
-  char *str = hello();
-  printf("%s\n", str);
-  Rfree(str);
-}
-@end verbatim
-
-Compile with @code{gcc liblib.a test.c -o test -lpthread -ldl}
+Make sure that you do not use Assembly in the same time.
 
 @iftex
 @bigskip@hrule@bigskip
@@ -1517,6 +1480,19 @@ Compile with @code{gcc liblib.a test.c -o test -lpthread -ldl}
 @ifnottex
 ------------------------------------------------------------------------
 @end ifnottex
+
+@node Assembly
+@section Assembly
+@anchor{#assembly}
+The source code that you should edit is in
+@strong{extra/scripts/pinky.s}, but you'll have to edit
+@strong{src/Makefail.skel} and add the following to:
+
+@verbatim
+pinkybar_SOURCES = extra/scripts/pinky.s
+@end verbatim
+
+Make sure that you do not use Rust in the same time.
 
 @node Wish list
 @section Wish list

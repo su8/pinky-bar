@@ -1,5 +1,5 @@
 /*
-   06/16/2017
+   06/22/2017
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -17,11 +17,11 @@
    MA 02110-1301, USA.
 */
 
-#ifndef R_H_
-#define R_H_
+#ifndef RUST_H_
+#define RUST_H_
 
-#if WITH_R == 1
-void get_r(char *, char *);
-#endif /* WITH_R */
+#if WITH_RUST == 1
+void get_rust(char *);
+#endif /* WITH_RUST */
 
-#endif /* R_H_ */
+#endif /* RUST_H_ */

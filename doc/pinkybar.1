@@ -1653,59 +1653,31 @@ pinky.ml\ \\
    *   *   *   *   *
 .SS Rust lang
 .PP
-By default I decided not to include Rust lang, but this doesn't mean you
-cannot do it by hand:
-.PP
-\f[B]lib.rs\f[]
+The source code that you should edit is in \f[B]src/pinky.rs\f[], but
+you'll have to edit \f[B]src/Makefail.skel\f[] and add the following to:
 .IP
 .nf
 \f[C]
-#![crate_type\ =\ "staticlib"]
-
-use\ std::os::raw::c_char;
-use\ std::ffi::CString;
-
-#[no_mangle]
-pub\ extern\ fn\ hello()\ \->\ *mut\ c_char\ {
-\ \ let\ mut\ str\ =\ String::from("Hello\ World");
-
-\ \ let\ c_str\ =\ CString::new(str).unwrap();
-\ \ c_str.into_raw()
-}
-
-#[no_mangle]
-pub\ extern\ fn\ Rfree(s:\ *mut\ c_char)\ {
-\ \ unsafe\ {
-\ \ \ \ if\ s.is_null()\ {\ return\ }
-\ \ \ \ CString::from_raw(s)
-\ \ };
-}
+pinkybar_LDADD\ =\ pinky.a
 \f[]
 .fi
 .PP
-Compile with \f[C]rustc\ \-\-crate\-type=staticlib\ lib.rs\f[]
-.PP
-\f[B]test.c\f[]
-.IP
-.nf
-\f[C]
-#include\ <stdio.h>
-
-extern\ char\ *hello(void);
-extern\ void\ Rfree(char\ *);
-
-int\ main(void)\ {
-\ \ char\ *str\ =\ hello();
-\ \ printf("%s\\n",\ str);
-\ \ Rfree(str);
-}
-\f[]
-.fi
-.PP
-Compile with
-\f[C]gcc\ liblib.a\ test.c\ \-o\ test\ \-lpthread\ \-ldl\f[]
+Make sure that you do not use Assembly in the same time.
 .PP
    *   *   *   *   *
+.SS Assembly
+.PP
+The source code that you should edit is in
+\f[B]extra/scripts/pinky.s\f[], but you'll have to edit
+\f[B]src/Makefail.skel\f[] and add the following to:
+.IP
+.nf
+\f[C]
+pinkybar_SOURCES\ =\ extra/scripts/pinky.s
+\f[]
+.fi
+.PP
+Make sure that you do not use Rust in the same time.
 .SS Wish list
 .PP
 It would be great if I had *BSD compatible usb wifi dongle or wireless
