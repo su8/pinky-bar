@@ -824,9 +824,7 @@ By default I decided not to include Rust lang, but this doesn't mean you cannot 
 ```rust
 #![crate_type = "staticlib"]
 
-extern crate libc;
-
-use libc::c_char;
+use std::os::raw::c_char;
 use std::ffi::CString;
 
 #[no_mangle]
@@ -846,7 +844,7 @@ pub extern fn Rfree(s: *mut c_char) {
 }
 ```
 
-Compile to object code with `rustc --emit=obj lib.rs`
+Compile to object code with `rustc --crate-type=staticlib lib.rs`
 
 **test.c**
 
@@ -858,15 +856,12 @@ extern void Rfree(char *);
 
 int main(void) {
   char *str = hello();
-
   printf("%s\n", str);
-
   Rfree(str);
-  return 0;
 }
 ```
 
-Compile with `gcc lib.o test.c -o test`
+Compile with `gcc liblib.a test.c -o test -lpthread -ldl`
 
 ---
 

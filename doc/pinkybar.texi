@@ -1472,9 +1472,7 @@ cannot do it by hand:
 @verbatim
 #![crate_type = "staticlib"]
 
-extern crate libc;
-
-use libc::c_char;
+use std::os::raw::c_char;
 use std::ffi::CString;
 
 #[no_mangle]
@@ -1494,7 +1492,7 @@ pub extern fn Rfree(s: *mut c_char) {
 }
 @end verbatim
 
-Compile to object code with @code{rustc --emit=obj lib.rs}
+Compile to object code with @code{rustc --crate-type=staticlib lib.rs}
 
 @strong{test.c}
 
@@ -1506,15 +1504,12 @@ extern void Rfree(char *);
 
 int main(void) {
   char *str = hello();
-
   printf("%s\n", str);
-
   Rfree(str);
-  return 0;
 }
 @end verbatim
 
-Compile with @code{gcc lib.o test.c -o test}
+Compile with @code{gcc liblib.a test.c -o test -lpthread -ldl}
 
 @iftex
 @bigskip@hrule@bigskip

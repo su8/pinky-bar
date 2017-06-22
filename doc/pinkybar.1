@@ -1662,9 +1662,7 @@ cannot do it by hand:
 \f[C]
 #![crate_type\ =\ "staticlib"]
 
-extern\ crate\ libc;
-
-use\ libc::c_char;
+use\ std::os::raw::c_char;
 use\ std::ffi::CString;
 
 #[no_mangle]
@@ -1685,7 +1683,8 @@ pub\ extern\ fn\ Rfree(s:\ *mut\ c_char)\ {
 \f[]
 .fi
 .PP
-Compile to object code with \f[C]rustc\ \-\-emit=obj\ lib.rs\f[]
+Compile to object code with
+\f[C]rustc\ \-\-crate\-type=staticlib\ lib.rs\f[]
 .PP
 \f[B]test.c\f[]
 .IP
@@ -1698,16 +1697,14 @@ extern\ void\ Rfree(char\ *);
 
 int\ main(void)\ {
 \ \ char\ *str\ =\ hello();
-
 \ \ printf("%s\\n",\ str);
-
 \ \ Rfree(str);
-\ \ return\ 0;
 }
 \f[]
 .fi
 .PP
-Compile with \f[C]gcc\ lib.o\ test.c\ \-o\ test\f[]
+Compile with
+\f[C]gcc\ liblib.a\ test.c\ \-o\ test\ \-lpthread\ \-ldl\f[]
 .PP
    *   *   *   *   *
 .SS Wish list
