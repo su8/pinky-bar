@@ -30,7 +30,7 @@ blades and watch what the program will show you, just try not to slice
 your cheesy fingers open in the process.
 .PP
 You can extend pinky\-bar with your own crafted
-perl/python/ruby/lua/R/assembly/lisp/ocaml script.
+perl/python/ruby/lua/R/assembly/lisp/ocaml/rust script.
 .PP
 If you compile your kernel from source code make sure to include your
 cpu and motherboard sensors as \f[B]modules\f[] and not inlined.
@@ -330,6 +330,13 @@ T}@T{
 \[en]ocaml
 T}@T{
 Extend pinkybar with your scripts written in ocaml, learn more from the
+Opt\-in section.
+T}
+T{
+T}@T{
+\[en]rust
+T}@T{
+Extend pinkybar with your scripts written in rust, learn more from the
 Opt\-in section.
 T}
 T{
@@ -739,6 +746,13 @@ T}@T{
 \[en]without\-ocaml
 T}@T{
 Extend pinkybar with your own crafted scripts written in ocaml
+T}
+T{
+\[en]with\-rust
+T}@T{
+\[en]without\-rust
+T}@T{
+Extend pinkybar with your own crafted scripts written in rust
 T}
 T{
 \[en]with\-weather
@@ -1355,7 +1369,7 @@ Copy the code from extra/scripts/drive\-temperature.sh or \f[C]exec\f[]
 it from \f[B]xinitrc\f[] or the script used to start your DE/WM.
 .PP
 To extend pinkybar with your own crafted
-perl/python/ruby/lua/assembly/R/ocaml/lisp script:
+perl/python/ruby/lua/assembly/R/ocaml/lisp/rust script:
 .IP \[bu] 2
 perl
 .IP \[bu] 2
@@ -1374,10 +1388,12 @@ assembly (the \f[B]as\f[] program from binutils)
 ecl for lisp
 .IP \[bu] 2
 ocaml
+.IP \[bu] 2
+rust
 .PP
 Have a look at extra/scripts/pinky.{py,pl,ruby,lua,R,s,lisp}, they serve
 as examples how to write the most basic scripts in order to extend
-pinkybar in python/perl/ruby/lua/R/assembly/lisp/ocaml.
+pinkybar in python/perl/ruby/lua/R/assembly/lisp/ocaml/rust.
 You can use all languages simultaneously.
 .PP
 Please, please do \f[B]NOT\f[] export or set PYTHONPATH on it's own
@@ -1487,6 +1503,17 @@ The source code resides in the \f[B]src\f[] folder under the name of
 .nf
 \f[C]
 ~/pinkbar\ \-\-ocaml
+\f[]
+.fi
+.PP
+\f[B]\[en]with\-rust\f[]
+.PP
+The source code resides in the \f[B]src\f[] folder under the name of
+\f[B]pinky.rs\f[]
+.IP
+.nf
+\f[C]
+~/pinkbar\ \-\-rust
 \f[]
 .fi
 .PP
