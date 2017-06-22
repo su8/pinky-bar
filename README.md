@@ -844,7 +844,7 @@ pub extern fn Rfree(s: *mut c_char) {
 }
 ```
 
-Compile to object code with `rustc --crate-type=staticlib lib.rs`
+Compile with `rustc --crate-type=staticlib lib.rs`
 
 **test.c**
 
