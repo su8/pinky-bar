@@ -18,7 +18,7 @@ The code doesn't age, neither it has expiration date.
 - [WM Requirements](#wm-specific-requirements)
 - [Go lang](#go-lang)
 - [OCAML lang](#ocaml-lang)
-- [Rust lang](#go-lang)
+- [Rust lang](#rust-lang)
 - [Wish list](#wish-list)
 
 ---
