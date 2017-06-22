@@ -28,8 +28,8 @@
 *
 * The entire language is in your hands. *)
 
-let uzer_func () = "Hello World";;
+let uzer_func1 () = "Hello World";;
 
 let () =
-    Callback.register "uzer_func" uzer_func;
+    Callback.register "uzer_func1" uzer_func1;
 ;;

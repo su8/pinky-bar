@@ -17,24 +17,11 @@
    MA 02110-1301, USA.
 */
 
-#include "config.h" /* Auto-generated */
+#ifndef GO_H_
+#define GO_H_
 
-#if WITH_RUST == 1
-#include "include/headers.h"
-#endif /* WITH_RUST */
+#if WITH_GO == 1
+void get_go(char *);
+#endif /* WITH_GO */
 
-#include "prototypes/rust.h"
-
-#if WITH_RUST == 1
-extern char *uzer_func(void);
-extern void Rfree(char *);
-
-void
-get_rust(char *str1) {
-  char *str = uzer_func2();
-  FILL_STR_ARR(1, str1, str);
-  Rfree(str);
-}
-#else
-char *rust9;
-#endif /* WITH_RUST */
+#endif /* GO_H_ */

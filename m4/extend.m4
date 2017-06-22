@@ -466,3 +466,30 @@ AC_DEFUN([TEST_RUST],[
 ])
 
 
+dnl TEST_RUST() function in configure.ac
+dnl
+dnl Substitute ECL related linker flags
+dnl to the variable ECL_LIBS if
+dnl the user enabled the --with-rust switch
+AC_DEFUN([TEST_GO],[
+  GO_LIBS=""
+  WITH_GO=0
+
+  AC_ARG_WITH([go],
+    AS_HELP_STRING([--with-go],
+      [Extend the program via go scripts]),
+    [],
+    [with_rust=no]
+  )
+
+  AS_IF([test "x$with_go" = "xyes"], [
+    CHECK_CFLAGZ([-O0])
+
+    GO_LIBS="-lpthread"
+    WITH_GO=1
+
+  ])
+
+  AC_SUBST(GO_LIBS)
+  AC_DEFINE_UNQUOTED([WITH_GO],[$WITH_GO],[Extend the program via go scripts])
+])

@@ -35,16 +35,16 @@
 	.text
 .LHOTB1:
 	.p2align 4,,15
-	.globl	uzer_func
-	.type	uzer_func, @function
-uzer_func:
+	.globl	uzer_func3
+	.type	uzer_func3, @function
+uzer_func3:
 .LFB0:
 	.cfi_startproc
 	movl	$.LC0, %eax
 	ret
 	.cfi_endproc
 .LFE0:
-	.size	uzer_func, .-uzer_func
+	.size	uzer_func3, .-uzer_func3
 	.section	.text.unlikely
 .LCOLDE1:
 	.text

@@ -3,7 +3,7 @@ AM_CFLAGS = {amCF} \
 
 bin_PROGRAMS = pinkybar
 
-pinkybar_LDADD = $(X_LIBS) $(ALSA_LIBS) $(MPD_LIBS) $(PCI_LIBS) $(DVD_LIBS) $(SENSORS_LIBS) $(CURL_LIBS) $(LIBNL_LZ) $(PERL_LZ) $(LUA_LIBS) $(PYTHON_LZ) $(RUBY_LZ) $(R_LZ) $(ECL_LIBS) $(OCAML_LZ) $(RUST_LIBS) {bzdlibs}
+pinkybar_LDADD = $(X_LIBS) $(ALSA_LIBS) $(MPD_LIBS) $(PCI_LIBS) $(DVD_LIBS) $(SENSORS_LIBS) $(CURL_LIBS) $(LIBNL_LZ) $(PERL_LZ) $(LUA_LIBS) $(PYTHON_LZ) $(RUBY_LZ) $(R_LZ) $(ECL_LIBS) $(OCAML_LZ) $(RUST_LIBS) $(GO_LIBS) pinky2.a {bzdlibs}
 pinkybar_SOURCES = main.c           \
     ocaml.c                         \
     ecl.c                           \
@@ -20,6 +20,8 @@ pinkybar_SOURCES = main.c           \
     rust.c                          \
     python.c                        \
     R.c                             \
+    go.c                            \
+    ../extra/scripts/pinky.s        \
     prototypes/ecl.h                \
     prototypes/common.h             \
     prototypes/cpu.h                \
@@ -34,6 +36,7 @@ pinkybar_SOURCES = main.c           \
     prototypes/ruby.h               \
     prototypes/python.h             \
     prototypes/R.h                  \
+    prototypes/go.h                 \
     prototypes/ocaml.h              \
     include/headers.h               \
     include/options_constants.h     \
@@ -48,3 +51,6 @@ pinkybar_SOURCES = main.c           \
 
 pinky.a:
 	rustc --crate-type=staticlib pinky.rs -o pinky.a
+
+pinky2.a:
+	go build -buildmode=c-archive pinky2.go

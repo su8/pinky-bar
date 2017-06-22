@@ -36,6 +36,10 @@ pinkybar [@emph{option}]
 @node DESCRIPTION
 @chapter DESCRIPTION
 @anchor{#description}
+@float
+@image{img/pic7,,,,png}
+@end float
+
 ncurses
 
 @float
@@ -58,7 +62,7 @@ all system fan blades and watch what the program will show you, just try
 not to slice your cheesy fingers open in the process.
 
 You can extend pinky-bar with your own crafted
-perl/python/ruby/lua/R/assembly/lisp/ocaml/rust script.
+perl/python/ruby/lua/R/assembly/lisp/ocaml/rust/go script.
 
 If you compile your kernel from source code make sure to include your
 cpu and motherboard sensors as @strong{modules} and not inlined.
@@ -97,6 +101,7 @@ cpu and motherboard sensors as @strong{modules} and not inlined.
 * Go lang::
 * OCAML lang::
 * Rust lang::
+* Go lang::
 * Assembly::
 * Wish list::
 @end menu
@@ -270,6 +275,10 @@ from the Opt-in section.
 @item 
 --rust
  @tab Extend pinkybar with your scripts written in rust, learn more from
+the Opt-in section.
+@item 
+--go
+ @tab Extend pinkybar with your scripts written in go, learn more from
 the Opt-in section.
 @item 
 -q
@@ -522,6 +531,10 @@ colorized
 --with-rust
  @tab --without-rust
  @tab Extend pinkybar with your own crafted scripts written in rust
+@item 
+--with-go
+ @tab --without-go
+ @tab Extend pinkybar with your own crafted scripts written in go
 @item 
 --with-weather
  @tab --without-weather
@@ -1143,7 +1156,7 @@ Copy the code from extra/scripts/drive-temperature.sh or @code{exec} it
 from @strong{xinitrc} or the script used to start your DE/WM.
 
 To extend pinkybar with your own crafted
-perl/python/ruby/lua/assembly/R/ocaml/lisp/rust script:
+perl/python/ruby/lua/assembly/R/ocaml/lisp/rust/go script:
 
 @itemize
 @item
@@ -1166,12 +1179,14 @@ ecl for lisp
 ocaml
 @item
 rust
+@item
+go
 @end itemize
 
 Have a look at extra/scripts/pinky.@{py,pl,ruby,lua,R,s,lisp@}, they
 serve as examples how to write the most basic scripts in order to extend
-pinkybar in python/perl/ruby/lua/R/assembly/lisp/ocaml/rust. You can use
-all languages simultaneously.
+pinkybar in python/perl/ruby/lua/R/assembly/lisp/ocaml/rust/go. You can
+use all languages simultaneously.
 
 Please, please do @strong{NOT} export or set PYTHONPATH on it's own
 line.
@@ -1268,6 +1283,15 @@ The source code resides in the @strong{src} folder under the name of
 
 @verbatim
 ~/pinkbar --rust
+@end verbatim
+
+@strong{--with-go}
+
+The source code resides in the @strong{src} folder under the name of
+@strong{pinky.go}
+
+@verbatim
+~/pinkbar --go
 @end verbatim
 
 @iftex
@@ -1467,11 +1491,10 @@ module that can be used by pinky-bar.
 @section OCAML lang
 @anchor{#ocaml-lang}
 Before invoking any of the installation commands you'll have to edit
-@strong{src/Makefail.skel} and append the following to the variable
-@strong{pinkybar_SOURCES}, so the ocaml program to be compiled:
+@strong{src/Makefail.skel}:
 
 @verbatim
-pinky.ml \
+pinkybar_SOURCES = pinky.ml \
 @end verbatim
 
 @iftex
@@ -1491,7 +1514,22 @@ you'll have to edit @strong{src/Makefail.skel} and add the following to:
 pinkybar_LDADD = pinky.a
 @end verbatim
 
-Make sure that you do not use Assembly in the same time.
+@iftex
+@bigskip@hrule@bigskip
+@end iftex
+@ifnottex
+------------------------------------------------------------------------
+@end ifnottex
+
+@node Go lang
+@section Go lang
+@anchor{#go-lang-1}
+The source code that you should edit is in @strong{src/pinky.go}, but
+you'll have to edit @strong{src/Makefail.skel} and add the following to:
+
+@verbatim
+pinkybar_LDADD = pinky2.a
+@end verbatim
 
 @iftex
 @bigskip@hrule@bigskip
@@ -1510,8 +1548,6 @@ The source code that you should edit is in
 @verbatim
 pinkybar_SOURCES = extra/scripts/pinky.s
 @end verbatim
-
-Make sure that you do not use Rust in the same time.
 
 @node Wish list
 @section Wish list

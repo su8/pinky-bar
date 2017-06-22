@@ -1,5 +1,5 @@
 /*
-   06/19/2017
+   06/22/2017
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -19,42 +19,20 @@
 
 #include "config.h" /* Auto-generated */
 
-#if WITH_ECL == 1
-
-#include <ecl/ecl.h>
+#if WITH_GO == 1
 #include "include/headers.h"
+#include "pinky2.h"
+#endif /* WITH_GO */
 
-#endif /* WITH_ECL */
+#include "prototypes/go.h"
 
-#include "prototypes/ecl.h"
-
-/* Based on:
- *  https://gist.github.com/vwood/662109
- *  https://stackoverflow.com/questions/41915795/getting-ecl-symbol-name-as-string-in-c */
-#if WITH_ECL == 1
-static cl_object ecl_call(char *);
-
-static cl_object
-ecl_call(char *call) {
-  return cl_safe_eval(c_string_to_object(call), Cnil, Cnil);
-}
-
-
+#if WITH_GO == 1
 void
-get_ecl(char *str1, char *str2) {
-  char temp[VLA], *temp2[] = { (char *)"pinkybar" };
-
-  cl_boot(1, temp2);
-
-  FILL_ARR(temp, "(load \"%s\")", str2);
-  ecl_call(temp);
-
-  cl_object from_str = ecl_call((char *)"(uzer_func1)");
-  ecl_base_char *to_str = from_str->base_string.self;
-
-  FILL_STR_ARR(1, str1, to_str);
-  cl_shutdown();
+get_go(char *str1) {
+  char *str = uzer_func4();
+  FILL_STR_ARR(1, str1, str);
+  Gfree(str);
 }
 #else
-char *ecl9;
-#endif /* WITH_ECL */
+char *go9;
+#endif /* WITH_GO */
