@@ -782,53 +782,6 @@ use **--without-colours** to skip the following step:
 
 ---
 
-## Go lang
-
-By default I decided not to include Go lang, but this doesn't mean you cannot do it by hand:
-
-```c
-/* test.c */
-#include <stdio.h>
-#include <string.h>
-#include <stdlib.h>
-
-#include "hello.h"
-
-int main(void) {
-  HelloWorld();
-  return EXIT_SUCCESS;
-}
-```
-
-**hello.go**
-
-```go
-package main
-
-import "fmt"
-import "C"
-
-//export HelloWorld
-func HelloWorld() {
-  fmt.Printf("Hello %d", 123)
-}
-
-func main() {}
-```
-
-build it with:
-
-```bash
-go build -buildmode=c-archive hello.go
-gcc -pthread test.c hello.a -o test
-# test it with:
-./test
-```
-
-Obviously the Go code should return string when you make it into standalone module. It's easy to add the above code into standalone module that can be used by pinky-bar.
-
----
-
 ## OCAML lang
 
 Before invoking any of the installation commands you'll have to edit **src/Makefail.skel**:

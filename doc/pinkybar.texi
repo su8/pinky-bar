@@ -98,7 +98,6 @@ cpu and motherboard sensors as @strong{modules} and not inlined.
 * *BSD Mandatory requirements::
 * Opt-in requirements::
 * WM specific requirements::
-* Go lang::
 * OCAML lang::
 * Rust lang::
 * Go lang::
@@ -1431,62 +1430,6 @@ your dwm config.h
 ------------------------------------------------------------------------
 @end ifnottex
 
-@node Go lang
-@section Go lang
-@anchor{#go-lang}
-By default I decided not to include Go lang, but this doesn't mean you
-cannot do it by hand:
-
-@verbatim
-/* test.c */
-#include <stdio.h>
-#include <string.h>
-#include <stdlib.h>
-
-#include "hello.h"
-
-int main(void) {
-  HelloWorld();
-  return EXIT_SUCCESS;
-}
-@end verbatim
-
-@strong{hello.go}
-
-@verbatim
-package main
-
-import "fmt"
-import "C"
-
-//export HelloWorld
-func HelloWorld() {
-  fmt.Printf("Hello %d", 123)
-}
-
-func main() {}
-@end verbatim
-
-build it with:
-
-@verbatim
-go build -buildmode=c-archive hello.go
-gcc -pthread test.c hello.a -o test
-# test it with:
-./test
-@end verbatim
-
-Obviously the Go code should return string when you make it into
-standalone module. It's easy to add the above code into standalone
-module that can be used by pinky-bar.
-
-@iftex
-@bigskip@hrule@bigskip
-@end iftex
-@ifnottex
-------------------------------------------------------------------------
-@end ifnottex
-
 @node OCAML lang
 @section OCAML lang
 @anchor{#ocaml-lang}
@@ -1523,7 +1466,7 @@ pinkybar_LDADD = pinky.a
 
 @node Go lang
 @section Go lang
-@anchor{#go-lang-1}
+@anchor{#go-lang}
 The source code that you should edit is in @strong{src/pinky.go}, but
 you'll have to edit @strong{src/Makefail.skel} and add the following to:
 
