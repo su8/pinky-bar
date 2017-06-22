@@ -1485,12 +1485,14 @@ pinkybar_LDADD = pinky2.a
 @section Assembly
 @anchor{#assembly}
 The source code that you should edit is in
-@strong{extra/scripts/pinky.s}, but you'll have to edit
-@strong{src/Makefail.skel} and add the following to:
+@strong{extra/scripts/pinky.s}
 
-@verbatim
-pinkybar_SOURCES = extra/scripts/pinky.s
-@end verbatim
+@iftex
+@bigskip@hrule@bigskip
+@end iftex
+@ifnottex
+------------------------------------------------------------------------
+@end ifnottex
 
 @node Wish list
 @section Wish list
