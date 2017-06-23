@@ -21,6 +21,7 @@ pinkybar_SOURCES = main.c           \
     python.c                        \
     R.c                             \
     go.c                            \
+    c++.cpp                         \
     ../extra/scripts/pinky.s        \
     prototypes/ecl.h                \
     prototypes/common.h             \
@@ -38,6 +39,7 @@ pinkybar_SOURCES = main.c           \
     prototypes/R.h                  \
     prototypes/go.h                 \
     prototypes/ocaml.h              \
+    prototypes/cpp.hpp              \
     include/headers.h               \
     include/options_constants.h     \
     include/functions_constants.h   \

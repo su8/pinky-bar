@@ -37,6 +37,7 @@
 #include "prototypes/ocaml.h"
 #include "prototypes/rust.h"
 #include "prototypes/go.h"
+#include "prototypes/cpp.hpp"
 
 /* Because we ran out of a-z A-Z options,
  * only long ones will be supported from now on.
@@ -56,6 +57,7 @@ enum {
   OCAML,
   RUST,
   GO,
+  CPP,
   BULLSHIFT
 };
 const char *argp_program_version = PACKAGE_STRING;
@@ -147,6 +149,10 @@ static const struct argp_option options[] = {
 #if WITH_GO == 1
   { .name = "go",         .key = GO,                           .doc = "Extend the program with go, read README."         },
 #endif /* WITH_GO */
+
+#if WITH_CPP == 1
+  { .name = "cpp",         .key = CPP,                        .doc = "Extend the program with c++, read README."         },
+#endif /* WITH_CPP */
 
 #if WITH_WEATHER == 1
   { .name = "weather", .key = 'q', .arg = "London,uk", .doc = "The temperature outside."                                 },
@@ -330,6 +336,11 @@ parse_opt(int key, char *arg, struct argp_state *state) {
 #if WITH_GO == 1
     NEW_LABEL(GO, char go[VLA], go, FMT_KERN);
 #endif /* WITH_GO */
+
+
+#if WITH_CPP == 1
+    NEW_LABEL(CPP, char cpp[VLA], cpp, FMT_KERN);
+#endif /* WITH_CPP */
 
 
 #if WITH_WEATHER == 1

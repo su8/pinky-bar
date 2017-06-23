@@ -62,7 +62,7 @@ all system fan blades and watch what the program will show you, just try
 not to slice your cheesy fingers open in the process.
 
 You can extend pinky-bar with your own crafted
-perl/python/ruby/lua/R/assembly/lisp/ocaml/rust/go script.
+perl/python/ruby/lua/R/assembly/lisp/ocaml/rust/go/c++ script.
 
 If you compile your kernel from source code make sure to include your
 cpu and motherboard sensors as @strong{modules} and not inlined.
@@ -279,6 +279,9 @@ the Opt-in section.
 --go
  @tab Extend pinkybar with your scripts written in go, learn more from
 the Opt-in section.
+@item 
+--cpp
+ @tab Extend pinkybar with your cpp, learn more from the Opt-in section.
 @item 
 -q
  @tab --weather
@@ -534,6 +537,10 @@ colorized
 --with-go
  @tab --without-go
  @tab Extend pinkybar with your own crafted scripts written in go
+@item 
+--with-cpp
+ @tab --without-cpp
+ @tab Extend pinkybar with c++ program
 @item 
 --with-weather
  @tab --without-weather
@@ -1155,7 +1162,7 @@ Copy the code from extra/scripts/drive-temperature.sh or @code{exec} it
 from @strong{xinitrc} or the script used to start your DE/WM.
 
 To extend pinkybar with your own crafted
-perl/python/ruby/lua/assembly/R/ocaml/lisp/rust/go script:
+perl/python/ruby/lua/assembly/R/ocaml/lisp/rust/go/c++ script:
 
 @itemize
 @item
@@ -1182,10 +1189,10 @@ rust
 go
 @end itemize
 
-Have a look at extra/scripts/pinky.@{py,pl,ruby,lua,R,s,lisp@}, they
-serve as examples how to write the most basic scripts in order to extend
-pinkybar in python/perl/ruby/lua/R/assembly/lisp/ocaml/rust/go. You can
-use all languages simultaneously.
+Have a look at extra/scripts, the examples there will teach you how to
+write the most basic scripts in order to extend pinkybar in
+python/perl/ruby/lua/R/assembly/lisp/ocaml/rust/go/c++. You can use all
+languages simultaneously.
 
 Please, please do @strong{NOT} export or set PYTHONPATH on it's own
 line.
@@ -1291,6 +1298,15 @@ The source code resides in the @strong{src} folder under the name of
 
 @verbatim
 ~/pinkbar --go
+@end verbatim
+
+@strong{--with-cpp}
+
+The source code resides in the @strong{src} folder under the name of
+@strong{c++.cpp}
+
+@verbatim
+~/pinkbar --cpp
 @end verbatim
 
 @iftex

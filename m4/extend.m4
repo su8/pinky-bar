@@ -466,11 +466,11 @@ AC_DEFUN([TEST_RUST],[
 ])
 
 
-dnl TEST_RUST() function in configure.ac
+dnl TEST_GO() function in configure.ac
 dnl
 dnl Substitute ECL related linker flags
 dnl to the variable ECL_LIBS if
-dnl the user enabled the --with-rust switch
+dnl the user enabled the --with-go switch
 AC_DEFUN([TEST_GO],[
   GO_LIBS=""
   WITH_GO=0
@@ -479,7 +479,7 @@ AC_DEFUN([TEST_GO],[
     AS_HELP_STRING([--with-go],
       [Extend the program via go scripts]),
     [],
-    [with_rust=no]
+    [with_go=no]
   )
 
   AS_IF([test "x$with_go" = "xyes"], [
@@ -492,4 +492,28 @@ AC_DEFUN([TEST_GO],[
 
   AC_SUBST(GO_LIBS)
   AC_DEFINE_UNQUOTED([WITH_GO],[$WITH_GO],[Extend the program via go scripts])
+])
+
+
+dnl TEST_C++() function in configure.ac
+dnl
+dnl Substitute ECL related linker flags
+dnl to the variable ECL_LIBS if
+dnl the user enabled the --with-c++ switch
+AC_DEFUN([TEST_CPP],[
+  WITH_CPP=0
+
+  AC_ARG_WITH([cpp],
+    AS_HELP_STRING([--with-cpp],
+      [Extend the program via c++]),
+    [],
+    [with_cpp=no]
+  )
+
+  AS_IF([test "x$with_cpp" = "xyes"], [
+    WITH_CPP=1
+
+  ])
+
+  AC_DEFINE_UNQUOTED([WITH_CPP],[$WITH_CPP],[Extend the program via c++])
 ])
