@@ -439,8 +439,8 @@ AC_DEFUN([TEST_OCAML],[
 
 dnl TEST_RUST() function in configure.ac
 dnl
-dnl Substitute ECL related linker flags
-dnl to the variable ECL_LIBS if
+dnl Substitute RUST related linker flags
+dnl to the variable RUST_LIBS if
 dnl the user enabled the --with-rust switch
 AC_DEFUN([TEST_RUST],[
   RUST_LIBS=""
@@ -468,8 +468,8 @@ AC_DEFUN([TEST_RUST],[
 
 dnl TEST_GO() function in configure.ac
 dnl
-dnl Substitute ECL related linker flags
-dnl to the variable ECL_LIBS if
+dnl Substitute GO related linker flags
+dnl to the variable GO_LIBS if
 dnl the user enabled the --with-go switch
 AC_DEFUN([TEST_GO],[
   GO_LIBS=""
@@ -495,11 +495,10 @@ AC_DEFUN([TEST_GO],[
 ])
 
 
-dnl TEST_C++() function in configure.ac
+dnl TEST_CPP() function in configure.ac
 dnl
-dnl Substitute ECL related linker flags
-dnl to the variable ECL_LIBS if
-dnl the user enabled the --with-c++ switch
+dnl Substitute pre-processor variable if
+dnl the user enabled the --with-cpp switch
 AC_DEFUN([TEST_CPP],[
   WITH_CPP=0
 
