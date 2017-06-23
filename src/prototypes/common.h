@@ -54,7 +54,7 @@ void get_loadavg(char *);
 #endif
 
 #if WITH_ASSEMBLY == 1
-extern char *uzer_func(void);
+extern char *uzer_func3(void);
 void get_assembly(char *);
 #endif
 
