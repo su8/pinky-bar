@@ -49,12 +49,13 @@ get_slang(char *str1, char *str2) {
     return;
   }
 
-  if (-1 == SLpop_string(&src)) {
-    return;
+  if (SLANG_STRING_TYPE == SLang_peek_at_stack()) {
+    if (-1 == SLpop_string(&src)) {
+      return;
+    }
+    FILL_STR_ARR(1, str1, src);
+    SLfree(src);
   }
-
-  FILL_STR_ARR(1, str1, src);
-  SLfree(src);
 }
 #else
 char *slang9;
