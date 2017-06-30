@@ -32,7 +32,7 @@ blades and watch what the program will show you, just try not to slice
 your cheesy fingers open in the process.
 .PP
 You can extend pinky\-bar with your own crafted
-perl/python/ruby/lua/R/assembly/lisp/ocaml/rust/go/c++ script.
+perl/python/ruby/lua/R/assembly/lisp/ocaml/rust/go/c++/slang script.
 .PP
 If you compile your kernel from source code make sure to include your
 cpu and motherboard sensors as \f[B]modules\f[] and not inlined.
@@ -353,6 +353,12 @@ T}@T{
 \[en]cpp
 T}@T{
 Extend pinkybar with your cpp, learn more from the Opt\-in section.
+T}
+T{
+T}@T{
+\[en]slang
+T}@T{
+Extend pinkybar with your slang, learn more from the Opt\-in section.
 T}
 T{
 \-q
@@ -782,6 +788,13 @@ T}@T{
 \[en]without\-cpp
 T}@T{
 Extend pinkybar with c++ program
+T}
+T{
+\[en]with\-slang
+T}@T{
+\[en]without\-slang
+T}@T{
+Extend pinkybar with slang program
 T}
 T{
 \[en]with\-weather
@@ -1398,7 +1411,7 @@ Copy the code from extra/scripts/drive\-temperature.sh or \f[C]exec\f[]
 it from \f[B]xinitrc\f[] or the script used to start your DE/WM.
 .PP
 To extend pinkybar with your own crafted
-perl/python/ruby/lua/assembly/R/ocaml/lisp/rust/go/c++ script:
+perl/python/ruby/lua/assembly/R/ocaml/lisp/rust/go/c++/slang script:
 .IP \[bu] 2
 perl
 .IP \[bu] 2
@@ -1421,10 +1434,12 @@ ocaml
 rust
 .IP \[bu] 2
 go
+.IP \[bu] 2
+slang
 .PP
 Have a look at extra/scripts, the examples there will teach you how to
 write the most basic scripts in order to extend pinkybar in
-python/perl/ruby/lua/R/assembly/lisp/ocaml/rust/go/c++.
+python/perl/ruby/lua/R/assembly/lisp/ocaml/rust/go/c++/slang.
 You can use all languages simultaneously.
 .PP
 Please, please do \f[B]NOT\f[] export or set PYTHONPATH on it's own
@@ -1567,6 +1582,14 @@ The source code resides in the \f[B]src\f[] folder under the name of
 .nf
 \f[C]
 ~/pinkbar\ \-\-cpp
+\f[]
+.fi
+.PP
+\f[B]\[en]with\-slang\f[]
+.IP
+.nf
+\f[C]
+~/pinkybar\ \-\-slang\ ~/pinky.sl
 \f[]
 .fi
 .PP

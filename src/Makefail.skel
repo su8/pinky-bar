@@ -3,7 +3,7 @@ AM_CFLAGS = {amCF} \
 
 bin_PROGRAMS = pinkybar
 
-pinkybar_LDADD = $(X_LIBS) $(ALSA_LIBS) $(MPD_LIBS) $(PCI_LIBS) $(DVD_LIBS) $(SENSORS_LIBS) $(CURL_LIBS) $(LIBNL_LZ) $(PERL_LZ) $(LUA_LIBS) $(PYTHON_LZ) $(RUBY_LZ) $(R_LZ) $(ECL_LIBS) $(OCAML_LZ) $(RUST_LIBS) $(GO_LIBS) {bzdlibs}
+pinkybar_LDADD = $(X_LIBS) $(ALSA_LIBS) $(MPD_LIBS) $(PCI_LIBS) $(DVD_LIBS) $(SENSORS_LIBS) $(CURL_LIBS) $(LIBNL_LZ) $(PERL_LZ) $(LUA_LIBS) $(PYTHON_LZ) $(RUBY_LZ) $(R_LZ) $(ECL_LIBS) $(OCAML_LZ) $(RUST_LIBS) $(GO_LIBS) $(SLANG_LIBS) {bzdlibs}
 pinkybar_SOURCES = main.c           \
     ocaml.c                         \
     ecl.c                           \
@@ -22,6 +22,7 @@ pinkybar_SOURCES = main.c           \
     R.c                             \
     go.c                            \
     c++.cpp                         \
+    slang.c                         \
     ../extra/scripts/pinky.s        \
     prototypes/ecl.h                \
     prototypes/common.h             \
@@ -40,6 +41,7 @@ pinkybar_SOURCES = main.c           \
     prototypes/go.h                 \
     prototypes/ocaml.h              \
     prototypes/cpp.hpp              \
+    prototypes/slang.h              \
     include/headers.h               \
     include/options_constants.h     \
     include/functions_constants.h   \

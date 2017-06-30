@@ -516,3 +516,32 @@ AC_DEFUN([TEST_CPP],[
 
   AC_DEFINE_UNQUOTED([WITH_CPP],[$WITH_CPP],[Extend the program via c++])
 ])
+
+
+
+dnl TEST_SLANG() function in configure.ac
+dnl
+dnl Substitute pre-processor variable and
+dnl SLang related linker flags
+dnl to the variable SLANG_LIBS if
+dnl the user enabled the --with-slang switch
+AC_DEFUN([TEST_SLANG],[
+  WITH_SLANG=0
+  SLANG_LIBS=""
+
+  AC_ARG_WITH([slang],
+    AS_HELP_STRING([--with-slang],
+      [Extend the program via slang]),
+    [],
+    [with_slang=no]
+  )
+
+  AS_IF([test "x$with_slang" = "xyes"], [
+    WITH_SLANG=1
+    SLANG_LIBS="-lslang"
+
+  ])
+
+  AC_SUBST(SLANG_LIBS)
+  AC_DEFINE_UNQUOTED([WITH_SLANG],[$WITH_SLANG],[Extend the program via slang])
+])

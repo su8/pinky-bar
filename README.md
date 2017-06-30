@@ -45,7 +45,7 @@ Please note that the program won't detect fans connected via molex connetor(s) o
 
 The program is smart enough to detect whether some of your fan(s) blades are spinning, or the particular fan have been removed. Hold down some of your fan blades and you'll see that the program won't include this fan and it's RPM, release the blades and you'll see the fan and it's RPM in the statusbar. Try simulating real fan hardware failure by holding down all system fan blades and watch what the program will show you, just try not to slice your cheesy fingers open in the process.
 
-You can extend pinky-bar with your own crafted perl/python/ruby/lua/R/assembly/lisp/ocaml/rust/go/c++ script.
+You can extend pinky-bar with your own crafted perl/python/ruby/lua/R/assembly/lisp/ocaml/rust/go/c++/slang script.
 
 If you compile your kernel from source code make sure to include your cpu and motherboard sensors as **modules** and not inlined.
 
@@ -104,7 +104,8 @@ The order of supplied options will dictate how, where and what system informatio
 |              | --ocaml     | Extend pinkybar with your scripts written in ocaml, learn more from the Opt-in section.     |
 |              | --rust      | Extend pinkybar with your scripts written in rust, learn more from the Opt-in section.     |
 |              | --go        | Extend pinkybar with your scripts written in go, learn more from the Opt-in section.     |
-|              | --cpp       | Extend pinkybar with your  cpp, learn more from the Opt-in section.  |
+|              | --cpp       | Extend pinkybar with your cpp, learn more from the Opt-in section.  |
+|              | --slang     | Extend pinkybar with your slang, learn more from the Opt-in section.  |
 | -q           | --weather   | Show the temperature outside [argument - London,uk]                |
 | -U           | --uptime    | The system uptime                                                  |
 | -w           | --loadavg   | The system average load for past 1, 5 and 15 minutes               |
@@ -185,6 +186,7 @@ It's up to you to decide which features suit you best.
 | --with-rust    | --without-rust      | Extend pinkybar with your own crafted scripts written in rust                              |
 | --with-go      | --without-go        | Extend pinkybar with your own crafted scripts written in go                                |
 | --with-cpp     | --without-cpp       | Extend pinkybar with c++ program                                                           |
+| --with-slang   | --without-slang     | Extend pinkybar with slang program                                                         |
 | --with-weather | --without-weather   | The temperature outside  (some details must be provided)                                   |
 | api\_key='123458976'               | | API key obtained after registering yourself in the weather website, must be combined **--with-weather**  |
 | --with-smartemp | --without-smartemp   | Read the drive temperature from S.M.A.R.T cross-platform available                       |
@@ -593,7 +595,7 @@ frost ALL=NOPASSWD:/usr/sbin/smartctl
 
 Copy the code from extra/scripts/drive-temperature.sh or `exec` it from **xinitrc** or the script used to start your DE/WM.
 
-To extend pinkybar with your own crafted perl/python/ruby/lua/assembly/R/ocaml/lisp/rust/go/c++ script:
+To extend pinkybar with your own crafted perl/python/ruby/lua/assembly/R/ocaml/lisp/rust/go/c++/slang script:
 
 * perl
 * python == 2.7 (--with-python2)
@@ -606,8 +608,9 @@ To extend pinkybar with your own crafted perl/python/ruby/lua/assembly/R/ocaml/l
 * ocaml
 * rust
 * go
+* slang
 
-Have a look at extra/scripts, the examples there will teach you how to write the most basic scripts in order to extend pinkybar in python/perl/ruby/lua/R/assembly/lisp/ocaml/rust/go/c++. You can use all languages simultaneously.
+Have a look at extra/scripts, the examples there will teach you how to write the most basic scripts in order to extend pinkybar in python/perl/ruby/lua/R/assembly/lisp/ocaml/rust/go/c++/slang. You can use all languages simultaneously.
 
 Please, please do **NOT** export or set PYTHONPATH on it's own line.
 
@@ -717,6 +720,12 @@ The source code resides in the **src** folder under the name of **c++.cpp**
 
 ```bash
 ~/pinkbar --cpp
+```
+
+**--with-slang**
+
+```bash
+~/pinkybar --slang ~/pinky.sl
 ```
 
 -----
