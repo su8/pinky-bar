@@ -17,7 +17,7 @@
 
 define pandora_snap
 	-sed -e '15r ../README.md' 'man_template.pdc' | \
-		sed -e '15,50d' | pandoc -s -S $(1) - -o pinkybar.$(2)
+		sed -e '15,55d' | pandoc -s -S $(1) - -o pinkybar.$(2)
 endef
 
 man:

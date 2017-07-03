@@ -545,3 +545,31 @@ AC_DEFUN([TEST_SLANG],[
   AC_SUBST(SLANG_LIBS)
   AC_DEFINE_UNQUOTED([WITH_SLANG],[$WITH_SLANG],[Extend the program via slang])
 ])
+
+
+dnl TEST_TCL() function in configure.ac
+dnl
+dnl Substitute pre-processor variable and
+dnl Tcl related linker flags
+dnl to the variable TCL_LIBS if
+dnl the user enabled the --with-tcl switch
+AC_DEFUN([TEST_TCL],[
+  WITH_TCL=0
+  TCL_LIBS=""
+
+  AC_ARG_WITH([tcl],
+    AS_HELP_STRING([--with-tcl],
+      [Extend the program via tcl]),
+    [],
+    [with_tcl=no]
+  )
+
+  AS_IF([test "x$with_tcl" = "xyes"], [
+    WITH_TCL=1
+    TCL_LIBS="-ltcl"
+
+  ])
+
+  AC_SUBST(TCL_LIBS)
+  AC_DEFINE_UNQUOTED([WITH_TCL],[$WITH_TCL],[Extend the program via tcl])
+])

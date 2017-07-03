@@ -39,6 +39,7 @@
 #include "prototypes/go.h"
 #include "prototypes/cpp.hpp"
 #include "prototypes/slang.h"
+#include "prototypes/tcl.h"
 
 /* Because we ran out of a-z A-Z options,
  * only long ones will be supported from now on.
@@ -60,6 +61,7 @@ enum {
   GO,
   CPP,
   SLANG,
+  TCL,
   BULLSHIFT
 };
 const char *argp_program_version = PACKAGE_STRING;
@@ -160,6 +162,12 @@ static const struct argp_option options[] = {
 #if WITH_SLANG == 1
   { .name = "slang",         .key = SLANG,    .arg = "script",    .doc = "Extend the program with slang, read README."   },
 #endif /* WITH_SLANG */
+
+
+#if WITH_TCL == 1
+  { .name = "tcl",         .key = TCL,    .arg = "script",    .doc = "Extend the program with tcl, read README."         },
+#endif /* WITH_TCL */
+
 
 #if WITH_WEATHER == 1
   { .name = "weather", .key = 'q', .arg = "London,uk", .doc = "The temperature outside."                                 },
@@ -353,6 +361,11 @@ parse_opt(int key, char *arg, struct argp_state *state) {
 #if WITH_SLANG == 1
     NEW_ARG_LABEL(SLANG, char slang[VLA], slang, FMT_KERN);
 #endif /* WITH_SLANG */
+
+
+#if WITH_TCL == 1
+    NEW_ARG_LABEL(TCL, char tcl[VLA], tcl, FMT_KERN);
+#endif /* WITH_TCL */
 
 
 #if WITH_WEATHER == 1
