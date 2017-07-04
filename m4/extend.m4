@@ -288,7 +288,7 @@ AC_DEFUN([TEST_RUBY],[
     ])
     PKG_PROG_PKG_CONFIG()
 
-    PKG_CHECK_MODULES([RUBY], [ruby-2.0 >= 2.0], [
+    PKG_CHECK_MODULES([RUBY], [ruby-2.2 >= 2.2], [
       dnl AC_CHECK_LIB(ruby_init,[],[
       dnl   MISSING_FUNC()
       dnl ])

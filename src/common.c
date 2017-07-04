@@ -472,11 +472,3 @@ split_n_index(char *str1) {
   }
   *str1 = '\0';
 }
-
-
-#if WITH_ASSEMBLY == 1
-void
-get_assembly(char *str1) {
-  FILL_STR_ARR(1, str1, uzer_func3());
-}
-#endif /* WITH_ASSEMBLY */

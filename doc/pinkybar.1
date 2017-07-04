@@ -1278,6 +1278,10 @@ export\ PKG_CONFIG_PATH=/usr/bin/pkg\-config
 \f[]
 .fi
 .PP
+Also you'll have to edit \f[B]m4/extend.m4\f[] and edit the line
+\f[C]PKG_CHECK_MODULES([RUBY],\ [ruby\-2.2\ >=\ 2.2]\f[] to point to the
+correct ruby version that you have installed.
+.PP
 Then pass \f[B]\[en]with\-libnl\f[] to configure.
 .PP
 To get the NIC vendor and model names:

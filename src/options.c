@@ -28,18 +28,8 @@
 #include "prototypes/options.h"
 #include "prototypes/weather.h"
 #include "prototypes/smart.h"
-#include "prototypes/perl.h"
-#include "prototypes/lua.h"
-#include "prototypes/ruby.h"
-#include "prototypes/python.h"
-#include "prototypes/R.h"
-#include "prototypes/ecl.h"
-#include "prototypes/ocaml.h"
-#include "prototypes/rust.h"
-#include "prototypes/go.h"
 #include "prototypes/cpp.hpp"
-#include "prototypes/slang.h"
-#include "prototypes/tcl.h"
+#include "prototypes/extend.h"
 
 /* Because we ran out of a-z A-Z options,
  * only long ones will be supported from now on.

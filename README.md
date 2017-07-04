@@ -488,6 +488,8 @@ In Gentoo there are two versions of pkg-config. The first one is named dev-util/
 export PKG_CONFIG_PATH=/usr/bin/pkg-config
 ```
 
+Also you'll have to edit **m4/extend.m4** and edit the line `PKG_CHECK_MODULES([RUBY], [ruby-2.2 >= 2.2]` to point to the correct ruby version that you have installed.
+
 Then pass **--with-libnl** to configure.
 
 To get the NIC vendor and model names:
