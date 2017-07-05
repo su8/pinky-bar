@@ -148,7 +148,7 @@ get_ecl(char *str1, char *str2) {
   FILL_ARR(temp, "(load \"%s\")", str2);
   ecl_call(temp);
 
-  cl_object from_str = ecl_call((char *)"(uzer_func1)");
+  cl_object from_str = ecl_call((char *)"(uzer_func)");
   ecl_base_char *to_str = from_str->base_string.self;
 
   FILL_STR_ARR(1, str1, to_str);
@@ -238,7 +238,7 @@ get_ocaml(char *str1) {
   CAMLparam0();
   CAMLlocal1(res);
 
-  value *func = caml_named_value("uzer_func");
+  value *func = caml_named_value("uzer_func1");
   if (NULL == func) {
     FILL_STR_ARR(1, str1, "0");
     return;
@@ -439,7 +439,7 @@ get_slang(char *str1, char *str2) {
     SLang_restart(1);
   }
 
-  if (-1 == SLang_load_string((char *)"uzer_function")) {
+  if (-1 == SLang_load_string((char *)"uzer_func")) {
     return;
   }
 

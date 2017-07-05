@@ -1491,8 +1491,9 @@ pinkybar_SOURCES = pinky.ml \
 @node Rust lang
 @section Rust lang
 @anchor{#rust-lang}
-The source code that you should edit is in @strong{src/pinky.rs}, but
-you'll have to edit @strong{src/Makefail.skel} and add the following to:
+The source code that you should edit is in
+@strong{extra/scripts/pinky.rs}, but you'll have to edit
+@strong{src/Makefail.skel} and add the following at the end:
 
 @verbatim
 pinkybar_LDADD = pinky.a
@@ -1509,7 +1510,8 @@ pinkybar_LDADD = pinky.a
 @section Go lang
 @anchor{#go-lang}
 The source code that you should edit is in @strong{src/pinky.go}, but
-you'll have to edit @strong{src/Makefail.skel} and add the following to:
+you'll have to edit @strong{src/Makefail.skel} and add the following at
+the end:
 
 @verbatim
 pinkybar_LDADD = pinky2.a

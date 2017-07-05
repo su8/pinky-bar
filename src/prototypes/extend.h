@@ -78,16 +78,6 @@ void get_assembly(char *);
 #if WITH_GO == 1
 void get_go(char *);
 
-/* Start of preamble from import "C" comments.  */
-
-#line 1 "cgo-generated-wrapper"
-
-/* End of preamble from import "C" comments.  */
-
-
-/* Start of boilerplate cgo prologue.  */
-#line 1 "cgo-gcc-export-header-prolog"
-
 #ifndef GO_CGO_PROLOGUE_H
 #define GO_CGO_PROLOGUE_H
 
@@ -119,7 +109,7 @@ typedef void *GoChan;
 typedef struct { void *t; void *v; } GoInterface;
 typedef struct { void *data; GoInt len; GoInt cap; } GoSlice;
 
-#endif
+#endif /* GO_CGO_PROLOGUE_H */
 
 /* End of boilerplate cgo prologue.  */
 
@@ -129,7 +119,6 @@ extern "C" {
 
 
 extern char* uzer_func4();
-
 extern void Gfree(char* p0);
 
 #ifdef __cplusplus

@@ -824,7 +824,7 @@ pinkybar_SOURCES = pinky.ml \
 
 ## Rust lang
 
-The source code that you should edit is in **src/pinky.rs**, but you'll have to edit **src/Makefail.skel** and add the following to:
+The source code that you should edit is in **extra/scripts/pinky.rs**, but you'll have to edit **src/Makefail.skel** and add the following at the end:
 
 ```bash
 pinkybar_LDADD = pinky.a
@@ -834,7 +834,7 @@ pinkybar_LDADD = pinky.a
 
 ## Go lang
 
-The source code that you should edit is in **src/pinky.go**, but you'll have to edit **src/Makefail.skel** and add the following to:
+The source code that you should edit is in **src/pinky.go**, but you'll have to edit **src/Makefail.skel** and add the following at the end:
 
 ```bash
 pinkybar_LDADD = pinky2.a

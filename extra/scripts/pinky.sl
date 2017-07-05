@@ -1,3 +1,3 @@
-define uzer_function() {
+define uzer_func() {
   return "Hello World";
 }
