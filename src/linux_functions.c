@@ -352,6 +352,7 @@ get_battery(char *str1) {
 
     if (NULL == (fp = fopen(temp, "r"))) {
       *str1++ = '0';
+      *str1 = '\0';
       return;
     }
   }
