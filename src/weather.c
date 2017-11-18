@@ -47,7 +47,7 @@ read_curl_data_cb(char *data, size_t size, size_t nmemb, char *str1) {
   uint8_t got_main = 0, got_temp = 0;
   uint8_t y = 0, z = 0;
   char *ptr = NULL;
-  const char wind[] = " Wind ", kmh[] = " km/h";
+  const char wind[] = " Wind ", mh[] = " m/h";
   size_t sz = nmemb * size, x = 0;
 
   for (ptr = data; *ptr; ptr++, x++) {
@@ -112,7 +112,7 @@ read_curl_data_cb(char *data, size_t size, size_t nmemb, char *str1) {
               }
 
               for (y = 0; y < 5; y++) {
-                *str1++ = kmh[y];
+                *str1++ = mh[y];
               }
             }
             *str1 = '\0';
