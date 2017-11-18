@@ -76,6 +76,7 @@ read_curl_data_cb(char *data, size_t size, size_t nmemb, char *str1) {
         if (0 == got_temp) {
           if ('e' == *(ptr+1) && 'm' == *(ptr+2) && 'p' == *(ptr+3)) {
             if ('-' == *(ptr+6)) {
+              *str1++ = '-';
               if (0 != (isdigit((unsigned char) *(ptr+7)))) {
                 *str1++ = *(ptr+7);
                 if (0 != (isdigit((unsigned char) *(ptr+8)))) {
