@@ -351,7 +351,8 @@ get_battery(char *str1) {
     BATTERY_TOTAL(temp, num);
 
     if (NULL == (fp = fopen(temp, "r"))) {
-      exit_with_err(CANNOT_OPEN, "BAT0 and BAT1");
+      *str1++ = '0';
+      return;
     }
   }
 
