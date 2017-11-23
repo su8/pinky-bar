@@ -14,7 +14,6 @@ pinkybar_SOURCES = main.c           \
     smart.c                         \
     c++.cpp                         \
     extend.c                        \
-    ../extra/scripts/pinky.s        \
     prototypes/common.h             \
     prototypes/cpu.h                \
     prototypes/sound.h              \

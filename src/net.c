@@ -770,6 +770,8 @@ get_wifi(char *str1, char *str2, uint8_t num) {
     FILL_STR_ARR(1, str1, nwid.i_nwid);
   }
 
+  (void)str2;
+  (void)num;
 #else
   (void)str1;
   (void)str2;

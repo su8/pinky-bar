@@ -153,7 +153,7 @@ The following options are available only in OpenBSD:
 | short option | long option | Descrtiption                                                       |
 |--------------|-------------|--------------------------------------------------------------------|
 | -l           | --ramused   | The used ram in MB                                                 |
-| -h           | --wifiname  | The name of currently connected wifi/wireless network [argument - wlan0]  |
+|              | --wifiname  | The name of currently connected wifi/wireless network [argument - wlan0]  |
 
 ---
 
