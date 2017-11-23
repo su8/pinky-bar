@@ -731,7 +731,7 @@ get_wifi(char *str1, char *str2, uint8_t num) {
     memset(&ifmr, 0, sizeof(ifmr));
     strlcpy(ifmr.ifm_name, ifa->ifa_name, IF_NAMESIZE);
 
-    if (0 != ioctl(SIOCGIFMEDIA, (caddr_t)&ifmr)) {
+    if (0 != ioctl(fd, SIOCGIFMEDIA, (caddr_t)&ifmr)) {
       continue;
     }
     if (0 == (ifmr.ifm_active & IFM_IEEE80211)) {

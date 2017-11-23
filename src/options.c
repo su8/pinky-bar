@@ -389,6 +389,11 @@ parse_opt(int key, char *arg, struct argp_state *state) {
     NEW_SWAPP_LABEL('F', char swapp_perc[VLA], swapp_perc, 4, FMT_SSD2, SSD_STR);
 
     NEW_NET_LABEL('j', char nic_info[VLA], nic_info, 7, FMT_KERN);
+
+#if defined(__OpenBSD__)
+    NEW_NET_LABEL('h', char wifiname[VLA], wifiname, 11, FMT_KERN);
+#endif /* __OpenBSD__ */
+
 #endif /* __FreeBSD__ || __OpenBSD__ */
 
 
@@ -408,9 +413,6 @@ parse_opt(int key, char *arg, struct argp_state *state) {
     NEW_NET_LABEL('e', char link_speed[VLA], link_speed, 7, FMT_KERN);
 #endif /* __linux__ */
 
-#if defined(__OpenBSD__)
-    NEW_NET_LABEL('h', char wifiname[VLA], wifiname, 11, FMT_KERN);
-#endif /* __OpenBSD__ */
 
     case 'V':
 #if defined(HAVE_ALSA_ASOUNDLIB_H) || defined(HAVE_SYS_SOUNDCARD_H) || \
