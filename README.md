@@ -845,7 +845,11 @@ pinkybar_LDADD = pinky2.a
 
 ## Assembly
 
-The source code that you should edit is in **extra/scripts/pinky.s**
+The source code that you should edit is in **extra/scripts/pinky.s**, but you'll have to edit **src/Makefail.skel** add append the following to pinkybar_SOURCES:
+
+```bash
+../extra/scripts/pinky.s        \
+```
 
 ---
 
