@@ -52,6 +52,7 @@ enum {
   CPP,
   SLANG,
   TCL,
+  OPENBSDWIFI,
   BULLSHIFT
 };
 const char *argp_program_version = PACKAGE_STRING;
@@ -174,7 +175,7 @@ static const struct argp_option options[] = {
 
 
 #if defined(__OpenBSD__)
-  { .name = "wifiname",     .key = 'h', .arg = "eth0", .doc = "The name of currently connected wireless/wifi network."   },
+  { .name = "wifiname",     .key = OPENBSDWIFI, .arg = "eth0", .doc = "The name of currently connected wireless/wifi network."   },
   { .name = "ramused",      .key = 'l',                .doc = "The used ram in MB."                                      },
 #endif /* __OpenBSD__ */
 
@@ -391,7 +392,7 @@ parse_opt(int key, char *arg, struct argp_state *state) {
     NEW_NET_LABEL('j', char nic_info[VLA], nic_info, 7, FMT_KERN);
 
 #if defined(__OpenBSD__)
-    NEW_NET_LABEL('h', char wifiname[VLA], wifiname, 11, FMT_KERN);
+    NEW_NET_LABEL(OPENBSDWIFI, char wifiname[VLA], wifiname, 11, FMT_KERN);
 #endif /* __OpenBSD__ */
 
 #endif /* __FreeBSD__ || __OpenBSD__ */

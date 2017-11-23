@@ -16,7 +16,7 @@ AM_SILENT_RULES([yes])
 # program flawlessly.
 # If you use OpenBSD uncomment the AC_PROG_CC([])
 # line below. Make sure that you have the latest gcc/llvm
-# AC_PROG_CC([egcc clang llvm-gcc gcc])
+#AC_PROG_CC([egcc clang llvm-gcc gcc])
 
 AC_PROG_CC_C99
 AC_C_CONST

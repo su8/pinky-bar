@@ -208,7 +208,7 @@ get_net(char *str1, char *str2, uint8_t num) {
             }
           }
 #else
-#if defiend(__OpenBSD__)
+#if defined(__OpenBSD__)
           } else if (11 == num) { /* wifi name */
             get_wifi(str1, str2, (uint8_t)(num - 10));
 #endif
@@ -707,6 +707,7 @@ get_wifi(char *str1, char *str2, uint8_t num) {
 
 
 #if defined(__OpenBSD__)
+void 
 get_wifi(char *str1, char *str2, uint8_t num) {
 #if WITH_NET == 1
   struct ifreq ifr;
