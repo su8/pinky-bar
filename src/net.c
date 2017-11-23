@@ -706,6 +706,8 @@ get_wifi(char *str1, char *str2, uint8_t num) {
 #endif /* __linux__ */
 
 
+/* Based on:
+    https://git.2f30.org/spoon/file/wifi.c.html */
 #if defined(__OpenBSD__)
 void 
 get_wifi(char *str1, char *str2, uint8_t num) {

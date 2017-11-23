@@ -455,7 +455,7 @@ Execute the program without supplying any command line options and it will parse
 * perl
 * **as** from binutils
 
-Some llvm and gcc versions will not check for headers and libraries in /usr/local, if that's the case for you, you should export the following environment variables:
+Some llvm and gcc versions will not check for headers and libraries in /usr/local, and you might get something like **ld cannot find -largp**, if that's the case for you, you should export the following environment variables:
 
 ```bash
 export LDFLAGS='-L/usr/local/lib'
