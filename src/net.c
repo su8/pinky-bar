@@ -77,6 +77,11 @@
 #endif /* __FreeBSD__ */
 
 #if defined(__OpenBSD__)
+#include <sys/types.h>
+#include <sys/select.h>
+#include <net/if_media.h>
+#include <net80211/ieee80211.h>
+#include <net80211/ieee80211_ioctl.h>
 #include "include/openbzd.h"
 #endif /* __OpenBSD__ */
 
@@ -203,6 +208,10 @@ get_net(char *str1, char *str2, uint8_t num) {
             }
           }
 #else
+#if defiend(__OpenBSD__)
+          } else if (11 == num) { /* wifi name */
+            get_wifi(str1, str2, (uint8_t)(num - 10));
+#endif
           } else if (4 == num) { /* mac address */
             temp_void = ifa->ifa_addr;
             mac = (struct sockaddr_dl *)temp_void;
@@ -695,3 +704,76 @@ get_wifi(char *str1, char *str2, uint8_t num) {
 }
 #endif /* WITH_LIBNL */
 #endif /* __linux__ */
+
+
+#if defined(__OpenBSD__)
+get_wifi(char *str1, char *str2, uint8_t num) {
+#if WITH_NET == 1
+  struct ifreq ifr;
+  struct ifaddrs *ifa, *ifas;
+  struct ifmediareq ifmr;
+  struct ieee80211_bssid bssid;
+  struct ieee80211_nwid nwid;
+
+  int fd = 0, ibssid = 0, inwid = 0, found_ssid = 0;
+
+  if (-1 == getifaddrs(&ifas)) {
+    FUNC_FAILED("getifaddrs()");
+  }
+  FILL_STR_ARR(1, str1, "Null");
+
+  fd = socket(AF_INET, SOCK_DGRAM, 0);
+  if (-1 == fd) {
+    return;
+  }
+
+  for (ifa = ifas; NULL != ifa; ifa = ifa->ifa_next) {
+    memset(&ifmr, 0, sizeof(ifmr));
+    strlcpy(ifmr.ifm_name, ifa->ifa_name, IF_NAMESIZE);
+
+    if (0 != ioctl(SIOCGIFMEDIA, (caddr_t)&ifmr)) {
+      continue;
+    }
+    if (0 == (ifmr.ifm_active & IFM_IEEE80211)) {
+      continue;
+    }
+    if (0 != (ifmr.ifm_active & IFM_IEEE80211_HOSTAP)) {
+      continue;
+    }
+
+    memset(&ifr, 0, sizeof(ifr));
+    memset(&bssid, 0, sizeof(bssid));
+    memset(&nwid, 0, sizeof(nwid));
+
+    ifr.ifr_data = (caddr_t)&nwid;
+    
+    strlcpy(bssid.i_name, ifa->ifa_name, sizeof(bssid.i_name));
+    strlcpy(ifr.ifr_name, bssid.i_name, sizeof(bssid.i_name));
+
+    ibssid = ioctl(fd, SIOCG80211BSSID, &bssid);
+    inwid  = ioctl(fd, SIOCG80211NWID, (caddr_t)&ifr);
+    if (-1 == ibssid || -1 == inwid) {
+      continue;
+    }
+    
+    found_ssid = 1;
+    break;
+  }
+  CLOSE_FD(fd);
+
+  if (NULL != ifas) {
+    freeifaddrs(ifas);
+  }
+  
+  if (1 == found_ssid) {
+    FILL_STR_ARR(1, str1, nwid.i_nwid);
+  }
+
+#else
+  (void)str1;
+  (void)str2;
+  (void)num;
+  RECOMPILE_WITH("net");
+#endif /* WITH_NET */
+}
+#endif /* __OpenBSD__ */

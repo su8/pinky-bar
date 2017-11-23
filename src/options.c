@@ -174,6 +174,7 @@ static const struct argp_option options[] = {
 
 
 #if defined(__OpenBSD__)
+  { .name = "wifiname",     .key = 'h', .arg = "eth0", .doc = "The name of currently connected wireless/wifi network."   },
   { .name = "ramused",      .key = 'l',                .doc = "The used ram in MB."                                      },
 #endif /* __OpenBSD__ */
 
@@ -407,6 +408,9 @@ parse_opt(int key, char *arg, struct argp_state *state) {
     NEW_NET_LABEL('e', char link_speed[VLA], link_speed, 7, FMT_KERN);
 #endif /* __linux__ */
 
+#if defined(__OpenBSD__)
+    NEW_NET_LABEL('h', char wifiname[VLA], wifiname, 11, FMT_KERN);
+#endif /* __OpenBSD__ */
 
     case 'V':
 #if defined(HAVE_ALSA_ASOUNDLIB_H) || defined(HAVE_SYS_SOUNDCARD_H) || \
