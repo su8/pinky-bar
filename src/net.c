@@ -54,19 +54,21 @@
 
 #if defined(__FreeBSD__) || defined(__OpenBSD__)
 #include <netdb.h>
-/* #include <sys/types.h> */
 #include <sys/socket.h>
 #include <sys/ioctl.h>
 #include <arpa/inet.h>
 #include <arpa/nameser.h>
 #include <ifaddrs.h>
-
 #include <net/if.h>
 #include <net/if_dl.h>
 #include <net/route.h>
 #include <netinet/in.h>
+#include <sys/types.h>
+#include <sys/select.h>
+#include <net/if_media.h>
+#include <net80211/ieee80211.h>
+#include <net80211/ieee80211_ioctl.h>
 #endif /* __FreeBSD__ || __OpenBSD__ */
-
 #endif /* WITH_NET */
 
 #include "include/headers.h"
@@ -79,15 +81,6 @@
 #if defined(__OpenBSD__)
 #include "include/openbzd.h"
 #endif /* __OpenBSD__ */
-
-#if defined(__OpenBSD__) || defined(__FreeBSD__)
-#include <sys/types.h>
-#include <sys/select.h>
-#include <net/if_media.h>
-#include <net80211/ieee80211.h>
-#include <net80211/ieee80211_ioctl.h>
-#endif /* __OpenBSD__ || __FreeBSD__ */
-
 
 #if defined(__linux__)
 
