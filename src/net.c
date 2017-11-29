@@ -77,13 +77,16 @@
 #endif /* __FreeBSD__ */
 
 #if defined(__OpenBSD__)
+#include "include/openbzd.h"
+#endif /* __OpenBSD__ */
+
+#if defined(__OpenBSD__) || defined(__FreeBSD__)
 #include <sys/types.h>
 #include <sys/select.h>
 #include <net/if_media.h>
 #include <net80211/ieee80211.h>
 #include <net80211/ieee80211_ioctl.h>
-#include "include/openbzd.h"
-#endif /* __OpenBSD__ */
+#endif /* __OpenBSD__ || __FreeBSD__ */
 
 
 #if defined(__linux__)
@@ -208,7 +211,7 @@ get_net(char *str1, char *str2, uint8_t num) {
             }
           }
 #else
-#if defined(__OpenBSD__)
+#if defined(__OpenBSD__) || defined(__FreeBSD__)
           } else if (11 == num) { /* wifi name */
             get_wifi(str1, str2, (uint8_t)(num - 10));
 #endif
@@ -782,3 +785,39 @@ get_wifi(char *str1, char *str2, uint8_t num) {
 #endif /* WITH_NET */
 }
 #endif /* __OpenBSD__ */
+
+
+/* Based on:  
+    https://chromium.googlesource.com/chromiumos/third_party/dhcpcd/+/master/if-bsd.c
+    https://www.freebsd.org/cgi/man.cgi?query=ieee80211&sektion=4&apropos=0&manpath=FreeBSD+5.3-RELEASE+and+Ports
+*/
+#if defined(__FreeBSD__)
+void 
+get_wifi(char *str1, char *str2, uint8_t num) {
+#if WITH_NET == 1
+  struct ieee80211req ireq;
+  int fd = 0;
+
+  if (-1 == (fd = socket(AF_INET, SOCK_DGRAM, 0))) {
+    return;
+  }
+
+  memset(&ireq, 0, sizeof(ireq));
+  strlcpy(ireq.i_name, str2, sizeof(ireq.i_name));
+
+  ireq.i_type = IEEE80211_IOC_SSID;
+  ireq.i_val = -1;
+  ireq.i_data = str1;
+
+  (void)ioctl(fd, SIOCG80211, &ireq);
+  CLOSE_FD(fd);
+
+  (void)num;
+#else
+  (void)str1;
+  (void)str2;
+  (void)num;
+  RECOMPILE_WITH("net");
+#endif /* WITH_NET */
+}
+#endif /* __FreeBSD__ */
