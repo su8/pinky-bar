@@ -851,9 +851,3 @@ The source code that you should edit is in **extra/scripts/pinky.s**, but you'll
 ```bash
 ../extra/scripts/pinky.s        \
 ```
-
----
-
-## Wish list
-
-It would be great if I had \*BSD compatible usb wifi dongle or wireless pci adapter to add wifi options in pinky-bar.
