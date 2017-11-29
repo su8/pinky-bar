@@ -147,13 +147,14 @@ The following options are available only to FreeBSD and OpenBSD:
 | -F           | --swaperc   | The used drive swap in percentage                                  |
 | -h           | --swaptotal | The total drive swap                                               |
 | -H           | --swapavail | The available drive swap (total - used)                            |
+|              | --wifiname  | The name of currently connected wifi/wireless network [argument - wlan0]  |
 
 The following options are available only in OpenBSD:
 
 | short option | long option | Descrtiption                                                       |
 |--------------|-------------|--------------------------------------------------------------------|
 | -l           | --ramused   | The used ram in MB                                                 |
-|              | --wifiname  | The name of currently connected wifi/wireless network [argument - wlan0]  |
+
 
 ---
 
