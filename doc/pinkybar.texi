@@ -979,7 +979,8 @@ perl
 @end itemize
 
 Some llvm and gcc versions will not check for headers and libraries in
-/usr/local, if that's the case for you, you should export the following
+/usr/local, and you might get something like @strong{ld cannot find
+-largp}, if that's the case for you, you should export the following
 environment variables:
 
 @verbatim
@@ -1531,7 +1532,12 @@ pinkybar_LDADD = pinky2.a
 @section Assembly
 @anchor{#assembly}
 The source code that you should edit is in
-@strong{extra/scripts/pinky.s}
+@strong{extra/scripts/pinky.s}, but you'll have to edit
+@strong{src/Makefail.skel} add append the following to pinkybar_SOURCES:
+
+@verbatim
+../extra/scripts/pinky.s        \
+@end verbatim
 
 @node REPORTING BUGS
 @chapter REPORTING BUGS

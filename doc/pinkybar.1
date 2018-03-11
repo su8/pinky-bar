@@ -1240,7 +1240,8 @@ perl
 \f[B]as\f[] from binutils
 .PP
 Some llvm and gcc versions will not check for headers and libraries in
-/usr/local, if that's the case for you, you should export the following
+/usr/local, and you might get something like \f[B]ld cannot find
+\-largp\f[], if that's the case for you, you should export the following
 environment variables:
 .IP
 .nf
@@ -1757,7 +1758,14 @@ pinkybar_LDADD\ =\ pinky2.a
 .SS Assembly
 .PP
 The source code that you should edit is in
-\f[B]extra/scripts/pinky.s\f[]
+\f[B]extra/scripts/pinky.s\f[], but you'll have to edit
+\f[B]src/Makefail.skel\f[] add append the following to pinkybar_SOURCES:
+.IP
+.nf
+\f[C]
+\&../extra/scripts/pinky.s\ \ \ \ \ \ \ \ \\
+\f[]
+.fi
 .SH REPORTING BUGS
 .PP
 Report bugs to https://gitlab.com/void0/pinky\-bar
