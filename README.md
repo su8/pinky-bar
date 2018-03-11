@@ -851,3 +851,6 @@ The source code that you should edit is in **extra/scripts/pinky.s**, but you'll
 ```bash
 ../extra/scripts/pinky.s        \
 ```
+=======
+# pinky-bar
+>>>>>>> eed23d5b4317466c594d60fb4efcbbeb7ad6042c
