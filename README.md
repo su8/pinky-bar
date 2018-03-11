@@ -21,7 +21,6 @@ The code doesn't age, neither it has expiration date.
 - [Rust lang](#rust-lang)
 - [Go lang](#go-lang)
 - [Assembly](#assembly)
-- [Wish list](#wish-list)
 
 ---
 
