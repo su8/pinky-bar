@@ -1,0 +1,1554 @@
+\input texinfo
+@setfilename pinkybar.info
+@documentencoding UTF-8
+
+@ifnottex
+@paragraphindent 0
+@end ifnottex
+@titlepage
+@title pinkybar(1) manual
+@author Aaron Caffrey
+Oktoberfest 23, 2016
+@end titlepage
+
+@node Top
+@top pinkybar(1) manual
+
+@menu
+* NAME::
+* SYNOPSIS::
+* DESCRIPTION::
+* REPORTING BUGS::
+* COPYRIGHT::
+@end menu
+
+@node NAME
+@chapter NAME
+@anchor{#name}
+This man page is converted from markdown, and some information might not
+look good and/or have been stripped during the automated process.
+
+@node SYNOPSIS
+@chapter SYNOPSIS
+@anchor{#synopsis}
+pinkybar [@emph{option}]
+
+@node DESCRIPTION
+@chapter DESCRIPTION
+@anchor{#description}
+Gather some system information and show it in this statusbar program,
+not tied to any Window Manager, terminal multiplexer, etc.
+
+Please note that the program won't detect fans connected via molex
+connetor(s) or external fan controller. Also I have not tested it with
+fan splitter(s) either.
+
+The program is smart enough to detect whether some of your fan(s) blades
+are spinning, or the particular fan have been removed. Hold down some of
+your fan blades and you'll see that the program won't include this fan
+and it's RPM, release the blades and you'll see the fan and it's RPM in
+the statusbar. Try simulating real fan hardware failure by holding down
+all system fan blades and watch what the program will show you, just try
+not to slice your cheesy fingers open in the process.
+
+You can extend pinky-bar with your own crafted
+perl/python/ruby/lua/R/assembly/lisp/ocaml/rust/go/c++/slang/tcl script.
+
+If you compile your kernel from source code make sure to include your
+cpu and motherboard sensors as @strong{modules} and not inlined.
+
+@strong{Just an example if you use BSD - acpi/aibs, coretemp/amdtemp.}
+
+@float
+@image{img/cpu-temp,,,,png}
+@end float
+
+@float
+@image{img/mobo-temp,,,,png}
+@end float
+
+@iftex
+@bigskip@hrule@bigskip
+@end iftex
+@ifnottex
+------------------------------------------------------------------------
+@end ifnottex
+@menu
+* Program options::
+* GNU Build System configure options::
+* Installation for dwm::
+* Installation for xmonad or other WM::
+* Installation in FreeBSD::
+* Installation in OpenBSD::
+* pinky curses installation::
+* pinky urxvt::
+* Installation for anything else::
+* Using configuration file::
+* Linux Mandatory requirements::
+* *BSD Mandatory requirements::
+* Opt-in requirements::
+* WM specific requirements::
+* OCAML lang::
+* Rust lang::
+* Go lang::
+* Assembly::
+@end menu
+
+@node Program options
+@section Program options
+@anchor{#program-options}
+The order of supplied options will dictate how, where and what system
+information to be shown.
+
+@multitable @columnfractions 0.15 0.14 0.70 
+@headitem 
+short option
+ @tab long option
+ @tab Descrtiption
+@item 
+-M
+ @tab --mpd
+ @tab The song filename
+@item 
+-W
+ @tab --mpdtrack
+ @tab The song track name (not available in cmus)
+@item 
+-x
+ @tab --mpdartist
+ @tab The song artist(s) name(s)
+@item 
+-X
+ @tab --mpdtitle
+ @tab The song title
+@item 
+-y
+ @tab --mpdalbum
+ @tab The song album name
+@item 
+-Y
+ @tab --mpddate
+ @tab The song date
+@item 
+-c
+ @tab --cpu
+ @tab The current cpu load (summed up all cores/threads)
+@item 
+-L
+ @tab --coresload
+ @tab Show the load regarding each individual cpu core/thread
+@item 
+-T
+ @tab --cputemp
+ @tab The current cpu temperature
+@item 
+-C
+ @tab --cpuspeed
+ @tab Show your maximum cpu clock speed in MHz, regardless of the used
+governor. Uses assembly.
+@item 
+-I
+ @tab --cpuinfo
+ @tab Detect your CPU vendor, stepping, family, clflush, l1/l2 cache and
+line size, physical cores, physical and virtual bits. Uses assembly.
+@item 
+-r
+ @tab --ramperc
+ @tab The used ram in percentage
+@item 
+-J
+ @tab --ramtotal
+ @tab The total ram
+@item 
+-K
+ @tab --ramfree
+ @tab The free ram
+@item 
+-l
+ @tab --ramshared
+ @tab The shared ram
+@item 
+-o
+ @tab --rambuffer
+ @tab The buffer ram (not available in OpenBSD)
+@item 
+-s
+ @tab --driveperc
+ @tab The used drive storage in percentage
+@item 
+-n
+ @tab --drivetotal
+ @tab The total drive storage
+@item 
+-N
+ @tab --drivefree
+ @tab The free drive storage
+@item 
+-O
+ @tab --driveavail
+ @tab The available drive storage (total - used)
+@item 
+--drivetemp
+ @tab Read the drive temperature from S.M.A.R.T
+@item 
+-g
+ @tab --battery
+ @tab The remaining battery charge
+@item 
+-z
+ @tab --dvdstr
+ @tab The vendor and model name of your cdrom/dvdrom
+@item 
+-S
+ @tab --statio
+ @tab Read and written MBs to the drive so far [argument - sda]
+@item 
+-p
+ @tab --packages
+ @tab The number of installed packages
+@item 
+-P
+ @tab --kernsys
+ @tab The kernel name
+@item 
+--kernode
+ @tab The network node hostname
+@item 
+-Q
+ @tab --kernrel
+ @tab The kernel release
+@item 
+-R
+ @tab --kernver
+ @tab The kernel version
+@item 
+-u
+ @tab --kernarch
+ @tab The machine architecture
+@item 
+-k
+ @tab --kernel
+ @tab Combined kernel name and version
+@item 
+--perl
+ @tab Extend pinkybar with your scripts written in perl, learn more from
+the Opt-in section.
+@item 
+--python
+ @tab Extend pinkybar with your scripts written in python, learn more
+from the Opt-in section.
+@item 
+--ruby
+ @tab Extend pinkybar with your scripts written in ruby, learn more from
+the Opt-in section.
+@item 
+--lua
+ @tab Extend pinkybar with your scripts written in lua, learn more from
+the Opt-in section.
+@item 
+--R
+ @tab Extend pinkybar with your scripts written in R, learn more from
+the Opt-in section.
+@item 
+--asm
+ @tab Extend pinkybar with assembly, learn more from the Opt-in section.
+@item 
+--lisp
+ @tab Extend pinkybar with your scripts written in lisp, learn more from
+the Opt-in section.
+@item 
+--ocaml
+ @tab Extend pinkybar with your scripts written in ocaml, learn more
+from the Opt-in section.
+@item 
+--rust
+ @tab Extend pinkybar with your scripts written in rust, learn more from
+the Opt-in section.
+@item 
+--go
+ @tab Extend pinkybar with your scripts written in go, learn more from
+the Opt-in section.
+@item 
+--cpp
+ @tab Extend pinkybar with your cpp, learn more from the Opt-in section.
+@item 
+--slang
+ @tab Extend pinkybar with your slang, learn more from the Opt-in
+section.
+@item 
+--tcl
+ @tab Extend pinkybar with your tcl, learn more from the Opt-in section.
+@item 
+-q
+ @tab --weather
+ @tab Show the temperature outside [argument - London,uk]
+@item 
+-U
+ @tab --uptime
+ @tab The system uptime
+@item 
+-w
+ @tab --loadavg
+ @tab The system average load for past 1, 5 and 15 minutes
+@item 
+-v
+ @tab --voltage
+ @tab The system voltage
+@item 
+-f
+ @tab --fans
+ @tab All system fans and their speed in RPM
+@item 
+-m
+ @tab --mobo
+ @tab Show the motherboard name and vendor
+@item 
+-d
+ @tab --mobotemp
+ @tab The motherboard temperature
+@item 
+-V
+ @tab --volume
+ @tab The sound volume level
+@item 
+-t
+ @tab --time
+ @tab The current time
+@item 
+-a
+ @tab --ipaddr
+ @tab The local ip address [argument - eth0]
+@item 
+-b
+ @tab --bandwidth
+ @tab The consumed internet bandwidth so far [argument - eth0]
+@item 
+-i
+ @tab --iface
+ @tab The current download and upload speed [argument - eth0]
+@item 
+-A
+ @tab --ipmac
+ @tab The NIC mac address [argument - eth0]
+@item 
+-B
+ @tab --ipmask
+ @tab The NIC subnet mask [argument - eth0]
+@item 
+-D
+ @tab --ipcast
+ @tab The NIC broadcast address [argument - eth0]
+@item 
+-E
+ @tab --iplookup
+ @tab Mini website IP lookup [website argument - google.com]
+@end multitable
+
+Be aware of the options that mention @strong{Uses assembly} are tested
+only on AMD and Intel CPUs (starting from pentium 4 onwards).
+
+The following options are available only in Linux:
+
+@multitable @columnfractions 0.15 0.14 0.70 
+@headitem 
+short option
+ @tab long option
+ @tab Descrtiption
+@item 
+-F
+ @tab --drivemodel
+ @tab The vendor name of your drive [argument - sda]
+@item 
+-G
+ @tab --nicinfo
+ @tab The NIC vendor and model [argument - eth0]
+@item 
+--nicdrv
+ @tab The NIC driver [argument - eth0]
+@item 
+-H
+ @tab --nicver
+ @tab The NIC version [argument - eth0]
+@item 
+-e
+ @tab --iplink
+ @tab The NIC link speed (useful for wireless/wifi) [argument - eth0]
+@item 
+-j
+ @tab --nicfw
+ @tab The NIC firmware [argument - eth0]
+@item 
+-h
+ @tab --wifiname
+ @tab The name of currently connected wifi/wireless network [argument -
+wlan0]
+@end multitable
+
+The following options are available only to FreeBSD and OpenBSD:
+
+@multitable @columnfractions 0.15 0.14 0.70 
+@headitem 
+short option
+ @tab long option
+ @tab Descrtiption
+@item 
+-j
+ @tab --nicgw
+ @tab The NIC gateway address [argument - re0]
+@item 
+-Z
+ @tab --swapused
+ @tab The used drive swap in MB
+@item 
+-F
+ @tab --swaperc
+ @tab The used drive swap in percentage
+@item 
+-h
+ @tab --swaptotal
+ @tab The total drive swap
+@item 
+-H
+ @tab --swapavail
+ @tab The available drive swap (total - used)
+@item 
+--wifiname
+ @tab The name of currently connected wifi/wireless network [argument -
+wlan0]
+@end multitable
+
+The following options are available only in OpenBSD:
+
+@multitable {short option} {long option} {The used ram in MB} 
+@headitem 
+short option
+ @tab long option
+ @tab Descrtiption
+@item 
+-l
+ @tab --ramused
+ @tab The used ram in MB
+@end multitable
+
+@iftex
+@bigskip@hrule@bigskip
+@end iftex
+@ifnottex
+------------------------------------------------------------------------
+@end ifnottex
+
+@node GNU Build System configure options
+@section GNU Build System (configure) options
+@anchor{#gnu-build-system-configure-options}
+Before the source code is passed to the compiler, you can enable/disable
+the following @strong{configure} options that will increase/reduce the
+number of dependencies required to compile the program.
+
+It's up to you to decide which features suit you best.
+
+@multitable @columnfractions 0.13 0.17 0.70 
+@headitem 
+To include
+ @tab Not to include
+ @tab Descrtiption
+@item 
+--with-x11
+ @tab --without-x11
+ @tab Enable it if you are using dwm.
+@item 
+--with-alsa
+ @tab --without-alsa
+ @tab To get the sound volume level.
+@item 
+--with-oss
+ @tab --without-oss
+ @tab To get the sound volume level in *BSD.
+@item 
+--with-net
+ @tab --without-net
+ @tab Enable the internet related options.
+@item 
+--with-libnl
+ @tab --without-libnl
+ @tab Enable the wifi related options regarding chipsets supporting the
+cfg80211/mac80211 modules (linux only).
+@item 
+--with-pci
+ @tab --without-pci
+ @tab To get the NIC vendor and model in linux
+@item 
+--with-dvd
+ @tab --without-dvd
+ @tab To get the cdrom/dvdrom vendor and model
+@item 
+--with-sensors
+ @tab --without-sensors
+ @tab Alternative way to get data from the sensors (linux only)
+@item 
+--with-apm
+ @tab --without-apm
+ @tab APM power and resource management for laptops (FreeBSD only)
+@item 
+--with-ncurses
+ @tab --without-ncurses
+ @tab Output the data to the terminal using the ncurses library, can be
+colorized
+@item 
+--with-perl
+ @tab --without-perl
+ @tab Extend pinkybar with your own crafted scripts written in perl
+@item 
+--with-lua
+ @tab --without-lua
+ @tab Extend pinkybar with your own crafted scripts written in lua
+@item 
+--with-ruby
+ @tab --without-ruby
+ @tab Extend pinkybar with your own crafted scripts written in ruby
+@item 
+--with-python2
+ @tab --without-python2
+ @tab Extend pinkybar with your own crafted scripts written in python2
+@item 
+--with-python3
+ @tab --without-python3
+ @tab Extend pinkybar with your own crafted scripts written in python3
+@item 
+--with-r
+ @tab --without-r
+ @tab Extend pinkybar with your own crafted scripts written in R
+@item 
+--with-assembly
+ @tab --without-assembly
+ @tab Extend pinkybar with assembly
+@item 
+--with-lisp
+ @tab --without-lisp
+ @tab Extend pinkybar with your own crafted scripts written in lisp
+@item 
+--with-ocaml
+ @tab --without-ocaml
+ @tab Extend pinkybar with your own crafted scripts written in ocaml
+@item 
+--with-rust
+ @tab --without-rust
+ @tab Extend pinkybar with your own crafted scripts written in rust
+@item 
+--with-go
+ @tab --without-go
+ @tab Extend pinkybar with your own crafted scripts written in go
+@item 
+--with-cpp
+ @tab --without-cpp
+ @tab Extend pinkybar with c++ program
+@item 
+--with-slang
+ @tab --without-slang
+ @tab Extend pinkybar with slang program
+@item 
+--with-tcl
+ @tab --without-tcl
+ @tab Extend pinkybar with tcl program
+@item 
+--with-weather
+ @tab --without-weather
+ @tab The temperature outside (some details must be provided)
+@item 
+api_key=`123458976'
+ @tab 
+ @tab API key obtained after registering yourself in the weather
+website, must be combined @strong{--with-weather}
+@item 
+--with-smartemp
+ @tab --without-smartemp
+ @tab Read the drive temperature from S.M.A.R.T cross-platform available
+@item 
+--with-drivetemp
+ @tab --without-drivetemp
+ @tab Read the drive temperature from S.M.A.R.T (linux only) uses curl
+@item 
+--with-drivetemp-light
+ @tab --without-drivetemp-light
+ @tab Read the drive temperature from S.M.A.R.T (linux only) light
+version
+@item 
+drive_port=`1234'
+ @tab 
+ @tab Different TCP port to listen to for the drive temperature, default
+one is 7634, must be combined @strong{--with-drivetemp} or
+@strong{--with-drivetemp-light}
+@item 
+--with-colours
+ @tab --without-colours
+ @tab Colorize the output data.
+@item 
+icons=/tmp
+ @tab 
+ @tab xbm icons that can be used by dzen2 for example. Discarded when
+@strong{--with-x11} is used
+@item 
+--with-mpd
+ @tab --without-mpd
+ @tab To see the currently played song name (if any).
+@item 
+--prefix=/tmp
+ @tab 
+ @tab The directory where the program will be installed
+@item 
+mobo_sensor=`dev.aibs.0'
+ @tab 
+ @tab FreeBSD motherboard sensor module name to use in the sysctl calls.
+Read the FreeBSD installation below
+@item 
+cpu_sensor=`dev.cpu.0.temperature'
+ @tab 
+ @tab FreeBSD cpu temperature module name to use in the sysctl calls .
+Read the FreeBSD installation below
+@end multitable
+
+By default, if @strong{no} options are passed, the program will be
+compiled with:
+
+@verbatim
+--with-net --with-pci
+@end verbatim
+
+Affects only FreeBSD users with laptops, @strong{--without-apm} will
+compile the program with acpi support to obtain the current battery
+life.
+
+@strong{--without-mpd} will compile the program with cmus support, the
+options syntax stays as is.
+
+The pci and sensors configure options will be discarded in *BSD.
+
+Affects only linux users with wifi/wireless chipsets, run
+@code{lsmod|grep 802} and see whether your chipset uses
+cfg80211/mac80211. If that's so you can rely on libnl and enable
+@strong{--with-libnl} configure options, otherwise your chipset probably
+still uses we/wext, so type @strong{--without-libnl}.
+
+Affects only linux users, @strong{--with-drivetemp} pretty much locks
+you down to hddtemp. You can adjust
+@strong{extra/scripts/drive-temperature.sh} and compile the program
+@strong{--with-smartemp}, so you can switch between hddtemp and
+smartmontools at any time without the need recompile pinkybar with
+different options. @strong{--with-smartemp} only cares for the existance
+of /tmp/pinkytemp file.
+
+@strong{--with-weather} is using
+@uref{http://openweathermap.org/current,this url}, register yourself
+there, create a new @uref{https://home.openweathermap.org/api_keys,API
+key}.
+
+Don't just rush to register yourself, read carefully what the ``Free''
+account limits are and take in account how often the program should call
+their api service. I'm not responsible if you exceeded the limits,
+you've been warned.
+
+@verbatim
+# Make sure it's working first
+# curl 'http://api.openweathermap.org/data/2.5/weather?q=London,uk&units=metric&APPID=28459ae16e4b3a7e5628ff21f4907b6f'
+
+# what to pass to configure
+--with-weather api_key='28459ae16e4b3a7e5628ff21f4907b6f'
+@end verbatim
+
+@iftex
+@bigskip@hrule@bigskip
+@end iftex
+@ifnottex
+------------------------------------------------------------------------
+@end ifnottex
+
+@node Installation for dwm
+@section Installation for dwm
+@anchor{#installation-for-dwm}
+
+@verbatim
+perl set.pl "distro"
+autoreconf --install --force
+
+./configure --prefix=$HOME/.cache --with-x11
+make
+make install
+@end verbatim
+
+Copy the code from extra/scripts/dwm.sh or @code{exec} it from
+@strong{xinitrc} or the script used to start dwm.
+
+@node Installation for xmonad or other WM
+@section Installation for xmonad (or other WM)
+@anchor{#installation-for-xmonad-or-other-wm}
+
+@verbatim
+# Copy the xbm icons
+mkdir -p --mode=700 $HOME/.xmonad/icons
+cp -r extra/xbm_icons/*.xbm $HOME/.xmonad/icons
+
+perl set.pl "distro"
+autoreconf --install --force
+
+# disable X11, point the location to the icons
+./configure --prefix=$HOME/.cache --without-x11 icons=$HOME/.xmonad/icons
+
+# compile 'n install
+make
+make install
+@end verbatim
+
+Copy the code from extra/scripts/xmonad.sh or @code{exec} it from
+@strong{xinitrc} or the script used to start xmonad.
+
+@node Installation in FreeBSD
+@section Installation in FreeBSD
+@anchor{#installation-in-freebsd}
+FreeBSD has no other way than using the module specific convention to
+query sysctl and obtain data from the sensors. Maintaining a list with
+all the possible module names and performing expensive sysctl calls in a
+loop to determine that X module is loaded into your system is no-go. Be
+prepared to spend a minute or two to find out some system information.
+
+Determine the motherboard sensor module name.
+
+@verbatim
+sysctl -a|grep 'aibs'
+
+dev.aibs.0.volt.0: 1356 850 1600
+dev.aibs.0.volt.1: 3344 2970 3630
+dev.aibs.0.volt.2: 5040 4500 5500
+dev.aibs.0.volt.3: 12278 10200 13800
+dev.aibs.0.temp.0: 39.0C 60.0C 95.0C
+dev.aibs.0.temp.1: 38.0C 45.0C 75.0C
+dev.aibs.0.fan.0: 1053 600 7200
+dev.aibs.0.fan.1: 1053 600 7200
+@end verbatim
+
+Copy only `dev.MODULE.NUMBER' (if there is any number at all) and paste
+it into the @strong{mobo_sensor} option below.
+
+Do the same for your cpu temperature, copy and paste the variable as is.
+@strong{dev.cpu.0.temperature} below is provied as example.
+
+@verbatim
+perl set.pl "freebsd"
+autoreconf --install --force
+
+./configure --prefix=$HOME/.cache --with-x11 --without-alsa --with-oss mobo_sensor='dev.aibs.0' cpu_sensor='dev.cpu.0.temperature'
+make
+make install
+@end verbatim
+
+Send a request to the FreeBSD mailing list and request the OpenBSD
+sensors API to be ported.
+
+@node Installation in OpenBSD
+@section Installation in OpenBSD
+@anchor{#installation-in-openbsd}
+Before proceeding, you'll have to:
+
+@verbatim
+# To detect the newer compiler that you are
+# about to install
+sed -i 's/#AC_PROG_CC(/AC_PROG_CC(/g' configure.ac
+
+ls /usr/local/bin/automake-*
+ls /usr/local/bin/autoconf-*
+
+# Then replace the numbers below
+export AUTOCONF_VERSION=2.69
+export AUTOMAKE_VERSION=1.15
+
+# Your call, gcc or llvm ?
+pkg_add gcc
+
+# after that:
+perl set.pl "openbsd"
+autoreconf --install --force
+
+./configure --prefix=$HOME/.cache --without-alsa --with-oss
+make
+make install
+@end verbatim
+
+@node pinky curses installation
+@section pinky curses installation
+@anchor{#pinky-curses-installation}
+Step one, compile pinky-bar @strong{--with-ncurses}, so the output to be
+formated in a way that pinky-curses can parse and colorize.
+
+@verbatim
+perl set.pl "distro"
+autoreconf --install --force
+
+# disable X11, enable the colours and ncurses opts.
+./configure --prefix=$HOME/.cache --without-x11 --with-alsa --with-colours --with-ncurses
+
+# compile 'n install
+make
+make install
+@end verbatim
+
+Step two, compile and install pinky-curses -
+https://notabug.org/void0/pinky-curses
+
+Copy the code from extra/scripts/pinky-curses.sh
+
+@node pinky urxvt
+@section pinky urxvt
+@anchor{#pinky-urxvt}
+What a coincidence, pinky-urxvt is my 3rd urxvt extension and 3rd member
+of the pinky family.
+
+The sole purpose of this urxvt extension is to make it easy for you to
+keep track of things that you are interested to monitor while hacking
+your way something in the terminal.
+
+Link - https://notabug.org/void0/pinky-urxvt
+
+@float
+@image{https://notabug.org/void0/pinky-urxvt/raw/master/2,,,,png}
+@end float
+
+pinky-urxvt, and pinky-curses are not tied to pinky-bar.
+
+@node Installation for anything else
+@section Installation for anything else
+@anchor{#installation-for-anything-else}
+pinky-bar is no longer tied to Window Managers only. With the addition
+of ``without colours'', the output can be shown in any program, just
+bear in mind that the more options you've supplied the more system
+information will be shown.
+
+The tmux status bar in action:
+
+@float
+@image{img/pic4,,,,png}
+@end float
+
+The installation steps:
+
+@verbatim
+perl set.pl "distro"
+autoreconf --install --force
+
+./configure --prefix=$HOME/.cache --without-x11 --without-colours
+make
+make install
+@end verbatim
+
+By choosing this 3rd installation method it is up to you where, how to
+start and use the system information that's produced by pinky-bar.
+
+@iftex
+@bigskip@hrule@bigskip
+@end iftex
+@ifnottex
+------------------------------------------------------------------------
+@end ifnottex
+Replace @strong{distro} with archlinux, debian, gentoo, slackware, rhel,
+frugalware, angstrom. Here's some short distros list of some popular
+distros that are based on another one:
+
+@itemize
+@item
+[x] archlinux based distros: parabola, chakra, manjaro
+@item
+[x] debian based distros: ubuntu, linux mint, trisquel, back track, kali
+linux, peppermint linux, solusos, crunchbang, deepin, elementary os, and
+the rest *buntu based distros
+@item
+[x] gentoo based distros: funtoo, sabayon, calculate linux
+@item
+[x] slackware
+@item
+[x] rhel based distros: opensuse (uses rpm), fedora, fuduntu, mandriva,
+mandrake, viperr, mageia
+@item
+[x] frugalware
+@item
+[x] angstrom
+@end itemize
+
+Cannot list the *BSD flavours as ``distros'', so they deserve own
+options:
+
+@itemize
+@item
+[x] freebsd
+@item
+[x] openbsd
+@end itemize
+
+@iftex
+@bigskip@hrule@bigskip
+@end iftex
+@ifnottex
+------------------------------------------------------------------------
+@end ifnottex
+
+@node Using configuration file
+@section Using configuration file
+@anchor{#using-configuration-file}
+@strong{~/.pinky} is the location of the configuration file. It uses the
+same short and long command line options.
+
+I do advise you to use the long options syntax.
+
+If any option depends on argument, don't put any space between the
+option and the argument.
+
+Use one option per line. Contrary to your shell, the ``parser'' won't
+expand ~/my_script.pl to point to /home/sweethome/my_script.pl
+
+@verbatim
+--weather=London,uk
+--coresload
+--cputemp
+--ramperc
+--driveperc
+--packages
+--kernel
+--voltage
+--fans
+--mobo
+--mobotemp
+--perl=/home/sweethome/my_script.pl
+@end verbatim
+
+Execute the program without supplying any command line options and it
+will parse the configuration file.
+
+@iftex
+@bigskip@hrule@bigskip
+@end iftex
+@ifnottex
+------------------------------------------------------------------------
+@end ifnottex
+
+@node Linux Mandatory requirements
+@section Linux Mandatory requirements
+@anchor{#linux-mandatory-requirements}
+@itemize
+@item
+gcc/clang
+@item
+glibc
+@item
+autoconf
+@item
+automake
+@item
+m4
+@item
+gawk
+@item
+perl
+@item
+@strong{as} from binutils
+@end itemize
+
+@node *BSD Mandatory requirements
+@section *BSD Mandatory requirements
+@anchor{#bsd-mandatory-requirements}
+@itemize
+@item
+gcc/clang
+@item
+autoconf
+@item
+automake
+@item
+autoconf-wrapper
+@item
+automake-wrapper
+@item
+autoconf-archive
+@item
+argp-standalone
+@item
+libtool
+@item
+m4
+@item
+gawk
+@item
+perl
+@item
+@strong{as} from binutils
+@end itemize
+
+Some llvm and gcc versions will not check for headers and libraries in
+/usr/local, and you might get something like @strong{ld cannot find
+-largp}, if that's the case for you, you should export the following
+environment variables:
+
+@verbatim
+export LDFLAGS='-L/usr/local/lib'
+export CFLAGS='-I/usr/local/include'
+@end verbatim
+
+After editing the wrong prototype I managed to stumble upon a bug in
+OpenBSD's own libc.
+
+@strong{Warning !!! OpenBSD users !!!}
+
+The majority of SCN* macros differs from their PRI* cousins. And I
+cannot guarantee the accuracy of fixed width integers when OpenBSD own
+libc managed to use different format specifiers. Read
+extra/misc/openbsd_bugs.md for more details.
+
+@node Opt-in requirements
+@section Opt-in requirements
+@anchor{#opt-in-requirements}
+Linux camp:
+
+The internet related options rely on headers provided iproute2. By
+default the program will try to compile with those headers included. If
+for any reason you would like to compile the program without internet
+related options, then pass @strong{--without-net} to configure.
+
+@itemize
+@item
+iproute2
+@end itemize
+
+wifi/wireless chipsets supporting mac80211/cfg80211:
+
+@itemize
+@item
+libnl (>= 3.0)
+@item
+pkg-config
+@end itemize
+
+In Gentoo there are two versions of pkg-config. The first one is named
+dev-util/pkgconfig and the second one is dev-ruby/pkg-config. In order
+to use the first one, you'll have to export the pkg-config path to the
+following environment variable:
+
+@verbatim
+export PKG_CONFIG_PATH=/usr/bin/pkg-config
+@end verbatim
+
+Also you'll have to edit @strong{m4/extend.m4} and edit the line
+@code{PKG_CHECK_MODULES([RUBY], [ruby-2.2 >= 2.2]} to point to the
+correct ruby version that you have installed.
+
+Then pass @strong{--with-libnl} to configure.
+
+To get the NIC vendor and model names:
+
+@itemize
+@item
+pciutils
+@end itemize
+
+Alternative way to obtain data from the sensors:
+
+@itemize
+@item
+lm_sensors
+@end itemize
+
+To read the drive temperature from S.M.A.R.T @strong{--with-drivetemp}:
+
+@itemize
+@item
+hddtemp
+@item
+curl
+@end itemize
+
+To read the drive temperature from S.M.A.R.T
+@strong{--with-drivetemp-light}:
+
+@itemize
+@item
+hddtemp
+@end itemize
+
+The ``light'' version does not rely on curl, and will not force -O0
+CFLAGS.
+
+@verbatim
+# --with-drivetemp-light
+0.00s user 0.00s system 15% cpu 0.006
+
+# --with-drivetemp
+0.01s user 0.00s system 72% cpu 0.008
+@end verbatim
+
+Try running hddtemp to see if it detects your drive, depending if it has
+temperature sensor in first place:
+
+@verbatim
+sudo hddtemp /dev/sda
+
+WARNING: Drive /dev/sda doesn't appear in the database of supported drives
+WARNING: But using a common value, it reports something.
+WARNING: Note that the temperature shown could be wrong.
+WARNING: See --help, --debug and --drivebase options.
+WARNING: And don't forget you can add your drive to hddtemp.db
+/dev/sda: Corsair Force GT:  23°C or °F
+@end verbatim
+
+The message is pretty clear ``don't forget to add your drive to
+hddtemp.db'', first run the debug command to see which field is
+responsible to report your drive temperature, it should be in the range
+of 190 - 200:
+
+@verbatim
+# Copy the Model: line
+
+sudo hddtemp --debug /dev/sda
+
+================= hddtemp 0.3-beta15 ==================
+Model: Corsair Force GT
+
+field(1)         = 0
+field(5)         = 0
+field(9)         = 253
+field(12)        = 237
+field(171)       = 0
+field(172)       = 0
+field(174)       = 147
+field(177)       = 1
+field(181)       = 0
+field(182)       = 0
+field(187)       = 0
+field(194)       = 22
+field(195)       = 0
+field(196)       = 0
+field(201)       = 0
+field(204)       = 0
+field(230)       = 100
+field(231)       = 0
+field(233)       = 130
+field(234)       = 216
+field(241)       = 216
+field(242)       = 151
+@end verbatim
+
+Open up @strong{/usr/share/hddtemp/hddtemp.db} and append the Model:
+line that you copied earlier with the correct field that reports your
+drive temperature.
+
+@verbatim
+"Corsair Force GT" 194 C "Corsair Force GT 120GB SSD"
+@end verbatim
+
+Next run hddtemp in daemon mode so we can request the temperature back:
+
+@verbatim
+sudo hddtemp -d /dev/sda
+@end verbatim
+
+Open up your browser and navigate to 127.0.0.1:7634 and you'll get
+instant temperature report back to you.
+
+The ``init'' lock-in for those of you that cannot choose between udev or
+eudev puts me in position not rely on libatasmart, regardless how neat
+the library is. There is stripped example program in extra/misc/skdump.c
+if you are curious to check and test libatasmart.
+
+Linux camp end.
+
+To read the drive temperature from S.M.A.R.T @strong{--with-smartemp}:
+
+@itemize
+@item
+smartmontools
+@end itemize
+
+smartmontools are not mandatory in OpenBSD, @code{atactl} does the same
+job.
+
+Execute the following command as root @code{visudo} and append:
+
+@verbatim
+# 'frost' is my computer username
+frost ALL=NOPASSWD:/usr/sbin/smartctl
+@end verbatim
+
+Copy the code from extra/scripts/drive-temperature.sh or @code{exec} it
+from @strong{xinitrc} or the script used to start your DE/WM.
+
+To extend pinkybar with your own crafted
+perl/python/ruby/lua/assembly/R/ocaml/lisp/rust/go/c++/slang/tcl script:
+
+@itemize
+@item
+perl
+@item
+python == 2.7 (--with-python2)
+@item
+python >= 3.3 (--with-python3)
+@item
+lua >= 5.1
+@item
+ruby >= 2.0 and pkg-config
+@item
+R
+@item
+assembly (the @strong{as} program from binutils)
+@item
+ecl for lisp
+@item
+ocaml
+@item
+rust
+@item
+go
+@item
+slang
+@item
+tcl
+@end itemize
+
+Have a look at extra/scripts, the examples there will teach you how to
+write the most basic scripts in order to extend pinkybar in
+python/perl/ruby/lua/R/assembly/lisp/ocaml/rust/go/c++/slang/tcl. You
+can use all languages simultaneously.
+
+Please, please do @strong{NOT} export or set PYTHONPATH on it's own
+line.
+
+@code{WRONG}:
+
+@verbatim
+export PYTHONPATH=/meh
+pinkybar --python my_script
+@end verbatim
+
+@code{WRONG}:
+
+@verbatim
+PYTHONPATH=/meh
+pinkybar --python my_script
+@end verbatim
+
+Correct PYTHONPATH usage:
+
+@verbatim
+# ~/chewbacca is the path where pinky.py resides
+# ~/chewbacca/pinky.py
+
+# python2
+PYTHONPATH=~/chewbacca ~/pinkybar --python pinky
+
+# python3
+# executed only once
+fuNky=$(python3 -c 'import sys;print(":".join([x for x in sys.path]))')
+
+# executed in a loop
+PYTHONPATH=$fuNky:~/chewbacca ~/pinkybar --python pinky
+@end verbatim
+
+@strong{--with-perl}:
+
+@verbatim
+~/pinkybar --perl ~/chewbacca/pinky.pl
+@end verbatim
+
+@strong{--with-ruby}:
+
+@verbatim
+~/pinkybar --ruby ~/chewbacca/pinky.rb
+@end verbatim
+
+@strong{--with-lua}:
+
+Non byte-compiled script:
+
+@verbatim
+~/pinkybar --lua ~/chewbacca/pinky.lua
+@end verbatim
+
+Once done editing your script, you can byte-compile it:
+
+@verbatim
+luac -o pinky.luac pinky.lua
+~/pinkybar --lua ~/chewbacca/pinky.luac # <-- .luac and not .lua
+@end verbatim
+
+@strong{--with-r}
+
+@verbatim
+~/pinkybar --R ~/chewbacca/pinky.R
+@end verbatim
+
+@strong{--with-assembly}
+
+@verbatim
+~/pinkybar --asm
+@end verbatim
+
+@strong{--with-lisp}
+
+@verbatim
+~/pinkybar --lisp ~/chewbacca/pinky.lisp
+@end verbatim
+
+@strong{--with-ocaml}
+
+The source code resides in the @strong{src} folder under the name of
+@strong{pinky.ml}
+
+@verbatim
+~/pinkbar --ocaml
+@end verbatim
+
+@strong{--with-rust}
+
+The source code resides in the @strong{src} folder under the name of
+@strong{pinky.rs}
+
+@verbatim
+~/pinkbar --rust
+@end verbatim
+
+@strong{--with-go}
+
+The source code resides in the @strong{src} folder under the name of
+@strong{pinky.go}
+
+@verbatim
+~/pinkbar --go
+@end verbatim
+
+@strong{--with-cpp}
+
+The source code resides in the @strong{src} folder under the name of
+@strong{c++.cpp}
+
+@verbatim
+~/pinkbar --cpp
+@end verbatim
+
+@strong{--with-slang}
+
+@verbatim
+~/pinkybar --slang ~/pinky.sl
+@end verbatim
+
+@strong{--with-tcl}
+
+@verbatim
+~/pinkybar --tcl ~/pinky.tcl
+@end verbatim
+
+@iftex
+@bigskip@hrule@bigskip
+@end iftex
+@ifnottex
+------------------------------------------------------------------------
+@end ifnottex
+To get the sound volume level:
+
+@itemize
+@item
+alsa-utils
+@item
+alsa-lib
+@end itemize
+
+Then pass @strong{--with-alsa} to configure.
+
+*BSD users can use the baked OSS instead, pass @strong{--without-alsa
+--with-oss} to configure instead.
+
+To output the data to the terminal using the ncurses library:
+
+@itemize
+@item
+ncurses
+@end itemize
+
+To get the vendor and model name of your cdrom/dvdrom/blu-ray:
+
+@itemize
+@item
+libcdio
+@item
+libcddb
+@end itemize
+
+In linux @strong{--without-dvd} will still compile the program with dvd
+support. Except it will be limited only to dvd support, it will try to
+parse the sr0 vendor and model name detected by the kernel.
+
+The weather related options, please go back and read @strong{Don't just
+rush to register yourself}:
+
+@itemize
+@item
+curl
+@item
+gzip
+@end itemize
+
+@strong{Warning, I'm not responsible for any lawsuit towards you,
+neither encourage you to pirate content that is not licensed as free
+and/or for fair use.}
+
+To see the currently played song name @strong{--with-mpd}:
+
+Server side:
+
+@itemize
+@item
+mpd (can be build with soundcloud support)
+@end itemize
+
+Client side:
+
+@itemize
+@item
+libmpdclient
+@item
+mpc/ncmpc/ncmpcpp, @uref{http://mpd.wikia.com/wiki/Clients,and the rest}
+@end itemize
+
+To see the currently played song name @strong{--without-mpd}:
+
+@itemize
+@item
+cmus
+@end itemize
+
+The ``soundcloud'' alternative that is supported in cmus and your mpd
+client will be to download @strong{.m3u/.pls} files according to the
+@uref{https://www.internet-radio.com,radio stream station} that you are
+interested to listen.
+
+The FreeBSD users will notice that ``mpd'' is named ``musicpd''.
+
+If you've never used mpd before copy the example configuration from
+extra/mpd according to your OS.
+
+Keep an eye on the @strong{log file size} if you are using raspberry pi
+(or equivalent device) that streams the music, make sure that it's
+deleted automatically if it exceeds some pre-defined size.
+
+@iftex
+@bigskip@hrule@bigskip
+@end iftex
+@ifnottex
+------------------------------------------------------------------------
+@end ifnottex
+
+@node WM specific requirements
+@section WM specific requirements
+@anchor{#wm-specific-requirements}
+If you would like the output to be shown in your Window Manager, those
+are the following requirements:
+
+for non-dwm WM:
+
+@itemize
+@item
+dzen2
+@end itemize
+
+for dwm:
+
+@itemize
+@item
+libx11
+@item
+xorg-server
+@end itemize
+
+use @strong{--without-colours} to skip the following step:
+
+@itemize
+@item
+dwm compiled with statuscolor patch. The colours in use are specified in
+your dwm config.h
+@end itemize
+
+@iftex
+@bigskip@hrule@bigskip
+@end iftex
+@ifnottex
+------------------------------------------------------------------------
+@end ifnottex
+
+@node OCAML lang
+@section OCAML lang
+@anchor{#ocaml-lang}
+Before invoking any of the installation commands you'll have to edit
+@strong{src/Makefail.skel}:
+
+@verbatim
+pinkybar_SOURCES = pinky.ml \
+@end verbatim
+
+@iftex
+@bigskip@hrule@bigskip
+@end iftex
+@ifnottex
+------------------------------------------------------------------------
+@end ifnottex
+
+@node Rust lang
+@section Rust lang
+@anchor{#rust-lang}
+The source code that you should edit is in
+@strong{extra/scripts/pinky.rs}, but you'll have to edit
+@strong{src/Makefail.skel} and add the following at the end:
+
+@verbatim
+pinkybar_LDADD = pinky.a
+@end verbatim
+
+@iftex
+@bigskip@hrule@bigskip
+@end iftex
+@ifnottex
+------------------------------------------------------------------------
+@end ifnottex
+
+@node Go lang
+@section Go lang
+@anchor{#go-lang}
+The source code that you should edit is in @strong{src/pinky.go}, but
+you'll have to edit @strong{src/Makefail.skel} and add the following at
+the end:
+
+@verbatim
+pinkybar_LDADD = pinky2.a
+@end verbatim
+
+@iftex
+@bigskip@hrule@bigskip
+@end iftex
+@ifnottex
+------------------------------------------------------------------------
+@end ifnottex
+
+@node Assembly
+@section Assembly
+@anchor{#assembly}
+The source code that you should edit is in
+@strong{extra/scripts/pinky.s}, but you'll have to edit
+@strong{src/Makefail.skel} add append the following to pinkybar_SOURCES:
+
+@verbatim
+../extra/scripts/pinky.s        \
+@end verbatim
+
+@node REPORTING BUGS
+@chapter REPORTING BUGS
+@anchor{#reporting-bugs}
+Report bugs to https://gitlab.com/void0/pinky-bar
+
+@node COPYRIGHT
+@chapter COPYRIGHT
+@anchor{#copyright}
+Copyright (c) 2016 Aaron Caffrey@*
+Free use of this software is granted under the terms of the GNU General
+Public License (GPL).
+
+@bye
