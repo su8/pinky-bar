@@ -155,6 +155,7 @@ The following options are available only in OpenBSD:
 |--------------|-------------|--------------------------------------------------------------------|
 | -l           | --ramused   | The used ram in MB                                                 |
 
+
 ---
 
 ## GNU Build System (configure) options
@@ -455,7 +456,7 @@ Execute the program without supplying any command line options and it will parse
 * perl
 * **as** from binutils
 
-Some llvm and gcc versions will not check for headers and libraries in /usr/local, if that's the case for you, you should export the following environment variables:
+Some llvm and gcc versions will not check for headers and libraries in /usr/local, and you might get something like **ld cannot find -largp**, if that's the case for you, you should export the following environment variables:
 
 ```bash
 export LDFLAGS='-L/usr/local/lib'
@@ -845,4 +846,8 @@ pinkybar_LDADD = pinky2.a
 
 ## Assembly
 
-The source code that you should edit is in **extra/scripts/pinky.s**
+The source code that you should edit is in **extra/scripts/pinky.s**, but you'll have to edit **src/Makefail.skel** add append the following to pinkybar_SOURCES:
+
+```bash
+../extra/scripts/pinky.s        \
+```
