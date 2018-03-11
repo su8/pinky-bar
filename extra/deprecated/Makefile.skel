@@ -1,0 +1,87 @@
+# 10/29/2016
+
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 2 of the License, or
+# (at your option) any later version.
+
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+
+# You should have received a copy of the GNU General Public License
+# along with this program; if not, write to the Free Software
+# Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
+# MA 02110-1301, USA.
+
+# The GNU/Make use in here is to
+# the cover our back and do most of
+# the heavy lifting for us.
+# When dealing with different operating
+# systems the things get pretty ugly quickly.
+# I did learned my lesson with the previous bash
+# bootstrap script, including the difference
+# between BSD and GNU sed versions.
+
+
+define stay_portable
+	$(shell perl -Mstrict -Mwarnings -e $(1))
+endef
+
+define stay_portable2
+	$(shell perl -Mstrict -Mwarnings -pi -e $(1) $(2))
+endef
+
+define reflace
+	$(call stay_portable2,'if ($$. == 10) {$$_="";print "$(1)\n";}',$(2))
+endef
+
+define reflace2
+	$(call stay_portable2,'s|$(1)|$(2)|;',$(3))
+endef
+
+define reflace3
+	$(call stay_portable2,'s|$(1)|$(2)|;s|$(3)|$(4)|;',$(5))
+endef
+
+
+BSDCF := -D_DEFAULT_SOURCE -L/usr/local/lib
+POSIXCF := -D_POSIX_C_SOURCE=200112L
+BSDLIBS :=
+AMCF :=
+SRCTOAPPEND :=
+OSENTERED := $(strip $(call stay_portable,'print uc "${ARG1}";'))
+DEFTITS := m4_define\(\[OSENTERED\], \[$(OSENTERED)\]\)
+
+
+# make ARG1=bar logic
+ifeq ($(findstring FREE,$(OSENTERED)),FREE)
+	BSDLIBS += -largp -ldevstat
+	AMCF += $(BSDCF)
+	DEFTITS += m4_define\(\[FREEBZD\], \[tits\]\)
+	SRCTOAPPEND += freebsd_functions.c include/freebzd.h
+
+else
+	ifeq ($(findstring OPEN,$(OSENTERED)),OPEN)
+		BSDLIBS += -largp -lossaudio
+		AMCF += $(BSDCF)
+		DEFTITS += m4_define\(\[OPENBZD\], \[forSure\]\)
+		SRCTOAPPEND += openbsd_functions.c include/openbzd.h
+
+	else
+		AMCF += $(POSIXCF)
+		DEFTITS += m4_define\(\[LINUKS\], \[cryMeAriver\]\)
+		SRCTOAPPEND += linux_functions.c
+
+	endif
+endif
+
+
+all:
+	$(call reflace,$(DEFTITS),configure.ac)
+	$(call reflace3,{amCF},$(AMCF),{srcFiles},$(SRCTOAPPEND),src/Makefile.am)
+	$(call reflace2,{bzdlibs},$(BSDLIBS),src/Makefile.am)
+	# ...
+
+.PHONY: all
