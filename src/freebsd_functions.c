@@ -25,23 +25,15 @@
 #include <vm/vm_param.h>
 #include <devstat.h>
 
+#if GOT_APM == 1 && defined(HAVE_MACHINE_APM_BIOS_H)
+#include <fcntl.h>
+#include <sys/ioctl.h>
+#include <machine/apm_bios.h>
+#endif /* GOT_APM && HAVE_MACHINE_APM_BIOS_H */
+
 #include "include/headers.h"
 #include "include/freebzd.h"
 
-/* bsdhwmon is nowhere closer to lm_sensors,
- * which unfortunately is not supported in BSD.
- *
- * My initial attempt was to add alternative via lm_sensors
- * to the FreeBSD users, because the unpredictable sensors 
- * and their specific naming which has to be used in order to obtain the
- * sensors values in FreeBSD pretty much restricts some of the code only
- * to ASUS motherboards.
- *
- * In linux regardless of the modules, their names, the sensors reports will
- * always be stored in same filename in the virtual filesystem. Now you
- * understand how hard it is to make general assumption how to obtain such
- * values in FreeBSD.
-*/
 
 void 
 get_ram(char *str1, uint8_t num) {
@@ -80,40 +72,13 @@ get_ram(char *str1, uint8_t num) {
         (uintmax_t)bufferram / MB, "MB");
       break;
     case 5:
-      FILL_UINT_ARR(str1, (used * 100) / utotal);
+      FILL_UINT_ARR(str1,
+        ((0 != utotal) ? ((used * 100) / utotal) : 0));
       break;
   }
-
 }
 
 
-void
-get_loadavg(char *str1) {
-  double up[3];
-  if (-1 == getloadavg(up, 3)) {
-  	FUNC_FAILED("getloadavg()");
-  }
-  FILL_ARR(str1, "%.2f %.2f %.2f",
-    (float)up[0], (float)up[1], (float)up[2]);
-}
-
-
-/* 
-  sysctl -a|grep 'aibs'
-  dev.aibs.0.volt.0: 1356 850 1600
-  dev.aibs.0.volt.1: 3344 2970 3630
-  dev.aibs.0.volt.2: 5040 4500 5500
-  dev.aibs.0.volt.3: 12278 10200 13800
-  dev.aibs.0.temp.0: 39.0C 60.0C 95.0C
-  dev.aibs.0.temp.1: 38.0C 45.0C 75.0C
-  dev.aibs.0.fan.0: 1053 600 7200
-  dev.aibs.0.fan.1: 1053 600 7200
-  dev.aibs.0.%parent: acpi0
-  dev.aibs.0.%pnpinfo: _HID=ATK0110 _UID=16843024
-  dev.aibs.0.%location: handle=\_SB_.PCI0.SBRG.ASOC
-  dev.aibs.0.%driver: aibs
-  dev.aibs.0.%desc: ASUSTeK AI Booster (ACPI ASOC ATK0110)
-*/
 void
 get_voltage(char *str1) {
   u_int  vol0[3], vol1[3], vol2[3], vol3[3];
@@ -139,12 +104,22 @@ get_voltage(char *str1) {
 
 
 void
+get_cpu_temp(char *str1) {
+  u_int temp = 0;
+  size_t len = sizeof(temp);
+
+  SYSCTLVAL(CPU_TEMP, &temp);
+  get_temp(str1, (uint_least32_t)temp);
+}
+
+
+void
 get_mobo_temp(char *str1) {
   u_int  temp[3];
   memset(temp, 0, sizeof(temp));
   size_t len = sizeof(temp);
 
-  SYSCTLVAL("dev.aibs.0.temp.1", &temp);
+  SYSCTLVAL(MOBO_VAL("temp.1"), &temp);
   get_temp(str1, (uint_least32_t)temp[0]);
 }
 
@@ -154,7 +129,7 @@ get_mobo(char *str1) {
   char temp[VLA];
   size_t len = sizeof(temp);
 
-  SYSCTLVAL("dev.aibs.0.%desc", &temp);
+  SYSCTLVAL(MOBO_VAL("%desc"), &temp);
   FILL_STR_ARR(1, str1, temp);
 }
 
@@ -182,20 +157,20 @@ get_statio(char *str1, char *str2) {
     return;
   }
 
-  memset(&stats, 0, sizeof(stats));
+  memset(&stats, 0, sizeof(struct statinfo));
   stats.dinfo = (struct devinfo *)malloc(sizeof(struct devinfo));
   if (NULL == stats.dinfo) {
     return;
   }
 
-  if(-1 == devstat_getdevs(NULL, &stats)) {
+  if(-1 == (devstat_getdevs(NULL, &stats))) {
     goto error;
   }
 
   num_devices = stats.dinfo->numdevs;
-  if (-1 == devstat_selectdevs(&dev_select, &num_selected, &num_selections,
+  if (-1 == (devstat_selectdevs(&dev_select, &num_selected, &num_selections,
     &select_generation, stats.dinfo->generation, stats.dinfo->devices, num_devices,
-    NULL, 0, NULL, 0, DS_SELECT_ADD, 16, 0)) {
+    NULL, 0, NULL, 0, DS_SELECT_ADD, 16, 0))) {
     goto error;
   }
 
@@ -230,15 +205,34 @@ error:
 }
 
 
-/*
- Looks like acpi is the only way
- in FreeBSD to obtain battery information.
-  hw.acpi.acline: 1
-  hw.acpi.battery.life: 100
-  hw.acpi.battery.time: -1
-  hw.acpi.battery.state: 0
-  hw.acpi.battery.units: 1
+/* https://www.freebsd.org/doc/handbook/acpi-overview.html
+    ACPI_BATT_STAT_NOT_PRESENT
 */
+#if GOT_APM == 1 && defined(HAVE_MACHINE_APM_BIOS_H)
+void
+get_battery(char *str1) {
+  struct apm_info bstate;
+  int fd = 0;
+  uintmax_t dummy = 0;
+
+  FILL_STR_ARR(1, str1, "Null");
+  memset(&bstate, 0, sizeof(struct apm_info));
+
+  if (0 != (fd = open("/dev/apm", O_RDONLY))) {
+    return;
+  }
+  if (0 != (ioctl(fd, APMIO_GETINFO, &bstate))) {
+    CLOSE_FD(fd);
+    return;
+  }
+  CLOSE_FD(fd);
+
+  dummy = (uintmax_t)bstate.ai_batt_life;
+  FILL_UINT_ARR(str1, (101 < dummy ? 0 : dummy));
+}
+
+#else
+
 void 
 get_battery(char *str1) {
   u_int dummy = 0;
@@ -249,6 +243,7 @@ get_battery(char *str1) {
   perc = (uint_least32_t)dummy;
   FILL_ARR(str1, ULINT, (101 < perc ? 0 : perc));
 }
+#endif /* GOT_APM && HAVE_MACHINE_APM_BIOS_H */
 
 
 void
@@ -257,7 +252,9 @@ get_swapp(char *str1, uint8_t num) {
   u_int pagesize = 0, dummy = 0;
   uintmax_t total = 0, used = 0, pz = 0;
   int mib[20];
+
   memset(mib, 0, sizeof(mib));
+  memset(&xsw, 0, sizeof(struct xswdev));
   size_t mibi = sizeof(mib) / sizeof(mib[0]);
   size_t len = sizeof(dummy), sisi = sizeof(struct xswdev);
 
@@ -289,13 +286,8 @@ get_swapp(char *str1, uint8_t num) {
       FILL_ARR(str1, FMT_UINT" %s", ((used * pz) / MB), "MB");
       break;
     case 4:
-      {
-        if (0 != total) {
-          FILL_ARR(str1, FMT_UINT"%%", (used * 100) / total);
-        } else {
-          FILL_STR_ARR(1, str1, "0 %");
-        }
-      }
+      FILL_ARR(str1, FMT_UINT"%%",
+        ((0 != total) ? ((used * 100) / total) : 0));
       break;
   }
 }

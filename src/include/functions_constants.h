@@ -32,7 +32,7 @@
 #define USINT "%"PRIu8
 #define SCAN_UFINT "%"SCNuFAST16
 #define SCAN_ULINT "%"SCNuLEAST32
-#define SCAN_UINTX "%"PRIxMAX /* hex */
+#define SCAN_UINTX "%"SCNxMAX /* hex */
 
 /* stay away from va_list */
 #define FILL_ARR(x, z, ...) (snprintf(x, VLA, z, __VA_ARGS__))
@@ -54,11 +54,23 @@
 /* voltage and fans */
 #if defined(__linux__)
 #define VOLTAGE_FILE(x) (HWMON_DIR"/in"x"_input")
-#else
-#define VOLTAGE_FILE(x) "dev.aibs.0.volt."x
-#endif /* __linux__ */
 #define FAN_FILE HWMON_DIR"/fan"UFINT"_input"
-#define FAN_STR(x, z) (FILL_ARR(x, "%s"UFINT, "dev.aibs.0.fan.", z))
+#endif /* __linux__ */
+
+#if defined(__FreeBSD__)
+
+#if defined(MOBO_MODL) && defined(CPU_MODL)
+#define MOBO_VAL(x) MOBO_MODL "." x
+#define CPU_TEMP CPU_MODL
+#else
+#define MOBO_VAL(x) "dev.aibs.0."x
+#define CPU_TEMP "dev.cpu.0.temperature"
+
+#endif /* MOBO_MODL && CPU_MODL */
+
+#define VOLTAGE_FILE(x) MOBO_VAL("volt") "." x
+#define FAN_STR(x, z) (FILL_ARR(x, "%s"UFINT, MOBO_VAL("fan") ".", z))
+#endif /* __FreeBSD__ */
 
 /* battery reports */
 #define BATTERY_NUM(x, y, z) (FILL_ARR(x, "%s"USINT"%s%s", \
@@ -88,6 +100,10 @@
 #define RECOMPILE_WITH(x) (exit_with_err(ERR, "recompile the program --with-" x))
 
 /* Let the preprocessor Do Repeat Myself */
+#define CHECK_SSCANF(buf, x, z) \
+  if (EOF == (sscanf(buf, x, z))) { \
+    exit_with_err(ERR, "sscanf() EOF"); \
+  }
 
 #define CHECK_FSCANF(fp, x, z) \
   if (EOF == (fscanf(fp, x, z))) { \
@@ -120,9 +136,21 @@
     exit_with_err(CANNOT_CLOSE, x); \
   }
 
+#define CLOSE_FD(fd) \
+  if (-1 == (close(fd))) { \
+    exit_with_err(ERR, CANNOT_CLOSE); \
+  }
+
+#define CLOSE_FD2(fd, res) \
+  if (-1 == (close(fd))) { \
+    freeaddrinfo(res); \
+    exit_with_err(ERR, CANNOT_CLOSE); \
+  }
+
 /* How many fans to try for detection */
 #define MAX_FANS 20
 
 #define STREQ(x, z) (0 == (strcmp(x, z)))
+#define FPRINTF(...) (fprintf(stderr, __VA_ARGS__))
 
 #endif /* CONSTANTS2_H_ */

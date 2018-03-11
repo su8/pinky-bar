@@ -20,10 +20,12 @@
 #ifndef SOUND_H_
 #define SOUND_H_
 
-#if defined (HAVE_ALSA_ASOUNDLIB_H) || defined(HAVE_SYS_SOUNDCARD_H)
+#if defined (HAVE_ALSA_ASOUNDLIB_H) || defined(HAVE_SYS_SOUNDCARD_H) || \
+  defined(HAVE_SOUNDCARD_H)
 void get_volume(char *);
 #endif
 
-void get_song(char *, uint8_t num);
+const char *shorten_stream(const char *);
+void get_song(char *, int8_t num);
 
 #endif /* SOUND_H_ */

@@ -17,9 +17,13 @@
    MA 02110-1301, USA.
 */
 
-/* Functions shared between Linux and FreeBSD */
+/* Functions shared between different operating
+ * zyztemz or are short enough that doesn't meet the
+ * 100 lines requirement to be put in standalone module */
 
 #include "config.h" /* Auto-generated */
+
+#include <ctype.h>
 
 #include <sys/statvfs.h>
 #include <sys/utsname.h>
@@ -43,6 +47,10 @@
 #include "include/freebzd.h"
 #endif /* __FreeBSD__ */
 
+#if defined(__OpenBSD__)
+#include "include/openbzd.h"
+#endif /* __OpenBSD__ */
+
 
 #if defined(__linux__)
 static uint_fast16_t glob_packages(const char *);
@@ -50,7 +58,7 @@ static uint_fast16_t glob_packages(const char *);
 
 void
 exit_with_err(const char *str1, const char *str2) {
-  printf("%s %s\n", str1, str2);
+  FPRINTF("%s %s\n", str1, str2);
   exit(EXIT_FAILURE);
 }
 
@@ -59,7 +67,7 @@ exit_with_err(const char *str1, const char *str2) {
 void
 get_temp(const char *str1, char *str2) {
   uint_least32_t temp = 0;
-  FILE *fp;
+  FILE *fp = NULL;
 
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wunused-result"
@@ -74,7 +82,9 @@ get_temp(const char *str1, char *str2) {
   }
 }
 
-#else
+#endif /* __linux__ */
+
+#if defined(__FreeBSD__)
 void
 get_temp(char *str1, uint_least32_t temp) {
   if (9999 < temp) { /* > 99C */
@@ -84,13 +94,32 @@ get_temp(char *str1, uint_least32_t temp) {
       temp / 100 : temp / 10)); /* > 9C || < 9C */
   }
 }
-#endif /* __linux__ */
+#endif /* __FreeBSD__ */
+
+
+void
+check_fan_vals(char *str1, uint_fast16_t *rpm, uint_fast16_t iterz) {
+  uint_fast16_t x = 0, y = 0;
+  char buffer[VLA];
+  char *all_fans = buffer;
+
+  for (x = 0; x < iterz; x++) {
+    if (0 != rpm[x]) {
+      GLUE2(all_fans, UFINT" ", rpm[x]);
+    } else {
+      ++y; /* non-spinning | removed | failed fan */
+    }
+  }
+  FILL_STR_ARR(1, str1, (y != x ? buffer : NOT_FOUND));
+
+}
 
 
 void 
 get_ssd(char *str1, uint8_t num) {
   uintmax_t val = 0;
   struct statvfs ssd;
+  memset(&ssd, 0, sizeof(struct statvfs));
 
   if (-1 == (statvfs(getenv("HOME"), &ssd))) {
     FUNC_FAILED("statvfs()");
@@ -117,13 +146,14 @@ get_ssd(char *str1, uint8_t num) {
       }
       break;
   }
-
 }
 
 
 void 
 get_kernel(char *str1, uint8_t num) {
   struct utsname KerneL;
+  memset(&KerneL, 0, sizeof(struct utsname));
+
   if (-1 == (uname(&KerneL))) {
     FUNC_FAILED("uname()");
   }
@@ -148,8 +178,8 @@ get_kernel(char *str1, uint8_t num) {
       FILL_STR_ARR(2, str1, KerneL.sysname, KerneL.release);
       break;
   }
-
 }
+
 
 #if defined(__linux__)
 /* Source (my improved screenfetch-c fork):
@@ -177,47 +207,55 @@ glob_packages(const char *str1) {
 void 
 get_packs(char *str1) {
   uint_fast16_t packages = 0;
-  FILE *pkgs_file;
+  FILE *pkgs_file = NULL;
 
-#if DISTRO == ARCHLINUX
+#if defined(ARCHLINUX)
   packages = glob_packages("/var/lib/pacman/local/*");
 
-#elif DISTRO == FRUGALWARE
+#elif defined(FRUGALWARE)
 
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wunused-result"
   CHECK_POPEN(pkgs_file, "pacman-g2 -Q 2> /dev/null | wc -l", &packages);
 #pragma GCC diagnostic pop
 
-#elif DISTRO == DEBIAN
+#elif defined(DEBIAN)
   packages = glob_packages("/var/lib/dpkg/info/*.list");
 
-#elif DISTRO == SLACKWARE
+#elif defined(SLACKWARE)
   packages = glob_packages("/var/log/packages/*");
 
-#elif DISTRO == GENTOO
+#elif defined(GENTOO)
   packages = glob_packages("/var/db/pkg/*/*");
 
-#elif DISTRO == RHEL
+#elif defined(RHEL)
 
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wunused-result"
   CHECK_POPEN(pkgs_file, "rpm -qa 2> /dev/null | wc -l", &packages);
 #pragma GCC diagnostic pop
 
-#elif DISTRO == ANGSTROM
+#elif defined(ANGSTROM)
 
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wunused-result"
   CHECK_POPEN(pkgs_file, "opkg list-installed 2> /dev/null | wc -l", &packages);
 #pragma GCC diagnostic pop
 
-#elif DISTRO == FREEBSD
+#elif defined(FREEBSD)
 
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wunused-result"
   CHECK_POPEN(pkgs_file, "pkg info | wc -l", &packages);
 #pragma GCC diagnostic pop
+
+#elif defined(OPENBSD)
+
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wunused-result"
+  CHECK_POPEN(pkgs_file, "pkg_info | wc -l", &packages);
+#pragma GCC diagnostic pop
+
 
 #endif
 
@@ -279,8 +317,8 @@ get_uptime(char *str1) {
 void 
 get_taim(char *str1) {
   char time_str[VLA];
-  time_t t;
-  struct tm *taim;
+  time_t t = 0;
+  struct tm *taim = NULL;
 
   if (-1 == (t = time(NULL)) || 
       NULL == (taim = localtime(&t)) ||
@@ -305,20 +343,20 @@ set_status(const char *str1) {
     exit_with_err(CANNOT_OPEN, "X server");
   }
 }
-#endif
+#endif /* HAVE_X11_XLIB_H */
 
 
-#if !defined(HAVE_SENSORS_SENSORS_H)
+#if !defined(HAVE_SENSORS_SENSORS_H) && !defined(__OpenBSD__)
 void 
 get_fans(char *str1) {
   bool found_fans = true;
-  char tempstr[VLA], buffer[VLA];
-  char *all_fans = buffer;
-  uint8_t x = 0, y = 0, z = 0;
-  uint_fast16_t rpm[21];
+  char tempstr[VLA];
+  uint_fast16_t x = 0, y = 0, z = 0, rpm[MAX_FANS+1];
+
+  memset(rpm, 0, sizeof(rpm));
 
 #if defined(__linux__)
-  FILE *fp;
+  FILE *fp = NULL;
   for (x = 1; x < MAX_FANS; x++, z++) {
     FILL_ARR(tempstr, FAN_FILE, x);
 
@@ -332,15 +370,15 @@ get_fans(char *str1) {
 
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wunused-result"
-    CHECK_FSCANF(fp, UFINT, &rpm[z]);
+    CHECK_FSCANF(fp, SCAN_UFINT, &rpm[z]);
 #pragma GCC diagnostic pop
     CLOSE_X(fp);
   }
 
 #else
+
   u_int fan[3];
   memset(fan, 0, sizeof(fan));
-  memset(rpm, 0, sizeof(rpm));
   size_t len = sizeof(fan);
 
   for (x = 0; x < MAX_FANS; x++, z++) {
@@ -356,20 +394,14 @@ get_fans(char *str1) {
     }
     rpm[x] = (uint_fast16_t)fan[0];
   }
+
 #endif /* __linux__ */
 
-  if (found_fans) {
-    for (x = 0; x < z; x++) {
-      if (0 != rpm[x]) {
-        GLUE2(all_fans, UFINT" ", rpm[x]);
-      } else {
-        ++y; /* non-spinning | removed | failed fan */
-      }
-    }
-    FILL_STR_ARR(1, str1, (y != x ? buffer : NOT_FOUND));
+  if (true == found_fans) {
+    check_fan_vals(str1, rpm, z);
   }
 }
-#endif /* !HAVE_SENSORS_SENSORS_H */
+#endif /* !HAVE_SENSORS_SENSORS_H && !__OpenBSD__ */
 
 
 #if defined(HAVE_CDIO_CDIO_H)
@@ -394,7 +426,7 @@ get_dvd(char *str1) {
 #if defined(__linux__)
 void
 get_dvd(char *str1) {
-  FILE *fp;
+  FILE *fp = NULL;
   char vendor[100], model[100];
 
 #pragma GCC diagnostic push
@@ -412,3 +444,31 @@ get_dvd(char *str1) {
 #endif /* __linux__ */
 
 #endif /* HAVE_CDIO_CDIO_H */
+
+
+#if defined(__FreeBSD__) || defined(__OpenBSD__)
+void
+get_loadavg(char *str1) {
+  double up[3];
+  memset(up, 0, sizeof(up));
+
+  if (-1 == (getloadavg(up, 3))) {
+  	FUNC_FAILED("getloadavg()");
+  }
+  FILL_ARR(str1, "%.2f %.2f %.2f",
+    (float)up[0], (float)up[1], (float)up[2]);
+}
+#endif /* __FreeBSD__ || __OpenBSD__ */
+
+
+void
+split_n_index(char *str1) {
+  char *ptr = str1;
+  for (; *ptr; ptr++) {
+    if (0 != (isspace((unsigned char) *ptr))) {
+      break;
+    }
+    *str1++ = *ptr;
+  }
+  *str1 = '\0';
+}

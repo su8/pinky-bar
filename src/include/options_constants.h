@@ -57,6 +57,7 @@
 #define BATT_STR   "BATT"
 #define UP_STR     "Up"
 #define LOAD_STR   "Load/avg"
+#define OUT_STR    "Out "
 
 #endif /* HAVE_X11_XLIB_H || WITH_NCURSES || WITH_COLOURS */
 

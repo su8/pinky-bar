@@ -21,10 +21,17 @@
 #define CPU_H_
 
 /* Inspired from  https://en.wikipedia.org/wiki/CPUID and
- * llvm Host.cpp */
-#define CPU_VENDOR(x, z) __asm__("cpuid": "=b" (z) : "a" (x))
-#define CPU_FEATURE(x, z) __asm__("cpuid": "=a" (z) : "a" (x))
-#define CPU_STR2(regizter, a, b, c, d) __asm__( \
+ * llvm Host.cpp, as hilarious as it sounds, llvm 3.7
+ * wants __volatile__ */
+#define CPU_VENDOR(x, z) __asm__ __volatile__ ("cpuid": "=b" (z) : "a" (x))
+#define CPU_FEATURE(x, z) __asm__ __volatile__("cpuid": "=a" (z) : "a" (x))
+#define CPU_REGS(x, y, z) __asm__ __volatile__ ( \
+  "cpuid": \
+  "=a" (z), \
+  "=b" (y) \
+  : "a" (x) \
+)
+#define CPU_STR2(regizter, a, b, c, d) __asm__ __volatile__ ( \
   "cpuid": \
     "=a" (a), \
     "=b" (b), \
@@ -32,31 +39,40 @@
     "=d" (d) \
     : "a" (regizter) \
 )
-#define CPU_ID_STR(regizter, b, c, d) __asm__( \
+#define CPU_ID_STR(regizter, b, c, d) __asm__ __volatile__ ( \
   "cpuid": \
     "=b" (b), \
     "=c" (c), \
     "=d" (d) \
     : "a" (regizter) \
 )
+#define IZMAX(x) (((x >> 8) & 0x0f) == 0x0f)
 
-#define BIT_SHIFT(x) ((x) & 0xf)
+#define SHFT(x) ((x) & 0x0f)
+#define SHFT2(x) ((x) & 0xff)
 #define AmD    0x68747541
 #define InteL  0x756e6547
 
+#if defined(__linux__)
+#define IDLE_NUM 3
+#define LOOP_ITERZ 10
+
+#else /* FreeBSD || OpenBSD */
+#define IDLE_NUM 4
+#define LOOP_ITERZ 5
+#endif /* __linux__ */
 
 /* --coresload related constant to determine
  * how many cpu cores/threads to try for detection */
 #define MAX_CORES 40
 
-
 void get_cpu(char *);
 void get_cores_load(char *);
-void get_cpu_temp(char *);
 
 #if defined(__i386__) || defined(__i686__) || defined(__x86_64__)
 void get_cpu_clock_speed(char *);
 void get_cpu_info(char *);
+uint8_t has_tsc_reg(void);
 #endif
 
 

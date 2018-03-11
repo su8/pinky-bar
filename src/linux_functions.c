@@ -43,6 +43,7 @@ void
 get_ram(char *str1, uint8_t num) {
   uintmax_t used = 0, total = 0;
   struct sysinfo mem;
+  memset(&mem, 0, sizeof(struct sysinfo));
 
   if (-1 == (sysinfo(&mem))) {
     FUNC_FAILED("sysinfo()");
@@ -70,17 +71,17 @@ get_ram(char *str1, uint8_t num) {
         total   = (uintmax_t) mem.totalram / MB;
         used    = (uintmax_t) (mem.totalram - mem.freeram -
                          mem.bufferram - mem.sharedram) / MB;
-        FILL_UINT_ARR(str1, (used * 100) / total);
+        FILL_UINT_ARR(str1,
+          ((0 != total) ? ((used * 100) / total) : 0));
       }
       break;
   }
-
 }
 
 
 void
 get_ssd_model(char *str1, char *str2) {
-  FILE *fp;
+  FILE *fp = NULL;
   char model[VLA];
   FILL_ARR(model, "%s%s%s", "/sys/block/", str2, "/device/model");
 
@@ -90,13 +91,14 @@ get_ssd_model(char *str1, char *str2) {
 #pragma GCC diagnostic pop
 
   FILL_STR_ARR(1, str1, model);
-
 }
 
 
 void
 get_loadavg(char *str1) {
   struct sysinfo up;
+  memset(&up, 0, sizeof(struct sysinfo));
+
   if (-1 == (sysinfo(&up))) {
     FUNC_FAILED("sysinfo()");
   }
@@ -105,6 +107,7 @@ get_loadavg(char *str1) {
     (float)up.loads[1] / 65535.0f,
     (float)up.loads[2] / 65535.0f);
 }
+
 
 /* My inital attempt was to make this code FreeBSD exclusive as the
  * sensors parsing there is much more difficult than it is in linux.
@@ -120,9 +123,11 @@ match_feature(char *str1, uint8_t num) {
   char *label = NULL, *all = buffer;
   double value = 0.0;
   int nr = 0, nr2 = 0, nr3 = 0;
-  uint8_t x = 0, y = 0, z = 0;
-  uint_fast16_t rpm[21];
+  uint8_t x = 0, y = 0, z = 0, dummy = 0;
+  uint_fast16_t rpm[MAX_FANS+1];
   bool found_fans = false;
+  const char *temp_sens[] = { "MB Temperature", "CPU Temperature" };
+  size_t len = 0;
 
   if (3 == num) {
     memset(rpm, 0, sizeof(rpm));
@@ -154,27 +159,28 @@ match_feature(char *str1, uint8_t num) {
                 }
                 GLUE2(all, "%.2f ", (float)value);
               }
-              break;
             }
+            break;
 
           case SENSORS_SUBFEATURE_TEMP_INPUT:
             {
-              if (2 == num) {
+              if (2 == num || 4 == num) {
+                dummy = (2 == num ? 0 : 1);
                 if (0 != (sensors_get_value(chip, subfeatures->number, &value))) {
                   break;
                 }
                 if (NULL == (label = sensors_get_label(chip, features))) {
                   break;
                 }
-                if (STREQ("MB Temperature", label)) {
+                if (STREQ(temp_sens[dummy], label)) {
                   FILL_ARR(str1, UFINT, (uint_fast16_t)value);
                 }
                 if (NULL != label) {
                   free(label);
                 }
               }
-              break;
             }
+            break;
 
           case SENSORS_SUBFEATURE_FAN_INPUT:
             {
@@ -182,12 +188,13 @@ match_feature(char *str1, uint8_t num) {
                 if (0 != (sensors_get_value(chip, subfeatures->number, &value))) {
                   break;
                 }
-                rpm[x++] = (uint_fast16_t)value;
-                z++;
+                if (MAX_FANS != z) {
+                  rpm[z++] = (uint_fast16_t)value;
+                }
                 found_fans = true;
               }
-              break;
             }
+            break;
 
           default:
             continue;
@@ -198,26 +205,19 @@ match_feature(char *str1, uint8_t num) {
   sensors_cleanup();
 
   if (1 == num && '\0' != buffer[0]) {
-    size_t len = strlen(buffer);
+    len = strlen(buffer);
     buffer[len-1] = '\0';
 
     FILL_STR_ARR(1, str1, buffer);
     return;
   }
 
-  if (found_fans) {
-    for (x = 0; x < z; x++) {
-      if (0 != rpm[x]) {
-        GLUE2(all, UFINT" ", rpm[x]);
-      } else {
-        ++y; /* non-spinning | removed | failed fan */
-      }
-    }
-    FILL_STR_ARR(1, str1, (y != x ? buffer : NOT_FOUND));
+  if (true == found_fans) {
+    check_fan_vals(str1, rpm, z);
   }
 
 #else
-  exit_with_err(ERR, "The sensors API version is >= 500. Not supported.");
+  exit_with_err(ERR, "The version of your sensors API is not supported by this program.");
 #endif /* SENSORS_API_VERSION >= 0x400 && SENSORS_API_VERSION <= 0x499 */
 }
 
@@ -240,12 +240,19 @@ get_fans(char *str1) {
 }
 
 
+void
+get_cpu_temp(char *str1) {
+  match_feature(str1, 4);
+}
+
+
 #else /* fall back */
 void 
 get_voltage(char *str1) {
   float voltage[4];
-  FILE *fp;
+  FILE *fp = NULL;
   uint8_t x = 0;
+  memset(voltage, 0, sizeof(voltage));
 
   const char *voltage_files[] = {
     VOLTAGE_FILE("0"),
@@ -275,12 +282,18 @@ void
 get_mobo_temp(char *str1) {
   get_temp(MOBO_TEMP_FILE, str1);
 }
+
+
+void
+get_cpu_temp(char *str1) {
+  get_temp(CPU_TEMP_FILE, str1);
+}
 #endif /* HAVE_SENSORS_SENSORS_H */
 
 
 void 
 get_mobo(char *str1) {
-  FILE *fp;
+  FILE *fp = NULL;
   char vendor[100], name[100];
 
 #pragma GCC diagnostic push
@@ -296,6 +309,7 @@ get_mobo(char *str1) {
   FILL_STR_ARR(2, str1, vendor, name);
 }
 
+
 void 
 get_statio(char *str1, char *str2) {
   uintmax_t statio[7];
@@ -309,9 +323,9 @@ get_statio(char *str1, char *str2) {
 
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wunused-result"
-  if (fscanf(fp, FMT_UINT FMT_UINT FMT_UINT FMT_UINT FMT_UINT FMT_UINT FMT_UINT,
+  if (EOF == (fscanf(fp, FMT_UINT FMT_UINT FMT_UINT FMT_UINT FMT_UINT FMT_UINT FMT_UINT,
     &statio[0], &statio[1], &statio[2], &statio[3],
-    &statio[4], &statio[5], &statio[6]) == EOF) {
+    &statio[4], &statio[5], &statio[6]))) {
       CLOSE_X(fp);
       exit_with_err(ERR, "reading the stat file failed");
   }
@@ -326,7 +340,7 @@ get_statio(char *str1, char *str2) {
 /* Thanks to https://bugzilla.kernel.org/show_bug.cgi?id=83411 */
 void
 get_battery(char *str1) {
-  uintmax_t used = 0, total = 0, percent = 0;
+  uintmax_t used = 0, total = 0;
   uint8_t num = 0;
   char temp[VLA];
   BATTERY_TOTAL(temp, num);
@@ -337,7 +351,9 @@ get_battery(char *str1) {
     BATTERY_TOTAL(temp, num);
 
     if (NULL == (fp = fopen(temp, "r"))) {
-      exit_with_err(CANNOT_OPEN, "BAT0 and BAT1");
+      *str1++ = '0';
+      *str1 = '\0';
+      return;
     }
   }
 
@@ -354,9 +370,6 @@ get_battery(char *str1) {
   OPEN_X(fp, temp, FMT_UINT, &used);
 #pragma GCC diagnostic pop
 
-  percent = 0;
-  if (0 != total) {
-    percent = (used * 100) / total;
-  }
-  FILL_UINT_ARR(str1, percent);
+  FILL_UINT_ARR(str1,
+    ((0 != total) ? ((used * 100) / total) : 0));
 }

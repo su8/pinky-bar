@@ -22,9 +22,9 @@
 
 
 #if WITH_COLOURS == 1
-#define PINK "&M"
-#define BLUE "&B"
-#define YELLOW "&Y"
+#define PINK "^M"
+#define BLUE "^B"
+#define YELLOW "^Y"
 
 #else
 #define PINK ""

@@ -21,5 +21,6 @@
 #define OPTIONS_H_
 
 void parse_opts(int argc, char *argv[], char *combined);
+void parse_konf(char *combined);
 
 #endif /* OPTIONS_H_ */

@@ -23,6 +23,7 @@ dnl the variable 'SENSORS_LIBS' if the user enabled
 dnl the --with-sensors switch
 AC_DEFUN([TEST_SENSORS],[
   SENSORS_LIBS=""
+  GOT_APM=0
 
   AC_ARG_WITH([sensors],
     AS_HELP_STRING([--with-sensors],
@@ -31,7 +32,17 @@ AC_DEFUN([TEST_SENSORS],[
     [with_sensors=no]
   )
 
-  ifdef([ITS_BSD],[],[
+  AC_ARG_WITH([apm],
+    AS_HELP_STRING([--with-apm],
+      [APM power and resource management for laptops]),
+    [],
+    [with_apm=no]
+  )
+
+  AC_ARG_VAR(mobo_sensor, [mobo sensors module name to use in sysctl calls])
+  AC_ARG_VAR(cpu_sensor, [cpu sensors module name to use in sysctl calls])
+
+  ifdef([LINUKS],[
     AS_IF([test "x$with_sensors" = "xyes"], [
       AC_CHECK_HEADERS([sensors/sensors.h], [
         SENSORS_LIBS="-lsensors"
@@ -49,15 +60,41 @@ AC_DEFUN([TEST_SENSORS],[
           sensors_cleanup
         ],[
           AC_CHECK_LIB(sensors,LiB,[],[
-            ERR([Missing core sensors function.])
+            MISSING_FUNC()
           ])
       ])
     ])
+  ],[
+  ])
+
+  ifdef([FREEBZD],[
+    if [[ ! -z "${mobo_sensor}" ]]
+    then
+      MOBO_MODL=\""${mobo_sensor}"\"
+      AC_DEFINE_UNQUOTED([MOBO_MODL],[$MOBO_MODL],[mobo sensors module])
+    fi
+
+    if [[ ! -z "${cpu_sensor}" ]]
+    then
+      CPU_MODL=\""${cpu_sensor}"\"
+      AC_DEFINE_UNQUOTED([CPU_MODL],[$CPU_MODL],[cpu sensors module])
+    fi
+
+    AS_IF([test "x$with_apm" = "xyes"], [
+      AC_CHECK_HEADERS([machine/apm_bios.h], [
+        GOT_APM=1
+        ],[
+          MISSING_HEADER()
+      ])
+    ])
+    AC_DEFINE_UNQUOTED([GOT_APM],[$GOT_APM],[APM power and resource management for laptops])
+
+  ],[
   ])
 
   AC_SUBST(SENSORS_LIBS)
 
-  ifdef([ITS_BSD],[],[
+  ifdef([LINUKS],[
     AS_IF([test "x$with_sensors" = "xyes"], [
       AC_LINK_IFELSE([
         AC_LANG_SOURCE([[
@@ -98,9 +135,8 @@ AC_DEFUN([TEST_SENSORS],[
                       if (NULL != label) {
                         free(label);
                       }
-
-                      break;
                     }
+                      break;
                     default:
                       continue;
                   }
@@ -118,7 +154,40 @@ AC_DEFUN([TEST_SENSORS],[
       )
     ])
 
+  ],[
   ])
 
+
+  ifdef([OPENBZD], [
+    AC_COMPILE_IFELSE([
+      AC_LANG_SOURCE([[
+        #include <stdio.h>
+        #include <stdlib.h>
+        #include <string.h>
+        #include <sys/sensors.h>
+        int main(void) {
+          struct sensordev dev;
+          struct sensor sens;
+          SENSOR_VOLTS_DC;
+          SENSOR_TEMP;
+          SENSOR_FANRPM;
+          SENSOR_FINVALID;
+          SENSOR_FUNKNOWN;
+          return 0;
+        }
+      ]])
+    ],[],[
+      COMPILE_FAILED([sensors])
+      ]
+    )
+  ],[
+  ])
+
+  AS_IF([test "x$with_sensors" = "xyes"], [
+    ifdef([NO_PCI],[
+      CHECK_CFLAGZ([-O0])
+    ],[])
+    m4_define([GOT_SENSR],[meltCPU])
+  ])
 
 ])

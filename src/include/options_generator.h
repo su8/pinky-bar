@@ -43,7 +43,7 @@
 
 /* Let the platform ticks decide how much
  * time is needed to sleep
- * 100 in linux and 133 in freebsd */
+ * 100 in linux and openbsd, 133 in freebsd */
 #define NEW_CPU_LABEL(lbl, declareVar, useVar, ...) \
   case lbl: \
   { \
@@ -79,15 +79,6 @@
   } \
   break;
 
-#define NEW_MPD_LABEL(lbl, declareVar, useVar, num) \
-  case lbl: \
-  { \
-    declareVar = ""; \
-    get_song(useVar, num); \
-    GLUE(arguments->all, FMT_SONG, useVar); \
-  } \
-  break;
-
 #define LABEL_WITH_NUM_GENERATOR(func, lbl, declareVar, useVar, num, ...) \
   case lbl: \
   { \
@@ -108,6 +99,9 @@
 
 #define NEW_SWAPP_LABEL(...) \
   LABEL_WITH_NUM_GENERATOR(swapp, __VA_ARGS__);
+
+#define NEW_MPD_LABEL(...) \
+  LABEL_WITH_NUM_GENERATOR(song, __VA_ARGS__);
 
 /* Fire the preprocessor */
 

@@ -22,6 +22,7 @@
 #if WITH_NET == 1
 
 #if defined(__linux__)
+#include <ctype.h>
 #include <netdb.h>
 /* #include <sys/types.h> */
 #include <sys/socket.h>
@@ -33,7 +34,17 @@
 #include <net/if.h>
 #include <linux/sockios.h>
 #include <linux/ethtool.h>
+
+#if WITH_LIBNL == 1
+#include <netlink/netlink.h>
+#include <netlink/genl/genl.h>
+#include <netlink/genl/ctrl.h>
+#include <linux/nl80211.h>
 #include <linux/if.h>
+
+#else
+#include <linux/wireless.h>
+#endif /* WITH_LIBNL */
 
 #if WITH_PCI == 1
 #include <pci/pci.h>
@@ -41,21 +52,23 @@
 
 #endif /* __linux__ */
 
-#if defined(__FreeBSD__)
+#if defined(__FreeBSD__) || defined(__OpenBSD__)
 #include <netdb.h>
-/* #include <sys/types.h> */
 #include <sys/socket.h>
 #include <sys/ioctl.h>
 #include <arpa/inet.h>
 #include <arpa/nameser.h>
 #include <ifaddrs.h>
-
 #include <net/if.h>
 #include <net/if_dl.h>
 #include <net/route.h>
 #include <netinet/in.h>
-#endif /* __FreeBSD__ */
-
+#include <sys/types.h>
+#include <sys/select.h>
+#include <net/if_media.h>
+#include <net80211/ieee80211.h>
+#include <net80211/ieee80211_ioctl.h>
+#endif /* __FreeBSD__ || __OpenBSD__ */
 #endif /* WITH_NET */
 
 #include "include/headers.h"
@@ -65,13 +78,26 @@
 #include "include/freebzd.h"
 #endif /* __FreeBSD__ */
 
+#if defined(__OpenBSD__)
+#include "include/openbzd.h"
+#endif /* __OpenBSD__ */
+
+#if defined(__linux__)
+
+#if WITH_LIBNL == 1 && WITH_NET == 1
+static int call_back(struct nl_msg *, void *);
+#endif /* WITH_LIBNL && WITH_NET */
+
+#endif /* __linux__ */
+
+
 /* Thanks to http://www.matisse.net/bitcalc/?source=print
  * and `man netdevice' */
 void
 get_net(char *str1, char *str2, uint8_t num) {
 #if WITH_NET == 1
 
-#if defined(__linux)
+#if defined(__linux__)
   struct rtnl_link_stats *stats = NULL;
   struct sockaddr_ll *mac = NULL;
 #else
@@ -86,7 +112,7 @@ get_net(char *str1, char *str2, uint8_t num) {
   void *temp_void = NULL;
   char temp[VLA];
 
-  if (-1 == getifaddrs(&ifaddr)) {
+  if (-1 == (getifaddrs(&ifaddr))) {
     FUNC_FAILED("getifaddrs()");
   }
   FILL_STR_ARR(1, str1, "Null");
@@ -101,7 +127,7 @@ get_net(char *str1, char *str2, uint8_t num) {
       continue;
     }
     if (3 == num || 5 == num || 6 == num) { /* ip | netmask | broadcast */
-      if (ifa->ifa_addr->sa_family == AF_INET) {
+      if (AF_INET == ifa->ifa_addr->sa_family) {
         if (STREQ(str2, ifa->ifa_name)) {
           switch(num) {
             case 3:
@@ -120,13 +146,8 @@ get_net(char *str1, char *str2, uint8_t num) {
           break;
         }
       }
-#if defined(__linux__)
-    } else if (ifa->ifa_addr->sa_family == AF_PACKET &&
-        NULL != ifa->ifa_data) {
-#else
-    } else if (ifa->ifa_addr->sa_family == AF_LINK &&
-        NULL != ifa->ifa_data) {
-#endif /* __linux__ */
+    } else if (NETFAM == ifa->ifa_addr->sa_family &&
+          NULL != ifa->ifa_data) {
         if (STREQ(str2, ifa->ifa_name)) {
 
 #if defined(__linux__)
@@ -136,13 +157,9 @@ get_net(char *str1, char *str2, uint8_t num) {
 #endif /* __linux__ */
 
           if (2 == num) { /* upload and download speeds */
-#if defined(__linux__)
-            cur_recv = (uintmax_t)stats->rx_bytes - prev_recv;
-            cur_sent = (uintmax_t)stats->tx_bytes - prev_sent;
-#else
-            cur_recv = (uintmax_t)stats->ifi_ibytes - prev_recv;
-            cur_sent = (uintmax_t)stats->ifi_obytes - prev_sent;
-#endif /* __linux__ */
+            cur_recv = (uintmax_t)stats->RECVBYTS - prev_recv;
+            cur_sent = (uintmax_t)stats->SENTBYTS - prev_sent;
+
             FILL_ARR(str1, "Down " FMT_UINT " KB, Up " FMT_UINT " KB",
               (cur_recv / KB), (cur_sent / KB));
 
@@ -150,15 +167,9 @@ get_net(char *str1, char *str2, uint8_t num) {
             prev_sent = cur_sent;
           } else if (1 == num) { /* consumed internet so far */
 
-#if defined(__linux__)
             FILL_ARR(str1, "Down " FMT_UINT " MB, Up " FMT_UINT " MB",
-              ((uintmax_t)stats->rx_bytes / MB),
-              ((uintmax_t)stats->tx_bytes / MB));
-#else
-            FILL_ARR(str1, "Down " FMT_UINT " MB, Up " FMT_UINT " MB",
-              ((uintmax_t)stats->ifi_ibytes / MB),
-              ((uintmax_t)stats->ifi_obytes / MB));
-#endif /* __linux__ */
+              ((uintmax_t)stats->RECVBYTS / MB),
+              ((uintmax_t)stats->SENTBYTS / MB));
 
 #if defined(__linux__)
           } else if (4 == num) { /* mac address */
@@ -176,12 +187,27 @@ get_net(char *str1, char *str2, uint8_t num) {
                 mac->sll_addr[0], mac->sll_addr[1],
                 mac->sll_addr[2], mac->sll_addr[3],
                 mac->sll_addr[4], mac->sll_addr[5]);
-          } else if (7 == num || 8 == num || 9 == num ||
-              10 == num) { /* link speed | driver | version | firmware */
 
-            get_nic_info2(str1, str2, (uint8_t)(num - 6));
+          } else if (11 == num) { /* wifi name */
+            get_wifi(str1, str2, (uint8_t)(num - 10));
+
+          } else { /* link speed | driver | version | firmware */
+            switch(num) {
+              case 7:
+              case 8:
+              case 9:
+              case 10:
+                get_nic_info2(str1, str2, (uint8_t)(num - 6));
+                break;
+              default:
+                break;
+            }
           }
 #else
+#if defined(__OpenBSD__) || defined(__FreeBSD__)
+          } else if (11 == num) { /* wifi name */
+            get_wifi(str1, str2, (uint8_t)(num - 10));
+#endif
           } else if (4 == num) { /* mac address */
             temp_void = ifa->ifa_addr;
             mac = (struct sockaddr_dl *)temp_void;
@@ -225,7 +251,7 @@ get_ip_lookup(char *str1, char *str2) {
   void *temp_void = NULL;
   char temp[VLA];
 
-  memset(&hints, 0, sizeof(hints));
+  memset(&hints, 0, sizeof(struct addrinfo));
 
   hints.ai_family = AF_INET;
   hints.ai_socktype = SOCK_DGRAM;
@@ -241,7 +267,7 @@ get_ip_lookup(char *str1, char *str2) {
       continue;
     }
     /* check ipv4 again, despite the "hints" */
-    if (rp->ai_family == AF_INET) {
+    if (AF_INET == rp->ai_family) {
       temp_void = rp->ai_addr;
 
       inet_ntop(AF_INET, &(((struct sockaddr_in *)temp_void)->sin_addr),
@@ -250,9 +276,6 @@ get_ip_lookup(char *str1, char *str2) {
 
       break;
     }
-  }
-  if ('\0' == str1[0]) {
-    FILL_STR_ARR(1, str1, "Null");
   }
   if (NULL != result) {
     freeaddrinfo(result);
@@ -266,24 +289,7 @@ get_ip_lookup(char *str1, char *str2) {
 }
 
 
-/* It's so nice that the FreeBSD kernel
-   does all the heavy lifting for us.
-   In Linux you get only the hex numbers.
-
-sysctl -a | grep 'dev.re.0'
-
-dev.re.0.wake: 0
-dev.re.0.int_rx_mod: 65
-dev.re.0.stats: -1
-dev.re.0.%parent: pci2
-dev.re.0.%pnpinfo: vendor=0x10ec device=0x8168 subvendor=0x1043 subdevice=0x8432 class=0x020000
-dev.re.0.%location: pci0:2:0:0 handle=\_SB_.PCI0.PCE4.RLAN
-dev.re.0.%driver: re
-dev.re.0.%desc: RealTek 8168/8111 B/C/CP/D/DP/E/F/G PCIe Gigabit Ethernet */
-
-
 #if defined(__linux__)
-/* Not using exit_with_err to freeifaddrs */
 void
 get_nic_info2(char *str1, char *str2, uint8_t num) {
 #if WITH_NET == 1
@@ -297,6 +303,10 @@ get_nic_info2(char *str1, char *str2, uint8_t num) {
   if (-1 == sock) {
     return;
   }
+
+  memset(&ecmd, 0, sizeof(struct ethtool_cmd));
+  memset(&drvinfo, 0, sizeof(struct ethtool_drvinfo));
+  memset(&ifr, 0, sizeof(struct ifreq));
 
   switch(num) {
     case 1:
@@ -313,18 +323,10 @@ get_nic_info2(char *str1, char *str2, uint8_t num) {
   snprintf(ifr.ifr_name, IF_NAMESIZE, "%s", str2);
 
   if (0 != (ioctl(sock, SIOCETHTOOL, &ifr))) {
+    CLOSE_FD(sock);
     return;
   }
 
-  /* The `ethtool_cmd_speed' negotiation concept
-   * is great, but the `SPEED_X' macros are not.
-   * They are constants representing the link speed
-   * from 10 Mbps up to 100 Gbps, but as we know,
-   * the wifi/wireless "things" suffer from various
-   * degradations, thus those macros are only reliable
-   * to detect wired NIC that doesn't tend to change
-   * it's link speed from various real-life factors.
-  */
   switch(num) {
     case 1:
       FILL_ARR(str1, "%d%s", ecmd.speed, "Mbps");
@@ -339,6 +341,7 @@ get_nic_info2(char *str1, char *str2, uint8_t num) {
       FILL_STR_ARR(1, str1, drvinfo.fw_version);
       break;
   }
+  CLOSE_FD(sock);
 
 #else
   (void)str1;
@@ -349,7 +352,7 @@ get_nic_info2(char *str1, char *str2, uint8_t num) {
 }
 
 
-/* 
+/*
  Quick spot the bug game.
  code begin:
   struct pci_access *pacc= NULL;
@@ -364,13 +367,13 @@ get_nic_info2(char *str1, char *str2, uint8_t num) {
 */
 void
 get_nic_info(char *str1, char *str2) {
-#if WITH_PCI == 1
+#if WITH_PCI == 1 && WITH_NET == 1
 
   uintmax_t vendor = 0, model = 0;
   char temp[VLA];
   struct pci_access *pacc = NULL;
   struct pci_dev *dev = NULL;
-  FILE *fp;
+  FILE *fp = NULL;
 
   FILL_STR_ARR(1, str1, "Null");
   NIC_VEND(temp, str2);
@@ -423,14 +426,14 @@ error:
   (void)str1;
   (void)str2;
   RECOMPILE_WITH("pci");
-#endif /* WITH_PCI */
+#endif /* WITH_PCI && WITH_NET */
 }
 
 #endif /* __linux__ */
 
 
 
-#if defined(__FreeBSD__)
+#if defined(__FreeBSD__) || defined(__OpenBSD__)
 #define ROUNDUP(x) ((x) > 0 ? \
   (1 + (((x) - 1) | (sizeof(long) - 1))) : sizeof(long))
 
@@ -446,12 +449,16 @@ get_nic_info(char *str1, char *str2) {
   struct sockaddr *sa = NULL, *addrs[RTAX_MAX];
   char *buf = NULL, *next = NULL, *lim = NULL, temp[VLA];
   uint8_t x = 0;
-  size_t needed;
+  size_t needed = 0;
   void *temp_void = NULL;
 
   /* No, it's not Men In Black acronym */
   int mib[] = { CTL_NET, PF_ROUTE, 0, 0, NET_RT_DUMP, 0 };
   if (0 != (sysctl(mib, 6, NULL, &needed, NULL, 0))) {
+    return;
+  }
+
+  if (0 == needed) {
     return;
   }
 
@@ -470,7 +477,7 @@ get_nic_info(char *str1, char *str2) {
     if (NULL == sa || NULL == rtm) {
       continue;
     }
-    if (sa->sa_family == AF_INET) {
+    if (AF_INET == sa->sa_family) {
       for (x = 0; x < RTAX_MAX; x++) {
         if (rtm->rtm_addrs & (1 << x)) {
           addrs[x] = sa;
@@ -480,8 +487,8 @@ get_nic_info(char *str1, char *str2) {
         }
       }
       if (((rtm->rtm_addrs & (RTA_DST|RTA_GATEWAY)) == (RTA_DST|RTA_GATEWAY))
-           && addrs[RTAX_DST]->sa_family == AF_INET
-           && addrs[RTAX_GATEWAY]->sa_family == AF_INET) {
+           && AF_INET == addrs[RTAX_DST]->sa_family
+           && AF_INET == addrs[RTAX_GATEWAY]->sa_family) {
 
         temp_void = addrs[RTAX_GATEWAY];
         inet_ntop(AF_INET, &(((struct sockaddr_in *)temp_void)->sin_addr),
@@ -491,6 +498,7 @@ get_nic_info(char *str1, char *str2) {
       }
     }
   }
+  (void)str2;
 
 error:
   if (NULL != buf) {
@@ -501,6 +509,307 @@ error:
 #else
   (void)str1;
   (void)str2;
+  RECOMPILE_WITH("net");
+#endif /* WITH_NET */
+}
+#endif /* __FreeBSD__ || __OpenBSD__ */
+
+
+#if defined(__linux__)
+/*
+
+  Entirely based on iw.c, link.c, genl.c, scan.c (print_bss_handler)
+  (v3.17)
+
+  Docs, return vals, and tips:
+   https://www.infradead.org/~tgr/libnl/doc/core.html
+   https://www.infradead.org/~tgr/libnl/doc/api/group__send__recv.html
+   http://lists.shmoo.com/pipermail/hostap/2011-October/024315.html
+   https://bugzilla.kernel.org/show_bug.cgi?id=78481
+*/
+#if WITH_LIBNL == 1
+
+#if WITH_NET == 1
+static int call_back(struct nl_msg *msg, void *str1) {
+  struct genlmsghdr *gnlh = nlmsg_data(nlmsg_hdr(msg));
+  struct nlattr *tb[NL80211_ATTR_MAX + 1];
+  struct nlattr *bss[NL80211_BSS_MAX + 1];
+  struct nla_policy bss_policy[NL80211_BSS_MAX + 1] = {
+    [NL80211_BSS_BSSID] = {.type = NLA_UNSPEC},
+    [NL80211_BSS_INFORMATION_ELEMENTS] = {.type = NLA_UNSPEC}
+  };
+  uint32_t len = 0, x = 0, z = 0;
+  char elo = '\0', *ssid = NULL, *ptr = (char *)str1;
+
+  if (0 != (nla_parse(tb,
+     NL80211_ATTR_MAX, genlmsg_attrdata(gnlh, 0),
+     genlmsg_attrlen(gnlh, 0), NULL))) {
+    return NL_SKIP;
+  }
+
+  if (NULL == tb[NL80211_ATTR_BSS]) {
+    return NL_SKIP;
+  }
+  if (0 != (nla_parse_nested(bss,
+     NL80211_BSS_MAX, tb[NL80211_ATTR_BSS], bss_policy))) {
+    return NL_SKIP;
+  }
+  if (NULL == bss[NL80211_BSS_STATUS]) {
+    return NL_SKIP;
+  }
+
+  switch(nla_get_u32(bss[NL80211_BSS_STATUS])) {
+    case NL80211_BSS_STATUS_ASSOCIATED:
+    case NL80211_BSS_STATUS_AUTHENTICATED:
+    case NL80211_BSS_STATUS_IBSS_JOINED:
+      break;
+    default:
+      return NL_SKIP;
+  }
+
+  if (NULL == bss[NL80211_BSS_BSSID]) {
+    return NL_SKIP;
+  }
+
+  if (bss[NL80211_BSS_INFORMATION_ELEMENTS]) {
+    ssid = (char *)(nla_data(bss[NL80211_BSS_INFORMATION_ELEMENTS]));
+    len = (uint32_t)nla_len(bss[NL80211_BSS_INFORMATION_ELEMENTS]);
+
+    if (NULL != ssid && 0 != len) {
+      ssid += 2;
+      for (x = 0; x < len; x++) {
+        elo = ssid[x];
+        if (0 == (isprint((unsigned char)elo))) {
+          break;
+        }
+        if (VLA > x) {
+          *ptr++ = elo;
+        }
+      }
+      *ptr = '\0';
+    }
+  }
+  return NL_SKIP;
+}
+#endif /* WITH_NET */
+
+void
+get_wifi(char *str1, char *str2, uint8_t num) {
+#if WITH_NET == 1
+
+  struct nl_sock *sock = NULL;
+  struct nl_msg *msg = NULL;
+  int fam = 0;
+  uint32_t dev = 0;
+  void *scan_ret = NULL;
+
+  if (NULL == (sock = nl_socket_alloc())) {
+    return;
+  }
+  if (0 != (genl_connect(sock))) {
+    goto error;
+  }
+
+  if (0 != (nl_socket_modify_cb(sock,
+     NL_CB_VALID, NL_CB_CUSTOM, call_back, str1))) {
+    goto error;
+  }
+  if (0 > (fam = genl_ctrl_resolve(sock, "nl80211"))) {
+    goto error;
+  }
+
+  dev = if_nametoindex(str2);
+  msg = nlmsg_alloc();
+  if (0 == dev || NULL == msg) {
+    goto error_msg;
+  }
+
+  scan_ret = genlmsg_put(msg, 0, 0, fam, 0, NLM_F_DUMP, NL80211_CMD_GET_SCAN, 0);
+  if (NULL == scan_ret ||
+     0 != (nla_put_u32(msg, NL80211_ATTR_IFINDEX, dev))) {
+    goto error_msg;
+  }
+
+  if (0 != (nl_send_sync(sock, msg))) {
+    goto error;
+  }
+  (void)num;
+
+error:
+  if (NULL != sock) {
+    nl_socket_free(sock);
+  }
+  return;
+
+error_msg:
+  if (NULL != msg) {
+    nlmsg_free(msg);
+  }
+  if (NULL != sock) {
+    nl_socket_free(sock);
+  }
+  return;
+
+#else
+  (void)str1;
+  (void)str2;
+  (void)num;
+  RECOMPILE_WITH("net");
+#endif /* WITH_NET */
+}
+
+#else
+void
+get_wifi(char *str1, char *str2, uint8_t num) {
+#if WITH_NET == 1
+
+  struct iwreq iwr;
+  int sock = 0;
+
+  sock = socket(AF_INET, SOCK_DGRAM, 0);
+  if (-1 == sock) {
+    return;
+  }
+
+  memset(&iwr, 0, sizeof(struct iwreq));
+
+  iwr.u.essid.pointer = str2;
+  iwr.u.essid.length  = IW_ESSID_MAX_SIZE + 1;
+  iwr.u.essid.flags   = 0;
+
+  snprintf(iwr.ifr_name, IF_NAMESIZE, "%s", str2);
+
+  if (0 != (ioctl(sock, SIOCGIWESSID, &iwr))) {
+    CLOSE_FD(sock);
+    return;
+  }
+
+  switch(num) {
+    case 1:
+      FILL_STR_ARR(1, str1, str2);
+      break;
+  }
+  CLOSE_FD(sock);
+
+#else
+  (void)str1;
+  (void)str2;
+  (void)num;
+  RECOMPILE_WITH("net");
+#endif /* WITH_NET */
+}
+#endif /* WITH_LIBNL */
+#endif /* __linux__ */
+
+
+/* Based on:
+    https://git.2f30.org/spoon/file/wifi.c.html */
+#if defined(__OpenBSD__)
+void 
+get_wifi(char *str1, char *str2, uint8_t num) {
+#if WITH_NET == 1
+  struct ifreq ifr;
+  struct ifaddrs *ifa, *ifas;
+  struct ifmediareq ifmr;
+  struct ieee80211_bssid bssid;
+  struct ieee80211_nwid nwid;
+
+  int fd = 0, ibssid = 0, inwid = 0, found_ssid = 0;
+
+  if (-1 == getifaddrs(&ifas)) {
+    FUNC_FAILED("getifaddrs()");
+  }
+  FILL_STR_ARR(1, str1, "Null");
+
+  fd = socket(AF_INET, SOCK_DGRAM, 0);
+  if (-1 == fd) {
+    return;
+  }
+
+  for (ifa = ifas; NULL != ifa; ifa = ifa->ifa_next) {
+    memset(&ifmr, 0, sizeof(ifmr));
+    strlcpy(ifmr.ifm_name, ifa->ifa_name, IF_NAMESIZE);
+
+    if (0 != ioctl(fd, SIOCGIFMEDIA, (caddr_t)&ifmr)) {
+      continue;
+    }
+    if (0 == (ifmr.ifm_active & IFM_IEEE80211)) {
+      continue;
+    }
+    if (0 != (ifmr.ifm_active & IFM_IEEE80211_HOSTAP)) {
+      continue;
+    }
+
+    memset(&ifr, 0, sizeof(ifr));
+    memset(&bssid, 0, sizeof(bssid));
+    memset(&nwid, 0, sizeof(nwid));
+
+    ifr.ifr_data = (caddr_t)&nwid;
+    
+    strlcpy(bssid.i_name, ifa->ifa_name, sizeof(bssid.i_name));
+    strlcpy(ifr.ifr_name, bssid.i_name, sizeof(bssid.i_name));
+
+    ibssid = ioctl(fd, SIOCG80211BSSID, &bssid);
+    inwid  = ioctl(fd, SIOCG80211NWID, (caddr_t)&ifr);
+    if (-1 == ibssid || -1 == inwid) {
+      continue;
+    }
+    
+    found_ssid = 1;
+    break;
+  }
+  CLOSE_FD(fd);
+
+  if (NULL != ifas) {
+    freeifaddrs(ifas);
+  }
+  
+  if (1 == found_ssid) {
+    FILL_STR_ARR(1, str1, nwid.i_nwid);
+  }
+
+  (void)str2;
+  (void)num;
+#else
+  (void)str1;
+  (void)str2;
+  (void)num;
+  RECOMPILE_WITH("net");
+#endif /* WITH_NET */
+}
+#endif /* __OpenBSD__ */
+
+
+/* Based on:  
+    https://chromium.googlesource.com/chromiumos/third_party/dhcpcd/+/master/if-bsd.c
+    https://www.freebsd.org/cgi/man.cgi?query=ieee80211&sektion=4&apropos=0&manpath=FreeBSD+5.3-RELEASE+and+Ports
+*/
+#if defined(__FreeBSD__)
+void 
+get_wifi(char *str1, char *str2, uint8_t num) {
+#if WITH_NET == 1
+  struct ieee80211req ireq;
+  int fd = 0;
+
+  if (-1 == (fd = socket(AF_INET, SOCK_DGRAM, 0))) {
+    return;
+  }
+
+  memset(&ireq, 0, sizeof(ireq));
+  strlcpy(ireq.i_name, str2, sizeof(ireq.i_name));
+
+  ireq.i_type = IEEE80211_IOC_SSID;
+  ireq.i_val = -1;
+  ireq.i_data = str1;
+
+  (void)ioctl(fd, SIOCG80211, &ireq);
+  CLOSE_FD(fd);
+
+  (void)num;
+#else
+  (void)str1;
+  (void)str2;
+  (void)num;
   RECOMPILE_WITH("net");
 #endif /* WITH_NET */
 }

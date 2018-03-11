@@ -27,11 +27,17 @@
 #include <alsa/asoundlib.h>
 #endif /* HAVE_ALSA_ASOUNDLIB_H */
 
-#if defined(HAVE_SYS_SOUNDCARD_H)
+#if defined(HAVE_SYS_SOUNDCARD_H) || defined(HAVE_SOUNDCARD_H)
 #include <fcntl.h>
 #include <sys/ioctl.h>
+
+#if defined(HAVE_SOUNDCARD_H)
+#include <soundcard.h>
+#else
 #include <sys/soundcard.h>
-#endif /* HAVE_SYS_SOUNDCARD_H */
+#endif /* HAVE_SOUNDCARD_H */
+
+#endif /* HAVE_SYS_SOUNDCARD_H || HAVE_SOUNDCARD_H */
 
 #include "include/headers.h"
 #include "prototypes/sound.h"
@@ -45,7 +51,7 @@ get_volume(char *str1) {
   snd_mixer_t *handle = NULL;
   snd_mixer_elem_t *elem = NULL;
   snd_mixer_selem_id_t *s_elem = NULL;
-  long int vol = 0L, max = 0L, min = 0L, percent = 0L;
+  long int vol = 0L, max = 0L, min = 0L;
 
   if (0 != (snd_mixer_open(&handle, 0))) {
     FUNC_FAILED("alsa");
@@ -78,15 +84,11 @@ get_volume(char *str1) {
   }
   snd_mixer_selem_get_playback_volume_range(elem, &min, &max);
 
-  percent = 0L;
-  if (0 != max) {
-    percent = (vol * 100) / max;
-  }
-
   snd_mixer_selem_id_free(s_elem);
   snd_mixer_close(handle);
 
-  FILL_ARR(str1, "%ld", percent);
+  FILL_ARR(str1, "%ld", 
+    ((0 != max) ? ((vol * 100) / max) : 0L));
   return;
 
 error:
@@ -101,7 +103,7 @@ error:
 #endif /* HAVE_ALSA_ASOUNDLIB_H */
 
 
-#if defined(HAVE_SYS_SOUNDCARD_H)
+#if defined(HAVE_SYS_SOUNDCARD_H) || defined(HAVE_SOUNDCARD_H)
 /* Used the following resource:
     sources.freebsd.org/RELENG_9/src/usr.sbin/mixer/mixer.c
 */
@@ -113,24 +115,56 @@ get_volume(char *str1) {
     exit_with_err(CANNOT_OPEN, "/dev/mixer");
   }
   if (-1 == (ioctl(fd, SOUND_MIXER_READ_DEVMASK, &devmask))) {
+    CLOSE_FD(fd);
     exit_with_err(ERR, "SOUND_MIXER_READ_DEVMASK");
   }
   if (-1 == (ioctl(fd, MIXER_READ(0), &volume))) {
+    CLOSE_FD(fd);
     exit_with_err(ERR, "MIXER_READ()");
   }
+  CLOSE_FD(fd);
 
   FILL_ARR(str1, "%d", ((volume >> 8) & 0x7f));
 }
-#endif /* HAVE_SYS_SOUNDCARD_H */
+#endif /* HAVE_SYS_SOUNDCARD_H || HAVE_SOUNDCARD_H */
 
 
-void
-get_song(char *str1, uint8_t num) {
+const char *
+shorten_stream(const char *str1) {
+  /* Dont submit pull request
+   * if you dont know the difference
+   * between the two examples below.
+   *
+   * const char *stream = "elo";
+   * char *const stream = "elo"; */
+  const char *stream = str1;
+
+  if (5 < (strlen(stream))) {
+    if (0 == (strncmp(stream, "http", 4))) {
+      stream = "..";
+    }
+  }
+  return stream;
+}
+
+
 #if defined (HAVE_MPD_CLIENT_H)
+void
+get_song(char *str1, int8_t num) {
 
   struct mpd_connection *conn = NULL;
   struct mpd_song *song = NULL;
+  const char *stream = NULL, *taggy = NULL;
+  static const int8_t tagz_arr[] = {
+    0,
+    MPD_TAG_TRACK,
+    MPD_TAG_ARTIST,
+    MPD_TAG_TITLE,
+    MPD_TAG_ALBUM,
+    MPD_TAG_DATE
+  };
 
+  *str1 = '\0';
   if (NULL == (conn = mpd_connection_new(NULL, 0, 0))) {
     return;
   }
@@ -142,28 +176,15 @@ get_song(char *str1, uint8_t num) {
     goto error;
   }
 
-  /* You can add more TAGs to be obtained,
-   * look at /usr/include/mpd/tag.h
-   */
-  switch(num) {
-    case 1:
-      FILL_STR_ARR(1, str1, mpd_song_get_tag(song, MPD_TAG_TRACK, 0));
-      break;
-    case 2:
-      FILL_STR_ARR(1, str1, mpd_song_get_tag(song, MPD_TAG_ARTIST, 0));
-      break;
-    case 3:
-      FILL_STR_ARR(1, str1, mpd_song_get_tag(song, MPD_TAG_TITLE, 0));
-      break;
-    case 4:
-      FILL_STR_ARR(1, str1, mpd_song_get_tag(song, MPD_TAG_ALBUM, 0));
-      break;
-    case 5:
-      FILL_STR_ARR(1, str1, mpd_song_get_tag(song, MPD_TAG_DATE, 0));
-      break;
-    case 6:
-      FILL_STR_ARR(1, str1, mpd_song_get_uri(song));
-      break;
+  if (6 != num) {
+    taggy = mpd_song_get_tag(song, tagz_arr[num], 0);
+    if (NULL != taggy) {
+      FILL_STR_ARR(1, str1, taggy);
+    }
+  } else {
+    if (NULL != (stream = mpd_song_get_uri(song))) {
+      FILL_STR_ARR(1, str1, (shorten_stream(stream)));
+    }
   }
 
 error:
@@ -174,10 +195,56 @@ error:
     mpd_connection_free(conn);
   }
   return;
+}
 
 #else
-  (void)str1;
-  (void)num;
-  RECOMPILE_WITH("mpd");
-#endif
+
+void
+get_song(char *str1, int8_t num) {
+  FILE *fp = NULL;
+  static bool got_stream = false;
+  char *ptr = NULL, buf[100], temp[100];
+  const char *tagz[] = { "artist", "title", "album", "date" };
+  const char *idx_tagz = ((6 != num) ? tagz[num-2] : "ohsnap");
+
+  if (NULL == (fp = popen("cmus-remote -Q 2> /dev/null", "r"))) {
+    return;
+  }
+
+  while (NULL != (fgets(buf, 99, fp))) {
+    if (6 == num) {
+      if ('f' == buf[0] && 'i' == buf[1] && 'l' == buf[2]) {
+        CHECK_SSCANF(buf, "%*s %[^\n]", temp);
+        if (NULL != (ptr = strrchr(temp, '/'))) {
+          for (; *ptr; ptr++) {
+            if ('/' != *ptr) {
+              *str1++ = *ptr;
+            }
+          }
+          *str1 = '\0';
+        }
+        break;
+      }
+    } else {
+      if ('t' == buf[0] && 'a' == buf[1] && 'g' == buf[2]) {
+        CHECK_SSCANF(buf, "%*s %s", temp);
+        if (STREQ(idx_tagz, temp)) {
+          CHECK_SSCANF(buf, "%*s %*s %[^\n]", str1);
+          break;
+        }
+      }
+      if ('s' == buf[0] && 't' == buf[1] && 'r' == buf[2]) {
+        if (1 != (num-2) && false == got_stream) {
+          CHECK_SSCANF(buf, "%*s %[^\n]", str1);
+          got_stream = true;
+          break;
+        }
+      }
+    }
+  }
+
+  if (-1 == (pclose(fp))) {
+    exit_with_err(CANNOT_CLOSE, "popen()");
+  }
 }
+#endif /* HAVE_MPD_CLIENT_H */

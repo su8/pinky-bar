@@ -85,10 +85,10 @@ AC_DEFUN([TEST_TYPEZ],[
     getopt.h         \
     sys/socket.h     \
   ],[],[
-    ERR([Missing core header files.])
+    MISSING_HEADER()
   ])
   
-  ifdef([ITS_BSD], [
+  ifdef([FREEBZD], [
     AC_CHECK_HEADERS([ \
       sys/types.h      \
       sys/sysctl.h     \
@@ -96,16 +96,19 @@ AC_DEFUN([TEST_TYPEZ],[
       sys/stat.h       \
       vm/vm_param.h    \
     ],[],[
-      ERR([Missing core header files.])
+      MISSING_HEADER()
     ])
 
   ], [
-    AC_CHECK_HEADERS([ \
-      argp.h           \
-      sys/sysinfo.h    \
-      glob.h           \
-    ],[],[
-      ERR([Missing core header files.])
+    ifdef([LINUKS],[
+      AC_CHECK_HEADERS([ \
+        argp.h           \
+        sys/sysinfo.h    \
+        glob.h           \
+      ],[],[
+        MISSING_HEADER()
+      ])
+    ],[
     ])
 
   ])
@@ -130,10 +133,10 @@ AC_DEFUN([TEST_TYPEZ],[
     getopt_long     \
 
   ],[],[
-    ERR([Missing core library functions.])
+    MISSING_FUNC()
   ])
 
-  ifdef([ITS_BSD], [
+  ifdef([FREEBZD], [
     AC_CHECK_FUNCS([  \
       sysctl          \
       sysctlbyname    \
@@ -142,18 +145,22 @@ AC_DEFUN([TEST_TYPEZ],[
       malloc          \
       free            \
     ],[],[
-      ERR([Missing core library functions.])
+      MISSING_FUNC()
     ])
 
   ], [
-    AC_CHECK_FUNCS([  \
-      sysinfo         \
-      glob            \
-      globfree        \
-      argp_parse      \
-      argp_usage      \
-    ],[],[
-      ERR([Missing core library functions.])
+
+    ifdef([LINUKS],[
+      AC_CHECK_FUNCS([  \
+        sysinfo         \
+        glob            \
+        globfree        \
+        argp_parse      \
+        argp_usage      \
+      ],[],[
+        MISSING_FUNC()
+      ])
+    ],[
     ])
 
   ])

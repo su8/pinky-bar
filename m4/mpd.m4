@@ -26,7 +26,7 @@ AC_DEFUN([TEST_MPD],[
 
   AC_ARG_WITH([mpd],
     AS_HELP_STRING([--with-mpd],
-      [mpd linker flag to show the current playing song]),
+      [mpd linker flag to show the currently played song]),
     [],
     [with_mpd=no]
   )
@@ -36,7 +36,7 @@ AC_DEFUN([TEST_MPD],[
       MPD_LIBS="-lmpdclient"
       ],[
         ERR_MUST_INSTALL([libmpdclient])
-      ])
+    ])
 
     m4_foreach([LiB], [
         mpd_connection_new          ,
@@ -48,7 +48,7 @@ AC_DEFUN([TEST_MPD],[
         mpd_song_get_uri
       ],[
         AC_CHECK_LIB(mpdclient,LiB,[],[
-          ERR([Missing core mpd function.])
+          MISSING_FUNC()
         ])
     ])
   ])

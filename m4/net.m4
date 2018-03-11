@@ -33,12 +33,22 @@ dnl used in the net functions and substitute appropriate macro
 dnl so the program to be compiled with/out net functions support.
 AC_DEFUN([TEST_NET],[
   WITH_NET=1
+  WITH_LIBNL=0
+  LIBNL_CF=""
+  LIBNL_LZ=""
 
   AC_ARG_WITH([net],
     AS_HELP_STRING([--with-net],
       [Net funcs]),
     [],
     [with_net=yes]
+  )
+
+  AC_ARG_WITH([libnl],
+    AS_HELP_STRING([--with-libnl],
+      [wifi funcs]),
+    [],
+    [with_libnl=no]
   )
 
   AS_IF([test "x$with_net" = "xno"], [
@@ -51,33 +61,61 @@ AC_DEFUN([TEST_NET],[
       ifaddrs.h           \
       arpa/inet.h         \
       sys/socket.h        \
-      net/if.h            \
       sys/ioctl.h         \
       netdb.h             \
     ],[],[
-      ERR([Missing core header files.])
+      MISSING_HEADER()
     ])
     
-    ifdef([ITS_BSD], [
+    ifdef([FREEBZD], [
       AC_CHECK_HEADERS([    \
         arpa/nameser.h      \
+        netinet/in.h        \
         net/if.h            \
         net/if_dl.h         \
-        netinet/in.h        \
       ],[],[
-        ERR([Missing core header files.])
+        MISSING_HEADER()
       ])
 
     ],[
+    ])
+
+    ifdef([LINUKS], [
       AC_CHECK_HEADERS([    \
         linux/if_link.h     \
         netpacket/packet.h  \
         linux/sockios.h     \
         linux/ethtool.h     \
       ],[],[
-        ERR([Missing core header files.])
+        MISSING_HEADER()
       ])
 
+      AS_IF([test "x$with_libnl" = "xyes"], [
+
+        m4_ifndef([PKG_PROG_PKG_CONFIG], [
+          AC_MSG_ERROR([Either you dont have pkg-config installed, or pkg.m4 is not in 'ls /usr/share/aclocal | grep pkg', if thats so try exporting the following env var: execute 'aclocal --print-ac-dir' without quotes, then: 'export ACLOCAL_PATH=/tmp' where /tmp is the directory printed from the previous command.])
+        ])
+        PKG_PROG_PKG_CONFIG()
+
+        PKG_CHECK_MODULES([LIBNL], [libnl-3.0 >= 3.0 libnl-genl-3.0 >= 3.0], [
+          AC_CHECK_LIB(nl-3,nlmsg_data,[],[
+            MISSING_FUNC()
+          ])
+          AC_CHECK_LIB(nl-genl-3,genlmsg_put,[],[
+            MISSING_FUNC()
+          ])
+
+        ],[
+          AC_MSG_ERROR([Your libnl version is too old, consider updating to version three at least])
+
+        ])
+        LIBNL_CF=$LIBNL_CFLAGS
+        LIBNL_LZ=$LIBNL_LIBS
+        WITH_LIBNL=1
+
+      ])
+
+    ],[
     ])
 
     AC_CHECK_FUNCS([ \
@@ -89,7 +127,7 @@ AC_DEFUN([TEST_NET],[
       ioctl          \
       inet_ntop      \
     ],[],[
-      ERR([Missing core library functions.])
+      MISSING_FUNC()
     ])
     
     NOTIFY([addrinfo])
@@ -133,7 +171,7 @@ AC_DEFUN([TEST_NET],[
       ]
     )
 
-    ifdef([ITS_BSD],[
+    ifdef([FREEBZD],[
       NOTIFY([getifaddrs-heavy])
       AC_COMPILE_IFELSE([
         AC_LANG_SOURCE([[
@@ -162,7 +200,10 @@ AC_DEFUN([TEST_NET],[
 
   ])
 
+  AC_SUBST(LIBNL_CF)
+  AC_SUBST(LIBNL_LZ)
   AC_DEFINE_UNQUOTED([WITH_NET],[$WITH_NET],[Net funcs])
+  AC_DEFINE_UNQUOTED([WITH_LIBNL],[$WITH_LIBNL],[wifi funcs])
 
 ])
 
@@ -186,12 +227,22 @@ AC_DEFUN([TEST_PCI],[
     [with_pci=yes]
   )
 
-  AS_IF([test "x$with_pci" = "xno"], [
+  ifdef([LINUKS],[],[
     WITH_PCI=0
     CHECK_CFLAGZ([-O2])
   ])
 
-  ifdef([ITS_BSD],[],[
+  ifdef([LINUKS],[
+    AS_IF([test "x$with_pci" = "xno"], [
+      WITH_PCI=0
+      ifdef([GOT_SENSR],[
+        CHECK_CFLAGZ([-O0])
+      ],[
+        CHECK_CFLAGZ([-O2])
+      ])
+      m4_define([NO_PCI],[thenFryAGP])
+    ])
+
     AS_IF([test "x$with_pci" = "xyes"], [
 
       dnl For very first time I stumble upon GCC -O2 bug.
@@ -213,10 +264,9 @@ AC_DEFUN([TEST_PCI],[
           pci_cleanup
         ],[
           AC_CHECK_LIB(pci,LiB,[],[
-            ERR([Missing core pci function.])
+            MISSING_FUNC()
           ])
       ])
-
     ])
 
     AC_SUBST(PCI_LIBS)
@@ -243,6 +293,7 @@ AC_DEFUN([TEST_PCI],[
       )
     ])
 
+  ],[
   ])
 
   AC_DEFINE_UNQUOTED([WITH_PCI],[$WITH_PCI],[PCI funcs])

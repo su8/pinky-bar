@@ -89,7 +89,7 @@ AC_DEFUN([TEST_SOME_FUNCS],[
   )
 
 
-  ifdef([ITS_BSD],[],[
+  ifdef([LINUKS],[
     NOTIFY([sysinfo])
     AC_COMPILE_IFELSE([
       AC_LANG_SOURCE([[
@@ -112,7 +112,7 @@ AC_DEFUN([TEST_SOME_FUNCS],[
       ]
     )
 
-  ])
+  ],[])
 
 
   NOTIFY([openNreadFile])
@@ -151,7 +151,7 @@ AC_DEFUN([TEST_SOME_FUNCS],[
   )
 
 
-  ifdef([ITS_BSD],[],[
+  ifdef([LINUKS],[
     NOTIFY([glob])
     AC_COMPILE_IFELSE([
       AC_LANG_SOURCE([[
@@ -166,7 +166,7 @@ AC_DEFUN([TEST_SOME_FUNCS],[
       ]
     )
 
-  ])
+  ],[])
 
 
   NOTIFY([sysconf])
@@ -279,7 +279,7 @@ AC_DEFUN([TEST_SOME_FUNCS],[
   )
   
   
-  ifdef([ITS_BSD],[
+  ifdef([FREEBZD],[
     NOTIFY([getloadavg])
     AC_COMPILE_IFELSE([
       AC_LANG_SOURCE([[
@@ -345,7 +345,7 @@ AC_DEFUN([TEST_SOME_FUNCS],[
         devstat_selectdevs
       ],[
         AC_CHECK_LIB(devstat,LiB,[],[
-          ERR([Missing core devstat function.])
+          MISSING_FUNC()
         ])
     ])
 
@@ -373,7 +373,7 @@ AC_DEFUN([TEST_SOME_FUNCS],[
         argp_usage
       ],[
         AC_CHECK_LIB(argp,LiB,[],[
-          ERR([Missing core argp function.])
+          MISSING_FUNC()
         ])
     ])
 
@@ -420,8 +420,63 @@ AC_DEFUN([TEST_SOME_FUNCS],[
       ]
     )
 
-  ],
-  [])
+  ],[])
+
+
+  ifdef([OPENBZD],[
+    NOTIFY([swapctl])
+    AC_COMPILE_IFELSE([
+      AC_LANG_SOURCE([[
+        #include <stdio.h>
+        #include <sys/swap.h>
+        int main(void) {
+          struct swapent *dev = NULL;
+          swapctl(SWAP_NSWAP, 0, 0);
+          return 0;
+        }
+      ]])
+    ],[],[
+      COMPILE_FAILED([swapctl])
+      ]
+    )
+
+    NOTIFY([apm battery])
+    AC_COMPILE_IFELSE([
+      AC_LANG_SOURCE([[
+        #include <stdio.h>
+        #include <string.h>
+        #include <stdint.h>
+        #include <fcntl.h>
+        #include <sys/ioctl.h>
+        #include <machine/apmvar.h>
+        int main(void) {
+          struct apm_power_info bstate;
+          int fd = 0;
+          uintmax_t dummy = 0;
+          memset(&bstate, 0, sizeof(struct apm_power_info));
+          if (0 != (fd = open("/dev/apm", O_RDONLY))) {
+            return 0;
+          }
+          if (0 != (ioctl(fd, APM_IOC_GETPOWER, &bstate))) {
+            close(fd);
+            return 0;
+          }
+          close(fd);
+          if (APM_BATT_UNKNOWN == bstate.battery_state ||
+              APM_BATTERY_ABSENT == bstate.battery_state) {
+            return 0;
+          }
+          dummy = (uintmax_t)bstate.battery_life;
+          return 0;
+        }
+      ]])
+    ],[],[
+      COMPILE_FAILED([apm battery])
+      ]
+    )
+
+  ],[])
+
 
 
 ])

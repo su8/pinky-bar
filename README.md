@@ -1,3 +1,30 @@
+The code doesn't age, neither it has expiration date.
+
+## Table of Contents
+
+- [Program Options](#program-options)
+- [Configure Options](#gnu-build-system-configure-options)
+- [Installation for dwm](#installation-for-dwm)
+- [Installation for xmonad/other WM](#installation-for-xmonad-or-other-wm)
+- [Installation in FreeBSD](#installation-in-freebsd)
+- [Installation in OpenBSD](#installation-in-openbsd)
+- [pinky curses installation](#pinky-curses-installation)
+- [pinky urxvt](#pinky-urxvt)
+- [Installation for anything else](#installation-for-anything-else)
+- [Using configuration file](#using-configuration-file)
+- [Linux Requirements](#linux-mandatory-requirements)
+- [BSD Requirements](#bsd-mandatory-requirements)
+- [Opt-in Requirements](#opt-in-requirements)
+- [WM Requirements](#wm-specific-requirements)
+- [Go lang](#go-lang)
+- [OCAML lang](#ocaml-lang)
+- [Rust lang](#rust-lang)
+- [Go lang](#go-lang)
+- [Assembly](#assembly)
+- [Wish list](#wish-list)
+
+---
+
 dwm
 
 ![](img/pic.png)
@@ -6,10 +33,11 @@ xmonad
 
 ![](img/pic5.png)
 
+![](img/pic7.png)
+
 ncurses
 
 ![](img/pic6.png)
-
 
 Gather some system information and show it in this statusbar program, not tied to any Window Manager, terminal multiplexer, etc.
 
@@ -17,18 +45,17 @@ Please note that the program won't detect fans connected via molex connetor(s) o
 
 The program is smart enough to detect whether some of your fan(s) blades are spinning, or the particular fan have been removed. Hold down some of your fan blades and you'll see that the program won't include this fan and it's RPM, release the blades and you'll see the fan and it's RPM in the statusbar. Try simulating real fan hardware failure by holding down all system fan blades and watch what the program will show you, just try not to slice your cheesy fingers open in the process.
 
+You can extend pinky-bar with your own crafted perl/python/ruby/lua/R/assembly/lisp/ocaml/rust/go/c++/slang/tcl script.
+
 If you compile your kernel from source code make sure to include your cpu and motherboard sensors as **modules** and not inlined.
 
-**Just an example if you use FreeBSD - acpi/aibs, coretemp/amdtemp.**
+**Just an example if you use BSD - acpi/aibs, coretemp/amdtemp.**
 
 ![](img/cpu-temp.png)
+
 ![](img/mobo-temp.png)
 
 ---
-
-## Bandwidth measurment
-
-pinky-bar supplies bandwitdh/network throughput measurment to satisfy those users that pay for overpriced 3G/mobile internet, and want to monitor every single megabit/megabyte.
 
 ## Program options
 
@@ -37,7 +64,7 @@ The order of supplied options will dictate how, where and what system informatio
 | short option | long option | Descrtiption                                                       |
 |--------------|-------------|--------------------------------------------------------------------|
 | -M           | --mpd       | The song filename                                                  |
-| -W           | --mpdtrack  | The song track name                                                |
+| -W           | --mpdtrack  | The song track name  (not available in cmus)                       |
 | -x           | --mpdartist | The song artist(s) name(s)                                         |
 | -X           | --mpdtitle  | The song title                                                     |
 | -y           | --mpdalbum  | The song album name                                                |
@@ -45,43 +72,59 @@ The order of supplied options will dictate how, where and what system informatio
 | -c           | --cpu       | The current cpu load (summed up all cores/threads)                 |
 | -L           | --coresload | Show the load regarding each individual cpu core/thread            |
 | -T           | --cputemp   | The current cpu temperature                                        |
-| -C           | --cpuspeed  | Show your maximum cpu clock speed in MHz, regardless of the used governor |
-| -I           | --cpuinfo   | Detect your CPU vendor, stepping and family from low level assembly access |
+| -C           | --cpuspeed  | Show your maximum cpu clock speed in MHz, regardless of the used governor. Uses assembly. |
+| -I           | --cpuinfo   | Detect your CPU vendor, stepping, family, clflush, l1/l2 cache and line size, physical cores, physical and virtual bits. Uses assembly. |
 | -r           | --ramperc   | The used ram in percentage                                         |
 | -J           | --ramtotal  | The total ram                                                      |
 | -K           | --ramfree   | The free ram                                                       |
 | -l           | --ramshared | The shared ram                                                     |
-| -o           | --rambuffer | The buffer ram                                                     |
+| -o           | --rambuffer | The buffer ram (not available in OpenBSD)                          |
 | -s           | --driveperc | The used drive storage in percentage                               |
 | -n           | --drivetotal| The total drive storage                                            |
 | -N           | --drivefree | The free drive storage                                             |
-| -O           | --driveavail| The available drive storage                                        |
+| -O           | --driveavail| The available drive storage (total - used)                         |
+|              | --drivetemp | Read the drive temperature from S.M.A.R.T                          |
 | -g           | --battery   | The remaining battery charge                                       |
 | -z           | --dvdstr    | The vendor and model name of your cdrom/dvdrom                     |
 | -S           | --statio    | Read and written MBs to the drive so far [argument - sda]          |
 | -p           | --packages  | The number of installed packages                                   |
 | -P           | --kernsys   | The kernel name                                                    |
-| -q           | --kernode   | The network node hostname                                          |
+|              | --kernode   | The network node hostname                                          |
 | -Q           | --kernrel   | The kernel release                                                 |
 | -R           | --kernver   | The kernel version                                                 |
 | -u           | --kernarch  | The machine architecture                                           |
 | -k           | --kernel    | Combined kernel name and version                                   |
+|              | --perl      | Extend pinkybar with your scripts written in perl, learn more from the Opt-in section.     |
+|              | --python    | Extend pinkybar with your scripts written in python, learn more from the Opt-in section.     |
+|              | --ruby      | Extend pinkybar with your scripts written in ruby, learn more from the Opt-in section.     |
+|              | --lua       | Extend pinkybar with your scripts written in lua, learn more from the Opt-in section.     |
+|              | --R         | Extend pinkybar with your scripts written in R, learn more from the Opt-in section.     |
+|              | --asm       | Extend pinkybar with assembly, learn more from the Opt-in section. |
+|              | --lisp      | Extend pinkybar with your scripts written in lisp, learn more from the Opt-in section.     |
+|              | --ocaml     | Extend pinkybar with your scripts written in ocaml, learn more from the Opt-in section.     |
+|              | --rust      | Extend pinkybar with your scripts written in rust, learn more from the Opt-in section.     |
+|              | --go        | Extend pinkybar with your scripts written in go, learn more from the Opt-in section.     |
+|              | --cpp       | Extend pinkybar with your cpp, learn more from the Opt-in section.  |
+|              | --slang     | Extend pinkybar with your slang, learn more from the Opt-in section.  |
+|              | --tcl       | Extend pinkybar with your tcl, learn more from the Opt-in section. |
+| -q           | --weather   | Show the temperature outside [argument - London,uk]                |
 | -U           | --uptime    | The system uptime                                                  |
 | -w           | --loadavg   | The system average load for past 1, 5 and 15 minutes               |
 | -v           | --voltage   | The system voltage                                                 |
 | -f           | --fans      | All system fans and their speed in RPM                             |
 | -m           | --mobo      | Show the motherboard name and vendor                               |
 | -d           | --mobotemp  | The motherboard temperature                                        |
-| -V           | --volume    | The volume                                                         |
+| -V           | --volume    | The sound volume level                                             |
 | -t           | --time      | The current time                                                   |
 | -a           | --ipaddr    | The local ip address [argument - eth0]                             |
-| -b           | --bandwitdh | The consumed internet bandwidth so far [argument - eth0]           |
+| -b           | --bandwidth | The consumed internet bandwidth so far [argument - eth0]           |
 | -i           | --iface     | The current download and upload speed [argument - eth0]            |
 | -A           | --ipmac     | The NIC mac address [argument - eth0]                              |
 | -B           | --ipmask    | The NIC subnet mask [argument - eth0]                              |
 | -D           | --ipcast    | The NIC broadcast address [argument - eth0]                        |
 | -E           | --iplookup  | Mini website IP lookup [website argument - google.com]             |
-| -j           | --nicfw     | The NIC firmware [argument - eth0]                                 |
+
+Be aware of the options that mention **Uses assembly** are tested only on AMD and Intel CPUs (starting from pentium 4 onwards).
 
 The following options are available only in Linux:
 
@@ -89,11 +132,13 @@ The following options are available only in Linux:
 |--------------|-------------|--------------------------------------------------------------------|
 | -F           | --drivemodel| The vendor name of your drive [argument - sda]                     |
 | -G           | --nicinfo   | The NIC vendor and model [argument - eth0]                         |
-| -h           | --nicdrv    | The NIC driver [argument - eth0]                                   |
+|              | --nicdrv    | The NIC driver [argument - eth0]                                   |
 | -H           | --nicver    | The NIC version [argument - eth0]                                  |
 | -e           | --iplink    | The NIC link speed (useful for wireless/wifi) [argument - eth0]    |
+| -j           | --nicfw     | The NIC firmware [argument - eth0]                                 |
+| -h           | --wifiname  | The name of currently connected wifi/wireless network [argument - wlan0]  |
 
-The following options are available only in FreeBSD:
+The following options are available only to FreeBSD and OpenBSD:
 
 | short option | long option | Descrtiption                                                       |
 |--------------|-------------|--------------------------------------------------------------------|
@@ -101,7 +146,15 @@ The following options are available only in FreeBSD:
 | -Z           | --swapused  | The used drive swap in MB                                          |
 | -F           | --swaperc   | The used drive swap in percentage                                  |
 | -h           | --swaptotal | The total drive swap                                               |
-| -H           | --swapavail | The available drive swap                                           |
+| -H           | --swapavail | The available drive swap (total - used)                            |
+|              | --wifiname  | The name of currently connected wifi/wireless network [argument - wlan0]  |
+
+The following options are available only in OpenBSD:
+
+| short option | long option | Descrtiption                                                       |
+|--------------|-------------|--------------------------------------------------------------------|
+| -l           | --ramused   | The used ram in MB                                                 |
+
 
 ---
 
@@ -114,267 +167,218 @@ It's up to you to decide which features suit you best.
 
 | To include     | Not to include      | Descrtiption                                                                               |
 |----------------|---------------------|--------------------------------------------------------------------------------------------|
-| --with-x11     | --without-x11       | Enable it if you are using Window Manager (dwm) to be more specific.                       |
+| --with-x11     | --without-x11       | Enable it if you are using dwm.                                                            |
 | --with-alsa    | --without-alsa      | To get the sound volume level.                                                             |
-| --with-oss     | --without-oss       | To get the sound volume level in FreeBSD.                                                  |
+| --with-oss     | --without-oss       | To get the sound volume level in \*BSD.                                                    |
 | --with-net     | --without-net       | Enable the internet related options.                                                       |
+| --with-libnl   | --without-libnl     | Enable the wifi related options regarding chipsets supporting the cfg80211/mac80211 modules (linux only).  |
 | --with-pci     | --without-pci       | To get the NIC vendor and model in linux                                                   |
 | --with-dvd     | --without-dvd       | To get the cdrom/dvdrom vendor and model                                                   |
-| --with-sensors | --without-sensors   | Alternative way to get the sensors values (linux only)                                     |
+| --with-sensors | --without-sensors   | Alternative way to get data from the sensors (linux only)                                  |
+| --with-apm     | --without-apm       | APM power and resource management for laptops (FreeBSD only)                               |
 | --with-ncurses | --without-ncurses   | Output the data to the terminal using the ncurses library, can be colorized                |
+| --with-perl    | --without-perl      | Extend pinkybar with your own crafted scripts written in perl                              |
+| --with-lua     | --without-lua       | Extend pinkybar with your own crafted scripts written in lua                               |
+| --with-ruby    | --without-ruby      | Extend pinkybar with your own crafted scripts written in ruby                              |
+| --with-python2 | --without-python2   | Extend pinkybar with your own crafted scripts written in python2                           |
+| --with-python3 | --without-python3   | Extend pinkybar with your own crafted scripts written in python3                           |
+| --with-r       | --without-r         | Extend pinkybar with your own crafted scripts written in R                                 |
+| --with-assembly| --without-assembly  | Extend pinkybar with assembly                                                              |
+| --with-lisp    | --without-lisp      | Extend pinkybar with your own crafted scripts written in lisp                              |
+| --with-ocaml   | --without-ocaml     | Extend pinkybar with your own crafted scripts written in ocaml                             |
+| --with-rust    | --without-rust      | Extend pinkybar with your own crafted scripts written in rust                              |
+| --with-go      | --without-go        | Extend pinkybar with your own crafted scripts written in go                                |
+| --with-cpp     | --without-cpp       | Extend pinkybar with c++ program                                                           |
+| --with-slang   | --without-slang     | Extend pinkybar with slang program                                                         |
+| --with-tcl     | --without-tcl       | Extend pinkybar with tcl program                                                           |
+| --with-weather | --without-weather   | The temperature outside  (some details must be provided)                                   |
+| api\_key='123458976'               | | API key obtained after registering yourself in the weather website, must be combined **--with-weather**  |
+| --with-smartemp | --without-smartemp   | Read the drive temperature from S.M.A.R.T cross-platform available                       |
+| --with-drivetemp | --without-drivetemp   | Read the drive temperature from S.M.A.R.T (linux only) uses curl                       |
+| --with-drivetemp-light | --without-drivetemp-light   | Read the drive temperature from S.M.A.R.T (linux only) light version       |
+| drive\_port='1234'  |                | Different TCP port to listen to for the drive temperature, default one is 7634, must be combined **--with-drivetemp** or **--with-drivetemp-light**   |
 | --with-colours | --without-colours   | Colorize the output data.                                                                  |
-| icons=/tmp     |                     | Use xbm icons that can be used by dzen2 for example. Discarded when **--with-x11** is used |
+| icons=/tmp     |                     | xbm icons that can be used by dzen2 for example. Discarded when **--with-x11** is used     |
 | --with-mpd     | --without-mpd       | To see the currently played song name (if any).                                            |
 | --prefix=/tmp  |                     | The directory where the program will be installed                                          |
+| mobo\_sensor='dev.aibs.0'  |         | FreeBSD motherboard sensor module name to use in the sysctl calls. Read the FreeBSD installation below  |
+| cpu\_sensor='dev.cpu.0.temperature' |  | FreeBSD cpu temperature module name to use in the sysctl calls . Read the FreeBSD installation below  |
 
-By default, if **no** options are passed, the program will be compiled with/without:
+By default, if **no** options are passed, the program will be compiled with:
 
 ```bash
---without-alsa --without-x11 --without-mpd --with-colours --with-net --with-pci --without-dvd --without-sensors --without-ncurses
+--with-net --with-pci
 ```
 
-The pci and sensors configure options will be discarded in FreeBSD. If you supplied **--with-alsa** and **--with-oss** or used the port package with the ncurses dialogue, alsa will have higher precedence over OSS. By default the port package will have OSS selected and alsa unselected.
+Affects only FreeBSD users with laptops, **--without-apm** will compile the program with acpi support to obtain the current battery life.
 
-**--with-net** will substitute -O0 flag to mitigate a bug in GCC caused by -O2. -O0 will optimize the compiled binary for file size, while -O2 will optimize it for speed. So don't be shocked to find out that **--without-net** will cause the compiled binary to double it's size.
+**--without-mpd** will compile the program with cmus support, the options syntax stays as is.
+
+The pci and sensors configure options will be discarded in \*BSD.
+
+Affects only linux users with wifi/wireless chipsets, run `lsmod|grep 802` and see whether your chipset uses cfg80211/mac80211. If that's so you can rely on libnl and enable **--with-libnl** configure options, otherwise your chipset probably still uses we/wext, so type **--without-libnl**.
+
+Affects only linux users, **--with-drivetemp** pretty much locks you down to hddtemp. You can adjust **extra/scripts/drive-temperature.sh** and compile the program **--with-smartemp**, so you can switch between hddtemp and smartmontools at any time without the need recompile pinkybar with different options. **--with-smartemp** only cares for the existance of /tmp/pinkytemp file.
+
+**--with-weather** is using [this url](http://openweathermap.org/current), register yourself there, create a new [API key](https://home.openweathermap.org/api\_keys).
+
+Don't just rush to register yourself, read carefully what the "Free" account limits are and take in account how often the program should call their api service. I'm not responsible if you exceeded the limits, you've been warned.
+
+```bash
+# Make sure it's working first
+# curl 'http://api.openweathermap.org/data/2.5/weather?q=London,uk&units=metric&APPID=28459ae16e4b3a7e5628ff21f4907b6f'
+
+# what to pass to configure
+--with-weather api_key='28459ae16e4b3a7e5628ff21f4907b6f'
+```
 
 ---
 
 ## Installation for dwm
 
 ```bash
-bash bootstrap distro
-./configure --prefix=$HOME/.cache --with-x11 --with-alsa
+perl set.pl "distro"
+autoreconf --install --force
+
+./configure --prefix=$HOME/.cache --with-x11
 make
 make install
 ```
 
-To see the currently played song name add **--with-mpd** to configure.
-
-To disable the colours you can add **--without-colours** to configure.
-
-Put the following in your **xinitrc** or the script used to start dwm.
-
-```bash
-# Execute the "statusbar" program every 5 secs
-while true; do
-  # scroll a few lines up to see the rest options
-  "$HOME/.cache/bin/pinkybar" -LTrspkvfmdVt
-  sleep 5
-done &
-```
+Copy the code from extra/scripts/dwm.sh or `exec` it from **xinitrc** or the script used to start dwm.
 
 ## Installation for xmonad (or other WM)
 
 ```bash
 # Copy the xbm icons
 mkdir -p --mode=700 $HOME/.xmonad/icons
-cp -r xbm_icons/*.xbm $HOME/.xmonad/icons
+cp -r extra/xbm_icons/*.xbm $HOME/.xmonad/icons
 
-# rename the program
-sed -i 's/pinkybar/xmonadbar/g' bootstrap
-
-bash bootstrap distro
+perl set.pl "distro"
+autoreconf --install --force
 
 # disable X11, point the location to the icons
-./configure --prefix=$HOME/.cache --without-x11 --with-alsa icons=$HOME/.xmonad/icons
+./configure --prefix=$HOME/.cache --without-x11 icons=$HOME/.xmonad/icons
 
 # compile 'n install
 make
 make install
 ```
 
-To see the currently played song name add **--with-mpd** to configure.
-
-Put the following in your **xinitrc** or the script used to start xmonad.
-
-```bash
-# Execute the "statusbar" program every 2 secs
-while true; do
-  # scroll a few lines up to see the rest options
-  "$HOME/.cache/bin/xmonadbar" -LTrspkvfmdVt
-  sleep 2
-done | dzen2 -w 1800 -x 130 -ta r -fn '-*-dejavusans-*-r-*-*-11-*-*-*-*-*-*-*' &
-```
+Copy the code from extra/scripts/xmonad.sh or `exec` it from **xinitrc** or the script used to start xmonad.
 
 ## Installation in FreeBSD
 
-You can use the provided port package instead.
+FreeBSD has no other way than using the module specific convention to query sysctl and obtain data from the sensors. Maintaining a list with all the possible module names and performing expensive sysctl calls in a loop to determine that X module is loaded into your system is no-go. Be prepared to spend a minute or two to find out some system information.
+
+Determine the motherboard sensor module name.
+
+```bash
+sysctl -a|grep 'aibs'
+
+dev.aibs.0.volt.0: 1356 850 1600
+dev.aibs.0.volt.1: 3344 2970 3630
+dev.aibs.0.volt.2: 5040 4500 5500
+dev.aibs.0.volt.3: 12278 10200 13800
+dev.aibs.0.temp.0: 39.0C 60.0C 95.0C
+dev.aibs.0.temp.1: 38.0C 45.0C 75.0C
+dev.aibs.0.fan.0: 1053 600 7200
+dev.aibs.0.fan.1: 1053 600 7200
+```
+
+Copy only 'dev.MODULE.NUMBER' (if there is any number at all) and paste it into the **mobo\_sensor** option below.
+
+Do the same for your cpu temperature, copy and paste the variable as is. **dev.cpu.0.temperature** below is provied as example.
+
+```bash
+perl set.pl "freebsd"
+autoreconf --install --force
+
+./configure --prefix=$HOME/.cache --with-x11 --without-alsa --with-oss mobo_sensor='dev.aibs.0' cpu_sensor='dev.cpu.0.temperature'
+make
+make install
+```
+
+Send a request to the FreeBSD mailing list and request the OpenBSD sensors API to be ported.
+
+## Installation in OpenBSD
+
+Before proceeding, you'll have to:
+
+```bash
+# To detect the newer compiler that you are
+# about to install
+sed -i 's/#AC_PROG_CC(/AC_PROG_CC(/g' configure.ac
+
+ls /usr/local/bin/automake-*
+ls /usr/local/bin/autoconf-*
+
+# Then replace the numbers below
+export AUTOCONF_VERSION=2.69
+export AUTOMAKE_VERSION=1.15
+
+# Your call, gcc or llvm ?
+pkg_add gcc
+
+# after that:
+perl set.pl "openbsd"
+autoreconf --install --force
+
+./configure --prefix=$HOME/.cache --without-alsa --with-oss
+make
+make install
+```
 
 ## pinky curses installation
 
+Step one, compile pinky-bar **--with-ncurses**, so the output to be formated in a way that pinky-curses can parse and colorize.
+
 ```bash
-# rename the program
-sed -i 's/pinkybar/randombar/g' bootstrap
+perl set.pl "distro"
+autoreconf --install --force
 
-bash bootstrap distro
-
-# disable X11
+# disable X11, enable the colours and ncurses opts.
 ./configure --prefix=$HOME/.cache --without-x11 --with-alsa --with-colours --with-ncurses
 
 # compile 'n install
 make
 make install
-
-# compile pinky_curses
-cd src
-gcc -Wall -Wextra -O2 curses.c -o $HOME/.cache/bin/pinky_curses -lncurses
 ```
 
-Put the following in your shell config as function or alias.
+Step two, compile and install pinky-curses - https://notabug.org/void0/pinky-curses
 
-```bash
-pinky() {
-  location="${HOME}/.cache/bin"
+Copy the code from extra/scripts/pinky-curses.sh
 
-  while true; do
-    # scroll a few lines up to see the rest options
-    "${location}"/randombar -LTrspkvfmdVt
-    sleep 2
-  done | "${location}"/pinky_curses
-}
-```
+## pinky urxvt
 
-Test it:
+What a coincidence, pinky-urxvt is my 3rd urxvt extension and 3rd member of the pinky family.
 
-```bash
-pinky  # Press CTRL + C to stop the program
-```
+The sole purpose of this urxvt extension is to make it easy for you to keep track of things that you are interested to monitor while hacking your way something in the terminal.
 
-Put the following in **~/.Xresources**
+Link - https://notabug.org/void0/pinky-urxvt
 
-```bash
-! Xft --------------------------------------------------------------------
-Xft.dpi:        96
-Xft.antialias:  true
-Xft.rgba:       rgb
-Xft.hinting:    true
-Xft.hintstyle:  hintslight
-Xft.autohint:   false
-Xft.lcdfilter:  lcddefault
+![](https://notabug.org/void0/pinky-urxvt/raw/master/2.png)
 
-
-! urxvt conf --------------------------------------------------------------------
-URxvt.buffered                  : true
-URxvt.cursorBlink               : false
-URxvt.cursorUnderline           : false
-URxvt.pointerBlank              : false
-URxvt.geometry                  : 80x24
-URxvt.font                      : xft:DejaVu Sans Mono:bold:pixelsize=11
-URxvt.boldfont                  : xft:DejaVu Sans Mono:bold:pixelsize=11
-URxvt.letterSpace               : -1
-URxvt.termName                  : rxvt-256color
-URxvt.iso14755                  : false
-URxvt.iso14755_52               : false
-URxvt.cursorColor               : #ffffff
-URxvt.colorIT                   : #87af5f
-URxvt.colorBD                   : #d7d7d7
-URxvt.colorUL                   : #87afd7
-URxvt.urgentOnBell              : false
-URxvt.mapAlert                  : false
-URxvt.visualBell                : false
-URxvt.saveLines                 : 10000
-URxvt.scrollBar                 : false
-URxvt.scrollBar_right           : false
-URxvt.scrollBar_floating        : false
-URxvt.scrollstyle               : rxvt
-URxvt.Depth                     : 32
-URxvt.loginShell                : false
-URxvt.insecure                  : false
-URxvt.pastableTabs              : false
-URxvt.utmpInhibit               : false
-URxvt.reverseVideo              : false
-URxvt.skipBuiltinGlyphs         : true
-
-
-! urxvt colours --------------------------------------------------------------------
-URxvt.tabbed.tabbar-fg: 2
-URxvt.tabbed.tabbar-bg: 0
-URxvt.tabbed.tab-fg: 8
-URxvt.tabbed.tab-bg: 0
-URxvt.tabbed.new-button: false
-URxvt.tabbed.autohide: true
-
-*.foreground:   #c5c8c6
-*.background:   #222222
-*.cursorColor:  #ffffff
-
-! black
-*.color0:       #222222
-*.color8:       #373b41
-
-! red
-*.color1:       #ef2929
-*.color9:       #ef2929
-
-! green
-*.color2:       #8ae234
-*.color10:      #8ae234
-
-! yellow
-*.color3:       #c2a000
-*.color11:      #fce94d
-
-! blue
-*.color4:       #5f819d
-*.color12:      #81a2be
-
-! magenta
-*.color5:       #85678f
-*.color13:      #a97fa8
-
-! cyan
-*.color6:       #5e8d87
-*.color14:      #34e2e2
-
-! white
-*.color7:       #ffffff
-*.color15:      #ffffff
-
-
-! xterm conf -----------------------------------------------------------
-XTerm.vt100.geometry:   80x24
-XTerm*faceName:     DejaVu Sans Book
-XTerm*faceSize:     9
-XTerm*toolBar:      off
-
-xterm*termName: xterm-256color
-XTerm*locale: true
-xterm*cursorColor: #FFFFFF
-xterm*toolBar: false
-xterm*scrollBar: false
-xterm*rightScrollBar: false
-xterm*background: #222222
-xterm*foreground: #999999
-xterm*faceName: DejaVu Sans Book:pixelsize=12
-xterm*allowBoldFonts: false
-xterm*geometry: 80x24
-```
-
-Force your non xterm/urxvt terminal emulator to use the newer xterm/urxvt colours. You'll have to kill Xorg (simply logout and log back in), experienced people are using xrdb instead killing Xorg each time they do changes to such files.
-
-pinky\_curses is standalone program not tied to pinky-bar.
-
-```bash
-# &B - Blue , &M - Magenta , &Y - Yellow
-while true; do echo "&BOh &Mhello &Ydear";sleep 1;done | ./pinky_curses
-```
+pinky-urxvt, and pinky-curses are not tied to pinky-bar.
 
 ## Installation for anything else
 
-pinky-bar is no longer tied to Window Managers only. With the addition of "without colours", the output can be shown in any program, just bear in mind that the more options you've supplied the more system information will be shown.
+pinky-bar is no longer tied to Window Managers only. With the addition of "without colours", the output can be shown in any program, just bear in mind that the more options you've supplied the more system information will be shown. 
+
+The tmux status bar in action:
 
 ![](img/pic4.png)
 
 The installation steps:
 
 ```bash
-bash bootstrap distro
+perl set.pl "distro"
+autoreconf --install --force
+
 ./configure --prefix=$HOME/.cache --without-x11 --without-colours
 make
 make install
 ```
-
-Will mention that you can add **--with-mpd** too, but scroll a few lines up, re-read **Installation for anything else** and see the tmux snapshot.
 
 By choosing this 3rd installation method it is up to you where, how to start and use the system information that's produced by pinky-bar.
 
@@ -390,9 +394,39 @@ Replace **distro** with archlinux, debian, gentoo, slackware, rhel, frugalware, 
 - [x] frugalware
 - [x] angstrom
 
-Cannot list FreeBSD as "distro", so it deserve it's own option:
+Cannot list the \*BSD flavours as "distros", so they deserve own options:
 
 - [x] freebsd
+- [x] openbsd
+
+---
+
+## Using configuration file
+
+**~/.pinky** is the location of the configuration file. It uses the same short and long command line options.
+
+I do advise you to use the long options syntax.
+
+If any option depends on argument, don't put any space between the option and the argument.
+
+Use one option per line. Contrary to your shell, the "parser" won't expand ~/my\_script.pl to point to /home/sweethome/my\_script.pl
+
+```bash
+--weather=London,uk
+--coresload
+--cputemp
+--ramperc
+--driveperc
+--packages
+--kernel
+--voltage
+--fans
+--mobo
+--mobotemp
+--perl=/home/sweethome/my_script.pl
+```
+
+Execute the program without supplying any command line options and it will parse the configuration file.
 
 ---
 
@@ -404,11 +438,12 @@ Cannot list FreeBSD as "distro", so it deserve it's own option:
 * automake
 * m4
 * gawk
+* perl
+* **as** from binutils
 
-## FreeBSD Mandatory requirements
+## \*BSD Mandatory requirements
 
 * gcc/clang
-* bash
 * autoconf
 * automake
 * autoconf-wrapper
@@ -418,25 +453,304 @@ Cannot list FreeBSD as "distro", so it deserve it's own option:
 * libtool
 * m4
 * gawk
+* perl
+* **as** from binutils
+
+Some llvm and gcc versions will not check for headers and libraries in /usr/local, and you might get something like **ld cannot find -largp**, if that's the case for you, you should export the following environment variables:
+
+```bash
+export LDFLAGS='-L/usr/local/lib'
+export CFLAGS='-I/usr/local/include'
+```
+
+After editing the wrong prototype I managed to stumble upon a bug in OpenBSD's own libc.
+
+**Warning !!! OpenBSD users !!!**
+
+The majority of SCN\* macros differs from their PRI\* cousins. And I cannot guarantee the accuracy of fixed width integers when OpenBSD own libc managed to use different format specifiers. Read extra/misc/openbsd\_bugs.md for more details.
 
 ## Opt-in requirements
+
+Linux camp:
 
 The internet related options rely on headers provided iproute2.
 By default the program will try to compile with those headers included.
 If for any reason you would like to compile the program without internet related options, then pass **--without-net** to configure.
 
-* iproute2    # Linux Net headers
+* iproute2
 
-The get the NIC vendor and model (linux):
+wifi/wireless chipsets supporting mac80211/cfg80211:
+
+* libnl (>= 3.0)
+* pkg-config
+
+In Gentoo there are two versions of pkg-config. The first one is named dev-util/pkgconfig and the second one is dev-ruby/pkg-config. In order to use the first one, you'll have to export the pkg-config path to the following environment variable:
+
+```bash
+export PKG_CONFIG_PATH=/usr/bin/pkg-config
+```
+
+Also you'll have to edit **m4/extend.m4** and edit the line `PKG_CHECK_MODULES([RUBY], [ruby-2.2 >= 2.2]` to point to the correct ruby version that you have installed.
+
+Then pass **--with-libnl** to configure.
+
+To get the NIC vendor and model names:
 
 * pciutils
+
+Alternative way to obtain data from the sensors:
+
+* lm\_sensors
+
+To read the drive temperature from S.M.A.R.T **--with-drivetemp**:
+
+* hddtemp
+* curl
+
+To read the drive temperature from S.M.A.R.T **--with-drivetemp-light**:
+
+* hddtemp
+
+The "light" version does not rely on curl, and will not force -O0 CFLAGS.
+
+```bash
+# --with-drivetemp-light
+0.00s user 0.00s system 15% cpu 0.006
+
+# --with-drivetemp
+0.01s user 0.00s system 72% cpu 0.008
+```
+
+Try running hddtemp to see if it detects your drive, depending if it has temperature sensor in first place:
+
+```bash
+sudo hddtemp /dev/sda
+
+WARNING: Drive /dev/sda doesn't appear in the database of supported drives
+WARNING: But using a common value, it reports something.
+WARNING: Note that the temperature shown could be wrong.
+WARNING: See --help, --debug and --drivebase options.
+WARNING: And don't forget you can add your drive to hddtemp.db
+/dev/sda: Corsair Force GT:  23°C or °F
+```
+
+The message is pretty clear "don't forget to add your drive to hddtemp.db", first run the debug command to see which field is responsible to report your drive temperature, it should be in the range of 190 - 200:
+
+```bash
+# Copy the Model: line
+
+sudo hddtemp --debug /dev/sda
+
+================= hddtemp 0.3-beta15 ==================
+Model: Corsair Force GT
+
+field(1)         = 0
+field(5)         = 0
+field(9)         = 253
+field(12)        = 237
+field(171)       = 0
+field(172)       = 0
+field(174)       = 147
+field(177)       = 1
+field(181)       = 0
+field(182)       = 0
+field(187)       = 0
+field(194)       = 22
+field(195)       = 0
+field(196)       = 0
+field(201)       = 0
+field(204)       = 0
+field(230)       = 100
+field(231)       = 0
+field(233)       = 130
+field(234)       = 216
+field(241)       = 216
+field(242)       = 151
+```
+
+Open up **/usr/share/hddtemp/hddtemp.db** and append the Model: line that you copied earlier with the correct field that reports your drive temperature.
+
+```bash
+"Corsair Force GT" 194 C "Corsair Force GT 120GB SSD"
+```
+
+Next run hddtemp in daemon mode so we can request the temperature back:
+
+```bash
+sudo hddtemp -d /dev/sda
+```
+
+Open up your browser and navigate to 127.0.0.1:7634 and you'll get instant temperature report back to you.
+
+The "init" lock-in for those of you that cannot choose between udev or eudev puts me in position not rely on libatasmart, regardless how neat the library is. There is stripped example program in extra/misc/skdump.c if you are curious to check and test libatasmart.
+
+Linux camp end.
+
+To read the drive temperature from S.M.A.R.T **--with-smartemp**:
+
+* smartmontools
+
+smartmontools are not mandatory in OpenBSD, `atactl` does the same job.
+
+Execute the following command as root `visudo` and append:
+
+```bash
+# 'frost' is my computer username
+frost ALL=NOPASSWD:/usr/sbin/smartctl
+```
+
+Copy the code from extra/scripts/drive-temperature.sh or `exec` it from **xinitrc** or the script used to start your DE/WM.
+
+To extend pinkybar with your own crafted perl/python/ruby/lua/assembly/R/ocaml/lisp/rust/go/c++/slang/tcl script:
+
+* perl
+* python == 2.7 (--with-python2)
+* python >= 3.3 (--with-python3)
+* lua >= 5.1
+* ruby >= 2.0 and pkg-config
+* R
+* assembly (the **as** program from binutils)
+* ecl for lisp
+* ocaml
+* rust
+* go
+* slang
+* tcl
+
+Have a look at extra/scripts, the examples there will teach you how to write the most basic scripts in order to extend pinkybar in python/perl/ruby/lua/R/assembly/lisp/ocaml/rust/go/c++/slang/tcl. You can use all languages simultaneously.
+
+Please, please do **NOT** export or set PYTHONPATH on it's own line.
+
+`WRONG`:
+
+```bash
+export PYTHONPATH=/meh
+pinkybar --python my_script
+```
+
+`WRONG`:
+
+```bash
+PYTHONPATH=/meh
+pinkybar --python my_script
+```
+
+Correct PYTHONPATH usage:
+
+```bash
+# ~/chewbacca is the path where pinky.py resides
+# ~/chewbacca/pinky.py
+
+# python2
+PYTHONPATH=~/chewbacca ~/pinkybar --python pinky
+
+# python3
+# executed only once
+fuNky=$(python3 -c 'import sys;print(":".join([x for x in sys.path]))')
+
+# executed in a loop
+PYTHONPATH=$fuNky:~/chewbacca ~/pinkybar --python pinky
+```
+
+**--with-perl**:
+
+```bash
+~/pinkybar --perl ~/chewbacca/pinky.pl
+```
+
+**--with-ruby**:
+
+```bash
+~/pinkybar --ruby ~/chewbacca/pinky.rb
+```
+
+**--with-lua**:
+
+Non byte-compiled script:
+
+```bash
+~/pinkybar --lua ~/chewbacca/pinky.lua
+```
+
+Once done editing your script, you can byte-compile it:
+
+```bash
+luac -o pinky.luac pinky.lua
+~/pinkybar --lua ~/chewbacca/pinky.luac # <-- .luac and not .lua
+```
+
+**--with-r**
+
+```bash
+~/pinkybar --R ~/chewbacca/pinky.R
+```
+
+**--with-assembly**
+
+```bash
+~/pinkybar --asm
+```
+
+**--with-lisp**
+
+```bash
+~/pinkybar --lisp ~/chewbacca/pinky.lisp
+```
+
+**--with-ocaml**
+
+The source code resides in the **src** folder under the name of **pinky.ml**
+
+```bash
+~/pinkbar --ocaml
+```
+
+**--with-rust**
+
+The source code resides in the **src** folder under the name of **pinky.rs**
+
+```bash
+~/pinkbar --rust
+```
+
+**--with-go**
+
+The source code resides in the **src** folder under the name of **pinky.go**
+
+```bash
+~/pinkbar --go
+```
+
+**--with-cpp**
+
+The source code resides in the **src** folder under the name of **c++.cpp**
+
+```bash
+~/pinkbar --cpp
+```
+
+**--with-slang**
+
+```bash
+~/pinkybar --slang ~/pinky.sl
+```
+
+**--with-tcl**
+
+```bash
+~/pinkybar --tcl ~/pinky.tcl
+```
+
+-----
 
 To get the sound volume level:
 
 * alsa-utils
 * alsa-lib
 
-Then pass **--with-alsa** to configure. FreeBSD users can use the baked OSS instead, pass **--without-alsa --with-oss** to configure instead.
+Then pass **--with-alsa** to configure.
+
+\*BSD users can use the baked OSS instead, pass **--without-alsa --with-oss** to configure instead.
 
 To output the data to the terminal using the ncurses library:
 
@@ -449,70 +763,33 @@ To get the vendor and model name of your cdrom/dvdrom/blu-ray:
 
 In linux **--without-dvd** will still compile the program with dvd support. Except it will be limited only to dvd support, it will try to parse the sr0 vendor and model name detected by the kernel.
 
-Alternative way to obtain sensors values in linux with:
-* lm\_sensors
+The weather related options, please go back and read **Don't just rush to register yourself**:
 
-Jokes aside, but my intention was to make the lm\_sensors api code FreeBSD exclusive, which unfortunately is unsupported in BSD.
+* curl
+* gzip
 
-To see the currently played song name:
+**Warning, I'm not responsible for any lawsuit towards you, neither encourage you to pirate content that is not licensed as free and/or for fair use.**
 
-* libmpdclient
-* mpd (with properly configured config)
+To see the currently played song name **--with-mpd**:
+
+  Server side:
+
+  * mpd (can be build with soundcloud support)
+
+  Client side:
+
+  * libmpdclient
+  * mpc/ncmpc/ncmpcpp, [and the rest](http://mpd.wikia.com/wiki/Clients)
+
+To see the currently played song name **--without-mpd**:
+
+* cmus
+
+The "soundcloud" alternative that is supported in cmus and your mpd client will be to download **.m3u/.pls** files according to the [radio stream station](https://www.internet-radio.com) that you are interested to listen.
 
 The FreeBSD users will notice that "mpd" is named "musicpd".
 
-Here's an example of my **/etc/mpd.conf** (linux)
-
-```nginx
-music_directory "/home/frost/music"
-playlist_directory "/home/frost/music"
-db_file "/tmp/mpddb"
-log_file "/tmp/mpdlog"
-state_file "/tmp/mpdstate"
-pid_file "/tmp/mpdpid"
-log_level "default"
-user "mpd"
-
-
-audio_output {
-  type "alsa"
-  name "My sound card"
-  mixer_type "software"
-}
-
-audio_output {
-  type "httpd"
-  name "HTTP Stream"
-  encoder "vorbis"
-  port "8000"
-  bitrate "128"
-  format "44100:16:1"
-}
-
-bind_to_address "127.0.0.1"
-```
-
-
-FreeBSD conf, you'll have to add the "musicpd" daemon user on your own:
-
-```nginx
-music_directory "/tmp/music"
-playlist_directory "/tmp/music"
-db_file "/tmp/mpddb"
-log_file "/tmp/mpdlog"
-state_file "/tmp/mpdstate"
-pid_file "/tmp/mpdpid"
-log_level "default"
-user "musicpd"
-
-audio_output {
-  type "oss"
-  name "My sound card"
-}
-
-port "6600"
-bind_to_address "127.0.0.1"
-```
+If you've never used mpd before copy the example configuration from extra/mpd according to your OS.
 
 Keep an eye on the **log file size** if you are using raspberry pi (or equivalent device) that streams the music, make sure that it's deleted automatically if it exceeds some pre-defined size.
 
@@ -533,62 +810,44 @@ for dwm:
 
 use **--without-colours** to skip the following step:
 
-* dwm compiled with [statuscolor](https://github.com/wifiextender/dwm-fork/blob/master/patches/statuscolours.diff) patch. The colours in use are specified in your [config.h](https://github.com/wifiextender/dwm-fork/blob/master/config.h#L6)
-
-## Wish list
-
-~~As top priority:~~
-
-~~FreeBSD disk io~~
-
-~~FreeBSD laptop battery support~~
+* dwm compiled with statuscolor patch. The colours in use are specified in your dwm config.h
 
 ---
 
-With the help from the gcc documentation, this wish list option has been solved.
+## OCAML lang
 
-~~Per core/thread CPU frequency detection: Can add it at any time if there is enough demand, but needs some consideration first.~~
+Before invoking any of the installation commands you'll have to edit **src/Makefail.skel**:
 
-~~The kernels cpu frequency governor "performance" will always run at the highest possible clock rate regardless of it's use/idle. The only side effect of this is higher temps when on idle (true if the cpu has multiple cores and or threads).~~
-
-~~The "powersaving" governor will always run at the lowest possible clock rate regardless of it's use/idle. The side effect - slower machine no matter what you do.~~
-
-~~The "ondemand" governor does what it says - ondemand scaling. With it you get the best performance when you need to, powersaving and lower temps when on idle.~~
-
-~~For example I manually turn off the cpu frequency governor in my kernel builds, which sets it to performance.~~
-
-~~The cpu frequency detection is easy, but it poses a roadblock by assuming that the "ondemand" is set and/or is enabled in the user kernel.~~
-
-~~Decision 1: On a multicore/thread cpu, the detection for each core/thread will produce up to 8 digit number, thus 4 core and 4 thread cpu will produce: 1234.5678 1234.5678 1234.5678 1234.5678 1234.5678 1234.5678 1234.5678 1234.5678, without including MHz for each core/thread, which will take a lot of space in the final statusbar output. This way the user will know for how long and which core/thread is under some load.~~
-
-~~Decision 2: On other hand it will be lame on a 10/16 core/thread system to show the overall (not per core/thread) cpu frequency that have been summed up, which will beat the purpose of cpu frequency detection in first place, as the user will not be aware that some core/thread is running at full cpu clock speed as the load will be spread equally when summing the numbers up.~~
-
----
-
-GPU temperature, voltage, fan(s) and used RAM: hard, but not impossible.
-
-It would be nice to have decent gpu temperature, voltage, fan(s) speed and used RAM detection. Should we detect multiple gpus (SLI,single dual gpu card), how to detect which of the multiple gpu cards is actually the one used for **this** monitor in case the program is compiled **--without-x11** and/or xinerama ? What about hybrid combination and some gpu manufactor that is not supported by MESA ? My legacy gpu only shows it's vendor name, model and used ram (in MESA) because it's onboard gpu.
-
----
-
-[Currently played filename in VLC](https://github.com/videolan/vlc/blob/master/src/libvlc.c): easy to be added.
-
-Unless MPRIS is replaced with sockets, I am not willing to add dbus as dependency to pinky-bar.
-
-```cpp
-// The "MPRIS_BUS_NAME" macro from libvlc
-dbus_message_new_method_call(
-  "org.mpris.MediaPlayer2.vlc",
-  "/org/mpris/MediaPlayer2",
-  "org.mpris.MediaPlayer2.Player",
-  "Metadata");
-// results in:  'xesam:url': <'file:///home/frost/music/Summer_Sixteen.mp3'> 
+```bash
+pinkybar_SOURCES = pinky.ml \
 ```
 
 ---
 
-Show the idle time in seconds/minutes: easy to be added via [XScreenSaverQueryInfo](http://linux.die.net/man/3/xscreensaverqueryinfo), but will discriminate the users that have compiled the program **--without-x11**.
+## Rust lang
+
+The source code that you should edit is in **extra/scripts/pinky.rs**, but you'll have to edit **src/Makefail.skel** and add the following at the end:
+
+```bash
+pinkybar_LDADD = pinky.a
+```
 
 ---
 
-Show the CapsLock/NumLock/ScrollLock indicator status for keyboard without LEDs: easy to be added via [XkbGetIndicatorState](http://linux.die.net/man/3/xkbgetindicatorstate), but will discriminate the users that have compiled the program **--without-x11**.
+## Go lang
+
+The source code that you should edit is in **src/pinky.go**, but you'll have to edit **src/Makefail.skel** and add the following at the end:
+
+```bash
+pinkybar_LDADD = pinky2.a
+```
+
+---
+
+## Assembly
+
+The source code that you should edit is in **extra/scripts/pinky.s**, but you'll have to edit **src/Makefail.skel** add append the following to pinkybar_SOURCES:
+
+```bash
+../extra/scripts/pinky.s        \
+```

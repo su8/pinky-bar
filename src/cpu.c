@@ -26,14 +26,9 @@
 #include "include/freebzd.h"
 #endif /* __FreeBSD__ */
 
-#if defined(__linux__)
-#define IDLE_NUM 3
-#define LOOP_ITERZ 10
-
-#else /* FreeBSD */
-#define IDLE_NUM 4
-#define LOOP_ITERZ 5
-#endif /* __linux__ */
+#if defined(__OpenBSD__)
+#include "include/openbzd.h"
+#endif /* __OpenBSD__ */
 
 void 
 get_cpu(char *str1) {
@@ -48,6 +43,12 @@ get_cpu(char *str1) {
   size_t len = sizeof(cpu_active);
   SYSCTLVAL("kern.cp_time", &cpu_active);
 #endif /* __FreeBSD__ */
+
+#if defined(__OpenBSD__)
+  int mib[] = { CTL_KERN, KERN_CPTIME };
+  size_t len = sizeof(cpu_active);
+  SYSCTLVAL(mib, 2, &cpu_active, &len);
+#endif /* __OpenBSD__ */
 
 #if defined(__linux__)
   FILE *fp = fopen("/proc/stat", "r");
@@ -113,22 +114,36 @@ get_cores_load(char *str1) {
   SYSCTLVAL("kern.cp_times", &core_active);
 #endif /* __FreeBSD__ */
 
+#if defined(__OpenBSD__)
+  uintmax_t ncpu = 0;
+  int mib[] = { CTL_KERN, KERN_CPTIME2, 0 };
+  int mib2[] = { CTL_HW, HW_NCPU };
+  size_t len = sizeof(core_active), len2 = sizeof(ncpu);
+
+  SYSCTLVAL(mib2, 2, &ncpu, &len2);
+  for (x = 0; x < ncpu; x++, mib[2]++) {
+    if (0 != (sysctl(mib, 3, &core_active[x], &len, NULL, 0))) {
+      break;
+    }
+  }
+#endif /* __OpenBSD__ */
+
 #if defined(__linux__)
   FILE *fp = fopen("/proc/stat", "r");
   CHECK_FP(fp);
 
-  if (NULL == fgets(buf, VLA, fp)) {
+  if (NULL == (fgets(buf, VLA-1, fp))) {
     CLOSE_X(fp);
     exit_with_err(ERR, "reached /proc/stat EOF");
   }
 
   for (x = 0; x < MAX_CORES; x++, z++) {
-    if (NULL == fgets(buf, VLA, fp)) {
+    if (NULL == (fgets(buf, VLA-1, fp))) {
       CLOSE_X(fp);
       exit_with_err(ERR, "reached /proc/stat EOF");
     }
 
-    if (buf[0] != 'c' && buf[1] != 'p' && buf[2] != 'u') {
+    if ('c' != buf[0] && 'p' != buf[1] && 'u' != buf[2]) {
       break;
     }
 
@@ -144,7 +159,7 @@ get_cores_load(char *str1) {
 
   for (x = 0; x < z; x++) {
 
-#else /* FreeBSD */
+#else /* FreeBSD || OpenBSD */
   for (x = 0; x < MAX_CORES; x++) {
     if (0 == core_active[x][0] && 0 ==
       core_active[x][1] && 0 ==
@@ -177,37 +192,26 @@ get_cores_load(char *str1) {
 }
 
 
-#if defined(__linux__)
-void
-get_cpu_temp(char *str1) {
-  get_temp(CPU_TEMP_FILE, str1);
+#if defined(__i386__) || defined(__i686__) || defined(__x86_64__)
+uint8_t has_tsc_reg(void) {
+  uint_fast16_t vend = 0, leafs = 0;
+  uint_fast16_t eax = 0, ecx = 0, edx = 0, ebx = 0;
+
+  CPU_REGS(0x00000000, vend, leafs);
+  if (0x00000001 > leafs) {
+    return 1;
+  }
+  if (vend != AmD && vend != InteL) {
+    return 1;
+  }
+
+  CPU_STR2(0x00000001, eax, ebx, ecx, edx);
+  if (0 == (edx & (1 << 4))) {
+    return 1;
+  }
+  return 0;
 }
-
-#else /* FreeBSD */
-
-
-/*
-  Go figure which one to blame.
-
-  the "aibs" module temps:
-  dev.aibs.0.temp.0: 39.0C
-
-  the "amdtemp" module temps:
-  dev.cpu.0.temperature: 28.5C
-
-  In linux the "aibs" temps are matching
-  my idle temps.
-*/
-void
-get_cpu_temp(char *str1) {
-  u_int temp = 0;
-  size_t len = sizeof(temp);
-
-  SYSCTLVAL("dev.cpu.0.temperature", &temp);
-  get_temp(str1, (uint_least32_t)temp);
-}
-
-#endif /* __linux__ */
+#endif /* __i386__ || __i686__ || __x86_64__  */
 
 
 /*  Taken from the gcc documentation
@@ -223,7 +227,9 @@ get_cpu_temp(char *str1) {
 static __inline__ uintmax_t 
 rdtsc(void) {
   uintmax_t x = 0;
-  __asm__ __volatile__ (".byte 0x0f, 0x31" : "=A" (x));
+  if (0 == (has_tsc_reg())) {
+    __asm__ __volatile__ (".byte 0x0f, 0x31" : "=A" (x));
+  }
   return x;
 }
 
@@ -254,22 +260,62 @@ get_cpu_clock_speed(char *str1) {
   }
   z[1] = (uintmax_t)(stop.tv_nsec - stop.tv_sec);
 
-  FILL_ARR(str1, FMT_UINT " MHz",
-    (1000 * (y - x) / (z[1] - z[0])));
+  if (0 != (z[1] - z[0])) {
+    FILL_ARR(str1, FMT_UINT " MHz",
+      (1000 * (y - x) / (z[1] - z[0])));
+  }
 }
 
 
 #elif defined(__x86_64__)
+/* 
+ * Thanks to Intel docs for pointing out
+ * "Out of Order Execution", added
+ * cpuid after reading it and edited the rdtscp
+ * code according to the docs
+ * https://www-ssl.intel.com/content/dam/www/public/us/en/documents/white-papers/ia-32-ia-64-benchmark-code-execution-paper.pdf */
 static __inline__ uintmax_t 
 rdtsc(void) {
-  unsigned int tickhi, ticklo;
-  __asm__ __volatile__ ("rdtsc" : "=a"(ticklo), "=d"(tickhi));
+  unsigned int tickhi = 0, ticklo = 0;
+  uint_fast16_t eax = 0, ecx = 0, edx = 0, ebx = 0;
+  uint_fast16_t vend = 0, regz = 0, x = 0;
+
+  if (0 != (has_tsc_reg())) {
+    goto seeya;
+  }
+  __asm__ __volatile__ (
+    "cpuid\n\t"
+    "rdtsc\n\t"
+    : "=a"(ticklo), "=d"(tickhi)
+    :: "%rbx", "%rcx"
+  );
+
+  CPU_FEATURE(0x80000000, regz);
+  if (0x80000001 > regz) {
+    goto seeya;
+  }
+  CPU_STR2(0x80000001, eax, ebx, ecx, edx);
+
+  if (0 != (edx & (1 << 27))) {
+    for (x = 0; x < 6; x++) {
+      __asm__ __volatile__ (
+        "rdtscp\n\t"
+        "mov %%edx, %0\n\t"
+        "mov %%eax, %1\n\t"
+        "cpuid\n\t"
+        : "=r"(tickhi), "=r"(ticklo)
+        :: "%rax", "%rbx", "%rcx", "%rdx"
+      );
+    }
+  }
+
+seeya:
   return (((uintmax_t)tickhi << 32) | (uintmax_t)ticklo);
 }
 
 void
 get_cpu_clock_speed(char *str1) {
-  uintmax_t x, z;
+  uintmax_t x = 0, z = 0;
 
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wmissing-field-initializers"
@@ -286,73 +332,135 @@ get_cpu_clock_speed(char *str1) {
 
   FILL_ARR(str1, FMT_UINT " MHz", ((z - x) / 100000));
 }
-#endif
+#endif /* __i386__ || __i686__ || __x86_64__ */
 
 
 #if defined(__i386__) || defined(__i686__) || defined(__x86_64__)
 void
 get_cpu_info(char *str1) {
-  char buffer[VLA], vend_id[13];
+  uint_fast16_t vend = 0, x = 0, z = 0, corez = 0, leafB = 0, bitz[2];
+  uint_fast16_t eax = 0, ecx = 0, edx = 0, ebx = 0, eax_old = 0, leafs = 0;
+  uint_fast16_t line_size = 0, regz = 0, clflu6 = 0, caches[3];
+  char buffer[VLA], vend_id[13], vend_chars[17];
   char *all = buffer;
-  uintmax_t vend = 0, num = 0, vend_str = 0, x = 0, z = 0;
-  uintmax_t eax = 0, ecx = 0, edx = 0, ebx = 0, eax_old = 0;
+  bool got_leafB = false;
 
-  CPU_VENDOR(0, vend);
-  if (0 == vend) {
-    FILL_STR_ARR(1, str1, "Null");
+  memset(caches, 0, sizeof(caches));
+  memset(bitz, 0, sizeof(bitz));
+  FILL_STR_ARR(1, str1, "Null");
+
+  CPU_REGS(0x00000000, vend, leafs);              /* movl $0x00000000, %eax */
+  if (0x00000001 > leafs) {
     return;
   }
-  CPU_FEATURE(1, eax_old);
-
-  switch(vend) {
-    case AmD:
-      num = 0;
-      break;
-
-    case InteL:
-      num = 1;
-      break;
+  if (vend != AmD && vend != InteL) {
+    return;
   }
 
-  /* Dont have intel cpu to verify the following code
-     It works fine on both of my primary amd systems.
-     I'm also aware of linking against assembly object file,
-     wanted to learn more assembly by back porting it to C */
-  if (0 == num) {
-    CPU_FEATURE(0x80000000, vend_str);                /* movl $0x80000000, %eax */
-    if (0 != vend_str) {
+  CPU_FEATURE(0x80000000, regz);                  /* movl $0x80000000, %eax */
+  if (0x80000004 > regz) {
+    return;
+  }
+  CPU_FEATURE(0x00000001, eax_old);               /* movl $0x00000001, %eax */
 
-      for (x = 0x80000002; x <= 0x80000004; x++) {    /* movl $0x80000002, %esi */
-        CPU_STR2(x, eax, ebx, ecx, edx);              /* cmpl $0x80000004, %eax */
-        char vend_chars[17]; /* 12 + 4 */
+  for (x = 0x80000002; x <= 0x80000004; x++) {    /* movl $0x80000002, %esi */
+    CPU_STR2(x, eax, ebx, ecx, edx);              /* cmpl $0x80000004, %eax */
+    memset(vend_chars, 0, sizeof(vend_chars));
 
-        for (z = 0; z < 4; z++) {
-          vend_chars[z] = (char)(eax >> (z * 8));     /* movl %eax */
-          vend_chars[z+4] = (char)(ebx >> (z * 8));   /* movl %ebx, 4 */
-          vend_chars[z+8] = (char)(ecx >> (z * 8));   /* movl %ecx, 8 */
-          vend_chars[z+12] = (char)(edx >> (z * 8));  /* movl %edx, 12 */
-        }
-        vend_chars[16] = '\0';
-        GLUE2(all, "%s", vend_chars);
+    for (z = 0; z < 4; z++) {
+      vend_chars[z] = (char)(eax >> (z * 8));     /* movl %eax, 0 */
+      vend_chars[z+4] = (char)(ebx >> (z * 8));   /* movl %ebx, 4 */
+      vend_chars[z+8] = (char)(ecx >> (z * 8));   /* movl %ecx, 8 */
+      vend_chars[z+12] = (char)(edx >> (z * 8));  /* movl %edx, 12 */
+    }
+    vend_chars[16] = '\0';
+    GLUE2(all, "%s", vend_chars);
+  }
+
+  CPU_ID_STR(0x00000000, ebx, ecx, edx);          /* movl $0x00000000, %ebx */
+  for (x = 0; x < 4; x++) {
+    vend_id[x] = (char)(ebx >> (x * 8));          /* movl %ebx, 0 */
+    vend_id[x+4] = (char)(edx >> (x * 8));        /* movl %edx, 4 */
+    vend_id[x+8] = (char)(ecx >> (x * 8));        /* movl %ecx, 8 */
+  }
+  vend_id[12] = '\0';
+
+  if (vend == AmD) {
+    if (0x80000005 <= regz) {
+      CPU_STR2(0x80000005, eax, ebx, ecx, edx);   /* movl $0x80000005, %eax */
+      caches[0] = SHFT2(ecx >> (3 * 8));          /* movl %ecx, 24 */
+    }
+    CPU_STR2(0x00000001, eax, ebx, ecx, edx);     /* movl $0x00000001, %eax */
+    corez = SHFT2(ebx >> (2 * 8));                /* movl %ebx, 16 */
+  }
+
+  if (vend == InteL) {
+    if (0x0000000B <= leafs) {
+      CPU_STR2(0x0000000B, eax, ebx, ecx, edx);   /* movl $0x0000000B, %eax */
+      corez  = SHFT2(ebx);                        /* movl %ebx, 0 */
+      leafB  = SHFT2(edx);                        /* movl %edx, 0 */
+      got_leafB = true;
+
+    } else {
+      if (0x00000004 <= leafs) {
+        CPU_STR2(0x00000004, eax, ebx, ecx, edx); /* movl $0x00000004, %eax */
+        corez  = SHFT2(eax >> 26);                /* movl %eax, 26 */
       }
-
-      CPU_ID_STR(0, ebx, ecx, edx);                   /* mov $0, %eax */
-      for (z = 0; z < 4; z++) {
-        vend_id[z] = (char)(ebx >> (z * 8));          /* movl %ebx, 0 */
-        vend_id[z+4] = (char)(edx >> (z * 8));        /* movl %edx, 4 */
-        vend_id[z+8] = (char)(ecx >> (z * 8));        /* movl %ecx, 8 */
-      }
-      vend_id[12] = '\0';
-
-      FILL_ARR(str1, "%s ID %s Stepping " FMT_UINT " Family " FMT_UINT " Model " FMT_UINT,
-        buffer, vend_id, BIT_SHIFT(eax_old),
-        BIT_SHIFT(eax_old >> 8), BIT_SHIFT(eax_old >> 4));
-      return;
     }
   }
 
-  FILL_ARR(str1, "%s Stepping " FMT_UINT " Family " FMT_UINT " Model " FMT_UINT,
-    (0 == num ? "AMD" : "Intel"), BIT_SHIFT(eax_old),
-    BIT_SHIFT(eax_old >> 8), BIT_SHIFT(eax_old >> 4));
+  if (0x80000006 <= regz) {
+    CPU_STR2(0x80000006, eax, ebx, ecx, edx);     /* movl $0x80000006, %eax */
+    /* L2, line size */
+    caches[1] = (ecx >> (2 * 8)) & 0xffff;        /* movl %ecx, 16 */
+    caches[2] = SHFT2(ecx);                       /* movl %ecx, 0 */
+  }
+
+  /* 100 mhz steps for the majority of AMD cpu's
+   *  movl $0x80000007 %edx, 6
+  */
+
+  if (0x80000008 <= regz) {
+    CPU_STR2(0x80000008, eax, ebx, ecx, edx);     /* movl $0x80000008, %eax */
+    /* physical, virtual */
+    bitz[0] = SHFT2(eax);                         /* movl %eax, 0 */
+    bitz[1] = SHFT2(eax >> 8);                    /* movl %eax, 8 */
+
+    if (vend == AmD) {
+      corez = SHFT2(ecx) + 1;                     /* movl %ecx, 0 */
+    }
+  }
+
+  CPU_STR2(0x00000001, eax, ebx, ecx, edx);       /* movl $0x00000001, %eax */
+  if (0 != (edx & (1 << 19))) {
+    clflu6 = SHFT2(ebx >> 8) * 8;                 /* movl %ebx, 8 */
+  }
+
+  FILL_ARR(str1,
+   UFINT "x %s ID %s"
+   " CLFLUSH/Line size " UFINT " " UFINT
+   " L1/L2 caches KB " UFINT " " UFINT
+   " Stepping " UFINT " Family " UFINT
+   " Model " UFINT
+   " Bits " UFINT " " UFINT
+   " apicid " UFINT,
+
+  /* cores, vendor, vendor id */
+    corez, buffer, vend_id,
+  /* clflush, line size */
+    clflu6, caches[2],
+  /* L1, L2 */
+    caches[0], caches[1],
+  /* stepping, family */
+    SHFT(eax_old), (SHFT(eax_old >> 8) +
+     ((IZMAX(eax_old)) ? SHFT2(eax_old >> 20) : 0)),
+  /* model */
+    (SHFT(eax_old >> 4) |
+     ((IZMAX(eax_old)) ? ((eax_old >> 12) & 0xf0) : 0)),
+  /* physical and virtual bits */
+    bitz[0], bitz[1],
+  /* apicid */
+    (true == got_leafB) ? leafB : SHFT2(ebx >> 24)
+  );
 }
-#endif
+#endif /* __i386__ || __i686__ || __x86_64__ */

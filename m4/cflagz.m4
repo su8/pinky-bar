@@ -54,9 +54,13 @@ AC_DEFUN([TEST_ASSEMBLY],[
 
   AC_COMPILE_IFELSE([
     AC_LANG_PROGRAM([[
-      #include <stdint.h>]],[[
-      uintmax_t x;
-      __asm__ __volatile__ (".byte 0x0f, 0x31" : "=A" (x));
+      #include <stdio.h>]],[[
+      unsigned int x = 1, z = 2;
+      __asm__ __volatile__ (
+        "addl %%ebx, %%eax"
+        : "=a"(x)
+        : "a"(x), "b"(z)
+      );
     ]])
   ],[supportz_assembly=yes],[supportz_assembly=no])
 
@@ -100,9 +104,12 @@ AC_DEFUN([TEST_CFLAGZ],[
   dnl -Wno-unused-result,
 
   dnl For very first time I stumble upon GCC -O2 bug.
-  dnl It hangs on pci_init with -O2
+  dnl It hangs on pci_init and sensors_init with -O2
   dnl net.m4 will append -O2 or -O0
-  dnl according whether --with-pci is used or not
+  dnl according whether --with-pci and --with-sensors
+  dnl are used or not. Another "newer" GCC release
+  dnl that I just installed hangs on sensors_init.
+  dnl One more snafu GCC, and I'll drop -02 in linux
 
   AC_MSG_NOTICE([checking all CFLAGS])
   CHECK_CFLAGZ([
@@ -125,9 +132,14 @@ AC_DEFUN([TEST_CFLAGZ],[
     -Wendif-labels,
     -Wredundant-decls,
     -Wmissing-prototypes,
+    -Winit-self,
     -Wno-unused-variable
   ])
  
   TEST_ASSEMBLY()
 
+  LIBS=''
+  AC_SUBST(LIBS)
+
+  AC_DEFINE_UNQUOTED([cuRos],[1],[da monster])
 ])
