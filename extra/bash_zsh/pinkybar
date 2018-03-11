@@ -1,0 +1,40 @@
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 2 of the License, or
+# (at your option) any later version.
+
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+
+# You should have received a copy of the GNU General Public License
+# along with this program; if not, write to the Free Software
+# Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
+# MA 02110-1301, USA.
+
+# bash completion
+
+_pinky() {
+  local cur
+  COMPREPLY=()
+  cur="${COMP_WORDS[COMP_CWORD]}"
+
+  opts1='-a -b -c -d -e -f -g -h -i -j -k -l -m -n -o -p -q -r -s -t -u -v -w -x -y -z'
+  opts2='-A -B -C -D -E -F -G -H -I -J -K -L -M -N -O -P -Q -R -S -T -U -V -W -X -Y -Z'
+  opts3='--mpd --mpdtrack --mpdartist --mpdalbum --cpu --coresload --cputemp --cpuspeed'
+  opts3+='--cpuinfo --ramperc --ramtotal --ramfree --ramshared --rambuffer --driveperc'
+  opts3+='--drivetemp --drivetotal --drivefree --driveavail --battery --dvdstr --statio'
+  opts3+='--packages --kernsys --kernode --kernrel --kernver --kernarch --kern --perl'
+  opts3+='--python --weather --uptime --loadavg --voltage --fans --mobo --mobotemp --time'
+  opts3+='--ipaddr --bandwidth --iface --ipmac --ipmask --ipcase --iplookup --drivemodel'
+  opts3+='--nicinfo --nicdrv --nicver --iplink --nicfw --wifiname'
+
+  case "$cur" in
+    -*) COMPREPLY=( $(compgen -W "${opts1} ${opts2} ${opts3}" -- "${cur}") )
+      ;;
+  esac
+
+  return 0
+}
+complete -F _pinky -o filenames pinkybar
