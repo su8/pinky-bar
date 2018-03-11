@@ -147,13 +147,13 @@ The following options are available only to FreeBSD and OpenBSD:
 | -F           | --swaperc   | The used drive swap in percentage                                  |
 | -h           | --swaptotal | The total drive swap                                               |
 | -H           | --swapavail | The available drive swap (total - used)                            |
+|              | --wifiname  | The name of currently connected wifi/wireless network [argument - wlan0]  |
 
 The following options are available only in OpenBSD:
 
 | short option | long option | Descrtiption                                                       |
 |--------------|-------------|--------------------------------------------------------------------|
 | -l           | --ramused   | The used ram in MB                                                 |
-|              | --wifiname  | The name of currently connected wifi/wireless network [argument - wlan0]  |
 
 ---
 
@@ -846,9 +846,3 @@ pinkybar_LDADD = pinky2.a
 ## Assembly
 
 The source code that you should edit is in **extra/scripts/pinky.s**
-
----
-
-## Wish list
-
-It would be great if I had \*BSD compatible usb wifi dongle or wireless pci adapter to add wifi options in pinky-bar.

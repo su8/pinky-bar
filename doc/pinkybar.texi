@@ -92,7 +92,6 @@ cpu and motherboard sensors as @strong{modules} and not inlined.
 * Rust lang::
 * Go lang::
 * Assembly::
-* Wish list::
 @end menu
 
 @node Program options
@@ -101,7 +100,7 @@ cpu and motherboard sensors as @strong{modules} and not inlined.
 The order of supplied options will dictate how, where and what system
 information to be shown.
 
-@multitable {short option} {--driveavail} {Detect your CPU vendor, stepping, family, clflush, l1/l2 cache and line size, physical cores, physical and virtual bits. Uses assembly.} 
+@multitable @columnfractions 0.15 0.14 0.70 
 @headitem 
 short option
  @tab long option
@@ -350,7 +349,7 @@ only on AMD and Intel CPUs (starting from pentium 4 onwards).
 
 The following options are available only in Linux:
 
-@multitable {short option} {--drivemodel} {The name of currently connected wifi/wireless network [argument - wlan0]} 
+@multitable @columnfractions 0.15 0.14 0.70 
 @headitem 
 short option
  @tab long option
@@ -387,7 +386,7 @@ wlan0]
 
 The following options are available only to FreeBSD and OpenBSD:
 
-@multitable {short option} {--swapavail} {The NIC gateway address [argument - re0]} 
+@multitable @columnfractions 0.15 0.14 0.70 
 @headitem 
 short option
  @tab long option
@@ -412,6 +411,10 @@ short option
 -H
  @tab --swapavail
  @tab The available drive swap (total - used)
+@item 
+--wifiname
+ @tab The name of currently connected wifi/wireless network [argument -
+wlan0]
 @end multitable
 
 The following options are available only in OpenBSD:
@@ -443,7 +446,7 @@ number of dependencies required to compile the program.
 
 It's up to you to decide which features suit you best.
 
-@multitable {cpu_sensor=`dev.cpu.0.temperature'} {--without-drivetemp-light} {Different TCP port to listen to for the drive temperature, default one is 7634, must be combined @strong{--with-drivetemp} or @strong{--with-drivetemp-light}} 
+@multitable @columnfractions 0.13 0.17 0.70 
 @headitem 
 To include
  @tab Not to include
@@ -1529,19 +1532,6 @@ pinkybar_LDADD = pinky2.a
 @anchor{#assembly}
 The source code that you should edit is in
 @strong{extra/scripts/pinky.s}
-
-@iftex
-@bigskip@hrule@bigskip
-@end iftex
-@ifnottex
-------------------------------------------------------------------------
-@end ifnottex
-
-@node Wish list
-@section Wish list
-@anchor{#wish-list}
-It would be great if I had *BSD compatible usb wifi dongle or wireless
-pci adapter to add wifi options in pinky-bar.
 
 @node REPORTING BUGS
 @chapter REPORTING BUGS
