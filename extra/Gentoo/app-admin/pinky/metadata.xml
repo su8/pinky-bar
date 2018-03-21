@@ -2,11 +2,11 @@
 <!DOCTYPE pkgmetadata SYSTEM "http://www.gentoo.org/dtd/metadata.dtd">
 <pkgmetadata>
 	<maintainer type="project">
-		<email>office@gentoo.org</email>
-		<name>Gentoo Office project</name>
+		<email>a@b.com</email>
+		<name>pinky-bar</name>
 	</maintainer>
 	<upstream>
-		<remote-id type="gitlab">pinky-bar</remote-id>
+		<remote-id type="github">pinky-bar</remote-id>
 	</upstream>
 	<use>
 		<flag name="x11">Enable it if you are using dwm.</flag>
@@ -25,5 +25,11 @@
 		<flag name="smartemp">Read the drive temperature from S.M.A.R.T</flag>
 		<flag name="perl">Extend pinkybar with your own crafted scripts written in perl, stored in /usr/share/pinkysc/pinky.pl</flag>
 		<flag name="python2">Extend pinkybar with your own crafted scripts written in python, stored in /usr/share/pinkysc/pinky.py</flag>
+		<flag name="ruby">Extend pinkybar with your own crafted scripts written in ruby, stored in /usr/share/pinkysc/pinky.rb</flag>
+		<flag name="R">Extend pinkybar with your own crafted scripts written in R, stored in /usr/share/pinkysc/pinky.R</flag>
+		<flag name="lisp">Extend pinkybar with your own crafted scripts written in lisp, stored in /usr/share/pinkysc/pinky.lisp</flag>
+		<flag name="slang">Extend pinkybar with your own crafted scripts written in slang, stored in /usr/share/pinkysc/pinky.sl</flag>
+		<flag name="tcl">Extend pinkybar with your own crafted scripts written in tcl, stored in /usr/share/pinkysc/pinky.tcl</flag>
+		<flag name="cpp">Extend pinkybar with cpp</flag>
 	</use>
 </pkgmetadata>
