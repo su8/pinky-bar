@@ -52,7 +52,7 @@ enum {
   CPP,
   SLANG,
   TCL,
-  OPENBSDWIFI,
+  WIFINAME,
   BULLSHIFT
 };
 const char *argp_program_version = PACKAGE_STRING;
@@ -175,7 +175,6 @@ static const struct argp_option options[] = {
 
 
 #if defined(__OpenBSD__)
-  { .name = "wifiname",     .key = OPENBSDWIFI, .arg = "eth0", .doc = "The name of currently connected wireless/wifi network."   },
   { .name = "ramused",      .key = 'l',                .doc = "The used ram in MB."                                      },
 #endif /* __OpenBSD__ */
 
@@ -186,7 +185,7 @@ static const struct argp_option options[] = {
   { .name = "nicver",       .key = 'H', .arg = "eth0", .doc = "The NIC version."                                         },
   { .name = "iplink",       .key = 'e', .arg = "eth0", .doc = "The NIC link speed (useful for wireless/wifi)."           },
   { .name = "nicinfo",      .key = 'G', .arg = "eth0", .doc = "The NIC vendor and model."                                },
-  { .name = "wifiname",     .key = 'h', .arg = "eth0", .doc = "The name of currently connected wireless/wifi network."   },
+  { .name = "wifiname",     .key = 'h', .arg = "wlan0", .doc = "The name of currently connected wireless/wifi network."   },
 #endif /* __linux__ */
 
 #if defined(__FreeBSD__) || defined(__OpenBSD__)
@@ -195,6 +194,7 @@ static const struct argp_option options[] = {
   { .name = "swaptotal",    .key = 'h',                .doc = "The total drive swap."                                    },
   { .name = "swapavail",    .key = 'H',                .doc = "The available drive swap."                                },
   { .name = "nicgw",        .key = 'j', .arg = "re0",  .doc = "The NIC gateway address."                                 },
+  { .name = "wifiname",     .key = WIFINAME, .arg = "wlan0", .doc = "The name of currently connected wireless/wifi network."   },
 #endif /* __FreeBSD__ || __OpenBSD__ */
 
   { .doc = NULL }
@@ -391,10 +391,7 @@ parse_opt(int key, char *arg, struct argp_state *state) {
 
     NEW_NET_LABEL('j', char nic_info[VLA], nic_info, 7, FMT_KERN);
 
-#if defined(__OpenBSD__)
-    NEW_NET_LABEL(OPENBSDWIFI, char wifiname[VLA], wifiname, 11, FMT_KERN);
-#endif /* __OpenBSD__ */
-
+    NEW_NET_LABEL(WIFINAME, char wifiname[VLA], wifiname, 11, FMT_KERN);
 #endif /* __FreeBSD__ || __OpenBSD__ */
 
 
