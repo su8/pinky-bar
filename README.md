@@ -9,6 +9,7 @@ The code doesn't age, neither it has expiration date.
 - [Installation in FreeBSD](#installation-in-freebsd)
 - [Installation in OpenBSD](#installation-in-openbsd)
 - [Installation for anything else](#installation-for-anything-else)
+- [Supported distros](#supported-distros)
 - [Using configuration file](#using-configuration-file)
 - [Linux Requirements](#linux-mandatory-requirements)
 - [BSD Requirements](#bsd-mandatory-requirements)
@@ -20,6 +21,7 @@ The code doesn't age, neither it has expiration date.
 - [Go lang](#go-lang)
 - [Assembly](#assembly)
 - [VoidLinux](#voidlinux)
+- [Wish list](#wish-list)
 
 ---
 
@@ -350,7 +352,9 @@ By choosing this 3rd installation method it is up to you where, how to start and
 
 ---
 
-Replace **distro** with archlinux, debian, gentoo, slackware, rhel, frugalware, angstrom. Here's some short distros list of some popular distros that are based on another one:
+## Supported distros
+
+Replace **distro** with the following:
 
 - [x] archlinux based distros: parabola, chakra, manjaro
 - [x] debian based distros: ubuntu, linux mint, trisquel, back track, kali linux, peppermint linux, solusos, crunchbang, deepin, elementary os, and the rest \*buntu based distros
@@ -359,6 +363,7 @@ Replace **distro** with archlinux, debian, gentoo, slackware, rhel, frugalware, 
 - [x] rhel based distros: opensuse (uses rpm), fedora, fuduntu, mandriva, mandrake, viperr, mageia
 - [x] frugalware
 - [x] angstrom
+- [x] voidlinux
 
 Cannot list the \*BSD flavours as "distros", so they deserve own options:
 
@@ -846,3 +851,9 @@ cd alsa-plugins-1.1.5
 make
 sudo make install
 ```
+
+---
+
+## Wish list
+
+It would be great if we can add NetBSD support.
