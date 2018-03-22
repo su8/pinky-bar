@@ -97,7 +97,7 @@ sub reflace_single {
   my @osArr = (
     "ARCHLINUX","DEBIAN",
     "GENTOO","SLACKWARE",
-    "RHEL","FRUGALWARE",
+    "RHEL","FRUGALWARE", "VOIDLINUX",
     "ANGSTROM","FREEBSD","OPENBSD"
   );
   my $hasMatch = any { $_ eq $osEntered } @osArr;

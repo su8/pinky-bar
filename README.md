@@ -21,6 +21,7 @@ The code doesn't age, neither it has expiration date.
 - [Rust lang](#rust-lang)
 - [Go lang](#go-lang)
 - [Assembly](#assembly)
+- [VoidLinux](#voidlinux)
 
 ---
 
@@ -849,4 +850,20 @@ The source code that you should edit is in **extra/scripts/pinky.s**, but you'll
 
 ```bash
 ../extra/scripts/pinky.s        \
+```
+
+---
+
+## VoidLinux
+
+By default you won't have the following packages installed:
+
+```bash
+pkg-config
+libtool
+automake
+autoconf
+m4
+make
+gcc/llvm/clang
 ```

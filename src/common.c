@@ -242,6 +242,13 @@ get_packs(char *str1) {
   CHECK_POPEN(pkgs_file, "opkg list-installed 2> /dev/null | wc -l", &packages);
 #pragma GCC diagnostic pop
 
+#elif defined(VOIDLINUX)
+
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wunused-result"
+  CHECK_POPEN(pkgs_file, "xbps-query -l 2> /dev/null | wc -l", &packages);
+#pragma GCC diagnostic pop
+
 #elif defined(FREEBSD)
 
 #pragma GCC diagnostic push
