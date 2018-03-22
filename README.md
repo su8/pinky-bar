@@ -8,8 +8,6 @@ The code doesn't age, neither it has expiration date.
 - [Installation for xmonad/other WM](#installation-for-xmonad-or-other-wm)
 - [Installation in FreeBSD](#installation-in-freebsd)
 - [Installation in OpenBSD](#installation-in-openbsd)
-- [pinky curses installation](#pinky-curses-installation)
-- [pinky urxvt](#pinky-urxvt)
 - [Installation for anything else](#installation-for-anything-else)
 - [Using configuration file](#using-configuration-file)
 - [Linux Requirements](#linux-mandatory-requirements)
@@ -328,38 +326,6 @@ autoreconf --install --force
 make
 make install
 ```
-
-## pinky curses installation
-
-Step one, compile pinky-bar **--with-ncurses**, so the output to be formated in a way that pinky-curses can parse and colorize.
-
-```bash
-perl set.pl "distro"
-autoreconf --install --force
-
-# disable X11, enable the colours and ncurses opts.
-./configure --prefix=$HOME/.cache --without-x11 --with-alsa --with-colours --with-ncurses
-
-# compile 'n install
-make
-make install
-```
-
-Step two, compile and install pinky-curses - https://notabug.org/void0/pinky-curses
-
-Copy the code from extra/scripts/pinky-curses.sh
-
-## pinky urxvt
-
-What a coincidence, pinky-urxvt is my 3rd urxvt extension and 3rd member of the pinky family.
-
-The sole purpose of this urxvt extension is to make it easy for you to keep track of things that you are interested to monitor while hacking your way something in the terminal.
-
-Link - https://notabug.org/void0/pinky-urxvt
-
-![](https://notabug.org/void0/pinky-urxvt/raw/master/2.png)
-
-pinky-urxvt, and pinky-curses are not tied to pinky-bar.
 
 ## Installation for anything else
 
@@ -866,4 +832,17 @@ autoconf
 m4
 make
 gcc/llvm/clang
+```
+
+The packages alsa-utils and alsa-lib does not ship with **asoundlib.h**, so if you want to use **--with-alsa** you'll have to compile the library manually:
+
+```bash
+# Make sure that you got wget and tar
+wget ftp://ftp.alsa-project.org/pub/plugins/alsa-plugins-1.1.5.tar.bz2
+bzip2 --decompress alsa-plugins-1.1.5.tar.bz2
+tar -xvf alsa-plugins-1.1.5.tar
+cd alsa-plugins-1.1.5
+./configure --prefix=/usr
+make
+sudo make install
 ```
