@@ -39,5 +39,6 @@ src/Makefile.am
 !extra/bash_zsh/_pinkybar
 !extra/bash_zsh/pinkybar
 !doc/man_template.pdc
-!extra/Gentoo/app-admin/pinkybar/*
+!extra/Gentoo/app-admin/pinkybar/pinkybar-9999.ebuild
+!extra/Gentoo/app-admin/pinkybar/metadata.xml
 !doc/Makefile
