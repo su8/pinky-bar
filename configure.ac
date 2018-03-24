@@ -63,3 +63,4 @@ AC_OUTPUT
 echo
 echo 'Now type \"make\" and \"make install\" afterwards'
 echo
+
