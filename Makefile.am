@@ -11,6 +11,9 @@ dist_man_MANS = doc/pinkybar.1
 EXTRA_DIST =      \
 	README.md       \
 	.gitignore      \
+	set.pl					\
+	configure.ac 		\
 	m4              \
 	doc             \
-	extra
+	extra  					\
+	src
