@@ -270,6 +270,13 @@ get_packs(char *str1) {
   CHECK_POPEN(pkgs_file, "tazpkg list 2> /dev/null | wc -l", &packages);
 #pragma GCC diagnostic pop
 
+#elif defined(TINYCORELINUX)
+
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wunused-result"
+  CHECK_POPEN(pkgs_file, "tce-status -i 2> /dev/null | wc -l", &packages);
+#pragma GCC diagnostic pop
+
 #elif defined(FREEBSD)
 
 #pragma GCC diagnostic push

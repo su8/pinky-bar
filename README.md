@@ -21,6 +21,7 @@ The code doesn't age, neither it has expiration date.
 - [Go lang](#go-lang)
 - [Assembly](#assembly)
 - [VoidLinux](#voidlinux)
+- [TinyCoreLinux](#tinycorelinux)
 - [Wish list](#wish-list)
 
 ---
@@ -367,6 +368,7 @@ Replace **distro** with the following [bases](https://en.wikipedia.org/wiki/List
 - [x] crux
 - [x] alpinelinux
 - [x] slitaz
+- [x] tinycorelinux
 
 Cannot list the \*BSD flavours as "distros", so they deserve own options:
 
@@ -853,6 +855,29 @@ cd alsa-plugins-1.1.5
 ./configure --prefix=/usr
 make
 sudo make install
+```
+
+---
+
+## TinyCoreLinux
+
+Install the following deps. from [here](http://distro.ibiblio.org/tinycorelinux/7.x/x86/tcz/):
+
+```bash
+tce-load -wi sed.tcz pkg-config.tcz libtool.tcz grep.tcz glibc_base-dev.tcz gcc.tcz m4.tcz perl5.tcz gawk.tcz make.tcz autoconf.tcz automake.tcz
+```
+
+Then followed by:
+
+```bash
+libtoolize --force
+aclocal
+autoheader
+automake --force-missing --add-missing
+autoconf
+./configure --without-net --without-alsa --without-pci
+make
+make install
 ```
 
 ---
