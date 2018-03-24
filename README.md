@@ -365,6 +365,7 @@ Replace **distro** with the following [bases](https://en.wikipedia.org/wiki/List
 - [x] angstrom
 - [x] voidlinux
 - [x] crux
+- [x] alpinelinux
 
 Cannot list the \*BSD flavours as "distros", so they deserve own options:
 

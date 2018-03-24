@@ -256,6 +256,13 @@ get_packs(char *str1) {
   CHECK_POPEN(pkgs_file, "pkginfo -i 2> /dev/null | wc -l", &packages);
 #pragma GCC diagnostic pop
 
+#elif defined(ALPINELINUX)
+
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wunused-result"
+  CHECK_POPEN(pkgs_file, "apk info 2> /dev/null | wc -l", &packages);
+#pragma GCC diagnostic pop
+
 #elif defined(FREEBSD)
 
 #pragma GCC diagnostic push
