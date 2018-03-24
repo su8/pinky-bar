@@ -354,7 +354,7 @@ By choosing this 3rd installation method it is up to you where, how to start and
 
 ## Supported distros
 
-Replace **distro** with the following:
+Replace **distro** with the following [bases](https://en.wikipedia.org/wiki/List_of_Linux_distributions):
 
 - [x] archlinux based distros: parabola, chakra, manjaro
 - [x] debian based distros: ubuntu, linux mint, trisquel, back track, kali linux, peppermint linux, solusos, crunchbang, deepin, elementary os, and the rest \*buntu based distros
@@ -364,6 +364,7 @@ Replace **distro** with the following:
 - [x] frugalware
 - [x] angstrom
 - [x] voidlinux
+- [x] crux
 
 Cannot list the \*BSD flavours as "distros", so they deserve own options:
 
