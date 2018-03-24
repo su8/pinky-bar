@@ -1,6 +1,5 @@
 # Copyright 1999-2018 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Id$
 
 EAPI=6
 
@@ -26,7 +25,7 @@ RDEPEND="
 	alsa? ( media-libs/alsa-lib )
 	x11? ( x11-libs/libX11 )
 	net? ( sys-apps/iproute2 )
-	libnl? ( >=dev-libs/libnl-3.2.27 dev-util/pkgconfig )
+	libnl? ( >=dev-libs/libnl-3.2.27 virtual/pkgconfig )
 	pci? ( sys-apps/pciutils )
 	dvd? ( dev-libs/libcdio )
 	sensors? ( sys-apps/lm_sensors )
