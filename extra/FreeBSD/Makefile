@@ -66,9 +66,9 @@ NCURSES_LIB_DEPENDS=         libncurses.so:devel/ncurses
 MPD_LIB_DEPENDS=             libmpdclient.so:audio/libmpdclient
 WEATHER_LIB_DEPENDS=         libcurl.so:ftp/curl
 LISP_LIB_DEPENDS=            libecl.so:lang/ecl
-RUBY_LIB_DEPENDS=            libruby24.so:lang/ruby
 LUA_LIB_DEPENDS=             liblua-5.2.so:lang/lua
 OCAML_RUN_DEPENDS=           ocaml
+RUBY_RUN_DEPENDS=            ruby
 PERL_RUN_DEPENDS=            perl
 PYTHON_RUN_DEPENDS=          python2
 
