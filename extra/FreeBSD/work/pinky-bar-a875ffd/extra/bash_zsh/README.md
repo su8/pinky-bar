@@ -1,1 +1,0 @@
-bash and zsh completions.
