@@ -20,8 +20,9 @@
 
 cd work/pinky-bar-*
 
-chmod +x bootstrap
-./bootstrap freebsd
+echo 'Generating Makefiles'
+perl set.pl 'freebsd'
+autoreconf -if
 
 mkdir -p -m 755 '/usr/local/share/icons/xbm_icons'
 install -D -m644 xbm_icons/* '/usr/local/share/icons/xbm_icons'
