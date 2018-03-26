@@ -9,7 +9,6 @@ addons:
     - automake
     - m4
     - perl
-    - glibc
     - libtool
     - pkg-config
     - gawk
