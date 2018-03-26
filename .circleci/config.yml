@@ -1,0 +1,19 @@
+version: 2
+jobs:
+  build:
+    docker:
+      - image: debian:stretch
+    steps:
+      - checkout
+      - run:
+          name: Set distro
+          command: perl set.pl 'debian'
+      - run:
+          name: Generate Makefiles
+          command: autoreconf -if
+      - run:
+          name: Run configure
+          command: ./configure --without-pci --without-alsa --without-ncurses
+      - run:
+          name: Run make
+          command: make
