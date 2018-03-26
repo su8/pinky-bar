@@ -369,6 +369,7 @@ Replace **distro** with the following [bases](https://en.wikipedia.org/wiki/List
 - [x] alpinelinux
 - [x] slitaz
 - [x] tinycorelinux
+- [x] nixos
 
 Cannot list the \*BSD flavours as "distros", so they deserve own options:
 
