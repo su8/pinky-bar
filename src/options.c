@@ -479,13 +479,14 @@ parse_konf(char *combined) {
   char *ptr = NULL;
   char *ello[] = { (char *)"pinkybar", NULL };
   char buf[100], conf[50], temp[100];
+  const char *const home = getenv("HOME") ? getenv("HOME") : "empty";
   struct arguments arguments = {
     .all = combined
   };
 
-  snprintf(conf, 49, "%s%s", getenv("HOME"), "/.pinky");
+  snprintf(conf, 49, "%s%s", home, "/.pinky");
   if (NULL == (fp = fopen(conf, "r"))) {
-    exit_with_err(ERR, "~/.pinky doesn't exist.");
+    exit_with_err(ERR, "~/.pinky doesn't exist or $HOME is unset");
   }
 
   while (NULL != (fgets(buf, 99, fp))) {
