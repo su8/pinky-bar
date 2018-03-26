@@ -371,6 +371,8 @@ Replace **distro** with the following [bases](https://en.wikipedia.org/wiki/List
 - [x] tinycorelinux
 - [x] nixos
 - [x] paldo
+- [x] dragora
+- [x] guixsd
 
 Cannot list the \*BSD flavours as "distros", so they deserve own options:
 

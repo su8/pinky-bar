@@ -95,7 +95,7 @@ sub reflace_single {
 
   my $osEntered = uc $ARGV[0];
   my @osArr = (
-    "PALDO",
+    "PALDO","DRAGORA","GUIXSD",
     "SLITAZ","TINYCORELINUX","NIXOS",
     "ARCHLINUX","DEBIAN","ALPINELINUX",
     "GENTOO","SLACKWARE","CRUX",

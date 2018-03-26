@@ -228,6 +228,12 @@ get_packs(char *str1) {
 #elif defined(GENTOO)
   packages = glob_packages("/var/db/pkg/*/*");
 
+#elif defined(DRAGORA)
+  packages = glob_packages("/var/db/pkg/*");
+
+#elif defined(GUIXSD)
+  packages = glob_packages("/guix/store/*");
+
 #elif defined(RHEL)
 
 #pragma GCC diagnostic push
