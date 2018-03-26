@@ -1,0 +1,23 @@
+language: c
+compiler: gcc
+os: linux
+addons:
+  apt:
+    packages:
+    - make
+    - autoconf
+    - automake
+    - m4
+    - perl
+    - glibc
+    - libtool
+    - pkg-config
+    - gawk
+script:
+  - perl set.pl 'debian'
+  - autoreconf -if
+  - make
+branches:
+  only:
+    - master
+sudo: false
