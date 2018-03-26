@@ -1,5 +1,3 @@
-[![Build Status](https://travis-ci.org/su8/pinky-bar.svg?branch=master)](https://travis-ci.org/su8/pinky-bar)
-
 The code doesn't age, neither it has expiration date.
 
 ## Table of Contents

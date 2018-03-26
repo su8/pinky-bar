@@ -1,6 +1,6 @@
 language: c
 compiler: gcc
-os: freebsd
+os: linux
 addons:
   apt:
     packages:
