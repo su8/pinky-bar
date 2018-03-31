@@ -237,10 +237,7 @@ void
 get_cpu_clock_speed(char *str1) {
   uintmax_t x = 0, y = 0, z[2];
 
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wmissing-field-initializers"
-  struct timespec start = {0}, stop = {0}, tc = {0};
-#pragma GCC diagnostic pop
+  struct timespec start = {0L, 0L}, stop = {0L, 0L}, tc = {0L, 0L};
 
   tc.tv_nsec = TICKZ * 1000000L;
 
@@ -317,10 +314,7 @@ void
 get_cpu_clock_speed(char *str1) {
   uintmax_t x = 0, z = 0;
 
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wmissing-field-initializers"
-  struct timespec tc = {0};
-#pragma GCC diagnostic pop
+  struct timespec tc = {0L, 0L};
 
   tc.tv_nsec = TICKZ * 1000000L;
 

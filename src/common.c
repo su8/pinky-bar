@@ -321,10 +321,7 @@ get_packs(char *str1) {
 void
 get_uptime(char *str1) {
 
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wmissing-field-initializers"
-  struct timespec tc = {0};
-#pragma GCC diagnostic pop
+  struct timespec tc = {0L, 0L};
 
   uintmax_t now = 0;
 

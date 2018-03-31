@@ -206,10 +206,7 @@ struct arguments {
 static error_t
 parse_opt(int key, char *arg, struct argp_state *state) {
 
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wmissing-field-initializers"
-  struct timespec tc = {0};
-#pragma GCC diagnostic pop
+  struct timespec tc = {0L, 0L};
 
   struct arguments *arguments = state->input;
   switch(key) {
