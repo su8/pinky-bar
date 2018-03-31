@@ -14,7 +14,8 @@ HOMEPAGE="https://github.com/su8/pinky-bar"
 
 LICENSE="GPL-3"
 SLOT="0"
-IUSE="+alsa colours cpp drivetemp drivetemp-light dvd libnl lisp lua mpd ncurses +net +pci perl python2 r ruby sensors slang smartemp tcl weather x11"
+IUSE="+alsa colours cpp drivetemp drivetemp-light dvd libnl lisp lua mpd ncurses
+	+net +pci perl python2 r ruby sensors slang smartemp tcl weather x11"
 
 DEPEND="
 	sys-devel/autoconf
@@ -57,7 +58,7 @@ REQUIRED_USE="
 src_prepare() {
 	default
 
-	einfo 'Generating Makefiles'
+	elog 'Generating Makefiles'
 	perl set.pl 'gentoo' || die
 	eautoreconf -if
 }
@@ -155,6 +156,6 @@ pkg_postinst() {
 	if use perl || use python2 || use lua ||
 		use r || use ruby || use tcl || use slang || use lisp
 	then
-		einfo 'The script(s) resides in /usr/share/pinkysc/'
+		elog 'The script(s) resides in /usr/share/pinkysc/'
 	fi
 }
