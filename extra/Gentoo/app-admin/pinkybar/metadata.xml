@@ -13,7 +13,7 @@
 		<remote-id type="github">su8/pinky-bar</remote-id>
 	</upstream>
 	<use>
-		<flag name="alsa">To get the sound volume level.</flag>
+		<flag name="alsa">Get the sound volume level using ALSA.</flag>
 		<flag name="colors">Colorize the output data.</flag>
 		<flag name="drivetemp">Read the drive temperature from S.M.A.R.T.</flag>
 		<flag name="drivetemp-light">Read the drive temperature from S.M.A.R.T
@@ -37,7 +37,7 @@
 			R, stored in /usr/share/pinkysc/pinky.R</flag>
 		<flag name="ruby">Extend pinkybar with your own crafted script written
 			in ruby, stored in /usr/share/pinkysc/pinky.rb</flag>
-		<flag name="sensors">Alternative way to obtain data from the sensors</flag>
+		<flag name="sensors">Alternative way to obtain data from the sensors.</flag>
 		<flag name="slang">Extend pinkybar with your own crafted script written
 			in slang, stored in /usr/share/pinkysc/pinky.sl</flag>
 		<flag name="smartemp">Read the drive temperature from S.M.A.R.T.</flag>

@@ -26,7 +26,7 @@ AC_DEFUN([TEST_X11],[
   WITH_COLOURS=0
 
   AC_ARG_WITH([x11],
-    AS_HELP_STRING([--with-x11],
+    AS_HELP_STRING([--with-dwm],
       [X11 linker flag for dwm support]),
     [],
     [with_dwm=no]
