@@ -11,7 +11,7 @@ COMMENT=                     Gather some system information
 USE_GITHUB=                  yes
 GH_ACCOUNT=                  su8
 GH_PROJECT=                  pinky-bar
-GH_TAGNAME=                  a441105
+GH_TAGNAME=                  d627c6689bb8735dfda328013c6285a3264449b8
 
 GNU_CONFIGURE=               yes
 USE_XORG+=                   x11
