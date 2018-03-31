@@ -207,6 +207,8 @@ get_song(char *str1, int8_t num) {
   const char *tagz[] = { "artist", "title", "album", "date" };
   const char *idx_tagz = ((6 != num) ? tagz[num-2] : "ohsnap");
 
+  FILL_STR_ARR(1, str1, "Null");
+
   if (NULL == (fp = popen("cmus-remote -Q 2> /dev/null", "r"))) {
     return;
   }

@@ -491,7 +491,7 @@ parse_konf(char *combined) {
 
   while (NULL != (fgets(buf, 99, fp))) {
     if (EOF == (sscanf(buf, "%s", temp))) {
-      CLOSE_X(fp);
+      CLOSE_FP(fp);
       exit_with_err(ERR, "empty line(s) detected.");
     }
     ptr = temp;
@@ -501,5 +501,5 @@ parse_konf(char *combined) {
     ello[1] = ptr;
     argp_parse(&arg_parser, 2, ello, ARGP_IN_ORDER, NULL, &arguments);
   }
-  CLOSE_X(fp);
+  CLOSE_FP(fp);
 }

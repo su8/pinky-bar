@@ -196,7 +196,7 @@ get_drivetemp(char *str1) {
 #pragma GCC diagnostic ignored "-Wunused-result"
   CHECK_FSCANF(fp, SCAN_UFINT, &temp);
 #pragma GCC diagnostic pop
-  CLOSE_X(fp);
+  CLOSE_FP(fp);
 
   FILL_ARR(str1, UFINT, temp);
 }

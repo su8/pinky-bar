@@ -87,7 +87,7 @@ get_ssd_model(char *str1, char *str2) {
 
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wunused-result"
-  OPEN_X(fp, model, "%[^\n]", model);
+  OPEN_FP(fp, model, "%[^\n]", model);
 #pragma GCC diagnostic pop
 
   FILL_STR_ARR(1, str1, model);
@@ -269,7 +269,7 @@ get_voltage(char *str1) {
 #pragma GCC diagnostic ignored "-Wunused-result"
     CHECK_FSCANF(fp, "%f", &voltage[x]);
 #pragma GCC diagnostic pop
-    CLOSE_X(fp);
+    CLOSE_FP(fp);
 
     voltage[x] /= 1000.0f;
   }
@@ -298,12 +298,12 @@ get_mobo(char *str1) {
 
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wunused-result"
-  OPEN_X(fp, MOBO_VENDOR, "%s", vendor);
+  OPEN_FP(fp, MOBO_VENDOR, "%s", vendor);
 #pragma GCC diagnostic pop
 
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wunused-result"
-  OPEN_X(fp, MOBO_NAME, "%s", name);
+  OPEN_FP(fp, MOBO_NAME, "%s", name);
 #pragma GCC diagnostic pop
 
   FILL_STR_ARR(2, str1, vendor, name);
@@ -326,11 +326,11 @@ get_statio(char *str1, char *str2) {
   if (EOF == (fscanf(fp, FMT_UINT FMT_UINT FMT_UINT FMT_UINT FMT_UINT FMT_UINT FMT_UINT,
     &statio[0], &statio[1], &statio[2], &statio[3],
     &statio[4], &statio[5], &statio[6]))) {
-      CLOSE_X(fp);
+      CLOSE_FP(fp);
       exit_with_err(ERR, "reading the stat file failed");
   }
 #pragma GCC diagnostic pop
-  CLOSE_X(fp);
+  CLOSE_FP(fp);
 
   FILL_ARR(str1, "Read " FMT_UINT " MB, Written " FMT_UINT " MB",
     BYTES_TO_MB(statio[2]), BYTES_TO_MB(statio[6]));
@@ -361,13 +361,13 @@ get_battery(char *str1) {
 #pragma GCC diagnostic ignored "-Wunused-result"
   CHECK_FSCANF(fp, FMT_UINT, &total);
 #pragma GCC diagnostic pop
-  CLOSE_X(fp);
+  CLOSE_FP(fp);
 
   BATTERY_USED(temp, num);
 
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wunused-result"
-  OPEN_X(fp, temp, FMT_UINT, &used);
+  OPEN_FP(fp, temp, FMT_UINT, &used);
 #pragma GCC diagnostic pop
 
   FILL_UINT_ARR(str1,

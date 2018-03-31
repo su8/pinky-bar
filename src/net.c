@@ -384,14 +384,14 @@ get_nic_info(char *str1, char *str2) {
 
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wunused-result"
-  OPEN_X(fp, temp, SCAN_UINTX, &vendor); /* hex */
+  OPEN_FP(fp, temp, SCAN_UINTX, &vendor); /* hex */
 #pragma GCC diagnostic pop
 
   NIC_MODEL(temp, str2);
 
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wunused-result"
-  OPEN_X(fp, temp, SCAN_UINTX, &model); /* hex */
+  OPEN_FP(fp, temp, SCAN_UINTX, &model); /* hex */
 #pragma GCC diagnostic pop
 
   pacc = pci_alloc();

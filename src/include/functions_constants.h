@@ -115,17 +115,17 @@
     exit_with_err(ERR, CANNOT_OPEN_FP); \
   }
 
-#define CLOSE_X(fp) \
+#define CLOSE_FP(fp) \
   if (EOF == (fclose(fp))) { \
     exit_with_err(ERR, CANNOT_CLOSE); \
   }
 
-#define OPEN_X(fp, x, y, z) \
+#define OPEN_FP(fp, x, y, z) \
   if (NULL == (fp = fopen(x, "r"))) { \
     exit_with_err(CANNOT_OPEN, x); \
   } \
   CHECK_FSCANF(fp, y, z); \
-  CLOSE_X(fp);
+  CLOSE_FP(fp);
 
 #define CHECK_POPEN(fp, x, packs) \
   if (NULL == (fp = popen(x, "r"))) { \

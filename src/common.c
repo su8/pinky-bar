@@ -71,7 +71,7 @@ get_temp(const char *str1, char *str2) {
 
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wunused-result"
-  OPEN_X(fp, str1, SCAN_ULINT, &temp);
+  OPEN_FP(fp, str1, SCAN_ULINT, &temp);
 #pragma GCC diagnostic pop
 
   if (99999 < temp) { /* > 99C */
@@ -427,7 +427,7 @@ get_fans(char *str1) {
 #pragma GCC diagnostic ignored "-Wunused-result"
     CHECK_FSCANF(fp, SCAN_UFINT, &rpm[z]);
 #pragma GCC diagnostic pop
-    CLOSE_X(fp);
+    CLOSE_FP(fp);
   }
 
 #else
@@ -486,12 +486,12 @@ get_dvd(char *str1) {
 
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wunused-result"
-  OPEN_X(fp, DVD_VEND, "%s", vendor);
+  OPEN_FP(fp, DVD_VEND, "%s", vendor);
 #pragma GCC diagnostic pop
 
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wunused-result"
-  OPEN_X(fp, DVD_MODEL, "%s", model);
+  OPEN_FP(fp, DVD_MODEL, "%s", model);
 #pragma GCC diagnostic pop
 
   FILL_STR_ARR(2, str1, vendor, model);
@@ -508,7 +508,7 @@ get_loadavg(char *str1) {
   memset(up, 0, sizeof(up));
 
   if (-1 == (getloadavg(up, 3))) {
-  	FUNC_FAILED("getloadavg()");
+    FUNC_FAILED("getloadavg()");
   }
   FILL_ARR(str1, "%.2f %.2f %.2f",
     (float)up[0], (float)up[1], (float)up[2]);
