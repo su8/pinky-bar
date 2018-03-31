@@ -29,23 +29,23 @@ AC_DEFUN([TEST_X11],[
     AS_HELP_STRING([--with-x11],
       [X11 linker flag for dwm support]),
     [],
-    [with_x11=no]
+    [with_dwm=no]
   )
 
-  AC_ARG_WITH([colours],
-    AS_HELP_STRING([--with-colours],
+  AC_ARG_WITH([colors],
+    AS_HELP_STRING([--with-colors],
       [Colorize the output]),
     [],
-    [with_colours=no]
+    [with_colors=no]
   )
 
   AC_ARG_VAR(icons, [path to xbm icons for non-dwm WM])
 
-  AS_IF([test "x$with_colours" = "xyes"], [
+  AS_IF([test "x$with_colors" = "xyes"], [
     WITH_COLOURS=1
   ])
 
-  AS_IF([test "x$with_x11" = "xyes"], [
+  AS_IF([test "x$with_dwm" = "xyes"], [
     AC_CHECK_HEADERS([X11/Xlib.h], [
       X_LIBS="-lX11"
       ],[
@@ -75,7 +75,7 @@ AC_DEFUN([TEST_X11],[
   AC_SUBST(X_LIBS)
   AC_DEFINE_UNQUOTED([WITH_COLOURS],[$WITH_COLOURS],[Colorize the output])
 
-  AS_IF([test "x$with_x11" = "xyes"], [
+  AS_IF([test "x$with_dwm" = "xyes"], [
     AC_LINK_IFELSE([
       AC_LANG_SOURCE([[
         #include <X11/Xlib.h>
@@ -92,7 +92,7 @@ AC_DEFUN([TEST_X11],[
     )
   ])
 
-  AS_IF([test "x$with_x11" = "xno"], [
+  AS_IF([test "x$with_dwm" = "xno"], [
     TEST_NCURSES()
   ])
 

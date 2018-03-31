@@ -168,7 +168,7 @@ It's up to you to decide which features suit you best.
 
 | To include     | Not to include      | Descrtiption                                                                               |
 |----------------|---------------------|--------------------------------------------------------------------------------------------|
-| --with-x11     | --without-x11       | Enable it if you are using dwm.                                                            |
+| --with-dwm     | --without-dwm       | Enable it if you are using dwm.                                                            |
 | --with-alsa    | --without-alsa      | To get the sound volume level.                                                             |
 | --with-oss     | --without-oss       | To get the sound volume level in \*BSD.                                                    |
 | --with-net     | --without-net       | Enable the internet related options.                                                       |
@@ -198,8 +198,8 @@ It's up to you to decide which features suit you best.
 | --with-drivetemp | --without-drivetemp   | Read the drive temperature from S.M.A.R.T (linux only) uses curl                       |
 | --with-drivetemp-light | --without-drivetemp-light   | Read the drive temperature from S.M.A.R.T (linux only) light version       |
 | drive\_port='1234'  |                | Different TCP port to listen to for the drive temperature, default one is 7634, must be combined **--with-drivetemp** or **--with-drivetemp-light**   |
-| --with-colours | --without-colours   | Colorize the output data.                                                                  |
-| icons=/tmp     |                     | xbm icons that can be used by dzen2 for example. Discarded when **--with-x11** is used     |
+| --with-colors  | --without-colors    | Colorize the output data.                                                                  |
+| icons=/tmp     |                     | xbm icons that can be used by dzen2 for example. Discarded when **--with-dwm** is used     |
 | --with-mpd     | --without-mpd       | To see the currently played song name (if any).                                            |
 | --prefix=/tmp  |                     | The directory where the program will be installed                                          |
 | mobo\_sensor='dev.aibs.0'  |         | FreeBSD motherboard sensor module name to use in the sysctl calls. Read the FreeBSD installation below  |
@@ -241,7 +241,7 @@ Don't just rush to register yourself, read carefully what the "Free" account lim
 perl set.pl "distro"
 autoreconf --install --force
 
-./configure --prefix=$HOME/.cache --with-x11
+./configure --prefix=$HOME/.cache --with-dwm
 make
 make install
 ```
@@ -259,7 +259,7 @@ perl set.pl "distro"
 autoreconf --install --force
 
 # disable X11, point the location to the icons
-./configure --prefix=$HOME/.cache --without-x11 icons=$HOME/.xmonad/icons
+./configure --prefix=$HOME/.cache --without-dwm icons=$HOME/.xmonad/icons
 
 # compile 'n install
 make
@@ -295,7 +295,7 @@ Do the same for your cpu temperature, copy and paste the variable as is. **dev.c
 perl set.pl "freebsd"
 autoreconf --install --force
 
-./configure --prefix=$HOME/.cache --with-x11 --without-alsa --with-oss mobo_sensor='dev.aibs.0' cpu_sensor='dev.cpu.0.temperature'
+./configure --prefix=$HOME/.cache --without-alsa --with-oss mobo_sensor='dev.aibs.0' cpu_sensor='dev.cpu.0.temperature'
 make
 make install
 ```
@@ -332,7 +332,7 @@ make install
 
 ## Installation for anything else
 
-pinky-bar is no longer tied to Window Managers only. With the addition of "without colours", the output can be shown in any program, just bear in mind that the more options you've supplied the more system information will be shown. 
+pinky-bar is no longer tied to Window Managers only. With the addition of "without colors", the output can be shown in any program, just bear in mind that the more options you've supplied the more system information will be shown. 
 
 The tmux status bar in action:
 
@@ -344,7 +344,7 @@ The installation steps:
 perl set.pl "distro"
 autoreconf --install --force
 
-./configure --prefix=$HOME/.cache --without-x11 --without-colours
+./configure --prefix=$HOME/.cache --without-dwm --without-colors
 make
 make install
 ```
@@ -790,9 +790,9 @@ for dwm:
 * libx11
 * xorg-server
 
-use **--without-colours** to skip the following step:
+use **--without-colors** to skip the following step:
 
-* dwm compiled with statuscolor patch. The colours in use are specified in your dwm config.h
+* dwm compiled with statuscolor patch. The colors in use are specified in your dwm config.h
 
 ---
 
