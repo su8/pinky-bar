@@ -81,11 +81,6 @@ read_gmail_data_cb(char *data, size_t size, size_t nmemb, char *str1) {
 
 
 /*
-  API docs - http://openweathermap.org/current
-  Register yourself, create a new API key:
-   https://home.openweathermap.org/api_keys
-  Comply with your account limits.
-
   cURL related docs and examples
    https://curl.haxx.se/libcurl/c/curl_easy_setopt.html
    https://github.com/curl/curl/tree/master/docs/examples
