@@ -205,8 +205,8 @@ It's up to you to decide which features suit you best.
 | --with-mpd     | --without-mpd       | To see the currently played song name (if any).                                            |
 | --with-keyboard | --without-keyboard | Query xorg and show the currently used keyboard layout                                     |
 | --with-mail    | --without-mail      | Query gmail and show all unread emails, must be combined with the variables **gmail_account** and **gmail_password**  |
-| gmail\_account=foo  |                     | Your gmail account goes here                                                           |
-| gmail\_password=bar |                     | Your gmail account password goes here                                                  |
+| gmail\_account=foo  |                     | Your gmail account goes here, must be combined **--with-mail**                        |
+| gmail\_password=bar |                     | Your gmail account password goes here, must be combined **--with-mail**               |
 | --prefix=/tmp  |                     | The directory where the program will be installed                                          |
 | mobo\_sensor='dev.aibs.0'  |         | FreeBSD motherboard sensor module name to use in the sysctl calls. Read the FreeBSD installation below  |
 | cpu\_sensor='dev.cpu.0.temperature' |  | FreeBSD cpu temperature module name to use in the sysctl calls . Read the FreeBSD installation below  |
