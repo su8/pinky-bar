@@ -41,9 +41,13 @@ void get_temp(const char *, char *);
 void get_temp(char *, uint_least32_t temp);
 #endif /* __FreeBSD__ */
 
-#if defined (HAVE_X11_XLIB_H)
+#if defined (HAVE_X11_XLIB_H) && WITH_DWM == 1
 void set_status(const char *);
-#endif
+#endif /* HAVE_X11_XLIB_H  && WITH_DWM */
+
+#if WITH_KEYBOARD == 1 && defined(HAVE_X11_XKBLIB_H)
+void get_keyboard(char *);
+#endif /* WITH_KEYBOARD */
 
 #if defined(HAVE_CDIO_CDIO_H) || defined(__linux__)
 void get_dvd(char *);

@@ -34,7 +34,12 @@
 
 #if defined (HAVE_X11_XLIB_H)
 #include <X11/Xlib.h>
-#endif
+
+#if WITH_KEYBOARD == 1 && defined(HAVE_X11_XKBLIB_H)
+#include <X11/XKBlib.h>
+#endif /* WITH_KEYBOARD && HAVE_X11_XKBLIB_H */
+
+#endif /* HAVE_X11_XLIB_H */
 
 #if defined(HAVE_CDIO_CDIO_H)
 #include <cdio/cdio.h>
@@ -381,7 +386,7 @@ get_taim(char *str1) {
 }
 
 
-#if defined (HAVE_X11_XLIB_H)
+#if defined (HAVE_X11_XLIB_H) && WITH_DWM == 1
 void 
 set_status(const char *str1) {
   Display *display = XOpenDisplay(NULL);
@@ -395,7 +400,29 @@ set_status(const char *str1) {
     exit_with_err(CANNOT_OPEN, "X server");
   }
 }
-#endif /* HAVE_X11_XLIB_H */
+#endif /* HAVE_X11_XLIB_H && WITH_DWM == 1 */
+
+
+/* Based on:
+ * https://gist.github.com/fikovnik/ef428e82a26774280c4fdf8f96ce8eeb  */
+#if WITH_KEYBOARD == 1 && defined(HAVE_X11_XKBLIB_H)
+void
+get_keyboard(char *str1) {
+  Display *display = XOpenDisplay(NULL);
+  char *group = NULL;
+  XkbStateRec state;
+
+  if (NULL == display) {
+    exit_with_err(CANNOT_OPEN, "X server");
+  }
+
+  XkbGetState(display, XkbUseCoreKbd, &state);
+  XkbDescPtr desc = XkbGetKeyboard(display, XkbAllComponentsMask, XkbUseCoreKbd);
+  group = XGetAtomName(display, desc->names->groups[state.group]);
+
+  FILL_STR_ARR(1, str1, (group != NULL ? group : "unknown"));
+}
+#endif /* WITH_KEYBOARD && HAVE_X11_XKBLIB_H */
 
 
 #if !defined(HAVE_SENSORS_SENSORS_H) && !defined(__OpenBSD__)

@@ -37,11 +37,11 @@ int main(int argc, char *argv[]) {
   }
 
   if ('\0' != combined[0]) {
-#if defined (HAVE_X11_XLIB_H)
+#if defined (HAVE_X11_XLIB_H) && WITH_DWM == 1
     set_status(combined);
 #else
     fprintf(stdout, "%s\n", combined);
-#endif
+#endif /* HAVE_X11_XLIB_H && WITH_DWM */
   }
 
   return EXIT_SUCCESS;

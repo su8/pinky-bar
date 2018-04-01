@@ -24,12 +24,21 @@ dnl the variable 'X_LIBS' if they are available.
 AC_DEFUN([TEST_X11],[
   X_LIBS=""
   WITH_COLOURS=0
+  WITH_KEYBOARD=0
+  WITH_DWM=0
 
-  AC_ARG_WITH([x11],
+  AC_ARG_WITH([dwm],
     AS_HELP_STRING([--with-dwm],
       [X11 linker flag for dwm support]),
     [],
     [with_dwm=no]
+  )
+
+  AC_ARG_WITH([keyboard],
+    AS_HELP_STRING([--with-keyboard],
+      [X11 linker flag for keyboard layout support]),
+    [],
+    [with_keyboard=no]
   )
 
   AC_ARG_WITH([colors],
@@ -45,8 +54,8 @@ AC_DEFUN([TEST_X11],[
     WITH_COLOURS=1
   ])
 
-  AS_IF([test "x$with_dwm" = "xyes"], [
-    AC_CHECK_HEADERS([X11/Xlib.h], [
+  AS_IF([test "x$with_dwm" = "xyes" || test "x$with_keyboard" = "xyes"], [
+    AC_CHECK_HEADERS([X11/Xlib.h X11/XKBlib.h], [
       X_LIBS="-lX11"
       ],[
         ERR_MUST_INSTALL([xorg and libx11])
@@ -72,10 +81,20 @@ AC_DEFUN([TEST_X11],[
     AC_DEFINE_UNQUOTED([ICONS_DIR],[$ICONZ],[xbm icons for non-dwm WM])
   fi
 
-  AC_SUBST(X_LIBS)
-  AC_DEFINE_UNQUOTED([WITH_COLOURS],[$WITH_COLOURS],[Colorize the output])
+  AS_IF([test "x$with_keyboard" = "xyes"], [
+    WITH_KEYBOARD=1
+  ])
 
   AS_IF([test "x$with_dwm" = "xyes"], [
+    WITH_DWM=1
+  ])
+
+  AC_SUBST(X_LIBS)
+  AC_DEFINE_UNQUOTED([WITH_COLOURS],[$WITH_COLOURS],[Colorize the output])
+  AC_DEFINE_UNQUOTED([WITH_KEYBOARD],[$WITH_KEYBOARD],[Query xorg to get the currently used kb layout])
+  AC_DEFINE_UNQUOTED([WITH_DWM],[$WITH_DWM],[Output the data to the root window])
+
+  AS_IF([test "x$with_dwm" = "xyes" || test "x$with_keyboard" = "xyes"], [
     AC_LINK_IFELSE([
       AC_LANG_SOURCE([[
         #include <X11/Xlib.h>
