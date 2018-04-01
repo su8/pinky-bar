@@ -28,6 +28,9 @@ AC_DEFUN([TEST_WEATHER],[
   WITH_WEATHER=0
   WITH_DRIVETEMP=0
   WITH_DRIVETEMP_LIGHT=0
+  GMAIL_ACC=""
+  GMAIL_PASS=""
+  WITH_MAIL=0
 
   AC_ARG_WITH([weather],
     AS_HELP_STRING([--with-weather],
@@ -57,11 +60,40 @@ AC_DEFUN([TEST_WEATHER],[
     [with_smartemp=no]
   )
 
+  AC_ARG_WITH([mail],
+    AS_HELP_STRING([--with-mail],
+      [Count all unread emails]),
+    [],
+    [with_mail=no]
+  )
+
   AC_ARG_VAR(drive_port, [TCP port to listen to])
   AC_ARG_VAR(api_key, [weather api key])
+  AC_ARG_VAR(gmail_account, [gmail account])
+  AC_ARG_VAR(gmail_password, [gmail password])
 
   AS_IF([test "x$with_drivetemp" = "xyes" && test "x$with_drivetemp_light" = "xyes"],[
     with_drivetemp=no
+  ])
+
+
+  if [[ ! -z "${gmail_account}" ]]
+  then
+    GMAIL_ACC=\""${gmail_account}"\"
+  fi
+  if [[ ! -z "${gmail_password}" ]]
+  then
+    GMAIL_PASS=\""${gmail_password}"\"
+  fi
+  AS_IF([test "x$with_mail" = "xyes"],[
+    WITH_MAIL=1
+    AC_DEFINE_UNQUOTED([GMAIL_ACC],[$GMAIL_ACC],[gmail account])
+    AC_DEFINE_UNQUOTED([GMAIL_PASS],[$GMAIL_PASS],[gmail password])
+  ])
+
+  AS_IF([test "x$with_weather" = "xyes"],[
+    WITH_WEATHER=1
+    AC_DEFINE_UNQUOTED([API_KEY],[$API_KEY],[weather api key])
   ])
 
   ifdef([LINUKS],[
@@ -157,7 +189,7 @@ AC_DEFUN([TEST_WEATHER],[
   ],[
   ])
 
-  AS_IF([test "x$with_weather" = "xyes" || test "x$with_drivetemp" = "xyes"], [
+  AS_IF([test "x$with_weather" = "xyes" || test "x$with_drivetemp" = "xyes" || test "x$with_mail" = "xyes"], [
     CHECK_CFLAGZ([-O0])
 
     AC_CHECK_HEADERS([curl/curl.h], [
@@ -184,6 +216,7 @@ AC_DEFUN([TEST_WEATHER],[
       API_KEY=\""${api_key}"\"
     fi
 
+
     AS_IF([test "x$with_weather" = "xyes"],[
       WITH_WEATHER=1
       AC_DEFINE_UNQUOTED([API_KEY],[$API_KEY],[weather api key])
@@ -196,6 +229,7 @@ AC_DEFUN([TEST_WEATHER],[
   AC_DEFINE_UNQUOTED([DRIVE_PORT],[$DRIVE_PORT],[TCP port to listen to])
   AC_DEFINE_UNQUOTED([WITH_DRIVETEMP],[$WITH_DRIVETEMP],[Gettin hot in here])
   AC_DEFINE_UNQUOTED([WITH_DRIVETEMP_LIGHT],[$WITH_DRIVETEMP_LIGHT],[Gettin hot in here])
+  AC_DEFINE_UNQUOTED([WITH_MAIL],[$WITH_MAIL],[Count all unread emails])
 
   AS_IF([test "x$with_weather" = "xyes" || test "x$with_drivetemp" = "xyes"], [
     AC_LINK_IFELSE([

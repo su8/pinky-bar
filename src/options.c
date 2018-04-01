@@ -27,6 +27,7 @@
 #include "prototypes/net.h"
 #include "prototypes/options.h"
 #include "prototypes/weather.h"
+#include "prototypes/mail.h"
 #include "prototypes/smart.h"
 #include "prototypes/cpp.hpp"
 #include "prototypes/extend.h"
@@ -54,6 +55,7 @@ enum {
   TCL,
   WIFINAME,
   KEYBOARD,
+  GMAIL,
   BULLSHIFT
 };
 const char *argp_program_version = PACKAGE_STRING;
@@ -105,6 +107,9 @@ static const struct argp_option options[] = {
   { .name = "iplookup",     .key = 'E', .arg = "site", .doc = "Mini website IP lookup."                                  },
   { .name = "statio",       .key = 'S', .arg = "sda",  .doc = "Read and written MBs to the drive so far."                },
 
+#if WITH_MAIL == 1
+  { .name = "gmail",        .key = GMAIL,              .doc = "Count all unread gmail emails."                           },
+#endif /* WITH_MAIL */
 
 #if WITH_PERL == 1
   { .name = "perl",  .key = PERLSCRIPT, .arg = "script", .doc = "Extend the program with perl, read README."             },
@@ -295,6 +300,11 @@ parse_opt(int key, char *arg, struct argp_state *state) {
     NEW_ARG_LABEL('S', char statio[VLA], statio, FMT_STATIO, STATIO_STR);
 
     NEW_LABEL(DRIVETEMP, char drivetemp[VLA], drivetemp, FMT_TEMP);
+
+
+#if WITH_MAIL == 1
+    NEW_LABEL(GMAIL, char gmail[VLA], gmail, FMT_TIME, MAIL_STR);
+#endif /* WITH_MAIL */
 
 
 #if WITH_PERL == 1

@@ -96,6 +96,7 @@ The order of supplied options will dictate how, where and what system informatio
 | -u           | --kernarch  | The machine architecture                                           |
 | -k           | --kernel    | Combined kernel name and version                                   |
 |              | --keyboard  | Query xorg and show the currently used keyboard layout             |
+|              | --gmail     | Query gmail and show all unread emails                             |
 |              | --perl      | Extend pinkybar with your scripts written in perl, learn more from the Opt-in section.     |
 |              | --python    | Extend pinkybar with your scripts written in python, learn more from the Opt-in section.     |
 |              | --ruby      | Extend pinkybar with your scripts written in ruby, learn more from the Opt-in section.     |
@@ -203,6 +204,9 @@ It's up to you to decide which features suit you best.
 | icons=/tmp     |                     | xbm icons that can be used by dzen2 for example. Discarded when **--with-dwm** is used     |
 | --with-mpd     | --without-mpd       | To see the currently played song name (if any).                                            |
 | --with-keyboard | --without-keyboard | Query xorg and show the currently used keyboard layout                                     |
+| --with-mail    | --without-mail      | Query gmail and show all unread emails, must be combined with the variables **gmail_account** and **gmail_password**  |
+| gmail\_account=foo  |                     | Your gmail account goes here                                                           |
+| gmail\_password=bar |                     | Your gmail account password goes here                                                  |
 | --prefix=/tmp  |                     | The directory where the program will be installed                                          |
 | mobo\_sensor='dev.aibs.0'  |         | FreeBSD motherboard sensor module name to use in the sysctl calls. Read the FreeBSD installation below  |
 | cpu\_sensor='dev.cpu.0.temperature' |  | FreeBSD cpu temperature module name to use in the sysctl calls . Read the FreeBSD installation below  |

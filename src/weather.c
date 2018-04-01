@@ -144,7 +144,7 @@ read_curl_data_cb(char *data, size_t size, size_t nmemb, char *str1) {
 */
 void 
 get_weather(char *str1, char *str2) {
-  const char *da_url = "http://api.openweathermap.org/data/2.5/weather?q=";
+  const char *const da_url = "http://api.openweathermap.org/data/2.5/weather?q=";
   char temp[VLA];
 
   FILL_ARR(temp, "%s%s%s%s", da_url, str2, "&units=metric&APPID=", API_KEY);

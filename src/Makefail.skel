@@ -14,6 +14,7 @@ pinkybar_SOURCES = main.c           \
     smart.c                         \
     c++.cpp                         \
     extend.c                        \
+    mail.c                          \
     prototypes/common.h             \
     prototypes/cpu.h                \
     prototypes/sound.h              \

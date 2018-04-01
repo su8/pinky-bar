@@ -58,6 +58,7 @@
 #define UP_STR     "Up"
 #define LOAD_STR   "Load/avg"
 #define OUT_STR    "Out "
+#define MAIL_STR   "Mail"
 
 #endif /* HAVE_X11_XLIB_H || WITH_NCURSES || WITH_COLOURS */
 
