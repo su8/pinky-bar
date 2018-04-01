@@ -421,7 +421,9 @@ get_keyboard(char *str1) {
   group = XGetAtomName(display, desc->names->groups[state.group]);
 
   FILL_STR_ARR(1, str1, (group != NULL ? group : "unknown"));
+
   XFree(group);
+  XCloseDisplay(display);
 }
 #endif /* WITH_KEYBOARD && HAVE_X11_XKBLIB_H */
 
