@@ -11,7 +11,7 @@ COMMENT=                     Gather some system information
 USE_GITHUB=                  yes
 GH_ACCOUNT=                  su8
 GH_PROJECT=                  pinky-bar
-GH_TAGNAME=                  d627c6689bb8735dfda328013c6285a3264449b8
+GH_TAGNAME=                  a5accd9
 
 GNU_CONFIGURE=               yes
 USE_XORG+=                   x11
@@ -25,9 +25,9 @@ BUILD_DEPENDS=               git:devel/git tar:archivers/gtar gzip:archivers/gzi
 BUILD_DEPENDS+=              gm4:devel/m4 libtool:devel/libtool autoconf:devel/autoconf 
 BUILD_DEPENDS+=              automake:devel/automake
 
-OPTIONS_DEFINE=              X11 ALSA OSS NET DVD MPD COLOURS NCURSES WEATHER PYTHON PERL RUBY LUA LISP OCAML
+OPTIONS_DEFINE=              DWM ALSA OSS NET DVD MPD COLOURS NCURSES WEATHER PYTHON PERL RUBY LUA LISP OCAML KEYBOARD
 OPTIONS_DEFAULT=             OSS
-X11_CONFIGURE_WITH=          x11 
+DWM_CONFIGURE_WITH=          dwm 
 ALSA_CONFIGURE_WITH=         alsa  
 OSS_CONFIGURE_WITH=          oss
 NET_CONFIGURE_WITH=          net
@@ -42,8 +42,10 @@ RUBY_CONFIGURE_WITH=         ruby
 LUA_CONFIGURE_WITH=          lua
 LISP_CONFIGURE_WITH=         lisp
 OCAML_CONFIGURE_WITH=        ocaml
+KEYBOARD_CONFIGURE_WITH=     keyboard
 
-X11_DESC=                    Enable it if you are using dwm
+KEYBOARD_DESC=               Query xorg and show the currently used keyboard layout
+DWM_DESC=                    Enable it if you are using dwm
 ALSA_DESC=                   To get the sound volume level  
 OSS_DESC=                    The default way to get the sound volume level
 NET_DESC=                    Enable the internet related options
@@ -59,7 +61,8 @@ LUA_DESC=                    Extend the program with lua
 LISP_DESC=                   Extend the program with lisp
 OCAML_DESC=                  Extend the program with ocaml
 
-X11_LIB_DEPENDS=             libX11.so:x11/xorg
+DWM_LIB_DEPENDS=             libX11.so:x11/xorg
+KEYBOARD_LIB_DEPENDS=        libX11.so:x11/xorg
 ALSA_LIB_DEPENDS=            libasound.so:audio/alsa-lib
 DVD_LIB_DEPENDS=             libcdio.so:sysutils/libcdio libcddb.so:audio/libcddb
 NCURSES_LIB_DEPENDS=         libncurses.so:devel/ncurses
