@@ -91,11 +91,6 @@ AC_DEFUN([TEST_WEATHER],[
     AC_DEFINE_UNQUOTED([GMAIL_PASS],[$GMAIL_PASS],[gmail password])
   ])
 
-  AS_IF([test "x$with_weather" = "xyes"],[
-    WITH_WEATHER=1
-    AC_DEFINE_UNQUOTED([API_KEY],[$API_KEY],[weather api key])
-  ])
-
   ifdef([LINUKS],[
     AS_IF([test "x$with_drivetemp_light" = "xyes"],[
       WITH_DRIVETEMP_LIGHT=1
