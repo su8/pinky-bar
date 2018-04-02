@@ -56,6 +56,7 @@ enum {
   WIFINAME,
   KEYBOARD,
   GMAIL,
+  IP,
   BULLSHIFT
 };
 const char *argp_program_version = PACKAGE_STRING;
@@ -106,6 +107,10 @@ static const struct argp_option options[] = {
   { .name = "ipcast",       .key = 'D', .arg = "eth0", .doc = "The NIC broadcast address."                               },
   { .name = "iplookup",     .key = 'E', .arg = "site", .doc = "Mini website IP lookup."                                  },
   { .name = "statio",       .key = 'S', .arg = "sda",  .doc = "Read and written MBs to the drive so far."                },
+
+#if WITH_IP == 1
+  { .name = "ip",           .key = IP,                 .doc = "Return your external ip address (ipv4)."                  },
+#endif /* WITH_IP */
 
 #if WITH_MAIL == 1
   { .name = "gmail",        .key = GMAIL,              .doc = "Count all unread gmail emails."                           },
@@ -300,6 +305,11 @@ parse_opt(int key, char *arg, struct argp_state *state) {
     NEW_ARG_LABEL('S', char statio[VLA], statio, FMT_STATIO, STATIO_STR);
 
     NEW_LABEL(DRIVETEMP, char drivetemp[VLA], drivetemp, FMT_TEMP);
+
+
+#if WITH_IP == 1
+    NEW_LABEL(IP, char ip[VLA], ip, FMT_KERN);
+#endif /* WITH_IP */
 
 
 #if WITH_MAIL == 1

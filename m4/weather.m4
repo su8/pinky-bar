@@ -31,6 +31,7 @@ AC_DEFUN([TEST_WEATHER],[
   GMAIL_ACC=""
   GMAIL_PASS=""
   WITH_MAIL=0
+  WITH_IP=0
 
   AC_ARG_WITH([weather],
     AS_HELP_STRING([--with-weather],
@@ -67,6 +68,13 @@ AC_DEFUN([TEST_WEATHER],[
     [with_mail=no]
   )
 
+  AC_ARG_WITH([ip],
+    AS_HELP_STRING([--with-ip],
+      [Return your external ip address]),
+    [],
+    [with_ip=no]
+  )
+
   AC_ARG_VAR(drive_port, [TCP port to listen to])
   AC_ARG_VAR(api_key, [weather api key])
   AC_ARG_VAR(gmail_account, [gmail account])
@@ -89,6 +97,10 @@ AC_DEFUN([TEST_WEATHER],[
     WITH_MAIL=1
     AC_DEFINE_UNQUOTED([GMAIL_ACC],[$GMAIL_ACC],[gmail account])
     AC_DEFINE_UNQUOTED([GMAIL_PASS],[$GMAIL_PASS],[gmail password])
+  ])
+
+  AS_IF([test "x$with_ip" = "xyes"],[
+    WITH_IP=1
   ])
 
   ifdef([LINUKS],[
@@ -184,7 +196,7 @@ AC_DEFUN([TEST_WEATHER],[
   ],[
   ])
 
-  AS_IF([test "x$with_weather" = "xyes" || test "x$with_drivetemp" = "xyes" || test "x$with_mail" = "xyes"], [
+  AS_IF([test "x$with_weather" = "xyes" || test "x$with_drivetemp" = "xyes" || test "x$with_mail" = "xyes" || test "x$with_ip" = "xyes"], [
     CHECK_CFLAGZ([-O0])
 
     AC_CHECK_HEADERS([curl/curl.h], [
@@ -225,6 +237,7 @@ AC_DEFUN([TEST_WEATHER],[
   AC_DEFINE_UNQUOTED([WITH_DRIVETEMP],[$WITH_DRIVETEMP],[Gettin hot in here])
   AC_DEFINE_UNQUOTED([WITH_DRIVETEMP_LIGHT],[$WITH_DRIVETEMP_LIGHT],[Gettin hot in here])
   AC_DEFINE_UNQUOTED([WITH_MAIL],[$WITH_MAIL],[Count all unread emails])
+  AC_DEFINE_UNQUOTED([WITH_IP],[$WITH_IP],[Return your external ip address])
 
   AS_IF([test "x$with_weather" = "xyes" || test "x$with_drivetemp" = "xyes"], [
     AC_LINK_IFELSE([

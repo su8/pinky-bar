@@ -119,6 +119,7 @@ The order of supplied options will dictate how, where and what system informatio
 | -d           | --mobotemp  | The motherboard temperature                                        |
 | -V           | --volume    | The sound volume level                                             |
 | -t           | --time      | The current time                                                   |
+|              | --ip        | Return your external ip address (ipv4).                            |
 | -a           | --ipaddr    | The local ip address [argument - eth0]                             |
 | -b           | --bandwidth | The consumed internet bandwidth so far [argument - eth0]           |
 | -i           | --iface     | The current download and upload speed [argument - eth0]            |
@@ -205,6 +206,7 @@ It's up to you to decide which features suit you best.
 | --with-mpd     | --without-mpd       | To see the currently played song name (if any).                                            |
 | --with-keyboard | --without-keyboard | Query xorg and show the currently used keyboard layout                                     |
 | --with-mail    | --without-mail      | Query gmail and show all unread emails, must be combined with the variables **gmail_account** and **gmail_password**  |
+| --with-ip      | --without-ip        | Return your external ip address (ipv4).                                                    |
 | gmail\_account=foo  |                     | Your gmail account goes here, must be combined **--with-mail**                        |
 | gmail\_password=bar |                     | Your gmail account password goes here, must be combined **--with-mail**               |
 | --prefix=/tmp  |                     | The directory where the program will be installed                                          |
