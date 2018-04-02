@@ -47,7 +47,11 @@ void set_status(const char *);
 
 #if WITH_KEYBOARD == 1 && defined(HAVE_X11_XKBLIB_H)
 void get_keyboard(char *);
-#endif /* WITH_KEYBOARD */
+#endif /* WITH_KEYBOARD && HAVE_X11_XKBLIB_H */
+
+#if WITH_MOUSE == 1 && defined(HAVE_X11_XLIB_H)
+void get_mouse(char *);
+#endif /* WITH_MOUSE && HAVE_X11_XKBLIB_H */
 
 #if defined(HAVE_CDIO_CDIO_H) || defined(__linux__)
 void get_dvd(char *);

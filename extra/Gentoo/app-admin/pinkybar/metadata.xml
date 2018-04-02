@@ -21,13 +21,14 @@
 		<flag name="dvd">To get the cdrom or dvdrom vendor and model names.</flag>
 		<flag name="dwm">Output the data to the root window. Enable it if you are
 			using dwm.</flag>
-		<flag name="ip">Fetch and display your current (ipv4) IP address.</flag>
+		<flag name="ip">Fetch and display your external (ipv4) IP address.</flag>
 		<flag name="keyboard">Query xorg and show the currently used keyboard
 			layout.</flag>
 		<flag name="libnl">Enable the wifi related options regarding chipsets
 			supporting the cfg80211,mac80211 modules</flag>
 		<flag name="lisp">Extend pinkybar with your own crafted script written
 			in lisp, stored in /usr/share/pinkysc/pinky.lisp</flag>
+		<flag name="mouse">Query xorg and get the mouse speed in percentage.</flag>
 		<flag name="mpd">To see the currently played song name, date, artist(s),
 			title.</flag>
 		<flag name="ncurses">Output the data to the terminal using the ncurses

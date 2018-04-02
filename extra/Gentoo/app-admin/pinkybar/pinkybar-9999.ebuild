@@ -15,7 +15,7 @@ HOMEPAGE="https://github.com/su8/pinky-bar"
 LICENSE="GPL-3"
 SLOT="0"
 IUSE="+alsa colors drivetemp drivetemp-light dvd dwm ip keyboard libnl lisp lua
-	mpd ncurses +net +pci perl python2 r ruby sensors slang smartemp tcl weather"
+	mouse mpd ncurses +net +pci perl python2 r ruby sensors slang smartemp tcl weather"
 
 DEPEND="
 	sys-devel/autoconf
@@ -35,6 +35,7 @@ RDEPEND="
 	libnl? ( >=dev-libs/libnl-3.2.27 virtual/pkgconfig )
 	lisp? ( dev-lisp/ecls )
 	lua? ( dev-lang/lua )
+	mouse? ( x11-libs/libX11 )
 	mpd? ( media-sound/mpd media-libs/libmpdclient )
 	ncurses? ( sys-libs/ncurses )
 	net? ( sys-apps/iproute2 )
@@ -78,6 +79,7 @@ src_configure() {
 		$(use_with libnl)
 		$(use_with lisp)
 		$(use_with lua)
+		$(use_with mouse)
 		$(use_with mpd)
 		$(use_with ncurses)
 		$(use_with net)

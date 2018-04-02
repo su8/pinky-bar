@@ -57,6 +57,7 @@ enum {
   KEYBOARD,
   GMAIL,
   IP,
+  MOUSE,
   BULLSHIFT
 };
 const char *argp_program_version = PACKAGE_STRING;
@@ -182,6 +183,10 @@ static const struct argp_option options[] = {
 #if WITH_KEYBOARD == 1 && defined(HAVE_X11_XKBLIB_H)
   { .name = "keyboard",     .key = KEYBOARD,           .doc = "Query xorg and show the currently used keyboard layout."  },
 #endif /* WITH_KEYBOARD && HAVE_X11_XKBLIB_H */
+
+#if WITH_MOUSE == 1 && defined(HAVE_X11_XLIB_H)
+  { .name = "mouse",        .key = MOUSE,              .doc = "Query xorg to get the current mouse speed."               },
+#endif /* WITH_MOUSE && HAVE_X11_XLIB_H */
 
 #if !defined(__OpenBSD__)
   { .name = "ramshared",    .key = 'l',                .doc = "The shared ram."                                          },
@@ -391,9 +396,16 @@ parse_opt(int key, char *arg, struct argp_state *state) {
     NEW_MPD_LABEL('W', char song_track[VLA], song_track, 1, FMT_SONG);
 #endif /* HAVE_MPD_CLIENT_H */
 
+
 #if WITH_KEYBOARD == 1 && defined(HAVE_X11_XKBLIB_H)
     NEW_LABEL(KEYBOARD, char keyboard[VLA], keyboard, FMT_KERN);
 #endif /* WITH_KEYBOARD && HAVE_X11_XKBLIB_H */
+
+
+#if WITH_MOUSE == 1 && defined(HAVE_X11_XLIB_H)
+    NEW_LABEL(MOUSE, char mouse[VLA], mouse, FMT, MOUSE_STR);
+#endif /* WITH_MOUSE && HAVE_X11_XLIB_H */
+
 
 #if defined(HAVE_CDIO_CDIO_H) || defined(__linux__)
     NEW_LABEL('z', char dvd[VLA], dvd, FMT_KERN);

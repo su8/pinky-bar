@@ -436,6 +436,25 @@ get_keyboard(char *str1) {
 #endif /* WITH_KEYBOARD && HAVE_X11_XKBLIB_H */
 
 
+/* Based on xset.c */
+#if WITH_MOUSE == 1 && defined(HAVE_X11_XLIB_H)
+void
+get_mouse(char *str1) {
+  Display *display = XOpenDisplay(NULL);
+  int acc_num = 0, acc_denom = 0, threshold = 0;
+
+  if (NULL == display) {
+    exit_with_err(CANNOT_OPEN, "X server");
+  }
+
+  XGetPointerControl(display, &acc_num, &acc_denom, &threshold);
+  FILL_ARR(str1, "%d", (110 - threshold));
+  XCloseDisplay(display);
+}
+
+#endif /* WITH_MOUSE && HAVE_X11_XLIB_H */
+
+
 #if !defined(HAVE_SENSORS_SENSORS_H) && !defined(__OpenBSD__)
 void 
 get_fans(char *str1) {

@@ -26,6 +26,7 @@ AC_DEFUN([TEST_X11],[
   WITH_COLOURS=0
   WITH_KEYBOARD=0
   WITH_DWM=0
+  WITH_MOUSE=0
 
   AC_ARG_WITH([dwm],
     AS_HELP_STRING([--with-dwm],
@@ -41,6 +42,13 @@ AC_DEFUN([TEST_X11],[
     [with_keyboard=no]
   )
 
+  AC_ARG_WITH([mouse],
+    AS_HELP_STRING([--with-mouse],
+      [X11 linker flag for mouse speed support]),
+    [],
+    [with_mouse=no]
+  )
+
   AC_ARG_WITH([colors],
     AS_HELP_STRING([--with-colors],
       [Colorize the output]),
@@ -54,7 +62,7 @@ AC_DEFUN([TEST_X11],[
     WITH_COLOURS=1
   ])
 
-  AS_IF([test "x$with_dwm" = "xyes" || test "x$with_keyboard" = "xyes"], [
+  AS_IF([test "x$with_dwm" = "xyes" || test "x$with_keyboard" = "xyes" || test "x$with_mouse" = "xyes"], [
     AC_CHECK_HEADERS([X11/Xlib.h X11/XKBlib.h], [
       X_LIBS="-lX11"
       ],[
@@ -85,6 +93,10 @@ AC_DEFUN([TEST_X11],[
     WITH_KEYBOARD=1
   ])
 
+  AS_IF([test "x$with_mouse" = "xyes"], [
+    WITH_MOUSE=1
+  ])
+
   AS_IF([test "x$with_dwm" = "xyes"], [
     WITH_DWM=1
   ])
@@ -92,9 +104,10 @@ AC_DEFUN([TEST_X11],[
   AC_SUBST(X_LIBS)
   AC_DEFINE_UNQUOTED([WITH_COLOURS],[$WITH_COLOURS],[Colorize the output])
   AC_DEFINE_UNQUOTED([WITH_KEYBOARD],[$WITH_KEYBOARD],[Query xorg to get the currently used kb layout])
+  AC_DEFINE_UNQUOTED([WITH_MOUSE],[$WITH_MOUSE],[Query xorg to get the current mouse speed])
   AC_DEFINE_UNQUOTED([WITH_DWM],[$WITH_DWM],[Output the data to the root window])
 
-  AS_IF([test "x$with_dwm" = "xyes" || test "x$with_keyboard" = "xyes"], [
+  AS_IF([test "x$with_dwm" = "xyes" || test "x$with_keyboard" = "xyes" || test "x$with_mouse" = "xyes"], [
     AC_LINK_IFELSE([
       AC_LANG_SOURCE([[
         #include <X11/Xlib.h>

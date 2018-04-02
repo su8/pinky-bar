@@ -59,6 +59,7 @@
 #define LOAD_STR   "Load/avg"
 #define OUT_STR    "Out "
 #define MAIL_STR   "Mail"
+#define MOUSE_STR  "Mouse"
 
 #endif /* HAVE_X11_XLIB_H || WITH_NCURSES || WITH_COLOURS */
 

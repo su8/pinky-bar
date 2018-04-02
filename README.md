@@ -96,6 +96,7 @@ The order of supplied options will dictate how, where and what system informatio
 | -u           | --kernarch  | The machine architecture                                           |
 | -k           | --kernel    | Combined kernel name and version                                   |
 |              | --keyboard  | Query xorg and show the currently used keyboard layout             |
+|              | --mouse     | Query xorg and get the mouse speed in percentage                   |
 |              | --gmail     | Query gmail and show all unread emails                             |
 |              | --perl      | Extend pinkybar with your scripts written in perl, learn more from the Opt-in section.     |
 |              | --python    | Extend pinkybar with your scripts written in python, learn more from the Opt-in section.     |
@@ -205,6 +206,7 @@ It's up to you to decide which features suit you best.
 | icons=/tmp     |                     | xbm icons that can be used by dzen2 for example. Discarded when **--with-dwm** is used     |
 | --with-mpd     | --without-mpd       | To see the currently played song name (if any).                                            |
 | --with-keyboard | --without-keyboard | Query xorg and show the currently used keyboard layout                                     |
+| --with-mouse   | --without-mouse     | Query xorg and get the mouse speed in percentage                                           |
 | --with-mail    | --without-mail      | Query gmail and show all unread emails, must be combined with the variables **gmail_account** and **gmail_password**  |
 | --with-ip      | --without-ip        | Return your external ip address (ipv4).                                                    |
 | gmail\_account=foo  |                     | Your gmail account goes here, must be combined **--with-mail**                        |

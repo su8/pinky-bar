@@ -49,6 +49,7 @@
 #define LOAD_STR   CPU_STR
 #define UP_STR     XBM_ICON("uptime.xbm")
 #define MAIL_STR   XBM_ICON("mail.xbm")
+#define MOUSE_STR  XBM_ICON("mouse.xbm")
 
 /* Only for the weather */
 #define OUT_STR    BLUE XBM_ICON("fox.xbm")" "
