@@ -48,7 +48,7 @@ read_gmail_data_cb(char *data, size_t size, size_t nmemb, char *str1) {
     if ((x+17) < sz) { /* Verifying up to *(ptr+17) */
 
       if ('f' == *ptr) { /* fullcount */
-        if ('f' == *ptr && 'u' == *(ptr+1) && 'l' == *(ptr+2)) {
+        if ('u' == *(ptr+1) && 'l' == *(ptr+2) && 'l' == *(ptr+3)) {
           *str1++ = *(ptr+10); /* 1 email */
           if (0 != (isdigit((unsigned char) *(ptr+11)))) {
             *str1++ = *(ptr+11); /* 10 emails */
