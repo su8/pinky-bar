@@ -394,7 +394,7 @@ get_taim(char *str1) {
 }
 
 
-#if defined (HAVE_X11_XLIB_H) && WITH_DWM == 1
+#if WITH_DWM == 1 && defined(HAVE_X11_XLIB_H)
 void 
 set_status(const char *str1) {
   Display *display = XOpenDisplay(NULL);
@@ -453,6 +453,26 @@ get_mouse(char *str1) {
 }
 
 #endif /* WITH_MOUSE && HAVE_X11_XLIB_H */
+
+
+#if WITH_NUMLOCK == 1 && defined(HAVE_X11_XLIB_H)
+void
+get_numcapslock(char *str1) {
+  Display *display = XOpenDisplay(NULL);
+  XKeyboardState x;
+
+  if (NULL == display) {
+    exit_with_err(CANNOT_OPEN, "X server");
+  }
+
+  XGetKeyboardControl(display, &x);
+  XCloseDisplay(display);
+
+  FILL_ARR(str1, "Num %s Caps %s",
+    (x.led_mask & 2 ? "On" : "Off"),
+    (x.led_mask & 1 ? "On" : "Off"));
+}
+#endif /* WITH_NUMLOCK && HAVE_X11_XLIB_H */
 
 
 #if !defined(HAVE_SENSORS_SENSORS_H) && !defined(__OpenBSD__)

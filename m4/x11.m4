@@ -27,6 +27,7 @@ AC_DEFUN([TEST_X11],[
   WITH_KEYBOARD=0
   WITH_DWM=0
   WITH_MOUSE=0
+  WITH_NUMLOCK=0
 
   AC_ARG_WITH([dwm],
     AS_HELP_STRING([--with-dwm],
@@ -62,7 +63,14 @@ AC_DEFUN([TEST_X11],[
     WITH_COLOURS=1
   ])
 
-  AS_IF([test "x$with_dwm" = "xyes" || test "x$with_keyboard" = "xyes" || test "x$with_mouse" = "xyes"], [
+  AC_ARG_WITH([numcapslock],
+    AS_HELP_STRING([--with-numcapslock],
+      [X11 linker flag for numlock and capslock support]),
+    [],
+    [with_numcapslock=no]
+  )
+
+  AS_IF([test "x$with_dwm" = "xyes" || test "x$with_keyboard" = "xyes" || test "x$with_mouse" = "xyes" || test "x$with_numcapslock" = "xyes"], [
     AC_CHECK_HEADERS([X11/Xlib.h X11/XKBlib.h], [
       X_LIBS="-lX11"
       ],[
@@ -101,10 +109,15 @@ AC_DEFUN([TEST_X11],[
     WITH_DWM=1
   ])
 
+  AS_IF([test "x$with_numcapslock" = "xyes"], [
+    WITH_NUMLOCK=1
+  ])
+
   AC_SUBST(X_LIBS)
   AC_DEFINE_UNQUOTED([WITH_COLOURS],[$WITH_COLOURS],[Colorize the output])
   AC_DEFINE_UNQUOTED([WITH_KEYBOARD],[$WITH_KEYBOARD],[Query xorg to get the currently used kb layout])
   AC_DEFINE_UNQUOTED([WITH_MOUSE],[$WITH_MOUSE],[Query xorg to get the current mouse speed])
+  AC_DEFINE_UNQUOTED([WITH_NUMLOCK],[$WITH_NUMLOCK],[Query xorg to get the current state of numlock and capslock])
   AC_DEFINE_UNQUOTED([WITH_DWM],[$WITH_DWM],[Output the data to the root window])
 
   AS_IF([test "x$with_dwm" = "xyes" || test "x$with_keyboard" = "xyes" || test "x$with_mouse" = "xyes"], [
