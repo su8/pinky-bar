@@ -457,7 +457,7 @@ get_mouse(char *str1) {
 
 #if WITH_NUMLOCK == 1 && defined(HAVE_X11_XLIB_H)
 void
-get_numcapslock(char *str1) {
+get_numlock(char *str1) {
   Display *display = XOpenDisplay(NULL);
   XKeyboardState x;
 
@@ -468,9 +468,22 @@ get_numcapslock(char *str1) {
   XGetKeyboardControl(display, &x);
   XCloseDisplay(display);
 
-  FILL_ARR(str1, "Num %s Caps %s",
-    (x.led_mask & 2 ? "On" : "Off"),
-    (x.led_mask & 1 ? "On" : "Off"));
+  FILL_ARR(str1, "Num %s", (x.led_mask & 2 ? "On" : "Off"));
+}
+
+void
+get_capslock(char *str1) {
+  Display *display = XOpenDisplay(NULL);
+  XKeyboardState x;
+
+  if (NULL == display) {
+    exit_with_err(CANNOT_OPEN, "X server");
+  }
+
+  XGetKeyboardControl(display, &x);
+  XCloseDisplay(display);
+
+  FILL_ARR(str1, "Caps %s", (x.led_mask & 1 ? "On" : "Off"));
 }
 #endif /* WITH_NUMLOCK && HAVE_X11_XLIB_H */
 

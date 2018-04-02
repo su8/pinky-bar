@@ -54,7 +54,8 @@ void get_mouse(char *);
 #endif /* WITH_MOUSE && HAVE_X11_XLIB_H */
 
 #if WITH_NUMLOCK == 1 && defined(HAVE_X11_XLIB_H)
-void get_numcapslock(char *);
+void get_numlock(char *);
+void get_capslock(char *);
 #endif /* WITH_NUMLOCK && HAVE_X11_XLIB_H */
 
 #if defined(HAVE_CDIO_CDIO_H) || defined(__linux__)

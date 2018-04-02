@@ -97,7 +97,8 @@ The order of supplied options will dictate how, where and what system informatio
 | -k           | --kernel    | Combined kernel name and version                                   |
 |              | --keyboard  | Query xorg and show the currently used keyboard layout             |
 |              | --mouse     | Query xorg and get the mouse speed in percentage                   |
-|              | --numcaps   | Query xorg to get the current state of numlock and capslock        |
+|              | --numlock   | Query xorg to get the current state of numlock                     |
+|              | --capslock  | Query xorg to get the current state of capslock                    |
 |              | --gmail     | Query gmail and show all unread emails                             |
 |              | --perl      | Extend pinkybar with your scripts written in perl, learn more from the Opt-in section.     |
 |              | --python    | Extend pinkybar with your scripts written in python, learn more from the Opt-in section.     |

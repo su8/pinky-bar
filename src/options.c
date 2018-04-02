@@ -58,7 +58,8 @@ enum {
   GMAIL,
   IP,
   MOUSE,
-  NUMCAPSLOCK,
+  NUMLOCK,
+  CAPSLOCK,
   BULLSHIFT
 };
 const char *argp_program_version = PACKAGE_STRING;
@@ -190,7 +191,8 @@ static const struct argp_option options[] = {
 #endif /* WITH_MOUSE && HAVE_X11_XLIB_H */
 
 #if WITH_NUMLOCK == 1 && defined(HAVE_X11_XLIB_H)
-  { .name = "numcaps",      .key = NUMCAPSLOCK,        .doc = "Query xorg to get the current state of numlock and capslock." },
+  { .name = "numlock",      .key = NUMLOCK,        .doc = "Query xorg to get the current state of numlock."              },
+  { .name = "capslock",     .key = CAPSLOCK,       .doc = "Query xorg to get the current state of capslock."             },
 #endif /* WITH_MOUSE && HAVE_X11_XLIB_H */
 
 #if !defined(__OpenBSD__)
@@ -413,7 +415,9 @@ parse_opt(int key, char *arg, struct argp_state *state) {
 
 
 #if WITH_NUMLOCK == 1 && defined(HAVE_X11_XLIB_H)
-    NEW_LABEL(NUMCAPSLOCK, char numcapslock[VLA], numcapslock, FMT_KERN);
+    NEW_LABEL(NUMLOCK, char numlock[VLA], numlock, FMT_KERN);
+
+    NEW_LABEL(CAPSLOCK, char capslock[VLA], capslock, FMT_KERN);
 #endif /* WITH_KEYBOARD && HAVE_X11_XLIB_H */
 
 
