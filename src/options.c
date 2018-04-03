@@ -31,6 +31,7 @@
 #include "prototypes/smart.h"
 #include "prototypes/cpp.hpp"
 #include "prototypes/extend.h"
+#include "prototypes/x11.h"
 
 /* Because we ran out of a-z A-Z options,
  * only long ones will be supported from now on.
