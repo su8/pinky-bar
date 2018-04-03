@@ -99,50 +99,22 @@ get_mouse(char *str1) {
 
 
 #if WITH_NUMLOCK == 1 && defined(HAVE_X11_XLIB_H)
-void
-get_numlock(char *str1) {
-  Display *display = XOpenDisplay(NULL);
-  XKeyboardState x;
-
-  if (NULL == display) {
-    exit_with_err(CANNOT_OPEN, "X server");
-  }
-
-  XGetKeyboardControl(display, &x);
-  XCloseDisplay(display);
-
-  FILL_ARR(str1, "Num %s", (x.led_mask & 2 ? "On" : "Off"));
+#define LOCK_TEMPLATE(func, to_format, num) \
+void get_##func(char *str1) { \
+  Display *display = XOpenDisplay(NULL); \
+  XKeyboardState x; \
+  if (NULL == display) { \
+    exit_with_err(CANNOT_OPEN, "X server"); \
+  } \
+  XGetKeyboardControl(display, &x); \
+  XCloseDisplay(display); \
+  FILL_ARR(str1, to_format, (x.led_mask & num ? "On" : "Off")); \
 }
 
-void
-get_capslock(char *str1) {
-  Display *display = XOpenDisplay(NULL);
-  XKeyboardState x;
-
-  if (NULL == display) {
-    exit_with_err(CANNOT_OPEN, "X server");
-  }
-
-  XGetKeyboardControl(display, &x);
-  XCloseDisplay(display);
-
-  FILL_ARR(str1, "Caps %s", (x.led_mask & 1 ? "On" : "Off"));
-}
-
-void
-get_scrolllock(char *str1) {
-  Display *display = XOpenDisplay(NULL);
-  XKeyboardState x;
-
-  if (NULL == display) {
-    exit_with_err(CANNOT_OPEN, "X server");
-  }
-
-  XGetKeyboardControl(display, &x);
-  XCloseDisplay(display);
-
-  FILL_ARR(str1, "Scroll %s", (x.led_mask & 4 ? "On" : "Off"));
-}
+LOCK_TEMPLATE(numlock, "Num %s", 2)
+LOCK_TEMPLATE(capslock, "Caps %s", 1)
+LOCK_TEMPLATE(scrolllock, "Scroll %s", 4)
+#undef LOCK_TEMPLATE
 #endif /* WITH_NUMLOCK && HAVE_X11_XLIB_H */
 
 #else
