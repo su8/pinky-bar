@@ -128,6 +128,21 @@ get_capslock(char *str1) {
 
   FILL_ARR(str1, "Caps %s", (x.led_mask & 1 ? "On" : "Off"));
 }
+
+void
+get_scrolllock(char *str1) {
+  Display *display = XOpenDisplay(NULL);
+  XKeyboardState x;
+
+  if (NULL == display) {
+    exit_with_err(CANNOT_OPEN, "X server");
+  }
+
+  XGetKeyboardControl(display, &x);
+  XCloseDisplay(display);
+
+  FILL_ARR(str1, "Scroll %s", (x.led_mask & 4 ? "On" : "Off"));
+}
 #endif /* WITH_NUMLOCK && HAVE_X11_XLIB_H */
 
 #else

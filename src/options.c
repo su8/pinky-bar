@@ -61,6 +61,7 @@ enum {
   MOUSE,
   NUMLOCK,
   CAPSLOCK,
+  SCROLLLOCK,
   BULLSHIFT
 };
 const char *argp_program_version = PACKAGE_STRING;
@@ -192,8 +193,9 @@ static const struct argp_option options[] = {
 #endif /* WITH_MOUSE && HAVE_X11_XLIB_H */
 
 #if WITH_NUMLOCK == 1 && defined(HAVE_X11_XLIB_H)
-  { .name = "numlock",      .key = NUMLOCK,        .doc = "Query xorg to get the current state of numlock."              },
-  { .name = "capslock",     .key = CAPSLOCK,       .doc = "Query xorg to get the current state of capslock."             },
+  { .name = "numlock",      .key = NUMLOCK,            .doc = "Query xorg to get the current state of numlock."          },
+  { .name = "capslock",     .key = CAPSLOCK,           .doc = "Query xorg to get the current state of capslock."         },
+  { .name = "scrolllock",   .key = SCROLLLOCK,         .doc = "Query xorg to get the current state of capslock."         },
 #endif /* WITH_MOUSE && HAVE_X11_XLIB_H */
 
 #if !defined(__OpenBSD__)
@@ -419,6 +421,8 @@ parse_opt(int key, char *arg, struct argp_state *state) {
     NEW_LABEL(NUMLOCK, char numlock[VLA], numlock, FMT_KERN);
 
     NEW_LABEL(CAPSLOCK, char capslock[VLA], capslock, FMT_KERN);
+
+    NEW_LABEL(SCROLLLOCK, char scrolllock[VLA], scrolllock, FMT_KERN);
 #endif /* WITH_KEYBOARD && HAVE_X11_XLIB_H */
 
 

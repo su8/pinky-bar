@@ -35,6 +35,7 @@ void get_mouse(char *);
 #if WITH_NUMLOCK == 1 && defined(HAVE_X11_XLIB_H)
 void get_numlock(char *);
 void get_capslock(char *);
+void get_scrolllock(char *);
 #endif /* WITH_NUMLOCK && HAVE_X11_XLIB_H */
 
 #endif /* X11_H_ */
