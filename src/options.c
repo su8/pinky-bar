@@ -62,6 +62,7 @@ enum {
   NUMLOCK,
   CAPSLOCK,
   SCROLLLOCK,
+  PASSWORD,
   BULLSHIFT
 };
 const char *argp_program_version = PACKAGE_STRING;
@@ -112,6 +113,7 @@ static const struct argp_option options[] = {
   { .name = "ipcast",       .key = 'D', .arg = "eth0", .doc = "The NIC broadcast address."                               },
   { .name = "iplookup",     .key = 'E', .arg = "site", .doc = "Mini website IP lookup."                                  },
   { .name = "statio",       .key = 'S', .arg = "sda",  .doc = "Read and written MBs to the drive so far."                },
+  { .name = "password",     .key = PASSWORD,           .doc = "Generate 20 character long password."                     },
 
 #if WITH_IP == 1
   { .name = "ip",           .key = IP,                 .doc = "Return your external ip address (ipv4)."                  },
@@ -150,31 +152,28 @@ static const struct argp_option options[] = {
 #endif /* WITH_ECL */
 
 #if WITH_OCAML == 1
-  { .name = "ocaml",         .key = OCAML,                     .doc = "Extend the program with ocaml, read README."      },
+  { .name = "ocaml",         .key = OCAML,                 .doc = "Extend the program with ocaml, read README."      },
 #endif /* WITH_OCAML */
 
 #if WITH_RUST == 1
-  { .name = "rust",         .key = RUST,                     .doc = "Extend the program with rust, read README."         },
+  { .name = "rust",         .key = RUST,                   .doc = "Extend the program with rust, read README."         },
 #endif /* WITH_RUST */
 
 #if WITH_GO == 1
-  { .name = "go",         .key = GO,                           .doc = "Extend the program with go, read README."         },
+  { .name = "go",         .key = GO,                       .doc = "Extend the program with go, read README."         },
 #endif /* WITH_GO */
 
 #if WITH_CPP == 1
-  { .name = "cpp",         .key = CPP,                        .doc = "Extend the program with c++, read README."         },
+  { .name = "cpp",         .key = CPP,                     .doc = "Extend the program with c++, read README."         },
 #endif /* WITH_CPP */
-
 
 #if WITH_SLANG == 1
   { .name = "slang",         .key = SLANG,    .arg = "script",    .doc = "Extend the program with slang, read README."   },
 #endif /* WITH_SLANG */
 
-
 #if WITH_TCL == 1
   { .name = "tcl",         .key = TCL,    .arg = "script",    .doc = "Extend the program with tcl, read README."         },
 #endif /* WITH_TCL */
-
 
 #if WITH_WEATHER == 1
   { .name = "weather", .key = 'q', .arg = "London,uk", .doc = "The temperature outside."                                 },
@@ -320,6 +319,8 @@ parse_opt(int key, char *arg, struct argp_state *state) {
     NEW_ARG_LABEL('S', char statio[VLA], statio, FMT_STATIO, STATIO_STR);
 
     NEW_LABEL(DRIVETEMP, char drivetemp[VLA], drivetemp, FMT_TEMP);
+
+    NEW_LABEL(PASSWORD, char password[VLA], password, FMT_KERN);
 
 
 #if WITH_IP == 1

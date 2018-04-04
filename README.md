@@ -101,6 +101,7 @@ The order of supplied options will dictate how, where and what system informatio
 |              | --capslock  | Query xorg to get the current state of capslock                    |
 |              | --scrolllock | Query xorg to get the current state of scroll lock                |
 |              | --gmail     | Query gmail and show all unread emails                             |
+|              | --password  | Generate 20 character long password                                |
 |              | --perl      | Extend pinkybar with your scripts written in perl, learn more from the Opt-in section.     |
 |              | --python    | Extend pinkybar with your scripts written in python, learn more from the Opt-in section.     |
 |              | --ruby      | Extend pinkybar with your scripts written in ruby, learn more from the Opt-in section.     |

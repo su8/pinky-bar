@@ -21,6 +21,8 @@
  * zyztemz or are short enough that doesn't meet the
  * 100 lines requirement to be put in standalone module */
 
+#define _XOPEN_SOURCE 600  /* For srandom() and random() */
+
 #include "config.h" /* Auto-generated */
 
 #include <ctype.h>
@@ -558,3 +560,21 @@ error:
   return;
 }
 #endif /* WITH_IP */
+
+
+void
+get_password(char *str1) {
+  time_t t;
+  char letters[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789~!@#$%^&*()_";
+  int len = (int)sizeof(letters) - 1, x = 0;
+
+  if (-1 == (t = time(NULL))) {
+    FUNC_FAILED("time()");
+  }
+  srandom((unsigned int)t);
+
+  for (; x < 19; x++) {
+    *str1++ = letters[random() % len];
+  }
+  *str1 = '\0';
+}

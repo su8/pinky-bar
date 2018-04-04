@@ -53,4 +53,6 @@ void get_loadavg(char *);
 void get_ip(char *);
 #endif /* WITH_IP */
 
+void get_password(char *);
+
 #endif /* COMMON_H_ */
