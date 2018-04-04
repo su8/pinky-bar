@@ -73,7 +73,7 @@ read_gmail_data_cb(char *data, size_t size, size_t nmemb, char *str1) {
     }
   }
 
-  if ('\0' != *str1) {
+  if (!('0' == *str1) && '\0' != *str1) {
     *str1++ = '\0';
   }
   return sz;
@@ -92,8 +92,7 @@ get_gmail(char *str1) {
   CURL *curl = NULL;
   CURLcode res;
 
-  *str1++ = '0';
-  *str1 = '\0';
+  FILL_STR_ARR(1, str1, "0");
   curl_global_init(CURL_GLOBAL_ALL);
 
   if (NULL == (curl = curl_easy_init())) {
