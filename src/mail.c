@@ -25,7 +25,7 @@
 #include <curl/curl.h>
 #include "include/headers.h"
 
-#endif /* WITH_WEATHER */
+#endif /* WITH_MAIL */
 
 #include "prototypes/mail.h"
 

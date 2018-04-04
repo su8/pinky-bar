@@ -32,6 +32,8 @@ AC_DEFUN([TEST_WEATHER],[
   GMAIL_PASS=""
   WITH_MAIL=0
   WITH_IP=0
+  WITH_GITHUB=0
+  GITHUB_TOKEN=""
 
   AC_ARG_WITH([weather],
     AS_HELP_STRING([--with-weather],
@@ -75,10 +77,18 @@ AC_DEFUN([TEST_WEATHER],[
     [with_ip=no]
   )
 
+  AC_ARG_WITH([github],
+    AS_HELP_STRING([--with-github],
+      [Query GitHub and number all unread notifications]),
+    [],
+    [with_github=no]
+  )
+
   AC_ARG_VAR(drive_port, [TCP port to listen to])
   AC_ARG_VAR(api_key, [weather api key])
   AC_ARG_VAR(gmail_account, [gmail account])
   AC_ARG_VAR(gmail_password, [gmail password])
+  AC_ARG_VAR(github_token, [github token])
 
   AS_IF([test "x$with_drivetemp" = "xyes" && test "x$with_drivetemp_light" = "xyes"],[
     with_drivetemp=no
@@ -101,6 +111,15 @@ AC_DEFUN([TEST_WEATHER],[
 
   AS_IF([test "x$with_ip" = "xyes"],[
     WITH_IP=1
+  ])
+
+  if [[ ! -z "${github_token}" ]]
+  then
+    GITHUB_TOKEN=\""${github_token}"\"
+  fi
+  AS_IF([test "x$with_github" = "xyes"],[
+    WITH_GITHUB=1
+    AC_DEFINE_UNQUOTED([GITHUB_TOKEN],[$GITHUB_TOKEN],[Query GitHub and number all unread notifications])
   ])
 
   ifdef([LINUKS],[
@@ -196,7 +215,7 @@ AC_DEFUN([TEST_WEATHER],[
   ],[
   ])
 
-  AS_IF([test "x$with_weather" = "xyes" || test "x$with_drivetemp" = "xyes" || test "x$with_mail" = "xyes" || test "x$with_ip" = "xyes"], [
+  AS_IF([test "x$with_weather" = "xyes" || test "x$with_drivetemp" = "xyes" || test "x$with_mail" = "xyes" || test "x$with_ip" = "xyes" || test "x$with_github" = "xyes"], [
     CHECK_CFLAGZ([-O0])
 
     AC_CHECK_HEADERS([curl/curl.h], [
@@ -238,8 +257,9 @@ AC_DEFUN([TEST_WEATHER],[
   AC_DEFINE_UNQUOTED([WITH_DRIVETEMP_LIGHT],[$WITH_DRIVETEMP_LIGHT],[Gettin hot in here])
   AC_DEFINE_UNQUOTED([WITH_MAIL],[$WITH_MAIL],[Count all unread emails])
   AC_DEFINE_UNQUOTED([WITH_IP],[$WITH_IP],[Return your external ip address])
+  AC_DEFINE_UNQUOTED([WITH_GITHUB],[$WITH_GITHUB],[Query GitHub and number all unread notifications])
 
-  AS_IF([test "x$with_weather" = "xyes" || test "x$with_drivetemp" = "xyes"], [
+  AS_IF([test "x$with_weather" = "xyes" || test "x$with_drivetemp" = "xyes" || test "x$with_mail" = "xyes" || test "x$with_ip" = "xyes" || test "x$with_github" = "xyes"], [
     AC_LINK_IFELSE([
       AC_LANG_SOURCE([[
         #include <stdio.h>

@@ -101,6 +101,7 @@ The order of supplied options will dictate how, where and what system informatio
 |              | --capslock  | Query xorg to get the current state of capslock                    |
 |              | --scrolllock | Query xorg to get the current state of scroll lock                |
 |              | --gmail     | Query gmail and show all unread emails                             |
+|              | --github    | Query GitHub and number all unread notifications                   |
 |              | --password  | Generate 20 character long password                                |
 |              | --perl      | Extend pinkybar with your scripts written in perl, learn more from the Opt-in section.     |
 |              | --python    | Extend pinkybar with your scripts written in python, learn more from the Opt-in section.     |
@@ -212,10 +213,12 @@ It's up to you to decide which features suit you best.
 | --with-keyboard | --without-keyboard | Query xorg and show the currently used keyboard layout                                     |
 | --with-mouse   | --without-mouse     | Query xorg and get the mouse speed in percentage                                           |
 | --with-numcapslock | --without-numcapslock | Query xorg to get the current state of numlock, capslock and scroll lock             |
-| --with-mail    | --without-mail      | Query gmail and show all unread emails, must be combined with the variables **gmail_account** and **gmail_password**  |
 | --with-ip      | --without-ip        | Return your external ip address (ipv4).                                                    |
-| gmail\_account=foo  |                     | Your gmail account goes here, must be combined **--with-mail**                        |
-| gmail\_password=bar |                     | Your gmail account password goes here, must be combined **--with-mail**               |
+| --with-mail    | --without-mail      | Query gmail and show all unread emails, must be combined with the variables **gmail_account** and **gmail_password**  |
+| gmail\_account=foo  |                | Your gmail account goes here, must be combined **--with-mail**                             |
+| gmail\_password=bar |                | Your gmail account password goes here, must be combined **--with-mail**                    |
+| --with-github    | --without-github       | Query GitHub and number all unread notifications |
+| github\_token=foo  |                     | [Generate token for specific scope](https://github.com/settings/tokens/new?scopes=notifications&description=pinky-bar), must be combined **--with-github**  |
 | --prefix=/tmp  |                     | The directory where the program will be installed                                          |
 | mobo\_sensor='dev.aibs.0'  |         | FreeBSD motherboard sensor module name to use in the sysctl calls. Read the FreeBSD installation below  |
 | cpu\_sensor='dev.cpu.0.temperature' |  | FreeBSD cpu temperature module name to use in the sysctl calls . Read the FreeBSD installation below  |

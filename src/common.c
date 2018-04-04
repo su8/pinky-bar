@@ -39,10 +39,6 @@
 #include <cdio/mmc.h>
 #endif /* HAVE_CDIO_CDIO_H */
 
-#if WITH_IP == 1
-#include <curl/curl.h>
-#endif /* WITH_IP */
-
 #include "include/headers.h"
 
 #if defined(__FreeBSD__)
@@ -57,10 +53,6 @@
 #if defined(__linux__)
 static uint_fast16_t glob_packages(const char *);
 #endif /* __linux__ */
-
-#if WITH_IP == 1
-static size_t read_ip_data_cb(char *, size_t size, size_t nmemb, char *);
-#endif /* WITH_IP */
 
 void
 exit_with_err(const char *str1, const char *str2) {
@@ -513,53 +505,6 @@ split_n_index(char *str1) {
   }
   *str1 = '\0';
 }
-
-
-#if WITH_IP == 1
-static size_t
-read_ip_data_cb(char *data, size_t size, size_t nmemb, char *str1) {
-  FILL_STR_ARR(1, str1, data);
-
-  return (nmemb * size);
-}
-
-void
-get_ip(char *str1) {
-  const char *const provider1 = "https://api.ipify.org";
-  /* const char *const provider2 = "https://ipv4bot.whatismyipaddress.com"; */
-  /* const char *const provider3 = "https://ident.me"; */
-  /* const char *const provider4 = "https://wtfismyip.com/text"; */
-
-  CURL *curl = NULL;
-  CURLcode res;
-
-  FILL_STR_ARR(1, str1, "0");
-  curl_global_init(CURL_GLOBAL_ALL);
-
-  if (NULL == (curl = curl_easy_init())) {
-    goto error;
-  }
-
-  curl_easy_setopt(curl, CURLOPT_URL, provider1);
-  curl_easy_setopt(curl, CURLOPT_ACCEPT_ENCODING, "gzip");
-  curl_easy_setopt(curl, CURLOPT_USE_SSL, (long)CURLUSESSL_ALL); 
-  curl_easy_setopt(curl, CURLOPT_TIMEOUT, 20L);
-  curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, read_ip_data_cb);
-  curl_easy_setopt(curl, CURLOPT_WRITEDATA, str1);
-
-  res = curl_easy_perform(curl);
-  if (CURLE_OK != res) {
-    goto error;
-  }
-
-error:
-  if (NULL != curl) {
-    curl_easy_cleanup(curl);
-  }
-  curl_global_cleanup();
-  return;
-}
-#endif /* WITH_IP */
 
 
 void

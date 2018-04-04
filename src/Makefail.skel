@@ -7,6 +7,7 @@ pinkybar_LDADD = $(X_LIBS) $(ALSA_LIBS) $(MPD_LIBS) $(PCI_LIBS) $(DVD_LIBS) $(SE
 pinkybar_SOURCES = main.c           \
     common.c                        \
     cpu.c                           \
+    curl.c                          \
     sound.c                         \
     options.c                       \
     net.c                           \
@@ -17,6 +18,9 @@ pinkybar_SOURCES = main.c           \
     x11.c                           \
     mail.c                          \
     prototypes/common.h             \
+    prototypes/mail.h               \
+    prototypes/curl.h               \
+    prototypes/x11.h                \
     prototypes/cpu.h                \
     prototypes/sound.h              \
     prototypes/net.h                \

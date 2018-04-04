@@ -49,10 +49,6 @@ void get_dvd(char *);
 void get_loadavg(char *);
 #endif /* __FreeBSD__ || __OpenBSD__ */
 
-#if WITH_IP == 1
-void get_ip(char *);
-#endif /* WITH_IP */
-
 void get_password(char *);
 
 #endif /* COMMON_H_ */
