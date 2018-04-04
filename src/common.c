@@ -573,7 +573,7 @@ get_password(char *str1) {
   }
   srandom((unsigned int)t);
 
-  for (; x < 19; x++) {
+  for (; x < 20; x++) {
     *str1++ = letters[random() % len];
   }
   *str1 = '\0';
