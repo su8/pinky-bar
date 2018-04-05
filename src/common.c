@@ -523,3 +523,9 @@ get_password(char *str1) {
   }
   *str1 = '\0';
 }
+
+
+void
+get_notes(char *str1, char *str2) {
+  FILL_STR_ARR(1, str1, str2);
+}

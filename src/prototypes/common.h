@@ -28,6 +28,8 @@ void get_taim(char *);
 void get_uptime(char *);
 void check_fan_vals(char *, uint_fast16_t *, uint_fast16_t iterz);
 void split_n_index(char *);
+void get_password(char *);
+void get_notes(char *, char *);
 
 #if !defined(HAVE_SENSORS_SENSORS_H) && !defined(__OpenBSD__)
 void get_fans(char *);
@@ -48,7 +50,5 @@ void get_dvd(char *);
 #if defined(__FreeBSD__) || defined(__OpenBSD__)
 void get_loadavg(char *);
 #endif /* __FreeBSD__ || __OpenBSD__ */
-
-void get_password(char *);
 
 #endif /* COMMON_H_ */

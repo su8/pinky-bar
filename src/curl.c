@@ -26,6 +26,13 @@
 #include "include/headers.h"
 #include "prototypes/curl.h"
 
+/* If you need to parse some news related website
+ * there is a neat website that offers 30 000 news
+ * related websites and exposes json api:
+ *   https://newsapi.org 
+ * Register yourself for free and get api key, then do
+ * your parsing here. */
+
 #if WITH_IP == 1
 static size_t read_ip_data_cb(char *, size_t, size_t, char *);
 #endif /* WITH_IP */
