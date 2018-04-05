@@ -65,6 +65,7 @@ enum {
   SCROLLLOCK,
   PASSWORD,
   GITHUB,
+  REDDIT,
   BULLSHIFT
 };
 const char *argp_program_version = PACKAGE_STRING;
@@ -116,6 +117,10 @@ static const struct argp_option options[] = {
   { .name = "iplookup",     .key = 'E', .arg = "site", .doc = "Mini website IP lookup."                                  },
   { .name = "statio",       .key = 'S', .arg = "sda",  .doc = "Read and written MBs to the drive so far."                },
   { .name = "password",     .key = PASSWORD,           .doc = "Generate 20 character long password."                     },
+
+#if WITH_REDDIT == 1
+  { .name = "reddit",       .key = REDDIT,             .doc = "Query reddit and number all unread notifications."        },
+#endif /* WITH_REDDIT */
 
 #if WITH_GITHUB == 1
   { .name = "github",       .key = GITHUB,             .doc = "Query GitHub and number all unread notifications."        },
@@ -327,6 +332,11 @@ parse_opt(int key, char *arg, struct argp_state *state) {
     NEW_LABEL(DRIVETEMP, char drivetemp[VLA], drivetemp, FMT_TEMP);
 
     NEW_LABEL(PASSWORD, char password[VLA], password, FMT_KERN);
+
+
+#if WITH_REDDIT == 1
+    NEW_LABEL(REDDIT, char reddit[VLA], reddit, FMT_KERN);
+#endif /* WITH_REDDIT */
 
 
 #if WITH_GITHUB == 1

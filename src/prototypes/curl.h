@@ -28,4 +28,8 @@ void get_ip(char *);
 void get_github(char *);
 #endif /* WITH_GITHUB */
 
+#if WITH_REDDIT == 1
+void get_reddit(char *);
+#endif /* WITH_REDDIT */
+
 #endif /* CURLLL_H_ */
