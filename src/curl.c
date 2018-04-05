@@ -127,7 +127,7 @@ get_github(char *str1) {
   curl_easy_setopt(curl, CURLOPT_URL, github_url);
   curl_easy_setopt(curl, CURLOPT_ACCEPT_ENCODING, "gzip");
   curl_easy_setopt(curl, CURLOPT_USERAGENT, "pinky-bar/1.0");
-  curl_easy_setopt(curl, CURLOPT_USE_SSL, (long)CURLUSESSL_ALL); 
+  curl_easy_setopt(curl, CURLOPT_USE_SSL, (long)CURLUSESSL_ALL);
   curl_easy_setopt(curl, CURLOPT_TIMEOUT, 20L);
   curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, read_github_data_cb);
   curl_easy_setopt(curl, CURLOPT_WRITEDATA, str1);
@@ -186,7 +186,7 @@ get_reddit(char *str1) {
   curl_easy_setopt(curl, CURLOPT_URL, reddit_url);
   curl_easy_setopt(curl, CURLOPT_ACCEPT_ENCODING, "gzip");
   curl_easy_setopt(curl, CURLOPT_USERAGENT, "pinky-bar/1.0");
-  curl_easy_setopt(curl, CURLOPT_USE_SSL, (long)CURLUSESSL_ALL); 
+  curl_easy_setopt(curl, CURLOPT_USE_SSL, (long)CURLUSESSL_ALL);
   curl_easy_setopt(curl, CURLOPT_TIMEOUT, 20L);
   curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, read_reddit_data_cb);
   curl_easy_setopt(curl, CURLOPT_WRITEDATA, str1);

@@ -221,7 +221,7 @@ It's up to you to decide which features suit you best.
 | --with-github  | --without-github    | Query GitHub and number all unread notifications |
 | github\_token=foo  |                 | [Generate token for specific scope](https://github.com/settings/tokens/new?scopes=notifications&description=pinky-bar), must be combined **--with-github**  |
 | --with-reddit  | --without-reddit    | Query reddit and number all unread notifications |
-| reddit\_feed=foo  |                 | [your inbox-\>everything, copy the JSON link and paste it to this variable](https://www.reddit.com/prefs/feeds/), must be combined **--with-reddit**  |
+| reddit\_feed=foo  |                  | ![](img/reddit.png)[copy the JSON link and paste it to this variable](https://www.reddit.com/prefs/feeds/), must be combined **--with-reddit**  |
 | --prefix=/tmp  |                     | The directory where the program will be installed                                          |
 | mobo\_sensor='dev.aibs.0'  |         | FreeBSD motherboard sensor module name to use in the sysctl calls. Read the FreeBSD installation below  |
 | cpu\_sensor='dev.cpu.0.temperature' |  | FreeBSD cpu temperature module name to use in the sysctl calls . Read the FreeBSD installation below  |
