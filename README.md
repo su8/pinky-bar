@@ -104,7 +104,7 @@ The order of supplied options will dictate how, where and what system informatio
 |              | --github    | Query GitHub and number all unread notifications                   |
 |              | --reddit    | Query reddit and number all unread notifications                   |
 |              | --password  | Generate 20 character long password                                |
-|              | --notes     | Static string that's displayed to you, could be a TODO or notes, [argument - static string] |
+|              | --notes     | Static string that's displayed to you, could be a TODO or notes or use the shell itself and execute some command that returns something, eg: --notes=$(tail --lines 1 /var/log/Xorg.0.log), [argument - static string] |
 |              | --perl      | Extend pinkybar with your scripts written in perl, learn more from the Opt-in section.     |
 |              | --python    | Extend pinkybar with your scripts written in python, learn more from the Opt-in section.     |
 |              | --ruby      | Extend pinkybar with your scripts written in ruby, learn more from the Opt-in section.     |
