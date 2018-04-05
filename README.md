@@ -430,7 +430,7 @@ Execute the program without supplying any command line options and it will parse
 
 ## Linux Mandatory requirements
 
-* gcc/clang
+* gcc/clang/pcc
 * g/libc
 * autoconf
 * automake
@@ -442,7 +442,7 @@ Execute the program without supplying any command line options and it will parse
 
 ## \*BSD Mandatory requirements
 
-* gcc/clang
+* gcc/clang/pcc
 * autoconf
 * automake
 * autoconf-wrapper

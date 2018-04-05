@@ -87,10 +87,11 @@ error:
 static size_t
 read_github_data_cb(char *data, size_t size, size_t nmemb, char *str1) {
   char *ptr = data;
-  size_t sz = nmemb * size, x = 0;
+  size_t sz = nmemb * size, z = 0;
+  static size_t x = 0;
 
   for (; *ptr; ptr++) {
-    if ((x+4) < sz) { /* Verifying up to *(ptr+4) */
+    if ((z+4) < sz) { /* Verifying up to *(ptr+4) */
 
       if ('u' == *ptr) { /* unread */
         if ('n' == *(ptr+1) && 'r' == *(ptr+2) && 'e' == *(ptr+3)) {
@@ -105,6 +106,7 @@ read_github_data_cb(char *data, size_t size, size_t nmemb, char *str1) {
   return sz;
 }
 
+/* Idea taken from "polybar" */
 void
 get_github(char *str1) {
   const char *const github_url = "https://api.github.com/notifications?access_token=" GITHUB_TOKEN;
@@ -120,6 +122,7 @@ get_github(char *str1) {
 
   curl_easy_setopt(curl, CURLOPT_URL, github_url);
   curl_easy_setopt(curl, CURLOPT_ACCEPT_ENCODING, "gzip");
+  curl_easy_setopt(curl, CURLOPT_USERAGENT, "pinky-bar/1.0");
   curl_easy_setopt(curl, CURLOPT_USE_SSL, (long)CURLUSESSL_ALL); 
   curl_easy_setopt(curl, CURLOPT_TIMEOUT, 20L);
   curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, read_github_data_cb);
