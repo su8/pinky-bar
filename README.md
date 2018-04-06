@@ -135,7 +135,7 @@ The order of supplied options will dictate how, where and what system informatio
 | -B           | --ipmask    | The NIC subnet mask [argument - eth0]                              |
 | -D           | --ipcast    | The NIC broadcast address [argument - eth0]                        |
 | -E           | --iplookup  | Mini website IP lookup [website argument - google.com]             |
-|              | --pingtime  | Perform a GET request and measure the round trip.                  |
+|              | --pingtime  | Perform a GET request and measure the round trip. [website argument https://wordpress.com]                 |
 
 Be aware of the options that mention **Uses assembly** are tested only on AMD and Intel CPUs (starting from pentium 4 onwards).
 
