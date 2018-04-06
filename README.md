@@ -230,8 +230,11 @@ It's up to you to decide which features suit you best.
 By default, if **no** options are passed, the program will be compiled with:
 
 ```bash
---with-net --with-pci
+# --with-pci is discarded in *BSD
+--with-net --with-pci --with-alsa
 ```
+
+Affects **--with-mail** and if you've chosen gmail. If you get error 403 unauthorized, then allow [less securey apps](https://myaccount.google.com/lesssecureapps) to access your account.
 
 Affects only FreeBSD users with laptops, **--without-apm** will compile the program with acpi support to obtain the current battery life.
 
