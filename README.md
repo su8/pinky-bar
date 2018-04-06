@@ -135,6 +135,7 @@ The order of supplied options will dictate how, where and what system informatio
 | -B           | --ipmask    | The NIC subnet mask [argument - eth0]                              |
 | -D           | --ipcast    | The NIC broadcast address [argument - eth0]                        |
 | -E           | --iplookup  | Mini website IP lookup [website argument - google.com]             |
+|              | --pingtime  | Perform a GET request and measure the round trip.                  |
 
 Be aware of the options that mention **Uses assembly** are tested only on AMD and Intel CPUs (starting from pentium 4 onwards).
 
@@ -219,10 +220,11 @@ It's up to you to decide which features suit you best.
 | --with-mail    | --without-mail      | Query gmail and show all unread emails, must be combined with the variables **gmail_account** and **gmail_password**  |
 | gmail\_account=foo  |                | Your gmail account goes here, must be combined **--with-mail**                             |
 | gmail\_password=bar |                | Your gmail account password goes here, must be combined **--with-mail**                    |
-| --with-github  | --without-github    | Query GitHub and number all unread notifications |
+| --with-github  | --without-github    | Query GitHub and number all unread notifications                                           |
 | github\_token=foo  |                 | [Generate token for specific scope](https://github.com/settings/tokens/new?scopes=notifications&description=pinky-bar), must be combined **--with-github**  |
-| --with-reddit  | --without-reddit    | Query reddit and number all unread notifications |
+| --with-reddit  | --without-reddit    | Query reddit and number all unread notifications                                           |
 | reddit\_feed=foo  |                  | ![](img/reddit.png)[copy the JSON link and paste it to this variable](https://www.reddit.com/prefs/feeds/), must be combined **--with-reddit**  |
+| --with-pingtime | --without-pingtime | Perform a GET request and measure the round trip                                           |
 | --prefix=/tmp  |                     | The directory where the program will be installed                                          |
 | mobo\_sensor='dev.aibs.0'  |         | FreeBSD motherboard sensor module name to use in the sysctl calls. Read the FreeBSD installation below  |
 | cpu\_sensor='dev.cpu.0.temperature' |  | FreeBSD cpu temperature module name to use in the sysctl calls . Read the FreeBSD installation below  |
@@ -234,7 +236,7 @@ By default, if **no** options are passed, the program will be compiled with:
 --with-net --with-pci --with-alsa
 ```
 
-Affects **--with-mail** and if you've chosen gmail. If you get error 403 unauthorized, then allow [less securey apps](https://myaccount.google.com/lesssecureapps) to access your account.
+Affects **--with-mail** and if you've chosen gmail. If you get error 403 unauthorized, then allow [less secure apps](https://myaccount.google.com/lesssecureapps) to access your account.
 
 Affects only FreeBSD users with laptops, **--without-apm** will compile the program with acpi support to obtain the current battery life.
 

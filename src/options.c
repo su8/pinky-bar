@@ -67,6 +67,7 @@ enum {
   GITHUB,
   REDDIT,
   NOTES,
+  PING,
   BULLSHIFT
 };
 const char *argp_program_version = PACKAGE_STRING;
@@ -119,6 +120,10 @@ static const struct argp_option options[] = {
   { .name = "statio",       .key = 'S', .arg = "sda",  .doc = "Read and written MBs to the drive so far."                },
   { .name = "password",     .key = PASSWORD,           .doc = "Generate 20 character long password."                     },
   { .name = "notes",        .key = NOTES, .arg = "Do Stuff",  .doc = "Static string that's displayed to you, could be a TODO or notes." },
+
+#if WITH_PING == 1
+  { .name = "pingtime",     .key = PING, .arg = "url", .doc = "Perform a GET request and measure the round trip."        },
+#endif /* WITH_PING */
 
 #if WITH_REDDIT == 1
   { .name = "reddit",       .key = REDDIT,             .doc = "Query reddit and number all unread notifications."        },
@@ -336,6 +341,11 @@ parse_opt(int key, char *arg, struct argp_state *state) {
     NEW_LABEL(PASSWORD, char password[VLA], password, FMT_KERN);
 
     NEW_ARG_LABEL(NOTES, char notes[VLA], notes, FMT_KERN);
+
+
+#if WITH_PING == 1
+    NEW_ARG_LABEL(PING, char ping[VLA], ping, FMT_KERN);
+#endif /* WITH_PING */
 
 
 #if WITH_REDDIT == 1

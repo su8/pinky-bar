@@ -32,4 +32,8 @@ void get_github(char *);
 void get_reddit(char *);
 #endif /* WITH_REDDIT */
 
+#if WITH_PING == 1
+void get_ping(char *, char *);
+#endif /* WITH_PING */
+
 #endif /* CURLLL_H_ */

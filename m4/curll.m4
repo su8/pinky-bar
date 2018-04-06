@@ -16,12 +16,12 @@ dnl Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
 dnl MA 02110-1301, USA.
 
 
-dnl TEST_WEATHER() function in configure.ac
+dnl TEST_CURLL() function in configure.ac
 dnl
 dnl Substitute the linker flags -lcurl to the
 dnl the variable 'CURL_LIBS' if the user enabled
-dnl the --with-weather switch
-AC_DEFUN([TEST_WEATHER],[
+dnl the various --with-* switches
+AC_DEFUN([TEST_CURLL],[
   CURL_LIBS=""
   API_KEY=\""g0tm1lf"\"
   DRIVE_PORT=\""7634"\"
@@ -36,6 +36,7 @@ AC_DEFUN([TEST_WEATHER],[
   GITHUB_TOKEN=""
   WITH_REDDIT=0
   REDDIT_FEED=""
+  WITH_PING=0
 
   AC_ARG_WITH([weather],
     AS_HELP_STRING([--with-weather],
@@ -93,6 +94,13 @@ AC_DEFUN([TEST_WEATHER],[
     [with_reddit=no]
   )
 
+  AC_ARG_WITH([pingtime],
+    AS_HELP_STRING([--with-pingtime],
+      [Perform a GET request and measure the round trip]),
+    [],
+    [with_pingtime=no]
+  )
+
   AC_ARG_VAR(drive_port, [TCP port to listen to])
   AC_ARG_VAR(api_key, [weather api key])
   AC_ARG_VAR(gmail_account, [gmail account])
@@ -138,6 +146,10 @@ AC_DEFUN([TEST_WEATHER],[
   AS_IF([test "x$with_reddit" = "xyes"],[
     WITH_REDDIT=1
     AC_DEFINE_UNQUOTED([REDDIT_FEED],[$REDDIT_FEED],[Query reddit and number all unread notifications])
+  ])
+
+  AS_IF([test "x$with_pingtime" = "xyes"],[
+    WITH_PING=1
   ])
 
   ifdef([LINUKS],[
@@ -233,7 +245,7 @@ AC_DEFUN([TEST_WEATHER],[
   ],[
   ])
 
-  AS_IF([test "x$with_weather" = "xyes" || test "x$with_drivetemp" = "xyes" || test "x$with_mail" = "xyes" || test "x$with_ip" = "xyes" || test "x$with_github" = "xyes" || test "x$with_reddit" = "xyes"], [
+  AS_IF([test "x$with_weather" = "xyes" || test "x$with_drivetemp" = "xyes" || test "x$with_mail" = "xyes" || test "x$with_ip" = "xyes" || test "x$with_github" = "xyes" || test "x$with_reddit" = "xyes" || test "x$with_pingtime" = "xyes"], [
     CHECK_CFLAGZ([-O0])
 
     AC_CHECK_HEADERS([curl/curl.h], [
@@ -277,8 +289,9 @@ AC_DEFUN([TEST_WEATHER],[
   AC_DEFINE_UNQUOTED([WITH_IP],[$WITH_IP],[Return your external ip address])
   AC_DEFINE_UNQUOTED([WITH_GITHUB],[$WITH_GITHUB],[Query GitHub and number all unread notifications])
   AC_DEFINE_UNQUOTED([WITH_REDDIT],[$WITH_REDDIT],[Query reddit and number all unread notifications])
+  AC_DEFINE_UNQUOTED([WITH_PING],[$WITH_PING],[Perform a GET request and measure the round trip])
 
-  AS_IF([test "x$with_weather" = "xyes" || test "x$with_drivetemp" = "xyes" || test "x$with_mail" = "xyes" || test "x$with_ip" = "xyes" || test "x$with_github" = "xyes" || test "x$with_reddit" = "xyes"], [
+  AS_IF([test "x$with_weather" = "xyes" || test "x$with_drivetemp" = "xyes" || test "x$with_mail" = "xyes" || test "x$with_ip" = "xyes" || test "x$with_github" = "xyes" || test "x$with_reddit" = "xyes" || test "x$with_pingtime" = "xyes"], [
     AC_LINK_IFELSE([
       AC_LANG_SOURCE([[
         #include <stdio.h>
