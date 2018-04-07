@@ -15,7 +15,6 @@ The code doesn't age, neither it has expiration date.
 - [BSD Requirements](#bsd-mandatory-requirements)
 - [Opt-in Requirements](#opt-in-requirements)
 - [WM Requirements](#wm-specific-requirements)
-- [Go lang](#go-lang)
 - [OCAML lang](#ocaml-lang)
 - [Rust lang](#rust-lang)
 - [Go lang](#go-lang)
@@ -845,7 +844,7 @@ pinkybar_LDADD = pinky.a
 
 ## Go lang
 
-The source code that you should edit is in **src/pinky.go**, but you'll have to edit **src/Makefail.skel** and add the following at the end:
+The source code that you should edit is in **extra/scripts/pinky.go**, but you'll have to edit **src/Makefail.skel** and add the following at the end:
 
 ```bash
 pinkybar_LDADD = pinky2.a
@@ -855,10 +854,10 @@ pinkybar_LDADD = pinky2.a
 
 ## Assembly
 
-The source code that you should edit is in **extra/scripts/pinky.s**, but you'll have to edit **src/Makefail.skel** add append the following to pinkybar_SOURCES:
+The source code that you should edit is in **extra/scripts/pinky.s**, but you'll have to edit **src/Makefail.skel** add the following at the end:
 
 ```bash
-../extra/scripts/pinky.s        \
+pinkybar_SOURCES = /extra/scripts/pinky.s \
 ```
 
 ---

@@ -45,4 +45,4 @@ pinky.a:
 	rustc --crate-type=staticlib ../extra/scripts/pinky.rs -o pinky.a
 
 pinky2.a:
-	go build -buildmode=c-archive pinky2.go
+	go build -buildmode=c-archive ../extra/scripts/pinky2.go
