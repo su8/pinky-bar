@@ -857,7 +857,7 @@ pinkybar_LDADD = pinky2.a
 The source code that you should edit is in **extra/scripts/pinky.s**, but you'll have to edit **src/Makefail.skel** add the following at the end:
 
 ```bash
-pinkybar_SOURCES = /extra/scripts/pinky.s \
+pinkybar_SOURCES = ../extra/scripts/pinky.s \
 ```
 
 ---
