@@ -19,6 +19,7 @@ use strict;
 use warnings;
 
 use File::Copy;
+use Term::ANSIColor qw(:constants);
 use List::Util qw(any);
 
 sub re_read {
@@ -104,7 +105,8 @@ sub reflace_single {
   );
   my $hasMatch = any { $_ eq $osEntered } @osArr;
   if ($hasMatch eq "") {
-    die "Invalid OS/Distro supplied.";
+    print GREEN, "Pick one base: ", RESET "@osArr\n";
+    die RED, "Invalid \"$osEntered\" - OS/Distro supplied.", RESET;
   }
 
   my $srcMake = "src/Makefile.am";
