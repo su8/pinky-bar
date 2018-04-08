@@ -105,7 +105,7 @@ sub reflace_single {
   );
   my $hasMatch = any { $_ eq $osEntered } @osArr;
   if ($hasMatch eq "") {
-    print GREEN, "Pick one base: ", RESET "@osArr\n";
+    print GREEN, "Pick one base: ", BLUE, "@osArr\n", RESET;
     die RED, "Invalid \"$osEntered\" - OS/Distro supplied.", RESET;
   }
 
