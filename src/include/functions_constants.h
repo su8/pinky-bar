@@ -35,10 +35,10 @@
 #define SCAN_UINTX "%"SCNxMAX /* hex */
 
 /* stay away from va_list */
-#define FILL_ARR(x, z, ...) (snprintf(x, VLA, z, __VA_ARGS__))
+#define FILL_ARR(x, z, ...) (snprintf(x, VLA-1, z, __VA_ARGS__))
 #define FILL_UINT_ARR(x, z) (FILL_ARR(x, FMT_UINT, z))
 #define FILL_STR_ARR(x, z, ...) (FILL_ARR(z, (1 == x ? "%s" : "%s %s"), __VA_ARGS__))
-#define GLUE2(x, z, ...) (x+=snprintf(x, VLA, z, __VA_ARGS__))
+#define GLUE2(x, z, ...) (x+=snprintf(x, VLA-1, z, __VA_ARGS__))
 
 /* temperature sensors */
 #define HWMON_DIR "/sys/class/hwmon/hwmon0"

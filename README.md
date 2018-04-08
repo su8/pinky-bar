@@ -117,6 +117,7 @@ The order of supplied options will dictate how, where and what system informatio
 |              | --cpp       | Extend pinkybar with your cpp, learn more from the Opt-in section.  |
 |              | --slang     | Extend pinkybar with your slang, learn more from the Opt-in section.  |
 |              | --tcl       | Extend pinkybar with your tcl, learn more from the Opt-in section. |
+|              | --sqlite    | Connect to sqlite db and perform SELECT operation, [argument e.g: "SELECT * from COMPANY where ID=1"]  |
 | -q           | --weather   | Show the temperature outside [argument - London,uk]                |
 | -U           | --uptime    | The system uptime                                                  |
 | -w           | --loadavg   | The system average load for past 1, 5 and 15 minutes               |
@@ -134,7 +135,7 @@ The order of supplied options will dictate how, where and what system informatio
 | -B           | --ipmask    | The NIC subnet mask [argument - eth0]                              |
 | -D           | --ipcast    | The NIC broadcast address [argument - eth0]                        |
 | -E           | --iplookup  | Mini website IP lookup [website argument - google.com]             |
-|              | --pingtime  | Perform a GET request and measure the round trip. [website argument https://wordpress.com]                 |
+|              | --pingtime  | Perform a GET request and measure the round trip time. [website argument https://wordpress.com]                 |
 
 Be aware of the options that mention **Uses assembly** are tested only on AMD and Intel CPUs (starting from pentium 4 onwards).
 
@@ -223,7 +224,9 @@ It's up to you to decide which features suit you best.
 | github\_token=foo  |                 | [Generate token for specific scope](https://github.com/settings/tokens/new?scopes=notifications&description=pinky-bar), must be combined **--with-github**  |
 | --with-reddit  | --without-reddit    | Query reddit and number all unread notifications                                           |
 | reddit\_feed=foo  |                  | ![](img/reddit.png)[copy the JSON link and paste it to this variable](https://www.reddit.com/prefs/feeds/), must be combined **--with-reddit**  |
-| --with-pingtime | --without-pingtime | Perform a GET request and measure the round trip                                           |
+| --with-pingtime | --without-pingtime | Perform a GET request and measure the round trip time                                      |
+| --with-sqlite  | --without-sqlite    | Connect to sqlite db and perform SELECT operation                                          |
+| sqlite\_db=foo |                     | The place where your db is located                                                         |
 | --prefix=/tmp  |                     | The directory where the program will be installed                                          |
 | mobo\_sensor='dev.aibs.0'  |         | FreeBSD motherboard sensor module name to use in the sysctl calls. Read the FreeBSD installation below  |
 | cpu\_sensor='dev.cpu.0.temperature' |  | FreeBSD cpu temperature module name to use in the sysctl calls . Read the FreeBSD installation below  |

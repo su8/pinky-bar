@@ -33,6 +33,7 @@
 #include "prototypes/extend.h"
 #include "prototypes/x11.h"
 #include "prototypes/curl.h"
+#include "prototypes/sqlite.h"
 
 /* Because we ran out of a-z A-Z options,
  * only long ones will be supported from now on.
@@ -68,6 +69,7 @@ enum {
   REDDIT,
   NOTES,
   PING,
+  SQLITEE,
   BULLSHIFT
 };
 const char *argp_program_version = PACKAGE_STRING;
@@ -120,6 +122,10 @@ static const struct argp_option options[] = {
   { .name = "statio",       .key = 'S', .arg = "sda",  .doc = "Read and written MBs to the drive so far."                },
   { .name = "password",     .key = PASSWORD,           .doc = "Generate 20 character long password."                     },
   { .name = "notes",        .key = NOTES, .arg = "Do Stuff",  .doc = "Static string that's displayed to you, could be a TODO or notes." },
+
+#if WITH_SQLITE == 1
+  { .name = "sqlite",       .key = SQLITEE, .arg = "string", .doc = "Connect to sqlite db and perform SELECT operation."        },
+#endif /* WITH_SQLITE */
 
 #if WITH_PING == 1
   { .name = "pingtime",     .key = PING, .arg = "url", .doc = "Perform a GET request and measure the round trip."        },
@@ -341,6 +347,11 @@ parse_opt(int key, char *arg, struct argp_state *state) {
     NEW_LABEL(PASSWORD, char password[VLA], password, FMT_KERN);
 
     NEW_ARG_LABEL(NOTES, char notes[VLA], notes, FMT_KERN);
+
+
+#if WITH_SQLITE == 1
+    NEW_ARG_LABEL(SQLITEE, char sqlite[VLA], sqlite, FMT_KERN);
+#endif /* WITH_SQLITE */
 
 
 #if WITH_PING == 1
