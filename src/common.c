@@ -21,7 +21,7 @@
  * zyztemz or are short enough that doesn't meet the
  * 100 lines requirement to be put in standalone module */
 
-#define _XOPEN_SOURCE 600  /* For srandom() and random() */
+#define _DEFAULT_SOURCE 1  /* For srandom() and random() */
 
 #include "config.h" /* Auto-generated */
 
