@@ -106,7 +106,7 @@ sub reflace_single {
   my $hasMatch = any { $_ eq $osEntered } @osArr;
   if ($hasMatch eq "") {
     print GREEN, "Pick one base: ", BRIGHT_BLUE, "@osArr\n", RESET;
-    die RED, "Invalid \"$osEntered\" - OS/Distro supplied.", RESET;
+    die RED, "Invalid \"", YELLOW, $osEntered, RED, "\" - OS/Distro supplied.", RESET;
   }
 
   my $srcMake = "src/Makefile.am";
