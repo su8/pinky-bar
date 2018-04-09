@@ -145,4 +145,6 @@ sub reflace_single {
     [\$bsdStr, \$bsdLibs]
   );
   reflace_many(\@hugeArr,\$srcMake);
+
+  print "Setting up $osEntered ... ", GREEN, "OK\n", RESET;
 }
