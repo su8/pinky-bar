@@ -311,6 +311,7 @@ cp -r extra/xbm_icons/*.xbm $HOME/.xmonad/icons
 perl set.pl "distro"
 autoreconf --install --force
 
+# here you can specify --with-awesomewm or --with-xmobar
 ./configure --prefix=$HOME/.cache --with-colors icons=$HOME/.xmonad/icons
 
 # compile 'n install
