@@ -228,7 +228,7 @@ It's up to you to decide which features suit you best.
 | --with-pingtime | --without-pingtime | Perform a GET request and measure the round trip time                                      |
 | --with-sqlite  | --without-sqlite    | Connect to sqlite db and perform SELECT operation                                          |
 | sqlite\_db=foo |                     | The place where your db is located                                                         |
-| --with-py3status | --without-py3status | Format the output data for py3stauts, can be colorized via **--with-colors**             |
+| --with-py3status | --without-py3status | Format the output data for py3status, can be colorized via **--with-colors**             |
 | --with-awesomewm | --without-awesomewm | Format the output data for awesomewm, can be colorized via **--with-colors**             |
 | --with-xmobar  | --without-xmobar    | Format the output data for xmobar, can be colorized via **--with-colors**                  |
 | --prefix=/tmp  |                     | The directory where the program will be installed                                          |
@@ -928,7 +928,7 @@ It would be great if we can add NetBSD support.
 
 ## Pre-History
 
-The project began (on February 25, 2015) as simple conky replacement written in 3 days when I switched from openbox to dwm, here's some pre-history:
+The project began (on February 22, 2015) as simple conky replacement written in 3 days when I switched from openbox to dwm, here's some pre-history:
 
 *I had 8 wonderful months with Openbox and the time to try and learn something new has come.*
 
