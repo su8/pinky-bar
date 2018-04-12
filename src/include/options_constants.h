@@ -77,22 +77,22 @@
 
 
 #if defined(HAVE_X11_XLIB_H) && WITH_DWM == 1
-#include "x11_colours.h"
+#include "colours/x11_colours.h"
 
 #elif WITH_NCURSES == 1
-#include "ncurses_colours.h"
+#include "colours/ncurses_colours.h"
 
 #elif WITH_PY3STATUS == 1
-#include "py3status_colours.h"
+#include "colours/py3status_colours.h"
 
 #elif WITH_AWESOMEWM == 1
-#include "awesomewm_colours.h"
+#include "colours/awesomewm_colours.h"
 
 #elif WITH_XMOBAR == 1
-#include "xmobar_colours.h"
+#include "colours/xmobar_colours.h"
 
 #else
-#include "dzen2_colours.h"
+#include "colours/dzen2_colours.h"
 
 #endif /* HAVE_X11_XLIB_H && WITH_DWM */
 
