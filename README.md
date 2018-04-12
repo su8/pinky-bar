@@ -5,6 +5,7 @@ The code doesn't age, neither it has expiration date.
 - [Program Options](#program-options)
 - [Configure Options](#gnu-build-system-configure-options)
 - [Installation for dwm](#installation-for-dwm)
+- [Installation for py3status](#installation-for-py3status)
 - [Installation for xmonad/other WM](#installation-for-xmonad-or-other-wm)
 - [Installation in FreeBSD](#installation-in-freebsd)
 - [Installation in OpenBSD](#installation-in-openbsd)
@@ -39,6 +40,10 @@ xmonad
 ncurses
 
 ![](img/pic6.png)
+
+py3status
+
+![](img/py3status.png)
 
 Gather some system information and show it in this statusbar program, not tied to any Window Manager, terminal multiplexer, etc.
 
@@ -278,6 +283,20 @@ autoreconf --install --force
 make
 make install
 ```
+
+---
+
+## Installation for py3status
+
+```bash
+perl set.pl "distro"
+autoreconf --install --force
+
+./configure --prefix=$HOME/.cache --with-py3status --with-colors
+make
+make install
+```
+---
 
 Copy the code from extra/scripts/dwm.sh or `exec` it from **xinitrc** or the script used to start dwm.
 
