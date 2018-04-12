@@ -29,6 +29,7 @@ AC_DEFUN([TEST_X11],[
   WITH_MOUSE=0
   WITH_NUMLOCK=0
   WITH_PY3STATUS=0
+  WITH_AWESOMEWM=0
 
   AC_ARG_WITH([dwm],
     AS_HELP_STRING([--with-dwm],
@@ -65,6 +66,13 @@ AC_DEFUN([TEST_X11],[
     [with_py3status=no]
   )
 
+  AC_ARG_WITH([awesomewm],
+    AS_HELP_STRING([--with-awesomewm],
+      [Format the output data for awesomewm]),
+    [],
+    [with_awesomewm=no]
+  )
+
   AC_ARG_VAR(icons, [path to xbm icons for non-dwm WM])
 
   AS_IF([test "x$with_colors" = "xyes"], [
@@ -80,6 +88,10 @@ AC_DEFUN([TEST_X11],[
 
   AS_IF([test "x$with_py3status" = "xyes"], [
     WITH_PY3STATUS=1
+  ])
+
+  AS_IF([test "x$with_awesomewm" = "xyes"], [
+    WITH_AWESOMEWM=1
   ])
 
   AS_IF([test "x$with_dwm" = "xyes" || test "x$with_keyboard" = "xyes" || test "x$with_mouse" = "xyes" || test "x$with_numcapslock" = "xyes"], [
@@ -132,6 +144,7 @@ AC_DEFUN([TEST_X11],[
   AC_DEFINE_UNQUOTED([WITH_NUMLOCK],[$WITH_NUMLOCK],[Query xorg to get the current state of numlock and capslock])
   AC_DEFINE_UNQUOTED([WITH_DWM],[$WITH_DWM],[Output the data to the root window])
   AC_DEFINE_UNQUOTED([WITH_PY3STATUS],[$WITH_PY3STATUS],[Format the output data for py3status])
+  AC_DEFINE_UNQUOTED([WITH_AWESOMEWM],[$WITH_AWESOMEWM],[Format the output data for awesomewm])
 
   AS_IF([test "x$with_dwm" = "xyes" || test "x$with_keyboard" = "xyes" || test "x$with_mouse" = "xyes"], [
     AC_LINK_IFELSE([

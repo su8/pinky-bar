@@ -17,14 +17,14 @@
    MA 02110-1301, USA.
 */
 
-#ifndef PY3STATUS_COLOURS_H_
-#define PY3STATUS_COLOURS_H_
+#ifndef AWESOMEWM_COLOURS_H_
+#define AWESOMEWM_COLOURS_H_
 
 
 #if WITH_COLOURS == 1
-#define PINK "[\\?color=violet&show "
-#define BLUE "[\\?color=deepskyblue&show "
-#define YELLOW "[\\?color=yellow&show "
+#define PINK "<span color='#f0c674'> "
+#define BLUE "<span color='#1793D1'> "
+#define YELLOW "<span color='#b294bb'> "
 
 #else
 #define PINK ""
@@ -39,4 +39,4 @@
 #define FMT_SONG  PINK SONG_ORIG                       /* Song            */
 
 
-#endif /* PY3STATUS_COLOURS_H_ */
+#endif /* AWESOMEWM_COLOURS_H_ */
