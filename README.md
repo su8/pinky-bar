@@ -211,7 +211,7 @@ It's up to you to decide which features suit you best.
 | --with-drivetemp | --without-drivetemp   | Read the drive temperature from S.M.A.R.T (linux only) uses curl                       |
 | --with-drivetemp-light | --without-drivetemp-light   | Read the drive temperature from S.M.A.R.T (linux only) light version       |
 | drive\_port='1234'  |                | Different TCP port to listen to for the drive temperature, default one is 7634, must be combined **--with-drivetemp** or **--with-drivetemp-light**   |
-| --with-colors  | --without-colors    | Colorize the output data.                                                                  |
+| --with-colors  | --without-colors    | Colorize the output data. When using non-dwm, non-ncurses, non-py3status, you must combine this option with **icons=PATH**. |
 | icons=/tmp     |                     | xbm icons that can be used by dzen2 for example. Discarded when **--with-dwm** is used     |
 | --with-mpd     | --without-mpd       | To see the currently played song name (if any).                                            |
 | --with-keyboard | --without-keyboard | Query xorg and show the currently used keyboard layout                                     |
@@ -228,6 +228,7 @@ It's up to you to decide which features suit you best.
 | --with-pingtime | --without-pingtime | Perform a GET request and measure the round trip time                                      |
 | --with-sqlite  | --without-sqlite    | Connect to sqlite db and perform SELECT operation                                          |
 | sqlite\_db=foo |                     | The place where your db is located                                                         |
+| --with-py3status | --without-py3status | Format the output data for py3stauts, can be colorized via **--with-colors**             |
 | --prefix=/tmp  |                     | The directory where the program will be installed                                          |
 | mobo\_sensor='dev.aibs.0'  |         | FreeBSD motherboard sensor module name to use in the sysctl calls. Read the FreeBSD installation below  |
 | cpu\_sensor='dev.cpu.0.temperature' |  | FreeBSD cpu temperature module name to use in the sysctl calls . Read the FreeBSD installation below  |
@@ -271,7 +272,7 @@ Don't just rush to register yourself, read carefully what the "Free" account lim
 perl set.pl "distro"
 autoreconf --install --force
 
-./configure --prefix=$HOME/.cache --with-dwm
+./configure --prefix=$HOME/.cache --with-dwm --with-colors
 make
 make install
 ```
@@ -288,8 +289,7 @@ cp -r extra/xbm_icons/*.xbm $HOME/.xmonad/icons
 perl set.pl "distro"
 autoreconf --install --force
 
-# disable X11, point the location to the icons
-./configure --prefix=$HOME/.cache --without-dwm icons=$HOME/.xmonad/icons
+./configure --prefix=$HOME/.cache --with-colors icons=$HOME/.xmonad/icons
 
 # compile 'n install
 make
@@ -374,7 +374,7 @@ The installation steps:
 perl set.pl "distro"
 autoreconf --install --force
 
-./configure --prefix=$HOME/.cache --without-dwm --without-colors
+./configure --prefix=$HOME/.cache --without-colors
 make
 make install
 ```
