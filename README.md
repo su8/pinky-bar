@@ -284,6 +284,8 @@ make
 make install
 ```
 
+Copy the code from extra/scripts/dwm.sh or `exec` it from **xinitrc** or the script used to start dwm.
+
 ---
 
 ## Installation for py3status
@@ -296,9 +298,8 @@ autoreconf --install --force
 make
 make install
 ```
----
 
-Copy the code from extra/scripts/dwm.sh or `exec` it from **xinitrc** or the script used to start dwm.
+---
 
 ## Installation for xmonad (or other WM)
 
