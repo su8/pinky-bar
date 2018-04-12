@@ -37,6 +37,8 @@
 # define ENT "]"
 #elif WITH_AWESOMEWM == 1 && WITH_COLOURS == 1
 # define ENT "</span>"
+#elif WITH_XMOBAR == 1 && WITH_COLOURS == 1
+# define ENT "</fc>"
 #else
 # define ENT ""
 #endif /* WITH_PY3STATUS */
@@ -48,7 +50,9 @@
 #ifndef WITH_NCURSES
 #define WITH_NCURSES 6
 #endif
-#if defined (HAVE_X11_XLIB_H) && WITH_DWM == 1 || WITH_NCURSES == 1 || WITH_COLOURS == 0 || WITH_PY3STATUS == 1 || WITH_AWESOMEWM == 1
+#if defined (HAVE_X11_XLIB_H) && WITH_DWM == 1 || WITH_NCURSES == 1 || \
+  WITH_COLOURS == 0 || WITH_PY3STATUS == 1 || WITH_AWESOMEWM == 1 || \
+  WITH_XMOBAR == 1
 
 #define CPU_STR    "CPU"
 #define RAM_STR    "RAM"
@@ -69,7 +73,7 @@
 #define MAIL_STR   "Mail"
 #define MOUSE_STR  "Mouse"
 
-#endif /* HAVE_X11_XLIB_H && WITH_DWM || WITH_NCURSES || WITH_COLOURS || WITH_PY3STATUS || WITH_AWESOMEWM */
+#endif /* HAVE_X11_XLIB_H && WITH_DWM || WITH_NCURSES || WITH_COLOURS || WITH_PY3STATUS || WITH_AWESOMEWM || WITH_XMOBAR */
 
 
 #if defined(HAVE_X11_XLIB_H) && WITH_DWM == 1
@@ -83,6 +87,9 @@
 
 #elif WITH_AWESOMEWM == 1
 #include "awesomewm_colours.h"
+
+#elif WITH_XMOBAR == 1
+#include "xmobar_colours.h"
 
 #else
 #include "dzen2_colours.h"

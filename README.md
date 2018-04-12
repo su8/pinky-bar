@@ -230,6 +230,7 @@ It's up to you to decide which features suit you best.
 | sqlite\_db=foo |                     | The place where your db is located                                                         |
 | --with-py3status | --without-py3status | Format the output data for py3stauts, can be colorized via **--with-colors**             |
 | --with-awesomewm | --without-awesomewm | Format the output data for awesomewm, can be colorized via **--with-colors**             |
+| --with-xmobar  | --without-xmobar    | Format the output data for xmobar, can be colorized via **--with-colors**                  |
 | --prefix=/tmp  |                     | The directory where the program will be installed                                          |
 | mobo\_sensor='dev.aibs.0'  |         | FreeBSD motherboard sensor module name to use in the sysctl calls. Read the FreeBSD installation below  |
 | cpu\_sensor='dev.cpu.0.temperature' |  | FreeBSD cpu temperature module name to use in the sysctl calls . Read the FreeBSD installation below  |
