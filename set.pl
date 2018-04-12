@@ -136,8 +136,10 @@ sub reflace_single {
 
   copy("src/Makefail.skel",$srcMake)
     or die "Could not copy src/Makefail.skel $!";
+  print "Copying src/Makefail.skel as $srcMake ... ", GREEN, "OK\n", RESET;
 
   reflace_configure(\$defTits);
+  print "Replacing variables in configure.ac ... ", GREEN, "OK\n", RESET;
 
   my @hugeArr = (
     [\$amStr, \$$amCF],
@@ -145,6 +147,7 @@ sub reflace_single {
     [\$bsdStr, \$bsdLibs]
   );
   reflace_many(\@hugeArr,\$srcMake);
+  print "Replacing variables in $srcMake ... ", GREEN, "OK\n", RESET;
 
   print "Setting up $osEntered ... ", GREEN, "OK\n", RESET;
 }
