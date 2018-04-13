@@ -195,7 +195,7 @@ get_updates(char *str1) {
 #elif defined(DEBIAN)
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wunused-result"
-  CHECK_POPEN(updates_file, "apt list --upgradable 2> /dev/null| wc -l", &updates);
+  CHECK_POPEN(updates_file, "apt list --upgradable 2> /dev/null | wc -l", &updates);
 #pragma GCC diagnostic pop
 
 #endif /* ARCHLINUX */
