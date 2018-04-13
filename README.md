@@ -504,6 +504,8 @@ export LDFLAGS='-L/usr/local/lib'
 export CFLAGS='-I/usr/local/include'
 ```
 
+It seems that OpenBSD 6.3 clang compiler fails to find **-largp** even with the above environment variables. You are advised to install gcc.
+
 After editing the wrong prototype I managed to stumble upon a bug in OpenBSD's own libc.
 
 **Warning !!! OpenBSD users !!!**
