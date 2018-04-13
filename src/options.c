@@ -120,11 +120,11 @@ static const struct argp_option options[] = {
   { .name = "ipcast",       .key = 'D', .arg = "eth0", .doc = "The NIC broadcast address."                               },
   { .name = "iplookup",     .key = 'E', .arg = "site", .doc = "Mini website IP lookup."                                  },
   { .name = "statio",       .key = 'S', .arg = "sda",  .doc = "Read and written MBs to the drive so far."                },
-  { .name = "password",     .key = PASSWORD,           .doc = "Generate 20 character long password."                     },
+  { .name = "password",     .key = PASSWORD, .arg = "num",  .doc = "Generate 20 character long password."                },
   { .name = "shell",        .key = SHELL, .arg = "Do Stuff",  .doc = "Static string that's displayed to you, could be a TODO or notes." },
 
 #if WITH_SQLITE == 1
-  { .name = "sqlite",       .key = SQLITEE, .arg = "string", .doc = "Connect to sqlite db and perform SELECT operation."        },
+  { .name = "sqlite",       .key = SQLITEE, .arg = "string", .doc = "Connect to sqlite db and perform SELECT operation." },
 #endif /* WITH_SQLITE */
 
 #if WITH_PING == 1
@@ -176,19 +176,19 @@ static const struct argp_option options[] = {
 #endif /* WITH_ECL */
 
 #if WITH_OCAML == 1
-  { .name = "ocaml",         .key = OCAML,                 .doc = "Extend the program with ocaml, read README."      },
+  { .name = "ocaml",         .key = OCAML,                 .doc = "Extend the program with ocaml, read README."          },
 #endif /* WITH_OCAML */
 
 #if WITH_RUST == 1
-  { .name = "rust",         .key = RUST,                   .doc = "Extend the program with rust, read README."         },
+  { .name = "rust",         .key = RUST,                   .doc = "Extend the program with rust, read README."           },
 #endif /* WITH_RUST */
 
 #if WITH_GO == 1
-  { .name = "go",         .key = GO,                       .doc = "Extend the program with go, read README."         },
+  { .name = "go",         .key = GO,                       .doc = "Extend the program with go, read README."             },
 #endif /* WITH_GO */
 
 #if WITH_CPP == 1
-  { .name = "cpp",         .key = CPP,                     .doc = "Extend the program with c++, read README."         },
+  { .name = "cpp",         .key = CPP,                     .doc = "Extend the program with c++, read README."            },
 #endif /* WITH_CPP */
 
 #if WITH_SLANG == 1
@@ -238,7 +238,7 @@ static const struct argp_option options[] = {
   { .name = "nicver",       .key = 'H', .arg = "eth0", .doc = "The NIC version."                                         },
   { .name = "iplink",       .key = 'e', .arg = "eth0", .doc = "The NIC link speed (useful for wireless/wifi)."           },
   { .name = "nicinfo",      .key = 'G', .arg = "eth0", .doc = "The NIC vendor and model."                                },
-  { .name = "wifiname",     .key = 'h', .arg = "wlan0", .doc = "The name of currently connected wireless/wifi network."   },
+  { .name = "wifiname",     .key = 'h', .arg = "wlan0", .doc = "The name of currently connected wireless/wifi network."  },
 #endif /* __linux__ */
 
 #if defined(__FreeBSD__) || defined(__OpenBSD__)
@@ -344,7 +344,7 @@ parse_opt(int key, char *arg, struct argp_state *state) {
 
     NEW_LABEL(DRIVETEMP, char drivetemp[VLA], drivetemp, FMT_TEMP);
 
-    NEW_LABEL(PASSWORD, char password[VLA], password, FMT_KERN);
+    NEW_ARG_LABEL(PASSWORD, char password[VLA], password, FMT_KERN);
 
     NEW_ARG_LABEL(SHELL, char shell[VLA], shell, FMT_KERN);
 

@@ -508,17 +508,18 @@ split_n_index(char *str1) {
 
 
 void
-get_password(char *str1) {
+get_password(char *str1, char *str2) {
   time_t t;
   char letters[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789~!@#$%^&*()_";
-  int len = (int)sizeof(letters) - 1, x = 0;
+  int len = (int)sizeof(letters) - 1;
+  uintmax_t x = strtoumax(str2, (char **)NULL, 10), z = 0;
 
   if (-1 == (t = time(NULL))) {
     FUNC_FAILED("time()");
   }
   srandom((unsigned int)t);
 
-  for (; x < 20; x++) {
+  for (; z < x && 199 > z; z++) {
     *str1++ = letters[random() % len];
   }
   *str1 = '\0';
