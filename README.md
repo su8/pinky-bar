@@ -181,7 +181,7 @@ make install
 
 ## Installation for anything else
 
-pinky-bar is no longer tied to Window Managers only. With the addition of "without colors", the output can be shown in any program, just bear in mind that the more options you've supplied the more system information will be shown. 
+pinky-bar is no longer tied to Window Managers only. With the addition of "without colors", the output can be shown in any program, just bear in mind that the more options you've supplied the more system information will be shown.
 
 The tmux status bar in action:
 
@@ -205,8 +205,7 @@ By choosing this 3rd installation method it is up to you where, how to start and
 
 ## GNU Build System (configure) options
 
-Before the source code is passed to the compiler, you can enable/disable the following **configure** options 
-that will increase/reduce the number of dependencies required to compile the program.
+Before the source code is passed to the compiler, you can enable/disable the following **configure** options that will increase/reduce the number of dependencies required to compile the program.
 
 It's up to you to decide which features suit you best.
 
@@ -250,8 +249,8 @@ It's up to you to decide which features suit you best.
 | --with-numcapslock | --without-numcapslock | Query xorg to get the current state of numlock, capslock and scroll lock             |
 | --with-ip      | --without-ip        | Return your external ip address (ipv4).                                                    |
 | --with-gmail    | --without-gmail      | Query gmail and show all unread emails, must be combined with the variables **gmail_account** and **gmail_password**  |
-| gmail\_account=foo  |                | Your gmail account goes here, must be combined **--with-mail**                             |
-| gmail\_password=bar |                | Your gmail account password goes here, must be combined **--with-mail**                    |
+| gmail\_account=foo  |                | Your gmail account goes here, must be combined **--with-gmail**                            |
+| gmail\_password=bar |                | Your gmail account password goes here, must be combined **--with-gmail**                   |
 | --with-github  | --without-github    | Query GitHub and number all unread notifications                                           |
 | github\_token=foo  |                 | [Generate token for specific scope](https://github.com/settings/tokens/new?scopes=notifications&description=pinky-bar), must be combined **--with-github**  |
 | --with-reddit  | --without-reddit    | Query reddit and number all unread notifications                                           |
