@@ -2,14 +2,14 @@ The code doesn't age, neither it has expiration date.
 
 ## Table of Contents
 
-- [Program Options](#program-options)
-- [Configure Options](#gnu-build-system-configure-options)
 - [Installation for dwm](#installation-for-dwm)
 - [Installation for py3status](#installation-for-py3status)
 - [Installation for xmonad/other WM](#installation-for-xmonad-or-other-wm)
 - [Installation in FreeBSD](#installation-in-freebsd)
 - [Installation in OpenBSD](#installation-in-openbsd)
 - [Installation for anything else](#installation-for-anything-else)
+- [Configure Options](#gnu-build-system-configure-options)
+- [Program Options](#program-options)
 - [Supported distros](#supported-distros)
 - [Using configuration file](#using-configuration-file)
 - [Linux Requirements](#linux-mandatory-requirements)
@@ -60,6 +60,240 @@ If you compile your kernel from source code make sure to include your cpu and mo
 ![](img/cpu-temp.png)
 
 ![](img/mobo-temp.png)
+
+---
+
+## Installation for dwm
+
+```bash
+perl set.pl "distro"
+autoreconf --install --force
+
+./configure --prefix=$HOME/.cache --with-dwm --with-colors
+make
+make install
+```
+
+Copy the code from extra/scripts/dwm.sh or `exec` it from **xinitrc** or the script used to start dwm.
+
+---
+
+## Installation for py3status
+
+```bash
+perl set.pl "distro"
+autoreconf --install --force
+
+./configure --prefix=$HOME/.cache --with-py3status --with-colors
+make
+make install
+```
+
+---
+
+## Installation for xmonad (or other WM)
+
+```bash
+# Copy the xbm icons
+mkdir -p --mode=700 $HOME/.xmonad/icons
+cp -r extra/xbm_icons/*.xbm $HOME/.xmonad/icons
+
+perl set.pl "distro"
+autoreconf --install --force
+
+# here you can specify --with-awesomewm or --with-xmobar
+./configure --prefix=$HOME/.cache --with-colors icons=$HOME/.xmonad/icons
+
+# compile 'n install
+make
+make install
+```
+
+Copy the code from extra/scripts/xmonad.sh or `exec` it from **xinitrc** or the script used to start xmonad.
+
+---
+
+## Installation in FreeBSD
+
+FreeBSD has no other way than using the module specific convention to query sysctl and obtain data from the sensors. Maintaining a list with all the possible module names and performing expensive sysctl calls in a loop to determine that X module is loaded into your system is no-go. Be prepared to spend a minute or two to find out some system information.
+
+Determine the motherboard sensor module name.
+
+```bash
+sysctl -a|grep 'aibs'
+
+dev.aibs.0.volt.0: 1356 850 1600
+dev.aibs.0.volt.1: 3344 2970 3630
+dev.aibs.0.volt.2: 5040 4500 5500
+dev.aibs.0.volt.3: 12278 10200 13800
+dev.aibs.0.temp.0: 39.0C 60.0C 95.0C
+dev.aibs.0.temp.1: 38.0C 45.0C 75.0C
+dev.aibs.0.fan.0: 1053 600 7200
+dev.aibs.0.fan.1: 1053 600 7200
+```
+
+Copy only 'dev.MODULE.NUMBER' (if there is any number at all) and paste it into the **mobo\_sensor** option below.
+
+Do the same for your cpu temperature, copy and paste the variable as is. **dev.cpu.0.temperature** below is provied as example.
+
+```bash
+perl set.pl "freebsd"
+autoreconf --install --force
+
+./configure --prefix=$HOME/.cache --without-alsa --with-oss mobo_sensor='dev.aibs.0' cpu_sensor='dev.cpu.0.temperature'
+make
+make install
+```
+
+Send a request to the FreeBSD mailing list and request the OpenBSD sensors API to be ported.
+
+## Installation in OpenBSD
+
+Before proceeding, you'll have to:
+
+```bash
+# To detect the newer compiler that you are
+# about to install
+sed -i 's/#AC_PROG_CC(/AC_PROG_CC(/g' configure.ac
+
+ls /usr/local/bin/automake-*
+ls /usr/local/bin/autoconf-*
+
+# Then replace the numbers below
+export AUTOCONF_VERSION=2.69
+export AUTOMAKE_VERSION=1.15
+
+# Your call, gcc or llvm ?
+pkg_add gcc
+
+# after that:
+perl set.pl "openbsd"
+autoreconf --install --force
+
+./configure --prefix=$HOME/.cache --without-alsa --with-oss
+make
+make install
+```
+
+---
+
+## Installation for anything else
+
+pinky-bar is no longer tied to Window Managers only. With the addition of "without colors", the output can be shown in any program, just bear in mind that the more options you've supplied the more system information will be shown. 
+
+The tmux status bar in action:
+
+![](img/pic4.png)
+
+The installation steps:
+
+```bash
+perl set.pl "distro"
+autoreconf --install --force
+
+./configure --prefix=$HOME/.cache --without-colors
+make
+make install
+```
+
+By choosing this 3rd installation method it is up to you where, how to start and use the system information that's produced by pinky-bar.
+
+---
+
+
+## GNU Build System (configure) options
+
+Before the source code is passed to the compiler, you can enable/disable the following **configure** options 
+that will increase/reduce the number of dependencies required to compile the program.
+
+It's up to you to decide which features suit you best.
+
+| To include     | Not to include      | Descrtiption                                                                               |
+|----------------|---------------------|--------------------------------------------------------------------------------------------|
+| --with-dwm     | --without-dwm       | Enable it if you are using dwm.                                                            |
+| --with-alsa    | --without-alsa      | To get the sound volume level.                                                             |
+| --with-oss     | --without-oss       | To get the sound volume level in \*BSD.                                                    |
+| --with-net     | --without-net       | Enable the internet related options.                                                       |
+| --with-libnl   | --without-libnl     | Enable the wifi related options regarding chipsets supporting the cfg80211/mac80211 modules (linux only).  |
+| --with-pci     | --without-pci       | To get the NIC vendor and model in linux                                                   |
+| --with-dvd     | --without-dvd       | To get the cdrom/dvdrom vendor and model                                                   |
+| --with-sensors | --without-sensors   | Alternative way to get data from the sensors (linux only)                                  |
+| --with-apm     | --without-apm       | APM power and resource management for laptops (FreeBSD only)                               |
+| --with-ncurses | --without-ncurses   | Output the data to the terminal using the ncurses library, can be colorized                |
+| --with-perl    | --without-perl      | Extend pinkybar with your own crafted scripts written in perl                              |
+| --with-lua     | --without-lua       | Extend pinkybar with your own crafted scripts written in lua                               |
+| --with-ruby    | --without-ruby      | Extend pinkybar with your own crafted scripts written in ruby                              |
+| --with-python2 | --without-python2   | Extend pinkybar with your own crafted scripts written in python2                           |
+| --with-python3 | --without-python3   | Extend pinkybar with your own crafted scripts written in python3                           |
+| --with-r       | --without-r         | Extend pinkybar with your own crafted scripts written in R                                 |
+| --with-assembly| --without-assembly  | Extend pinkybar with assembly                                                              |
+| --with-lisp    | --without-lisp      | Extend pinkybar with your own crafted scripts written in lisp                              |
+| --with-ocaml   | --without-ocaml     | Extend pinkybar with your own crafted scripts written in ocaml                             |
+| --with-rust    | --without-rust      | Extend pinkybar with your own crafted scripts written in rust                              |
+| --with-go      | --without-go        | Extend pinkybar with your own crafted scripts written in go                                |
+| --with-cpp     | --without-cpp       | Extend pinkybar with c++ program                                                           |
+| --with-slang   | --without-slang     | Extend pinkybar with slang program                                                         |
+| --with-tcl     | --without-tcl       | Extend pinkybar with tcl program                                                           |
+| --with-weather | --without-weather   | The temperature outside  (some details must be provided)                                   |
+| api\_key='123458976'               | | API key obtained after registering yourself in the weather website, must be combined **--with-weather**  |
+| --with-smartemp | --without-smartemp   | Read the drive temperature from S.M.A.R.T cross-platform available                       |
+| --with-drivetemp | --without-drivetemp   | Read the drive temperature from S.M.A.R.T (linux only) uses curl                       |
+| --with-drivetemp-light | --without-drivetemp-light   | Read the drive temperature from S.M.A.R.T (linux only) light version       |
+| drive\_port='1234'  |                | Different TCP port to listen to for the drive temperature, default one is 7634, must be combined **--with-drivetemp** or **--with-drivetemp-light**   |
+| --with-colors  | --without-colors    | Colorize the output data. When using non-dwm, non-ncurses, non-py3status, you must combine this option with **icons=PATH**. |
+| icons=/tmp     |                     | xbm icons that can be used by dzen2 for example. Discarded when **--with-dwm** is used     |
+| --with-mpd     | --without-mpd       | To see the currently played song name (if any).                                            |
+| --with-keyboard | --without-keyboard | Query xorg and show the currently used keyboard layout                                     |
+| --with-mouse   | --without-mouse     | Query xorg and get the mouse speed in percentage                                           |
+| --with-numcapslock | --without-numcapslock | Query xorg to get the current state of numlock, capslock and scroll lock             |
+| --with-ip      | --without-ip        | Return your external ip address (ipv4).                                                    |
+| --with-gmail    | --without-gmail      | Query gmail and show all unread emails, must be combined with the variables **gmail_account** and **gmail_password**  |
+| gmail\_account=foo  |                | Your gmail account goes here, must be combined **--with-mail**                             |
+| gmail\_password=bar |                | Your gmail account password goes here, must be combined **--with-mail**                    |
+| --with-github  | --without-github    | Query GitHub and number all unread notifications                                           |
+| github\_token=foo  |                 | [Generate token for specific scope](https://github.com/settings/tokens/new?scopes=notifications&description=pinky-bar), must be combined **--with-github**  |
+| --with-reddit  | --without-reddit    | Query reddit and number all unread notifications                                           |
+| reddit\_feed=foo  |                  | ![](img/reddit.png)[copy the JSON link and paste it to this variable](https://www.reddit.com/prefs/feeds/), must be combined **--with-reddit**  |
+| --with-pingtime | --without-pingtime | Perform a GET request and measure the round trip time                                      |
+| --with-sqlite  | --without-sqlite    | Connect to sqlite db and perform SELECT operation                                          |
+| sqlite\_db=foo |                     | The place where your db is located                                                         |
+| --with-py3status | --without-py3status | Format the output data for py3status, can be colorized via **--with-colors**             |
+| --with-awesomewm | --without-awesomewm | Format the output data for awesomewm, can be colorized via **--with-colors**             |
+| --with-xmobar  | --without-xmobar    | Format the output data for xmobar, can be colorized via **--with-colors**                  |
+| --prefix=/tmp  |                     | The directory where the program will be installed                                          |
+| mobo\_sensor='dev.aibs.0'  |         | FreeBSD motherboard sensor module name to use in the sysctl calls. Read the FreeBSD installation below  |
+| cpu\_sensor='dev.cpu.0.temperature' |  | FreeBSD cpu temperature module name to use in the sysctl calls . Read the FreeBSD installation below  |
+
+By default, if **no** options are passed, the program will be compiled with:
+
+```bash
+# --with-pci is discarded in *BSD
+--with-net --with-pci --with-alsa
+```
+
+Affects **--with-gmail**. If you get error 403 unauthorized, then allow [less secure apps](https://myaccount.google.com/lesssecureapps) to access your account.
+
+Affects only FreeBSD users with laptops, **--without-apm** will compile the program with acpi support to obtain the current battery life.
+
+**--without-mpd** will compile the program with cmus support, the options syntax stays as is.
+
+The pci and sensors configure options will be discarded in \*BSD.
+
+Affects only linux users with wifi/wireless chipsets, run `lsmod|grep 802` and see whether your chipset uses cfg80211/mac80211. If that's so you can rely on libnl and enable **--with-libnl** configure options, otherwise your chipset probably still uses we/wext, so type **--without-libnl**.
+
+Affects only linux users, **--with-drivetemp** pretty much locks you down to hddtemp. You can adjust **extra/scripts/drive-temperature.sh** and compile the program **--with-smartemp**, so you can switch between hddtemp and smartmontools at any time without the need recompile pinkybar with different options. **--with-smartemp** only cares for the existance of /tmp/pinkytemp file.
+
+**--with-weather** is using [this url](http://openweathermap.org/current), register yourself there, create a new [API key](https://home.openweathermap.org/api\_keys).
+
+Don't just rush to register yourself, read carefully what the "Free" account limits are and take in account how often the program should call their api service. I'm not responsible if you exceeded the limits, you've been warned.
+
+```bash
+# Make sure it's working first
+# curl 'http://api.openweathermap.org/data/2.5/weather?q=London,uk&units=metric&APPID=28459ae16e4b3a7e5628ff21f4907b6f'
+
+# what to pass to configure
+--with-weather api_key='28459ae16e4b3a7e5628ff21f4907b6f'
+```
 
 ---
 
@@ -180,236 +414,6 @@ The following options are available only in OpenBSD:
 | short option | long option | Descrtiption                                                       |
 |--------------|-------------|--------------------------------------------------------------------|
 | -l           | --ramused   | The used ram in MB                                                 |
-
-
----
-
-## GNU Build System (configure) options
-
-Before the source code is passed to the compiler, you can enable/disable the following **configure** options 
-that will increase/reduce the number of dependencies required to compile the program.
-
-It's up to you to decide which features suit you best.
-
-| To include     | Not to include      | Descrtiption                                                                               |
-|----------------|---------------------|--------------------------------------------------------------------------------------------|
-| --with-dwm     | --without-dwm       | Enable it if you are using dwm.                                                            |
-| --with-alsa    | --without-alsa      | To get the sound volume level.                                                             |
-| --with-oss     | --without-oss       | To get the sound volume level in \*BSD.                                                    |
-| --with-net     | --without-net       | Enable the internet related options.                                                       |
-| --with-libnl   | --without-libnl     | Enable the wifi related options regarding chipsets supporting the cfg80211/mac80211 modules (linux only).  |
-| --with-pci     | --without-pci       | To get the NIC vendor and model in linux                                                   |
-| --with-dvd     | --without-dvd       | To get the cdrom/dvdrom vendor and model                                                   |
-| --with-sensors | --without-sensors   | Alternative way to get data from the sensors (linux only)                                  |
-| --with-apm     | --without-apm       | APM power and resource management for laptops (FreeBSD only)                               |
-| --with-ncurses | --without-ncurses   | Output the data to the terminal using the ncurses library, can be colorized                |
-| --with-perl    | --without-perl      | Extend pinkybar with your own crafted scripts written in perl                              |
-| --with-lua     | --without-lua       | Extend pinkybar with your own crafted scripts written in lua                               |
-| --with-ruby    | --without-ruby      | Extend pinkybar with your own crafted scripts written in ruby                              |
-| --with-python2 | --without-python2   | Extend pinkybar with your own crafted scripts written in python2                           |
-| --with-python3 | --without-python3   | Extend pinkybar with your own crafted scripts written in python3                           |
-| --with-r       | --without-r         | Extend pinkybar with your own crafted scripts written in R                                 |
-| --with-assembly| --without-assembly  | Extend pinkybar with assembly                                                              |
-| --with-lisp    | --without-lisp      | Extend pinkybar with your own crafted scripts written in lisp                              |
-| --with-ocaml   | --without-ocaml     | Extend pinkybar with your own crafted scripts written in ocaml                             |
-| --with-rust    | --without-rust      | Extend pinkybar with your own crafted scripts written in rust                              |
-| --with-go      | --without-go        | Extend pinkybar with your own crafted scripts written in go                                |
-| --with-cpp     | --without-cpp       | Extend pinkybar with c++ program                                                           |
-| --with-slang   | --without-slang     | Extend pinkybar with slang program                                                         |
-| --with-tcl     | --without-tcl       | Extend pinkybar with tcl program                                                           |
-| --with-weather | --without-weather   | The temperature outside  (some details must be provided)                                   |
-| api\_key='123458976'               | | API key obtained after registering yourself in the weather website, must be combined **--with-weather**  |
-| --with-smartemp | --without-smartemp   | Read the drive temperature from S.M.A.R.T cross-platform available                       |
-| --with-drivetemp | --without-drivetemp   | Read the drive temperature from S.M.A.R.T (linux only) uses curl                       |
-| --with-drivetemp-light | --without-drivetemp-light   | Read the drive temperature from S.M.A.R.T (linux only) light version       |
-| drive\_port='1234'  |                | Different TCP port to listen to for the drive temperature, default one is 7634, must be combined **--with-drivetemp** or **--with-drivetemp-light**   |
-| --with-colors  | --without-colors    | Colorize the output data. When using non-dwm, non-ncurses, non-py3status, you must combine this option with **icons=PATH**. |
-| icons=/tmp     |                     | xbm icons that can be used by dzen2 for example. Discarded when **--with-dwm** is used     |
-| --with-mpd     | --without-mpd       | To see the currently played song name (if any).                                            |
-| --with-keyboard | --without-keyboard | Query xorg and show the currently used keyboard layout                                     |
-| --with-mouse   | --without-mouse     | Query xorg and get the mouse speed in percentage                                           |
-| --with-numcapslock | --without-numcapslock | Query xorg to get the current state of numlock, capslock and scroll lock             |
-| --with-ip      | --without-ip        | Return your external ip address (ipv4).                                                    |
-| --with-gmail    | --without-gmail      | Query gmail and show all unread emails, must be combined with the variables **gmail_account** and **gmail_password**  |
-| gmail\_account=foo  |                | Your gmail account goes here, must be combined **--with-mail**                             |
-| gmail\_password=bar |                | Your gmail account password goes here, must be combined **--with-mail**                    |
-| --with-github  | --without-github    | Query GitHub and number all unread notifications                                           |
-| github\_token=foo  |                 | [Generate token for specific scope](https://github.com/settings/tokens/new?scopes=notifications&description=pinky-bar), must be combined **--with-github**  |
-| --with-reddit  | --without-reddit    | Query reddit and number all unread notifications                                           |
-| reddit\_feed=foo  |                  | ![](img/reddit.png)[copy the JSON link and paste it to this variable](https://www.reddit.com/prefs/feeds/), must be combined **--with-reddit**  |
-| --with-pingtime | --without-pingtime | Perform a GET request and measure the round trip time                                      |
-| --with-sqlite  | --without-sqlite    | Connect to sqlite db and perform SELECT operation                                          |
-| sqlite\_db=foo |                     | The place where your db is located                                                         |
-| --with-py3status | --without-py3status | Format the output data for py3status, can be colorized via **--with-colors**             |
-| --with-awesomewm | --without-awesomewm | Format the output data for awesomewm, can be colorized via **--with-colors**             |
-| --with-xmobar  | --without-xmobar    | Format the output data for xmobar, can be colorized via **--with-colors**                  |
-| --prefix=/tmp  |                     | The directory where the program will be installed                                          |
-| mobo\_sensor='dev.aibs.0'  |         | FreeBSD motherboard sensor module name to use in the sysctl calls. Read the FreeBSD installation below  |
-| cpu\_sensor='dev.cpu.0.temperature' |  | FreeBSD cpu temperature module name to use in the sysctl calls . Read the FreeBSD installation below  |
-
-By default, if **no** options are passed, the program will be compiled with:
-
-```bash
-# --with-pci is discarded in *BSD
---with-net --with-pci --with-alsa
-```
-
-Affects **--with-gmail**. If you get error 403 unauthorized, then allow [less secure apps](https://myaccount.google.com/lesssecureapps) to access your account.
-
-Affects only FreeBSD users with laptops, **--without-apm** will compile the program with acpi support to obtain the current battery life.
-
-**--without-mpd** will compile the program with cmus support, the options syntax stays as is.
-
-The pci and sensors configure options will be discarded in \*BSD.
-
-Affects only linux users with wifi/wireless chipsets, run `lsmod|grep 802` and see whether your chipset uses cfg80211/mac80211. If that's so you can rely on libnl and enable **--with-libnl** configure options, otherwise your chipset probably still uses we/wext, so type **--without-libnl**.
-
-Affects only linux users, **--with-drivetemp** pretty much locks you down to hddtemp. You can adjust **extra/scripts/drive-temperature.sh** and compile the program **--with-smartemp**, so you can switch between hddtemp and smartmontools at any time without the need recompile pinkybar with different options. **--with-smartemp** only cares for the existance of /tmp/pinkytemp file.
-
-**--with-weather** is using [this url](http://openweathermap.org/current), register yourself there, create a new [API key](https://home.openweathermap.org/api\_keys).
-
-Don't just rush to register yourself, read carefully what the "Free" account limits are and take in account how often the program should call their api service. I'm not responsible if you exceeded the limits, you've been warned.
-
-```bash
-# Make sure it's working first
-# curl 'http://api.openweathermap.org/data/2.5/weather?q=London,uk&units=metric&APPID=28459ae16e4b3a7e5628ff21f4907b6f'
-
-# what to pass to configure
---with-weather api_key='28459ae16e4b3a7e5628ff21f4907b6f'
-```
-
----
-
-## Installation for dwm
-
-```bash
-perl set.pl "distro"
-autoreconf --install --force
-
-./configure --prefix=$HOME/.cache --with-dwm --with-colors
-make
-make install
-```
-
-Copy the code from extra/scripts/dwm.sh or `exec` it from **xinitrc** or the script used to start dwm.
-
----
-
-## Installation for py3status
-
-```bash
-perl set.pl "distro"
-autoreconf --install --force
-
-./configure --prefix=$HOME/.cache --with-py3status --with-colors
-make
-make install
-```
-
----
-
-## Installation for xmonad (or other WM)
-
-```bash
-# Copy the xbm icons
-mkdir -p --mode=700 $HOME/.xmonad/icons
-cp -r extra/xbm_icons/*.xbm $HOME/.xmonad/icons
-
-perl set.pl "distro"
-autoreconf --install --force
-
-# here you can specify --with-awesomewm or --with-xmobar
-./configure --prefix=$HOME/.cache --with-colors icons=$HOME/.xmonad/icons
-
-# compile 'n install
-make
-make install
-```
-
-Copy the code from extra/scripts/xmonad.sh or `exec` it from **xinitrc** or the script used to start xmonad.
-
-## Installation in FreeBSD
-
-FreeBSD has no other way than using the module specific convention to query sysctl and obtain data from the sensors. Maintaining a list with all the possible module names and performing expensive sysctl calls in a loop to determine that X module is loaded into your system is no-go. Be prepared to spend a minute or two to find out some system information.
-
-Determine the motherboard sensor module name.
-
-```bash
-sysctl -a|grep 'aibs'
-
-dev.aibs.0.volt.0: 1356 850 1600
-dev.aibs.0.volt.1: 3344 2970 3630
-dev.aibs.0.volt.2: 5040 4500 5500
-dev.aibs.0.volt.3: 12278 10200 13800
-dev.aibs.0.temp.0: 39.0C 60.0C 95.0C
-dev.aibs.0.temp.1: 38.0C 45.0C 75.0C
-dev.aibs.0.fan.0: 1053 600 7200
-dev.aibs.0.fan.1: 1053 600 7200
-```
-
-Copy only 'dev.MODULE.NUMBER' (if there is any number at all) and paste it into the **mobo\_sensor** option below.
-
-Do the same for your cpu temperature, copy and paste the variable as is. **dev.cpu.0.temperature** below is provied as example.
-
-```bash
-perl set.pl "freebsd"
-autoreconf --install --force
-
-./configure --prefix=$HOME/.cache --without-alsa --with-oss mobo_sensor='dev.aibs.0' cpu_sensor='dev.cpu.0.temperature'
-make
-make install
-```
-
-Send a request to the FreeBSD mailing list and request the OpenBSD sensors API to be ported.
-
-## Installation in OpenBSD
-
-Before proceeding, you'll have to:
-
-```bash
-# To detect the newer compiler that you are
-# about to install
-sed -i 's/#AC_PROG_CC(/AC_PROG_CC(/g' configure.ac
-
-ls /usr/local/bin/automake-*
-ls /usr/local/bin/autoconf-*
-
-# Then replace the numbers below
-export AUTOCONF_VERSION=2.69
-export AUTOMAKE_VERSION=1.15
-
-# Your call, gcc or llvm ?
-pkg_add gcc
-
-# after that:
-perl set.pl "openbsd"
-autoreconf --install --force
-
-./configure --prefix=$HOME/.cache --without-alsa --with-oss
-make
-make install
-```
-
-## Installation for anything else
-
-pinky-bar is no longer tied to Window Managers only. With the addition of "without colors", the output can be shown in any program, just bear in mind that the more options you've supplied the more system information will be shown. 
-
-The tmux status bar in action:
-
-![](img/pic4.png)
-
-The installation steps:
-
-```bash
-perl set.pl "distro"
-autoreconf --install --force
-
-./configure --prefix=$HOME/.cache --without-colors
-make
-make install
-```
-
-By choosing this 3rd installation method it is up to you where, how to start and use the system information that's produced by pinky-bar.
 
 ---
 
