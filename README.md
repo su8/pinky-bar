@@ -149,6 +149,7 @@ The following options are available only in Linux:
 
 | short option | long option | Descrtiption                                                       |
 |--------------|-------------|--------------------------------------------------------------------|
+|              | --ramused   | The used ram in MB                                                 |
 | -F           | --drivemodel| The vendor name of your drive [argument - sda]                     |
 | -G           | --nicinfo   | The NIC vendor and model [argument - eth0]                         |
 |              | --nicdrv    | The NIC driver [argument - eth0]                                   |

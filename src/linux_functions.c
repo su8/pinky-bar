@@ -67,12 +67,19 @@ get_ram(char *str1, uint8_t num) {
         (uintmax_t)mem.bufferram / MB, "MB");
       break;
     case 5:
+    case 6:
       {
         total   = (uintmax_t) mem.totalram / MB;
         used    = (uintmax_t) (mem.totalram - mem.freeram -
                          mem.bufferram - mem.sharedram) / MB;
-        FILL_UINT_ARR(str1,
-          ((0 != total) ? ((used * 100) / total) : 0));
+        if (5 == num) {
+          FILL_UINT_ARR(str1,
+            ((0 != total) ? ((used * 100) / total) : 0));
+        }
+        if (6 == num) {
+          FILL_ARR(str1, FMT_UINT "%s",
+            (total - ((uintmax_t)mem.freeram / MB)), "MB");
+        }
       }
       break;
   }

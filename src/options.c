@@ -72,6 +72,7 @@ enum {
   PING,
   SQLITEE,
   UPDATES,
+  RAMUSED,
   BULLSHIFT
 };
 const char *argp_program_version = PACKAGE_STRING;
@@ -242,6 +243,7 @@ static const struct argp_option options[] = {
   { .name = "iplink",       .key = 'e', .arg = "eth0", .doc = "The NIC link speed (useful for wireless/wifi)."           },
   { .name = "nicinfo",      .key = 'G', .arg = "eth0", .doc = "The NIC vendor and model."                                },
   { .name = "wifiname",     .key = 'h', .arg = "wlan0", .doc = "The name of currently connected wireless/wifi network."  },
+  { .name = "ramused",      .key = RAMUSED,            .doc = "The used ram in MB."                                      },
 #endif /* __linux__ */
 
 #if defined(__FreeBSD__) || defined(__OpenBSD__)
@@ -286,6 +288,8 @@ parse_opt(int key, char *arg, struct argp_state *state) {
     NEW_RAM_LABEL('J', char ram_total[VLA], ram_total, 1, FMT_RAM2, RAM_STR);
 
     NEW_RAM_LABEL('K', char ram_free[VLA], ram_free, 2, FMT_RAM2, RAM_STR);
+
+    NEW_RAM_LABEL('l', char ram_shared[VLA], ram_shared, 3, FMT_RAM2, RAM_STR);
 
     NEW_RAM_LABEL('r', char ram_perc[VLA], ram_perc, 5, FMT_RAM, RAM_STR);
 
@@ -338,8 +342,6 @@ parse_opt(int key, char *arg, struct argp_state *state) {
     NEW_NET_LABEL('D', char net_cast[VLA], net_cast, 6, FMT_KERN);
 
     NEW_ARG_LABEL('E', char ip_lookup[VLA], ip_lookup, FMT_KERN);
-
-    NEW_RAM_LABEL('l', char ram_shared[VLA], ram_shared, 3, FMT_RAM2, RAM_STR);
 
     NEW_LABEL('g', char battery[VLA], battery, FMT_BATT, BATT_STR);
 
@@ -516,6 +518,8 @@ parse_opt(int key, char *arg, struct argp_state *state) {
     NEW_ARG_LABEL('G', char nic_info[VLA], nic_info, FMT_KERN);
 
     NEW_NET_LABEL('e', char link_speed[VLA], link_speed, 7, FMT_KERN);
+
+    NEW_RAM_LABEL(RAMUSED, char ram_used[VLA], ram_used, 6, FMT_RAM2, RAM_STR);
 #endif /* __linux__ */
 
 
