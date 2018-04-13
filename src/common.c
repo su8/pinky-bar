@@ -318,7 +318,7 @@ get_packs(char *str1) {
 
 void 
 get_updates(char *str1) {
-#if defined(ARCHLINUX)
+#if defined(ARCHLINUX) || defined(GENTOO)
   uint_fast16_t updates = 0;
   FILE *updates_file = NULL;
 
@@ -327,6 +327,12 @@ get_updates(char *str1) {
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wunused-result"
   CHECK_POPEN(updates_file, "pacman -Qu 2> /dev/null | wc -l", &updates);
+#pragma GCC diagnostic pop
+
+#elif defined(GENTOO)
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wunused-result"
+  CHECK_POPEN(updates_file, "eix -cu --world 2> /dev/null | wc -l", &updates);
 #pragma GCC diagnostic pop
 
 #endif /* ARCHLINUX */
