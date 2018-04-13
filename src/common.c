@@ -338,6 +338,7 @@ get_updates(char *str1) {
 #endif /* ARCHLINUX */
 }
 
+
 void
 get_uptime(char *str1) {
 

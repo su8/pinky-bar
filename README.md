@@ -253,7 +253,7 @@ By default, if **no** options are passed, the program will be compiled with:
 --with-net --with-pci --with-alsa
 ```
 
-Affects **--with-mail** and if you've chosen gmail. If you get error 403 unauthorized, then allow [less secure apps](https://myaccount.google.com/lesssecureapps) to access your account.
+Affects **--with-gmail**. If you get error 403 unauthorized, then allow [less secure apps](https://myaccount.google.com/lesssecureapps) to access your account.
 
 Affects only FreeBSD users with laptops, **--without-apm** will compile the program with acpi support to obtain the current battery life.
 
@@ -748,7 +748,7 @@ The source code resides in the **src** folder under the name of **pinky.ml**
 
 **--with-rust**
 
-The source code resides in the **src** folder under the name of **pinky.rs**
+The source code resides in **extra/scripts/pinky.rs**
 
 ```bash
 ~/pinkbar --rust
@@ -756,7 +756,7 @@ The source code resides in the **src** folder under the name of **pinky.rs**
 
 **--with-go**
 
-The source code resides in the **src** folder under the name of **pinky.go**
+The source code resides in **extra/scripts/pinky2.go**
 
 ```bash
 ~/pinkbar --go
