@@ -319,7 +319,7 @@ get_packs(char *str1) {
 void 
 get_updates(char *str1) {
 #if defined(ARCHLINUX) || defined(GENTOO) || \
-  defined(RHEL) || defined(FREEBSD) defined(DEBIAN)
+  defined(RHEL) || defined(FREEBSD) || defined(DEBIAN)
   uint_fast16_t updates = 0;
   FILE *updates_file = NULL;
 
