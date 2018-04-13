@@ -355,7 +355,7 @@ parse_opt(int key, char *arg, struct argp_state *state) {
 
     NEW_ARG_LABEL('S', char statio[VLA], statio, FMT_STATIO, STATIO_STR);
 
-    NEW_LABEL(DRIVETEMP, char drivetemp[VLA], drivetemp, FMT_TEMP);
+    NEW_LABEL(DRIVETEMP, char drivetemp[VLA], drivetemp, FMT_KERN);
 
     NEW_ARG_LABEL(PASSWORD, char password[VLA], password, FMT_KERN);
 

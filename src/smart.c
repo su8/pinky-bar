@@ -40,10 +40,10 @@
 static size_t read_temp_data_cb(char *, size_t size, size_t nmemb, char *);
 /*
  * The data that we parse:
- * |/dev/sda|Corsair Force GT|24|C| */
+ * |/dev/sda|Corsair Force GT|26|C||/dev/sdc|Hitachi HDS721616PLA380|34|C| */
 static size_t
 read_temp_data_cb(char *data, size_t size, size_t nmemb, char *str1) {
-  static uint8_t one_run = 0, cols = 0;
+  static uint8_t one_run = 0;
   char *ptr = data;
   size_t sz = size * nmemb, x = 0;
 
@@ -52,19 +52,16 @@ read_temp_data_cb(char *data, size_t size, size_t nmemb, char *str1) {
   }
 
   for (; *ptr; ptr++, x++) {
-    if ((x+4) < sz) {
+    if ((x+2) < sz) {
 
       if ('|' == *ptr) {
-        ++cols;
-        if (('C' == *(ptr+3) || 'C' == *(ptr+4)) && 3 == cols) {
-          if (0 != (isdigit((unsigned char) *(ptr+1)))) {
-            *str1++ = *(ptr+1);
-            if (0 != (isdigit((unsigned char) *(ptr+2)))) {
-              *str1++ = *(ptr+2);
-            }
+        if (0 != (isdigit((unsigned char) *(ptr+1)))) {
+          *str1++ = *(ptr+1);
+          if (0 != (isdigit((unsigned char) *(ptr+2)))) {
+            *str1++ = *(ptr+2);
           }
-          *str1 = '\0';
-          break;
+          *str1++ = 'C';
+          *str1++ = ' ';
         }
       }
 
