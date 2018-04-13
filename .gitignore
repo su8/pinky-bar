@@ -18,6 +18,7 @@ src/pinky_curses
 *.pyo
 __pycache__
 *.info
+*.swp
 
 
 
