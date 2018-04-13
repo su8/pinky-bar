@@ -34,6 +34,7 @@
 #include "prototypes/x11.h"
 #include "prototypes/curl.h"
 #include "prototypes/sqlite.h"
+#include "prototypes/packages.h"
 
 /* Because we ran out of a-z A-Z options,
  * only long ones will be supported from now on.

@@ -23,14 +23,12 @@
 void exit_with_err(const char *, const char *);
 void get_ssd(char *, uint8_t num);
 void get_kernel(char *, uint8_t num);
-void get_packs(char *);
 void get_taim(char *);
 void get_uptime(char *);
 void check_fan_vals(char *, uint_fast16_t *, uint_fast16_t iterz);
 void split_n_index(char *);
 void get_password(char *, char *);
 void get_shell(char *, char *);
-void get_updates(char *);
 
 #if !defined(HAVE_SENSORS_SENSORS_H) && !defined(__OpenBSD__)
 void get_fans(char *);

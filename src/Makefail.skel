@@ -18,7 +18,9 @@ pinkybar_SOURCES = main.c           \
     x11.c                           \
     mail.c                          \
     sqlite.c                        \
+    packages.c                      \
     prototypes/common.h             \
+    prototypes/packages.h           \
     prototypes/sqlite.h             \
     prototypes/mail.h               \
     prototypes/curl.h               \
@@ -35,8 +37,12 @@ pinkybar_SOURCES = main.c           \
     include/headers.h               \
     include/options_constants.h     \
     include/functions_constants.h   \
-    include/non_x11_colours.h       \
-    include/x11_colours.h           \
+    include/colours/dzen2_colours.h \
+    include/colours/awesomewm_colours.h \
+    include/colours/ncurses_colours.h \
+    include/colours/py3status_colours.h \
+    include/colours/xmobar_colours.h \
+    include/colours/x11_colours.h   \
     include/options_generator.h     \
     {srcFiles}
 
