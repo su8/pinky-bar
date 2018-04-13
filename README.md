@@ -157,7 +157,7 @@ The following options are available only in Linux:
 | -j           | --nicfw     | The NIC firmware [argument - eth0]                                 |
 | -h           | --wifiname  | The name of currently connected wifi/wireless network [argument - wlan0]  |
 
-The following options are available only in archlinux, gentoo, rhel, freebsd(needs ports tree):
+The following options are available only in archlinux, debian, gentoo, rhel, freebsd(needs ports tree):
 
 | short option | long option | Descrtiption                                                       |
 |--------------|-------------|--------------------------------------------------------------------|
