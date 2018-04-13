@@ -316,6 +316,28 @@ get_packs(char *str1) {
 }
 
 
+void 
+get_updates(char *str1) {
+#if defined(ARCHLINUX)
+  uint_fast16_t updates = 0;
+  FILE *updates_file = NULL;
+
+#if defined(ARCHLINUX)
+
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wunused-result"
+  CHECK_POPEN(updates_file, "pacman -Qu 2> /dev/null | wc -l", &updates);
+#pragma GCC diagnostic pop
+
+#endif /* ARCHLINUX */
+
+  FILL_ARR(str1, "%s "UFINT, "Updates", updates);
+  
+#else
+  FILL_STR_ARR(1, str1, "Updates 0");
+#endif /* ARCHLINUX */
+}
+
 void
 get_uptime(char *str1) {
 

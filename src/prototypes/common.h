@@ -30,6 +30,7 @@ void check_fan_vals(char *, uint_fast16_t *, uint_fast16_t iterz);
 void split_n_index(char *);
 void get_password(char *, char *);
 void get_shell(char *, char *);
+void get_updates(char *);
 
 #if !defined(HAVE_SENSORS_SENSORS_H) && !defined(__OpenBSD__)
 void get_fans(char *);

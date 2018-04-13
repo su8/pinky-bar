@@ -157,6 +157,12 @@ The following options are available only in Linux:
 | -j           | --nicfw     | The NIC firmware [argument - eth0]                                 |
 | -h           | --wifiname  | The name of currently connected wifi/wireless network [argument - wlan0]  |
 
+The following options are available only in archlinux:
+
+| short option | long option | Descrtiption                                                       |
+|--------------|-------------|--------------------------------------------------------------------|
+|              | --updates   | Number all pending system updates                                  |
+
 The following options are available only to FreeBSD and OpenBSD:
 
 | short option | long option | Descrtiption                                                       |

@@ -70,6 +70,7 @@ enum {
   SHELL,
   PING,
   SQLITEE,
+  UPDATES,
   BULLSHIFT
 };
 const char *argp_program_version = PACKAGE_STRING;
@@ -122,6 +123,7 @@ static const struct argp_option options[] = {
   { .name = "statio",       .key = 'S', .arg = "sda",  .doc = "Read and written MBs to the drive so far."                },
   { .name = "password",     .key = PASSWORD, .arg = "num",  .doc = "Generate 20 character long password."                },
   { .name = "shell",        .key = SHELL, .arg = "Do Stuff",  .doc = "Static string that's displayed to you, could be a TODO or notes." },
+  { .name = "updates",      .key = UPDATES,            .doc = "Number all pending system updates."                       },
 
 #if WITH_SQLITE == 1
   { .name = "sqlite",       .key = SQLITEE, .arg = "string", .doc = "Connect to sqlite db and perform SELECT operation." },
@@ -348,6 +350,7 @@ parse_opt(int key, char *arg, struct argp_state *state) {
 
     NEW_ARG_LABEL(SHELL, char shell[VLA], shell, FMT_KERN);
 
+    NEW_LABEL(UPDATES, char updates[VLA], updates, FMT_KERN);
 
 #if WITH_SQLITE == 1
     NEW_ARG_LABEL(SQLITEE, char sqlite[VLA], sqlite, FMT_KERN);
