@@ -251,7 +251,7 @@ AC_DEFUN([TEST_CURLL],[
     AC_CHECK_HEADERS([curl/curl.h], [
       CURL_LIBS="-lcurl"
       ],[
-        ERR_MUST_INSTALL([curl and or libcurl])
+        ERR_MUST_INSTALL([curl and or libcurl-ssl])
     ])
 
     m4_foreach([LiB], [
