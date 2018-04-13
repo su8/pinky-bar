@@ -19,18 +19,18 @@
 
 #include "config.h" /* Auto-generated */
 
-#if WITH_MAIL == 1
+#if WITH_GMAIL == 1
 
 #include <ctype.h>
 #include <curl/curl.h>
 #include "include/headers.h"
 
-#endif /* WITH_MAIL */
+#endif /* WITH_GMAIL */
 
 #include "prototypes/mail.h"
 
-#if WITH_MAIL == 1
-static size_t read_gmail_data_cb(char *, size_t size, size_t nmemb, char *);
+#if WITH_GMAIL == 1
+static size_t read_gmail_data_cb(char *, size_t , size_t , char *);
 
 /*
  *
@@ -123,4 +123,4 @@ error:
 
 #else
 char *l33t2;
-#endif /* WITH_MAIL */
+#endif /* WITH_GMAIL */

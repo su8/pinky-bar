@@ -20,7 +20,7 @@
 #ifndef MAIL_H_
 #define MAIL_H_ 
 
-#if WITH_MAIL == 1
+#if WITH_GMAIL == 1
 void get_gmail(char *);
 #endif /* WITH_MAIL */
 

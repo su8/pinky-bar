@@ -67,7 +67,7 @@ enum {
   PASSWORD,
   GITHUB,
   REDDIT,
-  NOTES,
+  SHELL,
   PING,
   SQLITEE,
   BULLSHIFT
@@ -121,7 +121,7 @@ static const struct argp_option options[] = {
   { .name = "iplookup",     .key = 'E', .arg = "site", .doc = "Mini website IP lookup."                                  },
   { .name = "statio",       .key = 'S', .arg = "sda",  .doc = "Read and written MBs to the drive so far."                },
   { .name = "password",     .key = PASSWORD,           .doc = "Generate 20 character long password."                     },
-  { .name = "notes",        .key = NOTES, .arg = "Do Stuff",  .doc = "Static string that's displayed to you, could be a TODO or notes." },
+  { .name = "shell",        .key = SHELL, .arg = "Do Stuff",  .doc = "Static string that's displayed to you, could be a TODO or notes." },
 
 #if WITH_SQLITE == 1
   { .name = "sqlite",       .key = SQLITEE, .arg = "string", .doc = "Connect to sqlite db and perform SELECT operation."        },
@@ -143,9 +143,9 @@ static const struct argp_option options[] = {
   { .name = "ip",           .key = IP,                 .doc = "Return your external ip address (ipv4)."                  },
 #endif /* WITH_IP */
 
-#if WITH_MAIL == 1
+#if WITH_GMAIL == 1
   { .name = "gmail",        .key = GMAIL,              .doc = "Count all unread gmail emails."                           },
-#endif /* WITH_MAIL */
+#endif /* WITH_GMAIL */
 
 #if WITH_PERL == 1
   { .name = "perl",  .key = PERLSCRIPT, .arg = "script", .doc = "Extend the program with perl, read README."             },
@@ -346,7 +346,7 @@ parse_opt(int key, char *arg, struct argp_state *state) {
 
     NEW_LABEL(PASSWORD, char password[VLA], password, FMT_KERN);
 
-    NEW_ARG_LABEL(NOTES, char notes[VLA], notes, FMT_KERN);
+    NEW_ARG_LABEL(SHELL, char shell[VLA], shell, FMT_KERN);
 
 
 #if WITH_SQLITE == 1
@@ -374,9 +374,9 @@ parse_opt(int key, char *arg, struct argp_state *state) {
 #endif /* WITH_IP */
 
 
-#if WITH_MAIL == 1
+#if WITH_GMAIL == 1
     NEW_LABEL(GMAIL, char gmail[VLA], gmail, FMT_TIME, MAIL_STR);
-#endif /* WITH_MAIL */
+#endif /* WITH_GMAIL */
 
 
 #if WITH_PERL == 1

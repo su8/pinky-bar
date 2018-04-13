@@ -30,7 +30,7 @@ AC_DEFUN([TEST_CURLL],[
   WITH_DRIVETEMP_LIGHT=0
   GMAIL_ACC=""
   GMAIL_PASS=""
-  WITH_MAIL=0
+  WITH_GMAIL=0
   WITH_IP=0
   WITH_GITHUB=0
   GITHUB_TOKEN=""
@@ -66,11 +66,11 @@ AC_DEFUN([TEST_CURLL],[
     [with_smartemp=no]
   )
 
-  AC_ARG_WITH([mail],
-    AS_HELP_STRING([--with-mail],
+  AC_ARG_WITH([gmail],
+    AS_HELP_STRING([--with-gmail],
       [Count all unread emails]),
     [],
-    [with_mail=no]
+    [with_gmail=no]
   )
 
   AC_ARG_WITH([ip],
@@ -285,7 +285,7 @@ AC_DEFUN([TEST_CURLL],[
   AC_DEFINE_UNQUOTED([DRIVE_PORT],[$DRIVE_PORT],[TCP port to listen to])
   AC_DEFINE_UNQUOTED([WITH_DRIVETEMP],[$WITH_DRIVETEMP],[Gettin hot in here])
   AC_DEFINE_UNQUOTED([WITH_DRIVETEMP_LIGHT],[$WITH_DRIVETEMP_LIGHT],[Gettin hot in here])
-  AC_DEFINE_UNQUOTED([WITH_MAIL],[$WITH_MAIL],[Count all unread emails])
+  AC_DEFINE_UNQUOTED([WITH_GMAIL],[$WITH_GMAIL],[Count all unread emails])
   AC_DEFINE_UNQUOTED([WITH_IP],[$WITH_IP],[Return your external ip address])
   AC_DEFINE_UNQUOTED([WITH_GITHUB],[$WITH_GITHUB],[Query GitHub and number all unread notifications])
   AC_DEFINE_UNQUOTED([WITH_REDDIT],[$WITH_REDDIT],[Query reddit and number all unread notifications])

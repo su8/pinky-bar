@@ -526,6 +526,6 @@ get_password(char *str1) {
 
 
 void
-get_notes(char *str1, char *str2) {
+get_shell(char *str1, char *str2) {
   FILL_STR_ARR(1, str1, str2);
 }

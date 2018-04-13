@@ -252,7 +252,7 @@ AC_DEFUN([TEST_PCI],[
       AC_CHECK_HEADERS([pci/pci.h], [
           PCI_LIBS="-lpci"
         ],[
-          ERR_MUST_INSTALL([pciutils])
+          ERR_MUST_INSTALL([pciutils or libpci-dev])
         ])
 
       m4_foreach([LiB], [

@@ -109,7 +109,7 @@ The order of supplied options will dictate how, where and what system informatio
 |              | --github    | Query GitHub and number all unread notifications                   |
 |              | --reddit    | Query reddit and number all unread notifications                   |
 |              | --password  | Generate 20 character long password                                |
-|              | --notes     | Static string that's displayed to you, could be a TODO or notes or use the shell itself and execute some command that returns something, eg: --notes=$(tail --lines 1 /var/log/Xorg.0.log), [argument - static string] |
+|              | --shell     | Static string that's displayed to you, could be a TODO or notes or use the shell itself and execute some command that returns something, eg: --shell=$(tail --lines 1 /var/log/Xorg.0.log), [argument - static string] |
 |              | --perl      | Extend pinkybar with your scripts written in perl, learn more from the Opt-in section.     |
 |              | --python    | Extend pinkybar with your scripts written in python, learn more from the Opt-in section.     |
 |              | --ruby      | Extend pinkybar with your scripts written in ruby, learn more from the Opt-in section.     |
@@ -223,7 +223,7 @@ It's up to you to decide which features suit you best.
 | --with-mouse   | --without-mouse     | Query xorg and get the mouse speed in percentage                                           |
 | --with-numcapslock | --without-numcapslock | Query xorg to get the current state of numlock, capslock and scroll lock             |
 | --with-ip      | --without-ip        | Return your external ip address (ipv4).                                                    |
-| --with-mail    | --without-mail      | Query gmail and show all unread emails, must be combined with the variables **gmail_account** and **gmail_password**  |
+| --with-gmail    | --without-gmail      | Query gmail and show all unread emails, must be combined with the variables **gmail_account** and **gmail_password**  |
 | gmail\_account=foo  |                | Your gmail account goes here, must be combined **--with-mail**                             |
 | gmail\_password=bar |                | Your gmail account password goes here, must be combined **--with-mail**                    |
 | --with-github  | --without-github    | Query GitHub and number all unread notifications                                           |
