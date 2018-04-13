@@ -121,7 +121,7 @@ AC_DEFUN([TEST_CURLL],[
     GMAIL_PASS=\""${gmail_password}"\"
   fi
   AS_IF([test "x$with_mail" = "xyes"],[
-    WITH_MAIL=1
+    WITH_GMAIL=1
     AC_DEFINE_UNQUOTED([GMAIL_ACC],[$GMAIL_ACC],[gmail account])
     AC_DEFINE_UNQUOTED([GMAIL_PASS],[$GMAIL_PASS],[gmail password])
   ])
