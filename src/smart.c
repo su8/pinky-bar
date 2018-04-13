@@ -70,7 +70,7 @@ read_temp_data_cb(char *data, size_t size, size_t nmemb, char *str1) {
 
   one_run = 1;
   if ('\0' != *str1) {
-    *str1++ = '\0';
+    *(--str1) = '\0';
   }
   return sz;
 }
