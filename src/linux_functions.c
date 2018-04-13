@@ -102,17 +102,14 @@ get_ssd_model(char *str1, char *str2) {
 
 
 void
-get_loadavg(char *str1) {
+get_loadavg(char *str1, uint8_t num) {
   struct sysinfo up;
   memset(&up, 0, sizeof(struct sysinfo));
 
   if (-1 == (sysinfo(&up))) {
     FUNC_FAILED("sysinfo()");
   }
-  FILL_ARR(str1, "%.2f %.2f %.2f",
-    (float)up.loads[0] / 65535.0f,
-    (float)up.loads[1] / 65535.0f,
-    (float)up.loads[2] / 65535.0f);
+  FILL_ARR(str1, "%.2f", (float)up.loads[num] / 65535.0f);
 }
 
 

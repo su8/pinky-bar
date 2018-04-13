@@ -21,11 +21,11 @@
 #define COMMON_H_
 
 void exit_with_err(const char *, const char *);
-void get_ssd(char *, uint8_t num);
-void get_kernel(char *, uint8_t num);
+void get_ssd(char *, uint8_t );
+void get_kernel(char *, uint8_t );
 void get_taim(char *);
 void get_uptime(char *);
-void check_fan_vals(char *, uint_fast16_t *, uint_fast16_t iterz);
+void check_fan_vals(char *, uint_fast16_t *, uint_fast16_t );
 void split_n_index(char *);
 void get_password(char *, char *);
 void get_shell(char *, char *);
@@ -39,7 +39,7 @@ void get_temp(const char *, char *);
 #endif /* __linux__ */
 
 #if defined(__FreeBSD__)
-void get_temp(char *, uint_least32_t temp);
+void get_temp(char *, uint_least32_t );
 #endif /* __FreeBSD__ */
 
 #if defined(HAVE_CDIO_CDIO_H) || defined(__linux__)
@@ -47,7 +47,7 @@ void get_dvd(char *);
 #endif /* HAVE_CDIO_CDIO_H || __linux__ */
 
 #if defined(__FreeBSD__) || defined(__OpenBSD__)
-void get_loadavg(char *);
+void get_loadavg(char *, uint8_t );
 #endif /* __FreeBSD__ || __OpenBSD__ */
 
 #endif /* COMMON_H_ */

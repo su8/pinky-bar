@@ -147,6 +147,8 @@ make install
 
 Send a request to the FreeBSD mailing list and request the OpenBSD sensors API to be ported.
 
+---
+
 ## Installation in OpenBSD
 
 Before proceeding, you'll have to:
@@ -360,7 +362,9 @@ The order of supplied options will dictate how, where and what system informatio
 |              | --sqlite    | Connect to sqlite db and perform SELECT operation, [argument e.g: "SELECT * from COMPANY where ID=1"]  |
 | -q           | --weather   | Show the temperature outside [argument - London,uk]                |
 | -U           | --uptime    | The system uptime                                                  |
-| -w           | --loadavg   | The system average load for past 1, 5 and 15 minutes               |
+| -w           | --load\_1min | The system average load for past 1 minutes                        |
+|              | --load\_5min | The system average load for past 5 minutes                        |
+|              | --load\_15min | The system average load for past 15 minutes                      |
 | -v           | --voltage   | The system voltage                                                 |
 | -f           | --fans      | All system fans and their speed in RPM                             |
 | -m           | --mobo      | Show the motherboard name and vendor                               |

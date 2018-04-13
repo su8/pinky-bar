@@ -8,7 +8,6 @@ AM_INIT_AUTOMAKE([1.13 -Wall no-define foreign subdir-objects dist-xz no-dist-gz
 
 AM_SILENT_RULES([yes])
 {perl will replace this line}
-
 # With the addition of more runtime compile and
 # link tests, this option is no longer necessary.
 # Any compiler and C library succeeding to pass the

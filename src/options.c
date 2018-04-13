@@ -73,6 +73,8 @@ enum {
   SQLITEE,
   UPDATES,
   RAMUSED,
+  LOADAVG5,
+  LOADAVG15,
   BULLSHIFT
 };
 const char *argp_program_version = PACKAGE_STRING;
@@ -108,7 +110,9 @@ static const struct argp_option options[] = {
   { .name = "kernarch",     .key = 'u',                .doc = "The machine architecture."                                },
   { .name = "kernel",       .key = 'k',                .doc = "Combined kernel name and version."                        },
   { .name = "uptime",       .key = 'U',                .doc = "The system uptime"                                        },
-  { .name = "loadavg",      .key = 'w',                .doc = "The system average load for past 1, 5 and 15 minutes"     },
+  { .name = "load_1min",    .key = 'w',                .doc = "The system average load for past 1 minutes"               },
+  { .name = "load_5min",    .key = LOADAVG5,           .doc = "The system average load for past 5 minutes"               },
+  { .name = "load_15min",   .key = LOADAVG15,          .doc = "The system average load for past 15 minutes"              },
   { .name = "voltage",      .key = 'v',                .doc = "The system voltage"                                       },
   { .name = "fans",         .key = 'f',                .doc = "All system fans and their speed in RPM."                  },
   { .name = "mobo",         .key = 'm',                .doc = "The motherboard vendor and model names."                  },
@@ -317,7 +321,11 @@ parse_opt(int key, char *arg, struct argp_state *state) {
 
     NEW_LABEL('U', char uptime[VLA], uptime, FMT_UP, UP_STR);
 
-    NEW_LABEL('w', char loadavg[VLA], loadavg, FMT_LOAD, LOAD_STR);
+    NEW_LOADAVG_LABEL('w', char loadavg_1min[VLA], loadavg_1min, 0, FMT_LOAD, LOAD_STR);
+
+    NEW_LOADAVG_LABEL(LOADAVG5, char loadavg_5min[VLA], loadavg_5min, 1, FMT_LOAD, LOAD_STR);
+
+    NEW_LOADAVG_LABEL(LOADAVG15, char loadavg_15min[VLA], loadavg_15min, 2, FMT_LOAD, LOAD_STR);
 
     NEW_LABEL('v', char voltage[VLA], voltage, FMT_VOLT, VOLT_STR);
 

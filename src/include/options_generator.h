@@ -103,6 +103,9 @@
 #define NEW_MPD_LABEL(...) \
   LABEL_WITH_NUM_GENERATOR(song, __VA_ARGS__);
 
+#define NEW_LOADAVG_LABEL(...) \
+  LABEL_WITH_NUM_GENERATOR(loadavg, __VA_ARGS__);
+
 /* Fire the preprocessor */
 
 
