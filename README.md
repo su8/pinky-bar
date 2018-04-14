@@ -860,6 +860,9 @@ If you would like the output to be shown in your Window Manager, those are the f
 for non-dwm WM:
 
 * dzen2
+* py3status
+* awesomewm
+* xmobar
 
 for dwm:
 
