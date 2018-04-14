@@ -43,35 +43,30 @@ static size_t read_temp_data_cb(char *, size_t size, size_t nmemb, char *);
  * |/dev/sda|Corsair Force GT|26|C||/dev/sdc|Hitachi HDS721616PLA380|34|C| */
 static size_t
 read_temp_data_cb(char *data, size_t size, size_t nmemb, char *str1) {
-  static uint8_t one_run = 0;
   char *ptr = data;
+  static char buf[VLA];
+  static char *ptr2 = buf;
   size_t sz = size * nmemb, x = 0;
-
-  if (0 != one_run) {
-    return sz;
-  }
 
   for (; *ptr; ptr++, x++) {
     if ((x+2) < sz) {
 
       if ('|' == *ptr) {
         if (0 != (isdigit((unsigned char) *(ptr+1)))) {
-          *str1++ = *(ptr+1);
+          *ptr2++ = *(ptr+1);
           if (0 != (isdigit((unsigned char) *(ptr+2)))) {
-            *str1++ = *(ptr+2);
+            *ptr2++ = *(ptr+2);
           }
-          *str1++ = 'C';
-          *str1++ = ' ';
+          *ptr2++ = 'C';
+          *ptr2++ = ' ';
         }
       }
 
     }
   }
 
-  one_run = 1;
-  if ('\0' != *str1) {
-    *(--str1) = '\0';
-  }
+  FILL_STR_ARR(1, str1, buf);
+
   return sz;
 }
 #endif /* __linux__ && (WITH_DRIVETEMP || WITH_DRIVETEMP_LIGHT) */
@@ -110,6 +105,7 @@ error:
     curl_easy_cleanup(curl);
   }
   curl_global_cleanup();
+  str1[strlen(str1)-1] = '\0';
   return;
 }
 
@@ -173,6 +169,7 @@ get_drivetemp(char *str1) {
   if (NULL != result) {
     freeaddrinfo(result);
   }
+  str1[strlen(str1)-1] = '\0';
 }
 
 
