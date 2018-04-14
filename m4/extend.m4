@@ -152,7 +152,7 @@ AC_DEFUN([TEST_PYTHON],[
     dnl python version installed, the file naming is other.
     dnl Still reading or get bored ?
     m4_define([testveR],[python$PYTHON_VERSION])
-    m4_define([testveR2],[python-config-$PYTHON_VERSION])
+    m4_define([testveR2],[python$PYTHON_VERSION-config])
 
     dnl First check whether python and python-9.9 exist
     AC_PATH_PROG(pyvf1,testveR,no)
