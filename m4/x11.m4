@@ -87,11 +87,11 @@ AC_DEFUN([TEST_X11],[
     WITH_COLOURS=1
   ])
 
-  AC_ARG_WITH([numcapslock],
-    AS_HELP_STRING([--with-numcapslock],
+  AC_ARG_WITH([lock-keys],
+    AS_HELP_STRING([--with-lock-keys],
       [X11 linker flag for numlock and capslock support]),
     [],
-    [with_numcapslock=no]
+    [with_lock_keys=no]
   )
 
   AS_IF([test "x$with_py3status" = "xyes"], [
@@ -106,7 +106,7 @@ AC_DEFUN([TEST_X11],[
     WITH_XMOBAR=1
   ])
 
-  AS_IF([test "x$with_dwm" = "xyes" || test "x$with_keyboard" = "xyes" || test "x$with_mouse" = "xyes" || test "x$with_numcapslock" = "xyes"], [
+  AS_IF([test "x$with_dwm" = "xyes" || test "x$with_keyboard" = "xyes" || test "x$with_mouse" = "xyes" || test "x$with_lock_keys" = "xyes"], [
     AC_CHECK_HEADERS([X11/Xlib.h X11/XKBlib.h], [
       X_LIBS="-lX11"
       ],[
@@ -145,7 +145,7 @@ AC_DEFUN([TEST_X11],[
     WITH_DWM=1
   ])
 
-  AS_IF([test "x$with_numcapslock" = "xyes"], [
+  AS_IF([test "x$with_lock_keys" = "xyes"], [
     WITH_NUMLOCK=1
   ])
 
