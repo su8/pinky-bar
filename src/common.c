@@ -389,3 +389,9 @@ void
 get_shell(char *str1, char *str2) {
   FILL_STR_ARR(1, str1, str2);
 }
+
+
+void
+get_title(char *str1, char *str2) {
+  FILL_STR_ARR(1, str1, str2);
+}
