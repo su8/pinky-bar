@@ -671,37 +671,43 @@ To extend pinkybar with your own crafted perl/python/ruby/lua/assembly/R/ocaml/l
 
 Have a look at extra/scripts, the examples there will teach you how to write the most basic scripts in order to extend pinkybar in python/perl/ruby/lua/R/assembly/lisp/ocaml/rust/go/c++/slang/tcl. You can use all languages simultaneously.
 
-Please, please do **NOT** export or set PYTHONPATH on it's own line.
+**--with-python2** / **--with-python3**:
 
-`WRONG`:
+Please, please do **NOT** export or set `PYTHONPATH` on its own line.
 
-```bash
-export PYTHONPATH=/meh
-pinkybar --python my_script
+`Example Python Script: getloadavg.py`
+```python
+#!/usr/bin/env python
+from os import getloadavg
+
+                ↶ # VIF: VERY IMPORTANT FUNCTION
+def uzer_func():
+    return ', '.join([format(x) for x in getloadavg()])
 ```
 
 `WRONG`:
-
 ```bash
-PYTHONPATH=/meh
-pinkybar --python my_script
+export PYTHONPATH=~/script_dir  # PLEASE DO NOT EXPORT PYTHONPATH ON ITS OWN LINE.
+pinkybar --python getloadavg
 ```
-
-Correct PYTHONPATH usage:
-
 ```bash
-# ~/chewbacca is the path where pinky.py resides
-# ~/chewbacca/pinky.py
+PYTHONPATH=~/script_dir  # PLEASE DO NOT SET PYTHONPATH ON ITS OWN LINE.
+pinkybar --python getloadavg
 
+```
+`CORRECT`:
+```bash
 # python2
-PYTHONPATH=~/chewbacca ~/pinkybar --python pinky
-
+PYTHONPATH=~/scripts_dir ~/.cache/bin/pinkybar --python getloadavg
+PYTHONPATH=~/scripts_dir ~/.cache/bin/pinkybar --python getloadavg.py  # WRONG.
+```
+```bash
 # python3
-# executed only once
-fuNky=$(python3 -c 'import sys;print(":".join([x for x in sys.path]))')
+# executed once
+ONETIME=$(python3 -c 'import sys;print(":".join([x for x in sys.path]))')
 
 # executed in a loop
-PYTHONPATH=$fuNky:~/chewbacca ~/pinkybar --python pinky
+PYTHONPATH=$ONETIME:~/scripts_dir ~/.cache/bin/pinkybar --python getloadavg
 ```
 
 **--with-perl**:
@@ -754,7 +760,7 @@ luac -o pinky.luac pinky.lua
 The source code resides in the **src** folder under the name of **pinky.ml**
 
 ```bash
-~/pinkbar --ocaml
+~/pinkybar --ocaml
 ```
 
 **--with-rust**
@@ -762,7 +768,7 @@ The source code resides in the **src** folder under the name of **pinky.ml**
 The source code resides in **extra/scripts/pinky.rs**
 
 ```bash
-~/pinkbar --rust
+~/pinkybar --rust
 ```
 
 **--with-go**
@@ -770,7 +776,7 @@ The source code resides in **extra/scripts/pinky.rs**
 The source code resides in **extra/scripts/pinky2.go**
 
 ```bash
-~/pinkbar --go
+~/pinkybar --go
 ```
 
 **--with-cpp**
@@ -778,7 +784,7 @@ The source code resides in **extra/scripts/pinky2.go**
 The source code resides in the **src** folder under the name of **c++.cpp**
 
 ```bash
-~/pinkbar --cpp
+~/pinkybar --cpp
 ```
 
 **--with-slang**
