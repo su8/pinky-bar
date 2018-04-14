@@ -47,18 +47,25 @@ read_temp_data_cb(char *data, size_t size, size_t nmemb, char *str1) {
   static char buf[VLA];
   static char *ptr2 = buf;
   size_t sz = size * nmemb, x = 0;
+  static int z = 0;
 
   for (; *ptr; ptr++, x++) {
     if ((x+2) < sz) {
 
       if ('|' == *ptr) {
         if (0 != (isdigit((unsigned char) *(ptr+1)))) {
-          *ptr2++ = *(ptr+1);
-          if (0 != (isdigit((unsigned char) *(ptr+2)))) {
-            *ptr2++ = *(ptr+2);
+          if (VLA-1 > z) {
+            *ptr2++ = *(ptr+1);
+            z++;
+            if (0 != (isdigit((unsigned char) *(ptr+2)))) {
+              *ptr2++ = *(ptr+2);
+              z++;
+            }
+            *ptr2++ = 'C';
+            *ptr2++ = ' ';
+            z++;
+            z++;
           }
-          *ptr2++ = 'C';
-          *ptr2++ = ' ';
         }
       }
 
