@@ -7,6 +7,7 @@ Configuration parameters:
     command: specify a path to pinkybar command, otherwise auto
         eg '~/.cache/bin/pinkybar' (default None)
     format: display format for this module (default '{output}')
+    pythonpath: specify a python path to add for scripts (default None)
 
 Format placeholders:
     {output} format for pinkybar output
@@ -32,6 +33,7 @@ class Py3status:
     cache_timeout = 10
     command = None
     format = '{output}'
+    pythonpath = None
 
     def post_config_hook(self):
         if self.command:
@@ -42,10 +44,15 @@ class Py3status:
             )
         if not self.command or not self.py3.check_commands(self.command):
             raise Exception(STRING_ERROR)
+        if self.pythonpath:
+            self.command = 'PYTHONPATH={} {}'.format(
+                self.pythonpath, self.command
+            )
 
     def pinkybar(self):
         try:
-            output = self.py3.command_output(self.command).strip()
+            output = self.py3.command_output(
+                self.command, shell=bool(self.pythonpath)).strip()
             pinkybar_data = {'output': self.py3.safe_format(output)}
         except self.py3.CommandError as ce:
             self.py3.error(' '.join(ce.error.splitlines()[0].split()[2:]))
