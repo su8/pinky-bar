@@ -100,245 +100,245 @@ cpu and motherboard sensors as @strong{modules} and not inlined.
 The order of supplied options will dictate how, where and what system
 information to be shown.
 
-@multitable @columnfractions 0.15 0.14 0.70 
-@headitem 
+@multitable @columnfractions 0.15 0.14 0.70
+@headitem
 short option
  @tab long option
  @tab Descrtiption
-@item 
+@item
 -M
  @tab --mpd
  @tab The song filename
-@item 
+@item
 -W
  @tab --mpdtrack
  @tab The song track name (not available in cmus)
-@item 
+@item
 -x
  @tab --mpdartist
  @tab The song artist(s) name(s)
-@item 
+@item
 -X
  @tab --mpdtitle
  @tab The song title
-@item 
+@item
 -y
  @tab --mpdalbum
  @tab The song album name
-@item 
+@item
 -Y
  @tab --mpddate
  @tab The song date
-@item 
+@item
 -c
  @tab --cpu
  @tab The current cpu load (summed up all cores/threads)
-@item 
+@item
 -L
  @tab --coresload
  @tab Show the load regarding each individual cpu core/thread
-@item 
+@item
 -T
  @tab --cputemp
  @tab The current cpu temperature
-@item 
+@item
 -C
  @tab --cpuspeed
  @tab Show your maximum cpu clock speed in MHz, regardless of the used
 governor. Uses assembly.
-@item 
+@item
 -I
  @tab --cpuinfo
  @tab Detect your CPU vendor, stepping, family, clflush, l1/l2 cache and
 line size, physical cores, physical and virtual bits. Uses assembly.
-@item 
+@item
 -r
  @tab --ramperc
  @tab The used ram in percentage
-@item 
+@item
 -J
  @tab --ramtotal
  @tab The total ram
-@item 
+@item
 -K
  @tab --ramfree
  @tab The free ram
-@item 
+@item
 -l
  @tab --ramshared
  @tab The shared ram
-@item 
+@item
 -o
  @tab --rambuffer
  @tab The buffer ram (not available in OpenBSD)
-@item 
+@item
 -s
  @tab --driveperc
  @tab The used drive storage in percentage
-@item 
+@item
 -n
  @tab --drivetotal
  @tab The total drive storage
-@item 
+@item
 -N
  @tab --drivefree
  @tab The free drive storage
-@item 
+@item
 -O
  @tab --driveavail
  @tab The available drive storage (total - used)
-@item 
+@item
 --drivetemp
  @tab Read the drive temperature from S.M.A.R.T
-@item 
+@item
 -g
  @tab --battery
  @tab The remaining battery charge
-@item 
+@item
 -z
  @tab --dvdstr
  @tab The vendor and model name of your cdrom/dvdrom
-@item 
+@item
 -S
  @tab --statio
  @tab Read and written MBs to the drive so far [argument - sda]
-@item 
+@item
 -p
  @tab --packages
  @tab The number of installed packages
-@item 
+@item
 -P
  @tab --kernsys
  @tab The kernel name
-@item 
+@item
 --kernode
  @tab The network node hostname
-@item 
+@item
 -Q
  @tab --kernrel
  @tab The kernel release
-@item 
+@item
 -R
  @tab --kernver
  @tab The kernel version
-@item 
+@item
 -u
  @tab --kernarch
  @tab The machine architecture
-@item 
+@item
 -k
  @tab --kernel
  @tab Combined kernel name and version
-@item 
+@item
 --perl
  @tab Extend pinkybar with your scripts written in perl, learn more from
 the Opt-in section.
-@item 
+@item
 --python
  @tab Extend pinkybar with your scripts written in python, learn more
 from the Opt-in section.
-@item 
+@item
 --ruby
  @tab Extend pinkybar with your scripts written in ruby, learn more from
 the Opt-in section.
-@item 
+@item
 --lua
  @tab Extend pinkybar with your scripts written in lua, learn more from
 the Opt-in section.
-@item 
+@item
 --R
  @tab Extend pinkybar with your scripts written in R, learn more from
 the Opt-in section.
-@item 
+@item
 --asm
  @tab Extend pinkybar with assembly, learn more from the Opt-in section.
-@item 
+@item
 --lisp
  @tab Extend pinkybar with your scripts written in lisp, learn more from
 the Opt-in section.
-@item 
+@item
 --ocaml
  @tab Extend pinkybar with your scripts written in ocaml, learn more
 from the Opt-in section.
-@item 
+@item
 --rust
  @tab Extend pinkybar with your scripts written in rust, learn more from
 the Opt-in section.
-@item 
+@item
 --go
  @tab Extend pinkybar with your scripts written in go, learn more from
 the Opt-in section.
-@item 
+@item
 --cpp
  @tab Extend pinkybar with your cpp, learn more from the Opt-in section.
-@item 
+@item
 --slang
  @tab Extend pinkybar with your slang, learn more from the Opt-in
 section.
-@item 
+@item
 --tcl
  @tab Extend pinkybar with your tcl, learn more from the Opt-in section.
-@item 
+@item
 -q
  @tab --weather
  @tab Show the temperature outside [argument - London,uk]
-@item 
+@item
 -U
  @tab --uptime
  @tab The system uptime
-@item 
+@item
 -w
  @tab --loadavg
  @tab The system average load for past 1, 5 and 15 minutes
-@item 
+@item
 -v
  @tab --voltage
  @tab The system voltage
-@item 
+@item
 -f
  @tab --fans
  @tab All system fans and their speed in RPM
-@item 
+@item
 -m
  @tab --mobo
  @tab Show the motherboard name and vendor
-@item 
+@item
 -d
  @tab --mobotemp
  @tab The motherboard temperature
-@item 
+@item
 -V
  @tab --volume
  @tab The sound volume level
-@item 
+@item
 -t
  @tab --time
  @tab The current time
-@item 
+@item
 -a
  @tab --ipaddr
  @tab The local ip address [argument - eth0]
-@item 
+@item
 -b
  @tab --bandwidth
  @tab The consumed internet bandwidth so far [argument - eth0]
-@item 
+@item
 -i
  @tab --iface
  @tab The current download and upload speed [argument - eth0]
-@item 
+@item
 -A
  @tab --ipmac
  @tab The NIC mac address [argument - eth0]
-@item 
+@item
 -B
  @tab --ipmask
  @tab The NIC subnet mask [argument - eth0]
-@item 
+@item
 -D
  @tab --ipcast
  @tab The NIC broadcast address [argument - eth0]
-@item 
+@item
 -E
  @tab --iplookup
  @tab Mini website IP lookup [website argument - google.com]
@@ -349,35 +349,35 @@ only on AMD and Intel CPUs (starting from pentium 4 onwards).
 
 The following options are available only in Linux:
 
-@multitable @columnfractions 0.15 0.14 0.70 
-@headitem 
+@multitable @columnfractions 0.15 0.14 0.70
+@headitem
 short option
  @tab long option
  @tab Descrtiption
-@item 
+@item
 -F
  @tab --drivemodel
  @tab The vendor name of your drive [argument - sda]
-@item 
+@item
 -G
  @tab --nicinfo
  @tab The NIC vendor and model [argument - eth0]
-@item 
+@item
 --nicdrv
  @tab The NIC driver [argument - eth0]
-@item 
+@item
 -H
  @tab --nicver
  @tab The NIC version [argument - eth0]
-@item 
+@item
 -e
  @tab --iplink
  @tab The NIC link speed (useful for wireless/wifi) [argument - eth0]
-@item 
+@item
 -j
  @tab --nicfw
  @tab The NIC firmware [argument - eth0]
-@item 
+@item
 -h
  @tab --wifiname
  @tab The name of currently connected wifi/wireless network [argument -
@@ -386,32 +386,32 @@ wlan0]
 
 The following options are available only to FreeBSD and OpenBSD:
 
-@multitable @columnfractions 0.15 0.14 0.70 
-@headitem 
+@multitable @columnfractions 0.15 0.14 0.70
+@headitem
 short option
  @tab long option
  @tab Descrtiption
-@item 
+@item
 -j
  @tab --nicgw
  @tab The NIC gateway address [argument - re0]
-@item 
+@item
 -Z
  @tab --swapused
  @tab The used drive swap in MB
-@item 
+@item
 -F
  @tab --swaperc
  @tab The used drive swap in percentage
-@item 
+@item
 -h
  @tab --swaptotal
  @tab The total drive swap
-@item 
+@item
 -H
  @tab --swapavail
  @tab The available drive swap (total - used)
-@item 
+@item
 --wifiname
  @tab The name of currently connected wifi/wireless network [argument -
 wlan0]
@@ -419,12 +419,12 @@ wlan0]
 
 The following options are available only in OpenBSD:
 
-@multitable {short option} {long option} {The used ram in MB} 
-@headitem 
+@multitable {short option} {long option} {The used ram in MB}
+@headitem
 short option
  @tab long option
  @tab Descrtiption
-@item 
+@item
 -l
  @tab --ramused
  @tab The used ram in MB
@@ -446,162 +446,162 @@ number of dependencies required to compile the program.
 
 It's up to you to decide which features suit you best.
 
-@multitable @columnfractions 0.13 0.17 0.70 
-@headitem 
+@multitable @columnfractions 0.13 0.17 0.70
+@headitem
 To include
  @tab Not to include
  @tab Descrtiption
-@item 
+@item
 --with-x11
  @tab --without-x11
  @tab Enable it if you are using dwm.
-@item 
+@item
 --with-alsa
  @tab --without-alsa
  @tab To get the sound volume level.
-@item 
+@item
 --with-oss
  @tab --without-oss
  @tab To get the sound volume level in *BSD.
-@item 
+@item
 --with-net
  @tab --without-net
  @tab Enable the internet related options.
-@item 
+@item
 --with-libnl
  @tab --without-libnl
  @tab Enable the wifi related options regarding chipsets supporting the
 cfg80211/mac80211 modules (linux only).
-@item 
+@item
 --with-pci
  @tab --without-pci
  @tab To get the NIC vendor and model in linux
-@item 
+@item
 --with-dvd
  @tab --without-dvd
  @tab To get the cdrom/dvdrom vendor and model
-@item 
+@item
 --with-sensors
  @tab --without-sensors
  @tab Alternative way to get data from the sensors (linux only)
-@item 
+@item
 --with-apm
  @tab --without-apm
  @tab APM power and resource management for laptops (FreeBSD only)
-@item 
+@item
 --with-ncurses
  @tab --without-ncurses
  @tab Output the data to the terminal using the ncurses library, can be
 colorized
-@item 
+@item
 --with-perl
  @tab --without-perl
  @tab Extend pinkybar with your own crafted scripts written in perl
-@item 
+@item
 --with-lua
  @tab --without-lua
  @tab Extend pinkybar with your own crafted scripts written in lua
-@item 
+@item
 --with-ruby
  @tab --without-ruby
  @tab Extend pinkybar with your own crafted scripts written in ruby
-@item 
+@item
 --with-python2
  @tab --without-python2
  @tab Extend pinkybar with your own crafted scripts written in python2
-@item 
+@item
 --with-python3
  @tab --without-python3
  @tab Extend pinkybar with your own crafted scripts written in python3
-@item 
+@item
 --with-r
  @tab --without-r
  @tab Extend pinkybar with your own crafted scripts written in R
-@item 
+@item
 --with-assembly
  @tab --without-assembly
  @tab Extend pinkybar with assembly
-@item 
+@item
 --with-lisp
  @tab --without-lisp
  @tab Extend pinkybar with your own crafted scripts written in lisp
-@item 
+@item
 --with-ocaml
  @tab --without-ocaml
  @tab Extend pinkybar with your own crafted scripts written in ocaml
-@item 
+@item
 --with-rust
  @tab --without-rust
  @tab Extend pinkybar with your own crafted scripts written in rust
-@item 
+@item
 --with-go
  @tab --without-go
  @tab Extend pinkybar with your own crafted scripts written in go
-@item 
+@item
 --with-cpp
  @tab --without-cpp
  @tab Extend pinkybar with c++ program
-@item 
+@item
 --with-slang
  @tab --without-slang
  @tab Extend pinkybar with slang program
-@item 
+@item
 --with-tcl
  @tab --without-tcl
  @tab Extend pinkybar with tcl program
-@item 
+@item
 --with-weather
  @tab --without-weather
  @tab The temperature outside (some details must be provided)
-@item 
+@item
 api_key=`123458976'
- @tab 
+ @tab
  @tab API key obtained after registering yourself in the weather
 website, must be combined @strong{--with-weather}
-@item 
+@item
 --with-smartemp
  @tab --without-smartemp
  @tab Read the drive temperature from S.M.A.R.T cross-platform available
-@item 
+@item
 --with-drivetemp
  @tab --without-drivetemp
  @tab Read the drive temperature from S.M.A.R.T (linux only) uses curl
-@item 
+@item
 --with-drivetemp-light
  @tab --without-drivetemp-light
  @tab Read the drive temperature from S.M.A.R.T (linux only) light
 version
-@item 
+@item
 drive_port=`1234'
- @tab 
+ @tab
  @tab Different TCP port to listen to for the drive temperature, default
 one is 7634, must be combined @strong{--with-drivetemp} or
 @strong{--with-drivetemp-light}
-@item 
+@item
 --with-colours
  @tab --without-colours
  @tab Colorize the output data.
-@item 
+@item
 icons=/tmp
- @tab 
+ @tab
  @tab xbm icons that can be used by dzen2 for example. Discarded when
 @strong{--with-x11} is used
-@item 
+@item
 --with-mpd
  @tab --without-mpd
  @tab To see the currently played song name (if any).
-@item 
+@item
 --prefix=/tmp
- @tab 
+ @tab
  @tab The directory where the program will be installed
-@item 
+@item
 mobo_sensor=`dev.aibs.0'
- @tab 
+ @tab
  @tab FreeBSD motherboard sensor module name to use in the sysctl calls.
 Read the FreeBSD installation below
-@item 
+@item
 cpu_sensor=`dev.cpu.0.temperature'
- @tab 
+ @tab
  @tab FreeBSD cpu temperature module name to use in the sysctl calls .
 Read the FreeBSD installation below
 @end multitable
@@ -855,7 +855,7 @@ distros that are based on another one:
 [x] archlinux based distros: parabola, chakra, manjaro
 @item
 [x] debian based distros: ubuntu, linux mint, trisquel, back track, kali
-linux, peppermint linux, solusos, crunchbang, deepin, elementary os, and
+linux, peppermint linux, solus, crunchbang, deepin, elementary os, and
 the rest *buntu based distros
 @item
 [x] gentoo based distros: funtoo, sabayon, calculate linux
