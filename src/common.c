@@ -295,6 +295,7 @@ get_fans(char *str1) {
 #if defined(HAVE_CDIO_CDIO_H)
 void
 get_dvd(char *str1) {
+  char vendor[VLA];
   CdIo_t *p_cdio = cdio_open(NULL, DRIVER_DEVICE);
   cdio_hwinfo_t hwinfo;
 
@@ -303,7 +304,9 @@ get_dvd(char *str1) {
     return;
   }
   if (true == (mmc_get_hwinfo(p_cdio, &hwinfo))) {
-    FILL_STR_ARR(2, str1, hwinfo.psz_vendor, hwinfo.psz_model);
+    FILL_STR_ARR(1, vendor, hwinfo.psz_vendor);
+    split_n_index(vendor);
+    FILL_STR_ARR(2, str1, vendor, hwinfo.psz_model);
   }
   if (NULL != p_cdio) {
     cdio_destroy(p_cdio);
@@ -326,6 +329,8 @@ get_dvd(char *str1) {
 #pragma GCC diagnostic ignored "-Wunused-result"
   OPEN_FP(fp, DVD_MODEL, "%s", model);
 #pragma GCC diagnostic pop
+
+  split_n_index(vendor);
 
   FILL_STR_ARR(2, str1, vendor, model);
 }
