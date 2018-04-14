@@ -14,7 +14,11 @@ Format placeholders:
 @author lasers
 
 SAMPLE OUTPUT
-{'full_text': 'pinkybar', 'color': '#ffc0cb'}
+pinkybar
+[
+    {'full_text': u'pinky', 'color': '#ee82ee'},
+    {'full_text': u'bar', 'color': '#00bfff'},
+]
 """
 
 from os.path import expanduser
@@ -40,8 +44,11 @@ class Py3status:
             raise Exception(STRING_ERROR)
 
     def pinkybar(self):
-        output = self.py3.command_output(self.command).strip()
-        pinkybar_data = {'output': self.py3.safe_format(output)}
+        try:
+            output = self.py3.command_output(self.command).strip()
+            pinkybar_data = {'output': self.py3.safe_format(output)}
+        except self.py3.CommandError as ce:
+            self.py3.error(' '.join(ce.error.splitlines()[0].split()[2:]))
 
         return {
             'cached_until': self.py3.time_in(self.cache_timeout),
