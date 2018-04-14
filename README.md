@@ -10,20 +10,20 @@ The code doesn't age, neither it has expiration date.
 - [Installation for anything else](#installation-for-anything-else)
 - [Configure Options](#gnu-build-system-configure-options)
 - [Program Options](#program-options)
-- [Supported distros](#supported-distros)
-- [Using configuration file](#using-configuration-file)
-- [Linux Requirements](#linux-mandatory-requirements)
-- [BSD Requirements](#bsd-mandatory-requirements)
+- [Supported Linux Distributions](#supported-linux-distributions)
+- [Configuration File](#configuration-file)
+- [Linux Mandatory Requirements](#linux-mandatory-requirements)
+- [BSD Mandatory Requirements](#bsd-mandatory-requirements)
 - [Opt-in Requirements](#opt-in-requirements)
-- [WM Requirements](#wm-specific-requirements)
-- [OCAML lang](#ocaml-lang)
-- [Rust lang](#rust-lang)
-- [Go lang](#go-lang)
-- [Assembly](#assembly)
-- [VoidLinux](#voidlinux)
-- [TinyCoreLinux](#tinycorelinux)
-- [Wish list](#wish-list)
-- [Pre-History](#pre-history)
+- [WM Specific Requirements](#wm-specific-requirements)
+- [OCaml Language](#ocaml-language)
+- [Rust Language](#rust-language)
+- [Go Language](#go-language)
+- [Assembly Language](#assembly-language)
+- [Void Linux](#void-linux)
+- [Tiny Core Linux](#tiny-core-linux)
+- [Wish List](#wish-list)
+- [History](#history)
 
 ---
 
@@ -47,13 +47,13 @@ py3status
 
 Gather some system information and show it in this statusbar program, not tied to any Window Manager, terminal multiplexer, etc.
 
-Please note that the program won't detect fans connected via molex connetor(s) or external fan controller. Also I have not tested it with fan splitter(s) either.
+Please note that the program won't detect fans connected via Molex connectors or external fan controllers. Also I have not tested it with fan splitters either.
 
-The program is smart enough to detect whether some of your fan(s) blades are spinning, or the particular fan have been removed. Hold down some of your fan blades and you'll see that the program won't include this fan and it's RPM, release the blades and you'll see the fan and it's RPM in the statusbar. Try simulating real fan hardware failure by holding down all system fan blades and watch what the program will show you, just try not to slice your cheesy fingers open in the process.
+The program is smart enough to detect whether some of your fan blades are spinning, or the particular fan have been removed. Hold down some of your fan blades and you'll see that the program won't include this fan and it's RPM, release the blades and you'll see the fan and it's RPM in the statusbar. Try simulating real fan hardware failure by holding down all system fan blades and watch what the program will show you, just try not to slice your cheesy fingers open in the process.
 
-You can extend pinky-bar with your own crafted perl/python/ruby/lua/R/assembly/lisp/ocaml/rust/go/c++/slang/tcl script.
+You can extend pinky-bar with Perl/Python/Ruby/Lua/R/Assembly/Lisp/OCaml/Rust/Go/C++/Slang/Tcl scripts.
 
-If you compile your kernel from source code make sure to include your cpu and motherboard sensors as **modules** and not inlined.
+If you compile your kernel from source code make sure to include your CPU and motherboard sensors as **modules** and not inlined.
 
 **Just an example if you use BSD - acpi/aibs, coretemp/amdtemp.**
 
@@ -94,7 +94,7 @@ make install
 ## Installation for xmonad (or other WM)
 
 ```bash
-# Copy the xbm icons
+# copy the xbm icons
 mkdir -p --mode=700 $HOME/.xmonad/icons
 cp -r extra/xbm_icons/*.xbm $HOME/.xmonad/icons
 
@@ -134,7 +134,7 @@ dev.aibs.0.fan.1: 1053 600 7200
 
 Copy only 'dev.MODULE.NUMBER' (if there is any number at all) and paste it into the **mobo\_sensor** option below.
 
-Do the same for your cpu temperature, copy and paste the variable as is. **dev.cpu.0.temperature** below is provied as example.
+Do the same for your CPU temperature, copy and paste the variable as is. **dev.cpu.0.temperature** below is provided as example.
 
 ```bash
 perl set.pl "freebsd"
@@ -154,18 +154,17 @@ Send a request to the FreeBSD mailing list and request the OpenBSD sensors API t
 Before proceeding, you'll have to:
 
 ```bash
-# To detect the newer compiler that you are
-# about to install
+# detect the newer compiler that you are about to install
 sed -i 's/#AC_PROG_CC(/AC_PROG_CC(/g' configure.ac
 
 ls /usr/local/bin/automake-*
 ls /usr/local/bin/autoconf-*
 
-# Then replace the numbers below
+# then replace the numbers below
 export AUTOCONF_VERSION=2.69
 export AUTOMAKE_VERSION=1.15
 
-# Your call, gcc or llvm ?
+# your call, gcc or llvm ?
 pkg_add gcc
 
 # after that:
@@ -202,68 +201,67 @@ By choosing this 3rd installation method it is up to you where, how to start and
 
 ---
 
-
 ## GNU Build System (configure) options
 
 Before the source code is passed to the compiler, you can enable/disable the following **configure** options that will increase/reduce the number of dependencies required to compile the program.
 
 It's up to you to decide which features suit you best.
 
-| To include     | Not to include      | Descrtiption                                                                               |
+| To include     | Not to include      | Description                                                                                |
 |----------------|---------------------|--------------------------------------------------------------------------------------------|
-| --with-dwm     | --without-dwm       | Enable it if you are using dwm.                                                            |
-| --with-alsa    | --without-alsa      | To get the sound volume level.                                                             |
-| --with-oss     | --without-oss       | To get the sound volume level in \*BSD.                                                    |
-| --with-net     | --without-net       | Enable the internet related options.                                                       |
-| --with-libnl   | --without-libnl     | Enable the wifi related options regarding chipsets supporting the cfg80211/mac80211 modules (linux only).  |
-| --with-pci     | --without-pci       | To get the NIC vendor and model in linux                                                   |
-| --with-dvd     | --without-dvd       | To get the cdrom/dvdrom vendor and model                                                   |
-| --with-sensors | --without-sensors   | Alternative way to get data from the sensors (linux only)                                  |
-| --with-apm     | --without-apm       | APM power and resource management for laptops (FreeBSD only)                               |
-| --with-ncurses | --without-ncurses   | Output the data to the terminal using the ncurses library, can be colorized                |
-| --with-perl    | --without-perl      | Extend pinkybar with your own crafted scripts written in perl                              |
-| --with-lua     | --without-lua       | Extend pinkybar with your own crafted scripts written in lua                               |
-| --with-ruby    | --without-ruby      | Extend pinkybar with your own crafted scripts written in ruby                              |
-| --with-python2 | --without-python2   | Extend pinkybar with your own crafted scripts written in python2                           |
-| --with-python3 | --without-python3   | Extend pinkybar with your own crafted scripts written in python3                           |
-| --with-r       | --without-r         | Extend pinkybar with your own crafted scripts written in R                                 |
-| --with-assembly| --without-assembly  | Extend pinkybar with assembly                                                              |
-| --with-lisp    | --without-lisp      | Extend pinkybar with your own crafted scripts written in lisp                              |
-| --with-ocaml   | --without-ocaml     | Extend pinkybar with your own crafted scripts written in ocaml                             |
-| --with-rust    | --without-rust      | Extend pinkybar with your own crafted scripts written in rust                              |
-| --with-go      | --without-go        | Extend pinkybar with your own crafted scripts written in go                                |
-| --with-cpp     | --without-cpp       | Extend pinkybar with c++ program                                                           |
-| --with-slang   | --without-slang     | Extend pinkybar with slang program                                                         |
-| --with-tcl     | --without-tcl       | Extend pinkybar with tcl program                                                           |
-| --with-weather | --without-weather   | The temperature outside  (some details must be provided)                                   |
-| api\_key='123458976'               | | API key obtained after registering yourself in the weather website, must be combined **--with-weather**  |
-| --with-smartemp | --without-smartemp   | Read the drive temperature from S.M.A.R.T cross-platform available                       |
-| --with-drivetemp | --without-drivetemp   | Read the drive temperature from S.M.A.R.T (linux only) uses curl                       |
-| --with-drivetemp-light | --without-drivetemp-light   | Read the drive temperature from S.M.A.R.T (linux only) light version       |
-| drive\_port='1234'  |                | Different TCP port to listen to for the drive temperature, default one is 7634, must be combined **--with-drivetemp** or **--with-drivetemp-light**   |
-| --with-colors  | --without-colors    | Colorize the output data. When using non-dwm, non-ncurses, non-py3status, you must combine this option with **icons=PATH**. |
-| icons=/tmp     |                     | xbm icons that can be used by dzen2 for example. Discarded when **--with-dwm** is used     |
-| --with-mpd     | --without-mpd       | To see the currently played song name (if any).                                            |
-| --with-keyboard | --without-keyboard | Query xorg and show the currently used keyboard layout                                     |
-| --with-mouse   | --without-mouse     | Query xorg and get the mouse speed in percentage                                           |
-| --with-numcapslock | --without-numcapslock | Query xorg to get the current state of numlock, capslock and scroll lock             |
-| --with-ip      | --without-ip        | Return your external ip address (ipv4).                                                    |
-| --with-gmail    | --without-gmail      | Query gmail and show all unread emails, must be combined with the variables **gmail_account** and **gmail_password**  |
-| gmail\_account=foo  |                | Your gmail account goes here, must be combined **--with-gmail**                            |
-| gmail\_password=bar |                | Your gmail account password goes here, must be combined **--with-gmail**                   |
-| --with-github  | --without-github    | Query GitHub and number all unread notifications                                           |
-| github\_token=foo  |                 | [Generate token for specific scope](https://github.com/settings/tokens/new?scopes=notifications&description=pinky-bar), must be combined **--with-github**  |
-| --with-reddit  | --without-reddit    | Query reddit and number all unread notifications                                           |
-| reddit\_feed=foo  |                  | ![](img/reddit.png)[copy the JSON link and paste it to this variable](https://www.reddit.com/prefs/feeds/), must be combined **--with-reddit**  |
+| --with-dwm     | --without-dwm       | Output data to the root window for dwm|
+| --with-ncurses | --without-ncurses   | Output data to the terminal using ncurses library, can be colorized via **--with-colors**|
+| --with-py3status | --without-py3status | Output data in different format for py3status, can be colorized via **--with-colors**             |
+| --with-awesomewm | --without-awesomewm | Output data in different format for awesomewm, can be colorized via **--with-colors**             |
+| --with-xmobar  | --without-xmobar    | Output data in different format for xmobar, can be colorized via **--with-colors**                  |
+| --with-colors  | --without-colors    | Colorize the output data, must be combined with **icons=PATH** if not used with dwm, ncurses, or py3status. |
+| &emsp;&emsp;&#11169;icons=/tmp     |                     | Enable XBM icons for dzen2 and others. Discarded when used with **--with-dwm** |
+| --with-alsa    | --without-alsa      | Enable sound volume |
+| --with-oss     | --without-oss       | Enable sound volume (\*BSD)                                                     |
+| --with-net     | --without-net       | Enable Internet Options                                                        |
+| --with-libnl   | --without-libnl     | Enable WiFi related options regarding chipsets supporting the cfg80211/mac80211 modules (linux only).  |
+| --with-pci     | --without-pci       | Enable NIC vendor and model in linux                                                   |
+| --with-dvd     | --without-dvd       | Enable CD-ROM/DVD-ROM vendor and model                                                 |
+| --with-sensors | --without-sensors   | Query data from lm_sensors instead of kernel (linux only)|
+| --with-apm     | --without-apm       | Enable APM power and resource management for laptops (FreeBSD only)                               |
+| --with-perl    | --without-perl      | Build pinkybar with Perl support                              |
+| --with-lua     | --without-lua       | Build pinkybar with Lua support                               |
+| --with-ruby    | --without-ruby      | Build pinkybar with Ruby support                             |
+| --with-python2 | --without-python2   | Build pinkybar with Python 2 support                         |
+| --with-python3 | --without-python3   | Build pinkybar with Python 3 support                         |
+| --with-r       | --without-r         | Build pinkybar with R support                                |
+| --with-assembly| --without-assembly  | Build pinkybar with Assembly support
+| --with-lisp    | --without-lisp      | Build pinkybar with Lisp support                              |
+| --with-ocaml   | --without-ocaml     | Build pinkybar with OCaml support                            |
+| --with-rust    | --without-rust      | Build pinkybar with Rust support                             |
+| --with-go      | --without-go        | Build pinkybar with Go support                               |
+| --with-cpp     | --without-cpp       | Build pinkybar with C++ support
+| --with-slang   | --without-slang     | Build pinkybar with Slang support
+| --with-tcl     | --without-tcl       | Build pinkybar with Tcl program                                                           |
+| --with-weather | --without-weather   | Enable weather from OpenWeatherMap (location required)  |
+| &emsp;&emsp;&#11169;api\_key='123458976'               | | Required OpenWeatherMap API key, must be combined **--with-weather**  |
+| --with-smartemp | --without-smartemp   | Enable drive temperature from S.M.A.R.T (cross-platform) |
+| --with-drivetemp | --without-drivetemp   | Enable drive temperature from S.M.A.R.T (linux only) with curl                       |
+| --with-drivetemp-light | --without-drivetemp-light   | Enable drive temperature from S.M.A.R.T (linux only) without curl, light version|
+| &emsp;&emsp;&#11169;drive\_port='7634'  |                | Optional listening TCP port for drive temperature, default is 7634, must be combined **--with-drivetemp** or **--with-drivetemp-light**   |
+| --with-mpd     | --without-mpd       | Enable MPD support for songs playing in mpd
+| --with-keyboard | --without-keyboard | Enable Xorg support for keyboard layouts                                     |
+| --with-mouse   | --without-mouse     | Enable Xorg support for mouse speed, in percentage |
+| --with-lock-keys | --without-lock-keys | Enable Xorg for Num Lock, Caps Lock and Scroll Lock |
+| --with-ip      | --without-ip        | Enable External IP address (IPv4).                                                    |
+| --with-gmail    | --without-gmail      | Enable Gmail for a number of unread emails, must be combined with **gmail_account** and **gmail_password**  |
+| &emsp;&emsp;&#11169;gmail\_account=foo  |                | Required Gmail account, must be combined **--with-gmail**                            |
+| &emsp;&emsp;&#11169;gmail\_password=bar |                | Required Gmail password, must be combined **--with-gmail**                   |
+| --with-github  | --without-github    | Enable GitHub for a number of unread notifications                                           |
+| &emsp;&emsp;&#11169;github\_token=foo  |                 | Required GitHub token [Generate token for specific scope](https://github.com/settings/tokens/new?scopes=notifications&description=pinky-bar), must be combined **--with-github**  |
+| --with-reddit  | --without-reddit    | Enable Reddit for a number of unread notifications|
+| &emsp;&emsp;&#11169;reddit\_feed=foo  |                  | Required Reddit URL ![](img/reddit.png)[copy the JSON link and paste it to this variable](https://www.reddit.com/prefs/feeds/), must be combined **--with-reddit**  |
 | --with-pingtime | --without-pingtime | Perform a GET request and measure the round trip time                                      |
-| --with-sqlite  | --without-sqlite    | Connect to sqlite db and perform SELECT operation                                          |
-| sqlite\_db=foo |                     | The place where your db is located                                                         |
-| --with-py3status | --without-py3status | Format the output data for py3status, can be colorized via **--with-colors**             |
-| --with-awesomewm | --without-awesomewm | Format the output data for awesomewm, can be colorized via **--with-colors**             |
-| --with-xmobar  | --without-xmobar    | Format the output data for xmobar, can be colorized via **--with-colors**                  |
-| --prefix=/tmp  |                     | The directory where the program will be installed                                          |
+| --with-sqlite  | --without-sqlite    | Enable SQLite support to query SELECT statement on a database file              |
+| &emsp;&emsp;&#11169;sqlite\_db=foo |                     | Location of a SQLite database file                                                      |
+| --prefix=/tmp  |                     | Specify Installation Directory Location for this software|
 | mobo\_sensor='dev.aibs.0'  |         | FreeBSD motherboard sensor module name to use in the sysctl calls. Read the FreeBSD installation below  |
-| cpu\_sensor='dev.cpu.0.temperature' |  | FreeBSD cpu temperature module name to use in the sysctl calls . Read the FreeBSD installation below  |
+| cpu\_sensor='dev.cpu.0.temperature' |  | FreeBSD CPU temperature module name to use in the sysctl calls. Read the FreeBSD installation below  |
 
 By default, if **no** options are passed, the program will be compiled with:
 
@@ -274,19 +272,19 @@ By default, if **no** options are passed, the program will be compiled with:
 
 Affects **--with-gmail**. If you get error 403 unauthorized, then allow [less secure apps](https://myaccount.google.com/lesssecureapps) to access your account.
 
-Affects only FreeBSD users with laptops, **--without-apm** will compile the program with acpi support to obtain the current battery life.
+Affects only FreeBSD users with laptops, **--without-apm** will compile the program with ACPI support to obtain the current battery life.
 
 **--without-mpd** will compile the program with cmus support, the options syntax stays as is.
 
-The pci and sensors configure options will be discarded in \*BSD.
+The PCI and sensors configure options will be discarded in \*BSD.
 
-Affects only linux users with wifi/wireless chipsets, run `lsmod|grep 802` and see whether your chipset uses cfg80211/mac80211. If that's so you can rely on libnl and enable **--with-libnl** configure options, otherwise your chipset probably still uses we/wext, so type **--without-libnl**.
+Affects only linux users with WiFi/wireless chipsets, run `lsmod|grep 802` and see whether your chipset uses cfg80211/mac80211. If that's so you can rely on libnl and enable **--with-libnl** configure options, otherwise your chipset probably still uses we/wext, so type **--without-libnl**.
 
-Affects only linux users, **--with-drivetemp** pretty much locks you down to hddtemp. You can adjust **extra/scripts/drive-temperature.sh** and compile the program **--with-smartemp**, so you can switch between hddtemp and smartmontools at any time without the need recompile pinkybar with different options. **--with-smartemp** only cares for the existance of /tmp/pinkytemp file.
+Affects only linux users, **--with-drivetemp** pretty much locks you down to hddtemp. You can adjust **extra/scripts/drive-temperature.sh** and compile the program **--with-smartemp**, so you can switch between hddtemp and smartmontools at any time without the need recompile pinkybar with different options. **--with-smartemp** only cares for the existence of /tmp/pinkytemp file.
 
-**--with-weather** is using [this url](http://openweathermap.org/current), register yourself there, create a new [API key](https://home.openweathermap.org/api\_keys).
+**--with-weather** is using [this URL](http://openweathermap.org/current), register yourself there, create a new [API key](https://home.openweathermap.org/api\_keys).
 
-Don't just rush to register yourself, read carefully what the "Free" account limits are and take in account how often the program should call their api service. I'm not responsible if you exceeded the limits, you've been warned.
+Don't just rush to register yourself, read carefully what the "Free" account limits are and take in account how often the program should call their API service. I'm not responsible if you exceeded the limits, you've been warned.
 
 ```bash
 # Make sure it's working first
@@ -298,135 +296,135 @@ Don't just rush to register yourself, read carefully what the "Free" account lim
 
 ---
 
-## Program options
+## Program Options
 
 The order of supplied options will dictate how, where and what system information to be shown.
 
-| short option | long option | Descrtiption                                                       |
+| Short option | Long option | Description                                                        |
 |--------------|-------------|--------------------------------------------------------------------|
-| -M           | --mpd       | The song filename                                                  |
-| -W           | --mpdtrack  | The song track name  (not available in cmus)                       |
-| -x           | --mpdartist | The song artist(s) name(s)                                         |
-| -X           | --mpdtitle  | The song title                                                     |
-| -y           | --mpdalbum  | The song album name                                                |
-| -Y           | --mpddate   | The song date                                                      |
-| -c           | --cpu       | The current cpu load (summed up all cores/threads)                 |
-| -L           | --coresload | Show the load regarding each individual cpu core/thread            |
-| -T           | --cputemp   | The current cpu temperature                                        |
-| -C           | --cpuspeed  | Show your maximum cpu clock speed in MHz, regardless of the used governor. Uses assembly. |
-| -I           | --cpuinfo   | Detect your CPU vendor, stepping, family, clflush, l1/l2 cache and line size, physical cores, physical and virtual bits. Uses assembly. |
-| -r           | --ramperc   | The used ram in percentage                                         |
-| -J           | --ramtotal  | The total ram                                                      |
-| -K           | --ramfree   | The free ram                                                       |
-| -l           | --ramshared | The shared ram                                                     |
-| -o           | --rambuffer | The buffer ram (not available in OpenBSD)                          |
-| -s           | --driveperc | The used drive storage in percentage                               |
-| -n           | --drivetotal| The total drive storage                                            |
-| -N           | --drivefree | The free drive storage                                             |
-| -O           | --driveavail| The available drive storage (total - used)                         |
-|              | --drivetemp | Read the drive temperature from S.M.A.R.T                          |
-| -g           | --battery   | The remaining battery charge                                       |
-| -z           | --dvdstr    | The vendor and model name of your cdrom/dvdrom                     |
-| -S           | --statio    | Read and written MBs to the drive so far [argument - sda]          |
-| -p           | --packages  | The number of installed packages                                   |
-| -P           | --kernsys   | The kernel name                                                    |
-|              | --kernode   | The network node hostname                                          |
-| -Q           | --kernrel   | The kernel release                                                 |
-| -R           | --kernver   | The kernel version                                                 |
-| -u           | --kernarch  | The machine architecture                                           |
-| -k           | --kernel    | Combined kernel name and version                                   |
-|              | --keyboard  | Query xorg and show the currently used keyboard layout             |
-|              | --mouse     | Query xorg and get the mouse speed in percentage                   |
-|              | --numlock   | Query xorg to get the current state of numlock                     |
-|              | --capslock  | Query xorg to get the current state of capslock                    |
-|              | --scrolllock | Query xorg to get the current state of scroll lock                |
-|              | --gmail     | Query gmail and show all unread emails                             |
-|              | --github    | Query GitHub and number all unread notifications                   |
-|              | --reddit    | Query reddit and number all unread notifications                   |
+| -M           | --mpd       | Print song filename                                                  |
+| -W           | --mpdtrack  | Print song track name (not available in cmus)                       |
+| -x           | --mpdartist | Print song artist name                                               |
+| -X           | --mpdtitle  | Print song title                                                     |
+| -y           | --mpdalbum  | Print song album name                                                |
+| -Y           | --mpddate   | Print song date                                                      |
+| -c           | --cpu       | Print current CPU load (summed up all cores/threads)                 |
+| -L           | --coresload | Print current CPU percent for each cores/threads|
+| -T           | --cputemp   | Print current CPU temperature                                        |
+| -C           | --cpuspeed  | Print maximum CPU clock speed in MHz, regardless of the used governor. Uses assembly. |
+| -I           | --cpuinfo   | Print CPU vendor, stepping, family, clflush, l1/l2 cache and line size, physical cores, physical and virtual bits. Uses assembly. |
+| -r           | --ramperc   | Print used RAM, in percentage                                         |
+| -J           | --ramtotal  | Print total RAM|
+| -K           | --ramfree   | Print free RAM|
+| -l           | --ramshared | Print shared RAM|
+| -o           | --rambuffer | Print buffer RAM (not available in OpenBSD)                          |
+| -s           | --driveperc | Print used drive storage in percentage                               |
+| -n           | --drivetotal| Print total drive storage                                            |
+| -N           | --drivefree | Print free drive storage                                             |
+| -O           | --driveavail| Print available drive storage (total - used)                         |
+|              | --drivetemp | Print current drive temperature from S.M.A.R.T                          |
+| -g           | --battery   | Print remaining battery charge                                       |
+| -z           | --dvdstr    | Print vendor and model name of CD-ROM/DVD-ROM                   |
+| -S           | --statio    | Print read and written MBs to the drive so far [argument - sda]          |
+| -p           | --packages  | Print number of installed packages                                   |
+| -P           | --kernsys   | Print kernel name                                                    |
+|              | --kernode   | Print network node hostname                                          |
+| -Q           | --kernrel   | Print kernel release                                                 |
+| -R           | --kernver   | Print kernel version                                                 |
+| -u           | --kernarch  | Print machine architecture                                           |
+| -k           | --kernel    | Print kernel name and kernel version (combined)                   |
+|              | --keyboard  | Print current keyboard layout             |
+|              | --mouse     | Print current mouse speed, in percentage                   |
+|              | --numlock   | Print current state of Num Lock                     |
+|              | --capslock  | Print current state of Caps Lock                    |
+|              | --scrolllock| Print current state of Scroll Lock                |
+|              | --gmail     | Print number of unread emails
+|              | --github    | Print number of unread notifications
+|              | --reddit    | Print number of unread notifications
 |              | --password  | Generate random password [argument number of iterations to perform] |
-|              | --shell     | Static string that's displayed to you, could be a TODO or notes or use the shell itself and execute some command that returns something, eg: --shell=$(tail --lines 1 /var/log/Xorg.0.log), [argument - static string] |
-|              | --title     | Static string that's displayed to you, could be a title or header to prefix other option [argument - static string] |
-|              | --perl      | Extend pinkybar with your scripts written in perl, learn more from the Opt-in section.     |
-|              | --python    | Extend pinkybar with your scripts written in python, learn more from the Opt-in section.     |
-|              | --ruby      | Extend pinkybar with your scripts written in ruby, learn more from the Opt-in section.     |
-|              | --lua       | Extend pinkybar with your scripts written in lua, learn more from the Opt-in section.     |
-|              | --R         | Extend pinkybar with your scripts written in R, learn more from the Opt-in section.     |
-|              | --asm       | Extend pinkybar with assembly, learn more from the Opt-in section. |
-|              | --lisp      | Extend pinkybar with your scripts written in lisp, learn more from the Opt-in section.     |
-|              | --ocaml     | Extend pinkybar with your scripts written in ocaml, learn more from the Opt-in section.     |
-|              | --rust      | Extend pinkybar with your scripts written in rust, learn more from the Opt-in section.     |
-|              | --go        | Extend pinkybar with your scripts written in go, learn more from the Opt-in section.     |
-|              | --cpp       | Extend pinkybar with your cpp, learn more from the Opt-in section.  |
-|              | --slang     | Extend pinkybar with your slang, learn more from the Opt-in section.  |
-|              | --tcl       | Extend pinkybar with your tcl, learn more from the Opt-in section. |
-|              | --sqlite    | Connect to sqlite db and perform SELECT operation, [argument e.g: "SELECT * from COMPANY where ID=1"]  |
-| -q           | --weather   | Show the temperature outside [argument - London,uk]                |
-| -U           | --uptime    | The system uptime                                                  |
-| -w           | --load-1min | The system average load for past 1 minutes                        |
-|              | --load-5min | The system average load for past 5 minutes                        |
-|              | --load-15min | The system average load for past 15 minutes                      |
-| -v           | --voltage   | The system voltage                                                 |
-| -f           | --fans      | All system fans and their speed in RPM                             |
-| -m           | --mobo      | Show the motherboard name and vendor                               |
-| -d           | --mobotemp  | The motherboard temperature                                        |
-| -V           | --volume    | The sound volume level                                             |
-| -t           | --time      | The current time                                                   |
-|              | --ip        | Return your external ip address (ipv4).                            |
-| -a           | --ipaddr    | The local ip address [argument - eth0]                             |
-| -b           | --bandwidth | The consumed internet bandwidth so far [argument - eth0]           |
-| -i           | --iface     | The current download and upload speed [argument - eth0]            |
-| -A           | --ipmac     | The NIC mac address [argument - eth0]                              |
-| -B           | --ipmask    | The NIC subnet mask [argument - eth0]                              |
-| -D           | --ipcast    | The NIC broadcast address [argument - eth0]                        |
-| -E           | --iplookup  | Mini website IP lookup [website argument - google.com]             |
-|              | --pingtime  | Perform a GET request and measure the round trip time. [website argument https://wordpress.com]                 |
+|              | --shell     | Run a command or shell, eg: --shell=$(tail --lines 1 /var/log/Xorg.0.log), [argument - static string] |
+|              | --title     | Display a static string [argument - static string] |
+|              | --perl      | Execute scripts written in Perl, see Opt-in section.     |
+|              | --python    | Execute scripts written in Python, see Opt-in section.     |
+|              | --ruby      | Execute scripts written in Ruby, see Opt-in section.     |
+|              | --lua       | Execute scripts written in Lua, see Opt-in section.     |
+|              | --R         | Execute scripts written in R, see Opt-in section.     |
+|              | --asm       | Execute scripts written in Assembly language, see Opt-in section. |
+|              | --lisp      | Execute scripts written in Lisp, see Opt-in section.     |
+|              | --ocaml     | Execute scripts written in OCaml, see Opt-in section.     |
+|              | --rust      | Execute scripts written in Rust, see Opt-in section.     |
+|              | --go        | Execute scripts written in Go, see Opt-in section.     |
+|              | --cpp       | Execute programs written in C++, see Opt-in section.  |
+|              | --slang     | Execute programs written in Slang, see Opt-in section.|
+|              | --tcl       | Execute programs written in Tcl, see Opt-in section. |
+|              | --sqlite    | Query SELECT statement on a database file, [argument e.g.: "SELECT * from COMPANY where ID=1"]  |
+| -q           | --weather   | Print current weather temperature [argument - London,UK]                |
+| -U           | --uptime    | Print system uptime                                                  |
+| -w           | --load-1min | Print system load average for past 1 minutes                        |
+|              | --load-5min | Print system load average for past 5 minutes                        |
+|              | --load-15min |Print system load average for past 15 minutes                      |
+| -v           | --voltage   | Print system voltage                                                 |
+| -f           | --fans      | Print system fans and speeds in RPM                             |
+| -m           | --mobo      | Print motherboard name and vendor                               |
+| -d           | --mobotemp  | Print motherboard temperature                                        |
+| -V           | --volume    | Print current volume
+| -t           | --time      | Print current time                                                   |
+|              | --ip        | Print external IP address (IPv4).                            |
+| -a           | --ipaddr    | Print local IP address [argument - eth0]                             |
+| -b           | --bandwidth | Print consumed internet bandwidth so far [argument - eth0]           |
+| -i           | --iface     | Print current download and upload speed [argument - eth0]            |
+| -A           | --ipmac     | Print NIC MAC address [argument - eth0]                              |
+| -B           | --ipmask    | Print NIC subnet mask [argument - eth0]                              |
+| -D           | --ipcast    | Print NIC broadcast address [argument - eth0]                        |
+| -E           | --iplookup  | Perform mini website IP lookup [argument - google.com]             |
+|              | --pingtime  | Perform a GET request and measure the round trip time. [argument https://wordpress.com]                 |
 
 Be aware of the options that mention **Uses assembly** are tested only on AMD and Intel CPUs (starting from pentium 4 onwards).
 
 The following options are available only in Linux:
 
-| short option | long option | Descrtiption                                                       |
+| Short option | Long option | Description                                                        |
 |--------------|-------------|--------------------------------------------------------------------|
-|              | --ramused   | The used ram in MB                                                 |
-| -F           | --drivemodel| The vendor name of your drive [argument - sda]                     |
-| -G           | --nicinfo   | The NIC vendor and model [argument - eth0]                         |
-|              | --nicdrv    | The NIC driver [argument - eth0]                                   |
-| -H           | --nicver    | The NIC version [argument - eth0]                                  |
-| -e           | --iplink    | The NIC link speed (useful for wireless/wifi) [argument - eth0]    |
-| -j           | --nicfw     | The NIC firmware [argument - eth0]                                 |
-| -h           | --wifiname  | The name of currently connected wifi/wireless network [argument - wlan0]  |
+|              | --ramused   | Print used RAM, in MB                                                 |
+| -F           | --drivemodel| Print drive vendor [argument - sda]                     |
+| -G           | --nicinfo   | Print NIC vendor and model [argument - eth0]                         |
+|              | --nicdrv    | Print NIC driver [argument - eth0]                                   |
+| -H           | --nicver    | Print NIC version [argument - eth0]                                  |
+| -e           | --iplink    | Print NIC link speed (useful for wireless/WiFi) [argument - eth0]    |
+| -j           | --nicfw     | Print NIC firmware [argument - eth0]                                 |
+| -h           | --wifiname  | Print name of (connected) WiFi/wireless network [argument - wlan0]  |
 
-The following options are available only in archlinux, debian, gentoo, rhel, freebsd(needs ports tree):
+The following options are available only in Arch Linux, Debian, Gentoo, RHEL, FreeBSD (needs ports tree):
 
-| short option | long option | Descrtiption                                                       |
+| Short option | Long option | Description                                                        |
 |--------------|-------------|--------------------------------------------------------------------|
-|              | --updates   | Number all pending system updates                                  |
+|              | --updates   | Print number of pending system updates |
 
 The following options are available only to FreeBSD and OpenBSD:
 
-| short option | long option | Descrtiption                                                       |
+| Short option | Long option | Description                                                        |
 |--------------|-------------|--------------------------------------------------------------------|
-| -j           | --nicgw     | The NIC gateway address [argument - re0]                           |
-| -Z           | --swapused  | The used drive swap in MB                                          |
-| -F           | --swaperc   | The used drive swap in percentage                                  |
-| -h           | --swaptotal | The total drive swap                                               |
-| -H           | --swapavail | The available drive swap (total - used)                            |
-|              | --wifiname  | The name of currently connected wifi/wireless network [argument - wlan0]  |
+| -j           | --nicgw     | Print NIC gateway address [argument - re0]                           |
+| -Z           | --swapused  | Print used drive swap, in MB                                          |
+| -F           | --swaperc   | Print used drive swap, in percentage                                  |
+| -h           | --swaptotal | Print total drive swap                                               |
+| -H           | --swapavail | Print available drive swap (total - used)                            |
+|              | --wifiname  | Print name of (connected) WiFi/wireless network [argument - wlan0]  |
 
 The following options are available only in OpenBSD:
 
-| short option | long option | Descrtiption                                                       |
+| Short option | Long option | Description                                                        |
 |--------------|-------------|--------------------------------------------------------------------|
-| -l           | --ramused   | The used ram in MB                                                 |
+| -l           | --ramused   | Print used RAM, in MB                                                 |
 
 ---
 
-## Supported distros
+## Supported Linux Distributions
 
 Replace **distro** with the following [bases](https://en.wikipedia.org/wiki/List_of_Linux_distributions):
 
 - [x] archlinux based distros: parabola, chakra, manjaro
-- [x] debian based distros: ubuntu, linux mint, trisquel, back track, kali linux, peppermint linux, solusos, crunchbang, deepin, elementary os, and the rest \*buntu based distros
+- [x] debian based distros: ubuntu, linux mint, trisquel, back track, kali linux, peppermint linux, solus, crunchbang, deepin, elementary os, and the rest \*buntu based distros
 - [x] gentoo based distros: funtoo, sabayon, calculate linux
 - [x] slackware
 - [x] rhel based distros: opensuse (uses rpm), fedora, fuduntu, mandriva, mandrake, viperr, mageia
@@ -449,7 +447,7 @@ Cannot list the \*BSD flavours as "distros", so they deserve own options:
 
 ---
 
-## Using configuration file
+## Configuration File
 
 **~/.pinky** is the location of the configuration file. It uses the same short and long command line options.
 
@@ -457,7 +455,7 @@ I do advise you to use the long options syntax.
 
 If any option depends on argument, don't put any space between the option and the argument.
 
-Use one option per line. Contrary to your shell, the "parser" won't expand ~/my\_script.pl to point to /home/sweethome/my\_script.pl
+Use one option per line. Contrary to your shell, the "parser" won't expand ~/my\_script.pl to /home/CurrentUser/my\_script.pl
 
 ```bash
 --weather=London,uk
@@ -471,14 +469,14 @@ Use one option per line. Contrary to your shell, the "parser" won't expand ~/my\
 --fans
 --mobo
 --mobotemp
---perl=/home/sweethome/my_script.pl
+--perl=/home/CurrentUser/my_script.pl
 ```
 
 Execute the program without supplying any command line options and it will parse the configuration file.
 
 ---
 
-## Linux Mandatory requirements
+## Linux Mandatory Requirements
 
 * gcc/clang/pcc
 * g/libc
@@ -490,7 +488,7 @@ Execute the program without supplying any command line options and it will parse
 * pkg-config
 * **as** from binutils
 
-## \*BSD Mandatory requirements
+## \*BSD Mandatory Requirements
 
 * gcc/clang/pcc
 * autoconf
@@ -521,7 +519,7 @@ After editing the wrong prototype I managed to stumble upon a bug in OpenBSD's o
 
 The majority of SCN\* macros differs from their PRI\* cousins. And I cannot guarantee the accuracy of fixed width integers when OpenBSD own libc managed to use different format specifiers. Read extra/misc/openbsd\_bugs.md for more details.
 
-## Opt-in requirements
+## Opt-in Requirements
 
 Linux camp:
 
@@ -531,7 +529,7 @@ If for any reason you would like to compile the program without internet related
 
 * iproute2
 
-wifi/wireless chipsets supporting mac80211/cfg80211:
+WiFi/wireless chipsets supporting mac80211/cfg80211:
 
 * libnl (>= 3.0)
 * pkg-config
@@ -653,7 +651,7 @@ frost ALL=NOPASSWD:/usr/sbin/smartctl
 
 Copy the code from extra/scripts/drive-temperature.sh or `exec` it from **xinitrc** or the script used to start your DE/WM.
 
-To extend pinkybar with your own crafted perl/python/ruby/lua/assembly/R/ocaml/lisp/rust/go/c++/slang/tcl script:
+To extend pinkybar with Perl/Python/Ruby/Lua/Assembly/R/OCaml/Lisp/Rust/Go/C++/Slang/Tcl scripts, install any of the following binaries:
 
 * perl
 * python == 2.7 (--with-python2)
@@ -669,17 +667,16 @@ To extend pinkybar with your own crafted perl/python/ruby/lua/assembly/R/ocaml/l
 * slang
 * tcl
 
-Have a look at extra/scripts, the examples there will teach you how to write the most basic scripts in order to extend pinkybar in python/perl/ruby/lua/R/assembly/lisp/ocaml/rust/go/c++/slang/tcl. You can use all languages simultaneously.
+Have a look at extra/scripts, the examples there will teach you how to write the most basic scripts in order to extend pinkybar in Python/Perl/Ruby/Lua/R/Assembly/Lisp/OCaml/Rust/Go/C++/Slang/Tcl. You can use all languages simultaneously.
 
 **--with-python2** / **--with-python3**:
 
 Please, please do **NOT** export or set `PYTHONPATH` on its own line.
 
-`Example Python Script: getloadavg.py`
+`EXAMPLE SCRIPT: getloadavg.py`
 ```python
 #!/usr/bin/env python
 from os import getloadavg
-
                 ↶ # VIF: VERY IMPORTANT FUNCTION
 def uzer_func():
     return ', '.join([format(x) for x in getloadavg()])
@@ -814,12 +811,12 @@ To output the data to the terminal using the ncurses library:
 
 * ncurses
 
-To get the vendor and model name of your cdrom/dvdrom/blu-ray:
+To get the vendor and model name of your CD-ROM/DVD-ROM/Blu-ray:
 
 * libcdio
 * libcddb
 
-In linux **--without-dvd** will still compile the program with dvd support. Except it will be limited only to dvd support, it will try to parse the sr0 vendor and model name detected by the kernel.
+In linux **--without-dvd** will still compile the program with DVD support. Except it will be limited only to DVD support, it will try to parse the sr0 vendor and model name detected by the kernel.
 
 The weather related options, please go back and read **Don't just rush to register yourself**:
 
@@ -832,7 +829,7 @@ To see the currently played song name **--with-mpd**:
 
   Server side:
 
-  * mpd (can be build with soundcloud support)
+  * mpd (can be built with soundcloud support)
 
   Client side:
 
@@ -853,7 +850,7 @@ Keep an eye on the **log file size** if you are using raspberry pi (or equivalen
 
 ---
 
-## WM specific requirements
+## WM Specific Requirements
 
 If you would like the output to be shown in your Window Manager, those are the following requirements:
 
@@ -875,7 +872,7 @@ use **--without-colors** to skip the following step:
 
 ---
 
-## OCAML lang
+## OCaml Language
 
 Before invoking any of the installation commands you'll have to edit **src/Makefail.skel**:
 
@@ -885,7 +882,7 @@ pinkybar_SOURCES = pinky.ml \
 
 ---
 
-## Rust lang
+## Rust Language
 
 The source code that you should edit is in **extra/scripts/pinky.rs**, but you'll have to edit **src/Makefail.skel** and add the following at the end:
 
@@ -895,7 +892,7 @@ pinkybar_LDADD = pinky.a
 
 ---
 
-## Go lang
+## Go Language
 
 The source code that you should edit is in **extra/scripts/pinky.go**, but you'll have to edit **src/Makefail.skel** and add the following at the end:
 
@@ -905,7 +902,7 @@ pinkybar_LDADD = pinky2.a
 
 ---
 
-## Assembly
+## Assembly Language
 
 The source code that you should edit is in **extra/scripts/pinky.s**, but you'll have to edit **src/Makefail.skel** add the following at the end:
 
@@ -915,7 +912,7 @@ pinkybar_SOURCES = ../extra/scripts/pinky.s \
 
 ---
 
-## VoidLinux
+## Void Linux
 
 By default you won't have the following packages installed:
 
@@ -944,9 +941,9 @@ sudo make install
 
 ---
 
-## TinyCoreLinux
+## Tiny Core Linux
 
-Install the following deps. from [here](http://distro.ibiblio.org/tinycorelinux/7.x/x86/tcz/):
+Install the following dependencies from [here](http://distro.ibiblio.org/tinycorelinux/7.x/x86/tcz/):
 
 ```bash
 tce-load -wi sed.tcz pkg-config.tcz libtool.tcz grep.tcz glibc_base-dev.tcz gcc.tcz m4.tcz perl5.tcz gawk.tcz make.tcz autoconf.tcz automake.tcz
@@ -967,15 +964,15 @@ make install
 
 ---
 
-## Wish list
+## Wish List
 
 It would be great if we can add NetBSD support.
 
 ---
 
-## Pre-History
+## History
 
-The project began (on February 22, 2015) as simple conky replacement written in 3 days when I switched from openbox to dwm, here's some pre-history:
+The project began (on February 22, 2015) as simple conky replacement written in 3 days when I switched from Openbox to dwm, here's some history:
 
 *I had 8 wonderful months with Openbox and the time to try and learn something new has come.*
 
