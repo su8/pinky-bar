@@ -459,7 +459,7 @@ parse_opt(int key, char *arg, struct argp_state *state) {
 
 
 #if WITH_WEATHER == 1
-    NEW_ARG_LABEL('q', char weather[VLA], weather, OUT_STR YELLOW STR_SPEC" ");
+    NEW_ARG_LABEL('q', char weather[VLA], weather, OUT_STR YELLOW STR_SPEC ENT " ");
 #endif /* WITH_WEATHER */
 
 
