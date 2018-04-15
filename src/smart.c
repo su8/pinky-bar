@@ -54,7 +54,7 @@ read_temp_data_cb(char *data, size_t size, size_t nmemb, char *str1) {
 
       if ('|' == *ptr) {
         if (0 != (isdigit((unsigned char) *(ptr+1)))) {
-          if (VLA-1 > z) {
+          if (VLA-4 > z) {
             *ptr2++ = *(ptr+1);
             z++;
             if (0 != (isdigit((unsigned char) *(ptr+2)))) {
