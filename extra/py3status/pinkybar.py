@@ -7,7 +7,7 @@ Configuration parameters:
     command: specify a path to pinkybar command, otherwise auto
         eg '~/.cache/bin/pinkybar' (default None)
     format: display format for this module (default '{output}')
-    pythonpath: specify a python path to add for scripts (default None)
+    pythonpath: specify PYTHONPATH to use for scripts (default None)
 
 Format placeholders:
     {output} format for pinkybar output
@@ -54,9 +54,8 @@ class Py3status:
         try:
             output = self.py3.command_output(self.command, shell=self.shell)
         except self.py3.CommandError as ce:
-            if ce.output:
-                output = ce.output
-            elif ce.error:
+            output = ce.output
+            if 'pinkybar' in ce.error:
                 output = ce.error
                 self.py3.error(' '.join(output.splitlines()[0].split()[2:]))
 
