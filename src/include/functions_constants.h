@@ -90,7 +90,7 @@
 #define DVD_MODEL DVD_DIR("model")
 
 /* exit with error */
-#define CANNOT_OPEN "Could not open"
+#define CANNOT_OPEN "pinkybar: Could not open"
 #define CANNOT_CLOSE "Could not close a file handle"
 #define CANNOT_OPEN_FP "Could not open a file handle"
 #define FSCANF_FAILED "fscanf() failed"
