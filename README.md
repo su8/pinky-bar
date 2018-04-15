@@ -316,7 +316,7 @@ The order of supplied options will dictate how, where and what system informatio
 | -r           | --ramperc   | Print used RAM, in percentage                                        |
 | -J           | --ramtotal  | Print total RAM                                                      |
 | -K           | --ramfree   | Print free RAM                                                       |
-| -l           | --ramshared | Print shared RAM|
+| -l           | --ramshared | Print shared RAM                                                     |
 | -o           | --rambuffer | Print buffer RAM (not available in OpenBSD)                          |
 | -s           | --driveperc | Print used drive storage in percentage                               |
 | -n           | --drivetotal| Print total drive storage                                            |
@@ -338,7 +338,7 @@ The order of supplied options will dictate how, where and what system informatio
 |              | --numlock   | Print current state of Num Lock                                      |
 |              | --capslock  | Print current state of Caps Lock                                     |
 |              | --scrolllock| Print current state of Scroll Lock                                   |
-|              | --gmail     | Print number of unread emails
+|              | --gmail     | Print number of unread emails                                        |
 |              | --github    | Print number of unread notifications                                 |
 |              | --reddit    | Print number of unread notifications                                 |
 |              | --password  | Generate random password [argument number of iterations to perform]  |
@@ -404,12 +404,12 @@ The following options are available only to FreeBSD and OpenBSD:
 
 | Short option | Long option | Description                                                        |
 |--------------|-------------|--------------------------------------------------------------------|
-| -j           | --nicgw     | Print NIC gateway address [argument - re0]                           |
-| -Z           | --swapused  | Print used drive swap, in MB                                         |
-| -F           | --swaperc   | Print used drive swap, in percentage                                 |
-| -h           | --swaptotal | Print total drive swap                                               |
-| -H           | --swapavail | Print available drive swap (total - used)                            |
-|              | --wifiname  | Print name of (connected) WiFi/wireless network [argument - wlan0]  |
+| -j           | --nicgw     | Print NIC gateway address [argument - re0]                         |
+| -Z           | --swapused  | Print used drive swap, in MB                                       |
+| -F           | --swaperc   | Print used drive swap, in percentage                               |
+| -h           | --swaptotal | Print total drive swap                                             |
+| -H           | --swapavail | Print available drive swap (total - used)                          |
+|              | --wifiname  | Print name of (connected) WiFi/wireless network [argument - wlan0] |
 
 The following options are available only in OpenBSD:
 
@@ -459,7 +459,7 @@ Use one option per line. Contrary to your shell, the "parser" won't expand ~/my\
 
 ```bash
 --weather=London,uk
---coresload
+--cpu-percent-all
 --cputemp
 --ramperc
 --driveperc
