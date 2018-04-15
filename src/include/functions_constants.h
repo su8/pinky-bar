@@ -90,11 +90,11 @@
 #define DVD_MODEL DVD_DIR("model")
 
 /* exit with error */
-#define CANNOT_OPEN "pinkybar: Could not open"
+#define CANNOT_OPEN "pinkybar 1.00.00: Could not open"
 #define CANNOT_CLOSE "Could not close a file handle"
 #define CANNOT_OPEN_FP "Could not open a file handle"
 #define FSCANF_FAILED "fscanf() failed"
-#define ERR "pinkybar: Error:"
+#define ERR "pinkybar 1.00.00: Error:"
 #define NOT_FOUND "Not found, "
 #define FUNC_FAILED(x) (exit_with_err(ERR, x " failed"))
 #define RECOMPILE_WITH(x) (exit_with_err(ERR, "recompile the program --with-" x))
