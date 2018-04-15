@@ -94,7 +94,7 @@
 #define CANNOT_CLOSE "Could not close a file handle"
 #define CANNOT_OPEN_FP "Could not open a file handle"
 #define FSCANF_FAILED "fscanf() failed"
-#define ERR "Error:"
+#define ERR "pinkybar: Error:"
 #define NOT_FOUND "Not found, "
 #define FUNC_FAILED(x) (exit_with_err(ERR, x " failed"))
 #define RECOMPILE_WITH(x) (exit_with_err(ERR, "recompile the program --with-" x))

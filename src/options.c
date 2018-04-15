@@ -544,7 +544,7 @@ parse_opt(int key, char *arg, struct argp_state *state) {
       }
       break;
 #else
-      FPRINTF("%s\n", "recompile the program --with-alsa or --with-oss");
+      FPRINTF("%s\n", "pinkybar: recompile the program --with-alsa or --with-oss");
       return ARGP_KEY_ERROR;
 #endif /* HAVE_ALSA_ASOUNDLIB_H || HAVE_SYS_SOUNDCARD_H || HAVE_SOUNDCARD_H */
 
