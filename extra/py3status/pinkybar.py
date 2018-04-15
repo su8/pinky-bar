@@ -48,18 +48,25 @@ class Py3status:
             self.command = 'PYTHONPATH={} {}'.format(
                 self.pythonpath, self.command
             )
+        self.shell = bool(self.pythonpath)
 
     def pinkybar(self):
         try:
-            output = self.py3.command_output(
-                self.command, shell=bool(self.pythonpath)).strip()
-            pinkybar_data = {'output': self.py3.safe_format(output)}
+            output = self.py3.command_output(self.command, shell=self.shell)
         except self.py3.CommandError as ce:
-            self.py3.error(' '.join(ce.error.splitlines()[0].split()[2:]))
+            if ce.output:
+                output = ce.output
+            elif ce.error:
+                output = ce.error
+                self.py3.error(' '.join(output.splitlines()[0].split()[2:]))
+
+        output = output.strip()
 
         return {
             'cached_until': self.py3.time_in(self.cache_timeout),
-            'full_text': self.py3.safe_format(self.format, pinkybar_data),
+            'full_text': self.py3.safe_format(
+                self.format, {'output': self.py3.safe_format(output)}
+            )
         }
 
 
