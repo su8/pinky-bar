@@ -303,80 +303,80 @@ The order of supplied options will dictate how, where and what system informatio
 | Short option | Long option | Description                                                        |
 |--------------|-------------|--------------------------------------------------------------------|
 | -M           | --mpd       | Print song filename                                                  |
-| -W           | --mpdtrack  | Print song track name (not available in cmus)                       |
+| -W           | --mpdtrack  | Print song track name (not available in cmus)                        |
 | -x           | --mpdartist | Print song artist name                                               |
 | -X           | --mpdtitle  | Print song title                                                     |
 | -y           | --mpdalbum  | Print song album name                                                |
 | -Y           | --mpddate   | Print song date                                                      |
-| -c           | --cpu       | Print current CPU load (summed up all cores/threads)                 |
-| -L           | --coresload | Print current CPU percent for each cores/threads|
+| -c           | --cpu-percent | Print current CPU load (summed up all cores/threads)               |
+| -L           | --cpu-percent-all | Print current CPU percent for each cores/threads               |
 | -T           | --cputemp   | Print current CPU temperature                                        |
 | -C           | --cpuspeed  | Print maximum CPU clock speed in MHz, regardless of the used governor. Uses assembly. |
 | -I           | --cpuinfo   | Print CPU vendor, stepping, family, clflush, l1/l2 cache and line size, physical cores, physical and virtual bits. Uses assembly. |
-| -r           | --ramperc   | Print used RAM, in percentage                                         |
-| -J           | --ramtotal  | Print total RAM|
-| -K           | --ramfree   | Print free RAM|
+| -r           | --ramperc   | Print used RAM, in percentage                                        |
+| -J           | --ramtotal  | Print total RAM                                                      |
+| -K           | --ramfree   | Print free RAM                                                       |
 | -l           | --ramshared | Print shared RAM|
 | -o           | --rambuffer | Print buffer RAM (not available in OpenBSD)                          |
 | -s           | --driveperc | Print used drive storage in percentage                               |
 | -n           | --drivetotal| Print total drive storage                                            |
 | -N           | --drivefree | Print free drive storage                                             |
 | -O           | --driveavail| Print available drive storage (total - used)                         |
-|              | --drivetemp | Print current drive temperature from S.M.A.R.T                          |
+|              | --drivetemp | Print current drive temperature from S.M.A.R.T                       |
 | -g           | --battery   | Print remaining battery charge                                       |
-| -z           | --dvdstr    | Print vendor and model name of CD-ROM/DVD-ROM                   |
-| -S           | --statio    | Print read and written MBs to the drive so far [argument - sda]          |
+| -z           | --dvdstr    | Print vendor and model name of CD-ROM/DVD-ROM                        |
+| -S           | --statio    | Print read and written MBs to the drive so far [argument - sda]      |
 | -p           | --packages  | Print number of installed packages                                   |
 | -P           | --kernsys   | Print kernel name                                                    |
 |              | --kernode   | Print network node hostname                                          |
 | -Q           | --kernrel   | Print kernel release                                                 |
 | -R           | --kernver   | Print kernel version                                                 |
 | -u           | --kernarch  | Print machine architecture                                           |
-| -k           | --kernel    | Print kernel name and kernel version (combined)                   |
-|              | --keyboard  | Print current keyboard layout             |
-|              | --mouse     | Print current mouse speed, in percentage                   |
-|              | --numlock   | Print current state of Num Lock                     |
-|              | --capslock  | Print current state of Caps Lock                    |
-|              | --scrolllock| Print current state of Scroll Lock                |
+| -k           | --kernel    | Print kernel name and kernel version (combined)                      |
+|              | --keyboard  | Print current keyboard layout                                        |
+|              | --mouse     | Print current mouse speed, in percentage                             |
+|              | --numlock   | Print current state of Num Lock                                      |
+|              | --capslock  | Print current state of Caps Lock                                     |
+|              | --scrolllock| Print current state of Scroll Lock                                   |
 |              | --gmail     | Print number of unread emails
-|              | --github    | Print number of unread notifications
-|              | --reddit    | Print number of unread notifications
-|              | --password  | Generate random password [argument number of iterations to perform] |
+|              | --github    | Print number of unread notifications                                 |
+|              | --reddit    | Print number of unread notifications                                 |
+|              | --password  | Generate random password [argument number of iterations to perform]  |
 |              | --shell     | Run a command or shell, eg: --shell=$(tail --lines 1 /var/log/Xorg.0.log), [argument - static string] |
-|              | --title     | Display a static string [argument - static string] |
-|              | --perl      | Execute scripts written in Perl, see Opt-in section.     |
-|              | --python    | Execute scripts written in Python, see Opt-in section.     |
-|              | --ruby      | Execute scripts written in Ruby, see Opt-in section.     |
-|              | --lua       | Execute scripts written in Lua, see Opt-in section.     |
-|              | --R         | Execute scripts written in R, see Opt-in section.     |
-|              | --asm       | Execute scripts written in Assembly language, see Opt-in section. |
-|              | --lisp      | Execute scripts written in Lisp, see Opt-in section.     |
-|              | --ocaml     | Execute scripts written in OCaml, see Opt-in section.     |
-|              | --rust      | Execute scripts written in Rust, see Opt-in section.     |
-|              | --go        | Execute scripts written in Go, see Opt-in section.     |
-|              | --cpp       | Execute programs written in C++, see Opt-in section.  |
-|              | --slang     | Execute programs written in Slang, see Opt-in section.|
-|              | --tcl       | Execute programs written in Tcl, see Opt-in section. |
+|              | --title     | Display a static string [argument - static string]                   |
+|              | --perl      | Execute scripts written in Perl, see Opt-in section.                 |
+|              | --python    | Execute scripts written in Python, see Opt-in section.               |
+|              | --ruby      | Execute scripts written in Ruby, see Opt-in section.                 |
+|              | --lua       | Execute scripts written in Lua, see Opt-in section.                  |
+|              | --R         | Execute scripts written in R, see Opt-in section.                    |
+|              | --asm       | Execute scripts written in Assembly language, see Opt-in section.    |
+|              | --lisp      | Execute scripts written in Lisp, see Opt-in section.                 |
+|              | --ocaml     | Execute scripts written in OCaml, see Opt-in section.                |
+|              | --rust      | Execute scripts written in Rust, see Opt-in section.                 |
+|              | --go        | Execute scripts written in Go, see Opt-in section.                   |
+|              | --cpp       | Execute programs written in C++, see Opt-in section.                 |
+|              | --slang     | Execute programs written in Slang, see Opt-in section.               |
+|              | --tcl       | Execute programs written in Tcl, see Opt-in section.                 |
 |              | --sqlite    | Query SELECT statement on a database file, [argument e.g.: "SELECT * from COMPANY where ID=1"]  |
-| -q           | --weather   | Print current weather temperature [argument - London,UK]                |
+| -q           | --weather   | Print current weather temperature [argument - London,UK]             |
 | -U           | --uptime    | Print system uptime                                                  |
-| -w           | --load-1min | Print system load average for past 1 minutes                        |
-|              | --load-5min | Print system load average for past 5 minutes                        |
-|              | --load-15min |Print system load average for past 15 minutes                      |
+| -w           | --load-1min | Print system load average for past 1 minutes                         |
+|              | --load-5min | Print system load average for past 5 minutes                         |
+|              | --load-15min |Print system load average for past 15 minutes                        |
 | -v           | --voltage   | Print system voltage                                                 |
-| -f           | --fans      | Print system fans and speeds in RPM                             |
-| -m           | --mobo      | Print motherboard name and vendor                               |
+| -f           | --fans      | Print system fans and speeds in RPM                                  |
+| -m           | --mobo      | Print motherboard name and vendor                                    |
 | -d           | --mobotemp  | Print motherboard temperature                                        |
-| -V           | --volume    | Print current volume
+| -V           | --volume    | Print current volume                                                 |
 | -t           | --time      | Print current time                                                   |
-|              | --ip        | Print external IP address (IPv4).                            |
+|              | --ip        | Print external IP address (IPv4).                                    |
 | -a           | --ipaddr    | Print local IP address [argument - eth0]                             |
 | -b           | --bandwidth | Print consumed internet bandwidth so far [argument - eth0]           |
 | -i           | --iface     | Print current download and upload speed [argument - eth0]            |
 | -A           | --ipmac     | Print NIC MAC address [argument - eth0]                              |
 | -B           | --ipmask    | Print NIC subnet mask [argument - eth0]                              |
 | -D           | --ipcast    | Print NIC broadcast address [argument - eth0]                        |
-| -E           | --iplookup  | Perform mini website IP lookup [argument - google.com]             |
+| -E           | --iplookup  | Perform mini website IP lookup [argument - google.com]               |
 |              | --pingtime  | Perform a GET request and measure the round trip time. [argument https://wordpress.com]                 |
 
 Be aware of the options that mention **Uses assembly** are tested only on AMD and Intel CPUs (starting from pentium 4 onwards).
@@ -385,14 +385,14 @@ The following options are available only in Linux:
 
 | Short option | Long option | Description                                                        |
 |--------------|-------------|--------------------------------------------------------------------|
-|              | --ramused   | Print used RAM, in MB                                                 |
-| -F           | --drivemodel| Print drive vendor [argument - sda]                     |
+|              | --ramused   | Print used RAM, in MB                                                |
+| -F           | --drivemodel| Print drive vendor [argument - sda]                                  |
 | -G           | --nicinfo   | Print NIC vendor and model [argument - eth0]                         |
 |              | --nicdrv    | Print NIC driver [argument - eth0]                                   |
 | -H           | --nicver    | Print NIC version [argument - eth0]                                  |
 | -e           | --iplink    | Print NIC link speed (useful for wireless/WiFi) [argument - eth0]    |
 | -j           | --nicfw     | Print NIC firmware [argument - eth0]                                 |
-| -h           | --wifiname  | Print name of (connected) WiFi/wireless network [argument - wlan0]  |
+| -h           | --wifiname  | Print name of (connected) WiFi/wireless network [argument - wlan0]   |
 
 The following options are available only in Arch Linux, Debian, Gentoo, RHEL, FreeBSD (needs ports tree):
 
@@ -405,8 +405,8 @@ The following options are available only to FreeBSD and OpenBSD:
 | Short option | Long option | Description                                                        |
 |--------------|-------------|--------------------------------------------------------------------|
 | -j           | --nicgw     | Print NIC gateway address [argument - re0]                           |
-| -Z           | --swapused  | Print used drive swap, in MB                                          |
-| -F           | --swaperc   | Print used drive swap, in percentage                                  |
+| -Z           | --swapused  | Print used drive swap, in MB                                         |
+| -F           | --swaperc   | Print used drive swap, in percentage                                 |
 | -h           | --swaptotal | Print total drive swap                                               |
 | -H           | --swapavail | Print available drive swap (total - used)                            |
 |              | --wifiname  | Print name of (connected) WiFi/wireless network [argument - wlan0]  |
@@ -415,7 +415,7 @@ The following options are available only in OpenBSD:
 
 | Short option | Long option | Description                                                        |
 |--------------|-------------|--------------------------------------------------------------------|
-| -l           | --ramused   | Print used RAM, in MB                                                 |
+| -l           | --ramused   | Print used RAM, in MB                                              |
 
 ---
 
