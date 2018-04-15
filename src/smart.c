@@ -185,8 +185,8 @@ get_drivetemp(char *str1) {
 void
 get_drivetemp(char *str1) {
   FILE *fp = NULL;
-  uint_fast16_t temp = 0;
-  const char *pinkytemp = "/tmp/pinkytemp";
+  char buf[VLA];
+  const char *const pinkytemp = "/tmp/pinkytemp";
 
   FILL_STR_ARR(1, str1, "0");
   if (NULL == (fp = fopen(pinkytemp, "r"))) {
@@ -195,11 +195,11 @@ get_drivetemp(char *str1) {
 
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wunused-result"
-  CHECK_FSCANF(fp, SCAN_UFINT, &temp);
+  CHECK_FSCANF(fp, "%[^\n]", buf);
 #pragma GCC diagnostic pop
   CLOSE_FP(fp);
 
-  FILL_ARR(str1, UFINT, temp);
+  FILL_STR_ARR(1, str1, buf);
 }
 
 #endif /* __linux__ && WITH_DRIVETEMP || __linux__ && WITH_DRIVETEMP_LIGHT || with smartemp */

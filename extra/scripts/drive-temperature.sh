@@ -24,6 +24,9 @@
 # To use atactl replace "smartctl" with
 # atactl sd0 readattr 
 # replace $arr[9] with $arr[3]
+# smartctl can operate on single drive
+# copy and paste the perl command several
+# times if you have more drives
 while true; do
   sudo smartctl -a /dev/sd0a | \
     perl -Mstrict -Mwarnings -ne '
