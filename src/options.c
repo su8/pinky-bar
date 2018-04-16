@@ -638,7 +638,7 @@ parse_konf(char *combined) {
         continue;
       }
     }
-    if ('#' == *ptr || '/' == *ptr || ';' == *ptr || '*' == *ptr) {
+    if ('#' == *ptr || '/' == *ptr || ';' == *ptr || '*' == *ptr || '\0' == *(ptr+1)) {
       continue;
     }
     ello[1] = ptr;
