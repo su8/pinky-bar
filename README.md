@@ -458,7 +458,18 @@ If any option depends on argument, don't put any space between the option and th
 Use one option per line. Contrary to your shell, the "parser" won't expand ~/my\_script.pl to /home/CurrentUser/my\_script.pl
 
 ```bash
+/*
+*
+* Example configuration file
+* comments can start with:
+*   // comment, /* comment */
+*   # comment, ;; comment
+*
+*/
+
+;; town followed by country code
 --weather=London,uk
+
 --cpu-percent-all
 --cputemp
 --ramperc
@@ -469,7 +480,11 @@ Use one option per line. Contrary to your shell, the "parser" won't expand ~/my\
 --fans
 --mobo
 --mobotemp
+
+# perl script to run
 --perl=/home/CurrentUser/my_script.pl
+
+// shell command to run
 --shell echo 'hi'
 ```
 
