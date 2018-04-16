@@ -56,8 +56,9 @@ class Py3status:
         except self.py3.CommandError as ce:
             output = ce.output
             if 'pinkybar' in ce.error:
-                output = ce.error
-                self.py3.error(' '.join(output.splitlines()[0].split()[2:]))
+                for line in ce.error.splitlines():
+                    if 'pinkybar' in line:
+                        self.py3.error(' '.join(line.split()[2:]))
 
         output = output.strip()
 
