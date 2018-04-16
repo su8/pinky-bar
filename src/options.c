@@ -638,11 +638,12 @@ parse_konf(char *combined) {
         continue;
       }
     }
-    if ('#' == *ptr || '/' == *ptr || ';' == *ptr || '*' == *ptr || '\0' == *(ptr+1)) {
+    if ('#' == *ptr || '/' == *ptr || ';' == *ptr || '*' == *ptr || '\0' == *(ptr+1) || '\0' == *ptr) {
       continue;
     }
     ello[1] = ptr;
     argp_parse(&arg_parser, 2, ello, ARGP_IN_ORDER, NULL, &arguments);
+    temp[0] = '\0';
   }
   CLOSE_FP(fp);
 }
