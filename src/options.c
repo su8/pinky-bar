@@ -601,7 +601,7 @@ parse_konf(char *combined) {
   FILE *fp = NULL, *fp2 = NULL;
   char *ptr = NULL;
   char *ello[] = { (char *)PACKAGE_STRING, NULL };
-  char buf[VLA], conf[VLA], temp[VLA], cmd[VLA], temp2[VLA];
+  char buf[VLA], conf[VLA], temp[VLA], cmd[VLA], output[VLA];
   const char *const home = getenv("HOME") ? getenv("HOME") : "empty";
   struct arguments arguments = {
     .all = combined
@@ -615,7 +615,7 @@ parse_konf(char *combined) {
   while (NULL != (fgets(buf, VLA-1, fp))) {
     if (EOF == (sscanf(buf, "%[^\n]", temp))) {
       CLOSE_FP(fp);
-      exit_with_err(ERR, "empty line(s) detected.");
+      exit_with_err(ERR, "Reached EOF.");
     }
     ptr = temp;
     while (0 != (isspace((unsigned char) *ptr))) {
@@ -625,20 +625,21 @@ parse_konf(char *combined) {
       if ('s' == *(ptr+2) && 'e' == *(ptr+4)) {
         if (EOF == (sscanf(ptr, "%*s %[^\n]", cmd))) {
           CLOSE_FP(fp);
-          exit_with_err(ERR, "empty line(s) detected - EOF.");
+          exit_with_err(ERR, "The shell requires argument, e.g: --shell echo 'hi'.");
         }
         if (NULL == (fp2 = popen(cmd, "r"))) {
           continue;
         }
-        CHECK_FSCANF(fp2, "%[^\n]", temp2);
-        GLUE(arguments.all, FMT_KERN, temp2);
+        CHECK_FSCANF(fp2, "%[^\n]", output);
+        GLUE(arguments.all, FMT_KERN, output);
         if (-1 == (pclose(fp2))) {
           exit_with_err(CANNOT_CLOSE, "popen()");
         }
         continue;
       }
     }
-    if ('#' == *ptr || '/' == *ptr || ';' == *ptr || '*' == *ptr || '\0' == *(ptr+1) || '\0' == *ptr) {
+    if ('#' == *ptr || '/' == *ptr || ';' == *ptr || 
+        '*' == *ptr || '\0' == *(ptr+1) || '\0' == *ptr) {
       continue;
     }
     ello[1] = ptr;
