@@ -342,7 +342,7 @@ The order of supplied options will dictate how, where and what system informatio
 |              | --github    | Print number of unread notifications                                 |
 |              | --reddit    | Print number of unread notifications                                 |
 |              | --password  | Generate random password [argument number of iterations to perform]  |
-|              | --shell     | Run a command or shell, eg: --shell=$(tail --lines 1 /var/log/Xorg.0.log), [argument - static string] |
+|              | --shell     | Exclusive option to the configuration file, cannot be run from the terminal [ argument e.g --shell echo 'hi' ] |
 |              | --title     | Display a static string [argument - static string]                   |
 |              | --perl      | Execute scripts written in Perl, see Opt-in section.                 |
 |              | --python    | Execute scripts written in Python, see Opt-in section.               |
@@ -453,7 +453,7 @@ Cannot list the \*BSD flavours as "distros", so they deserve own options:
 
 I do advise you to use the long options syntax.
 
-If any option depends on argument, don't put any space between the option and the argument.
+If any option depends on argument, don't put any space between the option and the argument. Only true if you are not using the `--shell` option.
 
 Use one option per line. Contrary to your shell, the "parser" won't expand ~/my\_script.pl to /home/CurrentUser/my\_script.pl
 
@@ -470,6 +470,7 @@ Use one option per line. Contrary to your shell, the "parser" won't expand ~/my\
 --mobo
 --mobotemp
 --perl=/home/CurrentUser/my_script.pl
+--shell echo 'hi'
 ```
 
 Execute the program without supplying any command line options and it will parse the configuration file.

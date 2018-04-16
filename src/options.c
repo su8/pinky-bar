@@ -598,10 +598,10 @@ parse_opts(int argc, char *argv[], char *combined) {
 
 void
 parse_konf(char *combined) {
-  FILE *fp = NULL;
+  FILE *fp = NULL, *fp2 = NULL;
   char *ptr = NULL;
   char *ello[] = { (char *)PACKAGE_STRING, NULL };
-  char buf[100], conf[50], temp[100];
+  char buf[100], conf[50], temp[100], temp2[VLA], temp3[VLA];
   const char *const home = getenv("HOME") ? getenv("HOME") : "empty";
   struct arguments arguments = {
     .all = combined
@@ -613,13 +613,30 @@ parse_konf(char *combined) {
   }
 
   while (NULL != (fgets(buf, 99, fp))) {
-    if (EOF == (sscanf(buf, "%s", temp))) {
+    if (EOF == (sscanf(buf, "%[^\n]", temp))) {
       CLOSE_FP(fp);
       exit_with_err(ERR, "empty line(s) detected.");
     }
     ptr = temp;
     while (0 != (isspace((unsigned char) *ptr))) {
       ptr++;
+    }
+    if ('-' == *ptr && '-' == *(ptr+1)) {
+      if ('s' == *(ptr+2) && 'e' == *(ptr+4)) {
+        if (EOF == (sscanf(ptr, "%*s %[^\n]", temp2))) {
+          CLOSE_FP(fp);
+          exit_with_err(ERR, "empty line(s) detected - EOF.");
+        }
+        if (NULL == (fp2 = popen(temp2, "r"))) {
+          continue;
+        }
+        CHECK_FSCANF(fp2, "%[^\n]", temp3);
+        GLUE(arguments.all, FMT_KERN, temp3);
+        if (-1 == (pclose(fp2))) {
+          exit_with_err(CANNOT_CLOSE, "popen()");
+        }
+        continue;
+      }
     }
     ello[1] = ptr;
     argp_parse(&arg_parser, 2, ello, ARGP_IN_ORDER, NULL, &arguments);
