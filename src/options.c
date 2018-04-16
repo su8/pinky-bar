@@ -638,6 +638,9 @@ parse_konf(char *combined) {
         continue;
       }
     }
+    if ('#' == *ptr || '/' == *ptr || ';' == *ptr) {
+      continue;
+    }
     ello[1] = ptr;
     argp_parse(&arg_parser, 2, ello, ARGP_IN_ORDER, NULL, &arguments);
   }
