@@ -601,18 +601,18 @@ parse_konf(char *combined) {
   FILE *fp = NULL, *fp2 = NULL;
   char *ptr = NULL;
   char *ello[] = { (char *)PACKAGE_STRING, NULL };
-  char buf[100], conf[50], temp[100], temp2[VLA], temp3[VLA];
+  char buf[VLA], conf[VLA], temp[VLA], cmd[VLA], temp2[VLA];
   const char *const home = getenv("HOME") ? getenv("HOME") : "empty";
   struct arguments arguments = {
     .all = combined
   };
 
-  snprintf(conf, 49, "%s%s", home, "/.pinky");
+  snprintf(conf, VLA-1, "%s%s", home, "/.pinky");
   if (NULL == (fp = fopen(conf, "r"))) {
     exit_with_err(ERR, "~/.pinky doesn't exist or $HOME is unset");
   }
 
-  while (NULL != (fgets(buf, 99, fp))) {
+  while (NULL != (fgets(buf, VLA-1, fp))) {
     if (EOF == (sscanf(buf, "%[^\n]", temp))) {
       CLOSE_FP(fp);
       exit_with_err(ERR, "empty line(s) detected.");
@@ -623,15 +623,15 @@ parse_konf(char *combined) {
     }
     if ('-' == *ptr && '-' == *(ptr+1)) {
       if ('s' == *(ptr+2) && 'e' == *(ptr+4)) {
-        if (EOF == (sscanf(ptr, "%*s %[^\n]", temp2))) {
+        if (EOF == (sscanf(ptr, "%*s %[^\n]", cmd))) {
           CLOSE_FP(fp);
           exit_with_err(ERR, "empty line(s) detected - EOF.");
         }
-        if (NULL == (fp2 = popen(temp2, "r"))) {
+        if (NULL == (fp2 = popen(cmd, "r"))) {
           continue;
         }
-        CHECK_FSCANF(fp2, "%[^\n]", temp3);
-        GLUE(arguments.all, FMT_KERN, temp3);
+        CHECK_FSCANF(fp2, "%[^\n]", temp2);
+        GLUE(arguments.all, FMT_KERN, temp2);
         if (-1 == (pclose(fp2))) {
           exit_with_err(CANNOT_CLOSE, "popen()");
         }
