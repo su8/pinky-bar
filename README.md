@@ -4,6 +4,7 @@ The code doesn't age, neither it has expiration date.
 
 - [Installation for dwm](#installation-for-dwm)
 - [Installation for py3status](#installation-for-py3status)
+- [Installation for tmux](#installation-for-tmux)
 - [Installation for xmonad/other WM](#installation-for-xmonad-or-other-wm)
 - [Installation in FreeBSD](#installation-in-freebsd)
 - [Installation in OpenBSD](#installation-in-openbsd)
@@ -87,6 +88,24 @@ autoreconf --install --force
 ./configure --prefix=$HOME/.cache --with-py3status --with-colors
 make
 make install
+```
+
+---
+
+## Installation for tmux
+
+```bash
+perl set.pl "distro"
+autoreconf --install --force
+
+./configure --prefix=$HOME/.cache --with-tmux --with-colors
+make
+make install
+```
+```bash
+# ~/.tmux.conf
+set -g status-style 'bg=black'
+set -g status-right '#(~/.cache/bin/pinkybar)'
 ```
 
 ---
@@ -212,6 +231,7 @@ It's up to you to decide which features suit you best.
 | `--with-dwm`     | `--without-dwm`       | Output data to the root window for dwm.<br /> Can be colorized with **--with-colors**|
 | `--with-ncurses` | `--without-ncurses`   | Output data to the terminal using ncurses library.<br />Can be colorized with **--with-colors**|
 | `--with-py3status` | `--without-py3status` | Output data in different format for py3status.<br />Can be colorized with **--with-colors**             |
+| `--with-tmux`  | `--without-tmux`    | Output data in different format for tmux.<br />Can be colorized with **--with-colors**                  |
 | `--with-awesomewm` | `--without-awesomewm` | Output data in different format for awesomewm.<br />Can be colorized with **--with-colors**             |
 | `--with-xmobar`  | `--without-xmobar`    | Output data in different format for xmobar.<br />Can be colorized with **--with-colors**                  |
 | `--with-colors`  | `--without-colors`    | Colorize the output, must be combined with **icons=PATH**<br />if not used with dwm, ncurses, or py3status. |
