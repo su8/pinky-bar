@@ -31,6 +31,7 @@ AC_DEFUN([TEST_X11],[
   WITH_PY3STATUS=0
   WITH_AWESOMEWM=0
   WITH_XMOBAR=0
+  WITH_LEMONBAR=0
   WITH_TMUX=0
 
   AC_ARG_WITH([dwm],
@@ -82,6 +83,13 @@ AC_DEFUN([TEST_X11],[
     [with_xmobar=no]
   )
 
+  AC_ARG_WITH([lemonbar],
+    AS_HELP_STRING([--with-lemonbar],
+      [Format the output data for lemonbar]),
+    [],
+    [with_lemonbar=no]
+  )
+
   AC_ARG_WITH([tmux],
     AS_HELP_STRING([--with-tmux],
       [Format the output data for tmux]),
@@ -112,6 +120,10 @@ AC_DEFUN([TEST_X11],[
 
   AS_IF([test "x$with_xmobar" = "xyes"], [
     WITH_XMOBAR=1
+  ])
+
+  AS_IF([test "x$with_lemonbar" = "xyes"], [
+    WITH_LEMONBAR=1
   ])
 
   AS_IF([test "x$with_tmux" = "xyes"], [
@@ -170,6 +182,7 @@ AC_DEFUN([TEST_X11],[
   AC_DEFINE_UNQUOTED([WITH_PY3STATUS],[$WITH_PY3STATUS],[Format the output data for py3status])
   AC_DEFINE_UNQUOTED([WITH_AWESOMEWM],[$WITH_AWESOMEWM],[Format the output data for awesomewm])
   AC_DEFINE_UNQUOTED([WITH_XMOBAR],[$WITH_XMOBAR],[Format the output data for xmobar])
+  AC_DEFINE_UNQUOTED([WITH_LEMONBAR],[$WITH_LEMONBAR],[Format the output data for lemonbar])
   AC_DEFINE_UNQUOTED([WITH_TMUX],[$WITH_TMUX],[Format the output data for tmux])
 
   AS_IF([test "x$with_dwm" = "xyes" || test "x$with_keyboard" = "xyes" || test "x$with_mouse" = "xyes"], [

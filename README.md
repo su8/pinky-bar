@@ -6,6 +6,7 @@ The code doesn't age, neither it has expiration date.
 - [Installation for py3status](#installation-for-py3status)
 - [Installation for tmux](#installation-for-tmux)
 - [Installation for xmonad/other WM](#installation-for-xmonad-or-other-wm)
+- [Installation for lemonbar](#installation-for-lemonbar)
 - [Installation in FreeBSD](#installation-in-freebsd)
 - [Installation in OpenBSD](#installation-in-openbsd)
 - [Installation for anything else](#installation-for-anything-else)
@@ -132,6 +133,34 @@ Copy the code from extra/scripts/xmonad.sh or `exec` it from **xinitrc** or the 
 
 ---
 
+## Installation for lemonbar
+
+```bash
+perl set.pl "distro"
+autoreconf --install --force
+
+./configure --prefix=$HOME/.cache --with-lemonbar --with-colors
+make
+make install
+```
+```bash
+#!/usr/bin/env bash
+while true; do
+    echo -n "%{r}"
+    ~/.cache/bin/pinkybar
+    sleep 2
+done
+```
+```bash
+~/script.sh | lemonbar -p
+```
+One-liner.
+```bash
+while true; do echo -n "%{r}" ; ~/.cache/bin/pinkybar ; sleep 2; done | lemonbar -p
+```
+
+---
+
 ## Installation in FreeBSD
 
 FreeBSD has no other way than using the module specific convention to query sysctl and obtain data from the sensors. Maintaining a list with all the possible module names and performing expensive sysctl calls in a loop to determine that X module is loaded into your system is no-go. Be prepared to spend a minute or two to find out some system information.
@@ -234,6 +263,7 @@ It's up to you to decide which features suit you best.
 | `--with-tmux`  | `--without-tmux`    | Output data in different format for tmux.<br />Can be colorized with **--with-colors**                  |
 | `--with-awesomewm` | `--without-awesomewm` | Output data in different format for awesomewm.<br />Can be colorized with **--with-colors**             |
 | `--with-xmobar`  | `--without-xmobar`    | Output data in different format for xmobar.<br />Can be colorized with **--with-colors**                  |
+| `--with-lemonbar`  | `--without-lemonbar`    | Output data in different format for lemonbar.<br />Can be colorized with **--with-colors**                  |
 | `--with-colors`  | `--without-colors`    | Colorize the output, must be combined with **icons=PATH**<br />if not used with dwm, ncurses, or py3status. |
 | &emsp;&emsp;&#11169;`icons=/tmp`     |                     | Enable XBM icons for dzen2 and others.<br />Discarded when used with **--with-dwm** |
 | `--with-alsa`    | `--without-alsa`      | Enable sound volume |
