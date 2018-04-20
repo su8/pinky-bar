@@ -1,0 +1,38 @@
+#!/usr/bin/env python
+"""
+This script can convert output from Conky, Python, Bash, Lua, and others
+as long as the string contains generic color format `{color_123456}` that
+would be converted into specialized color format passed by an argument.
+
+Example: conky | ~/f2f --py3status
+Example: echo '{color_#00ffff}Hello {color_#00ff00}world!' | ~/f2f --py3status
+"""
+from sys import argv, stdin, exit
+
+if __name__ == "__main__":
+
+    if '--tmux' in argv:
+        format_string = '#[fg=#{color},bright]{output}'
+    elif '--py3status' in argv:
+        format_string = '[\?color=#{color}&show {output}]'
+    elif '--lemonbar' in argv:
+        format_string = '%{{F#{color}}}{output}'
+    elif '--xmobar' in argv:
+        format_string = '<fc=#{color}>{output}'
+    else:
+        exit('Missing argument')
+
+    output_string = ''
+    for line in stdin:
+        output_string += ''.join(line.splitlines())
+
+    output_list = output_string.split('{color_')[1::1]
+
+    for index, parameter in enumerate(output_list):
+        end = parameter.find('}')
+        color = parameter[:end]
+        output = parameter[1 + end:]
+        output_list[index] = format_string.format(color=color, output=output)
+
+    string = ''.join(output_list).strip()
+    print(string)
