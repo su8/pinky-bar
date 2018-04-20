@@ -5,7 +5,7 @@ as long as the string contains generic color format `{color_123456}` that
 would be converted into specialized color format passed by an argument.
 
 Example: conky | ~/f2f --py3status
-Example: echo '{color_#00ffff}Hello {color_#00ff00}world!' | ~/f2f --py3status
+Example: echo '{color_00ffff}Hello {color_00ff00}world!' | ~/f2f --lemonbar
 """
 from sys import argv, stdin, exit
 
@@ -28,11 +28,13 @@ if __name__ == "__main__":
 
     output_list = output_string.split('{color_')[1::1]
 
-    for index, parameter in enumerate(output_list):
-        end = parameter.find('}')
-        color = parameter[:end]
-        output = parameter[1 + end:]
-        output_list[index] = format_string.format(color=color, output=output)
+    output_string = ''
+    for malformed_string in output_list:
+        end = malformed_string.find('}')
+        color = malformed_string[:end]
+        output = malformed_string[1 + end:]
+        output_string += format_string.format(
+            color=color, output=output
+        )
 
-    string = ''.join(output_list).strip()
-    print(string)
+    print(output_string)
