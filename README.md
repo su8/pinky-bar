@@ -2,14 +2,9 @@ The code doesn't age, neither it has expiration date.
 
 ## Table of Contents
 
-- [Installation for dwm](#installation-for-dwm)
-- [Installation for py3status](#installation-for-py3status)
-- [Installation for tmux](#installation-for-tmux)
-- [Installation for xmonad/other WM](#installation-for-xmonad-or-other-wm)
-- [Installation for lemonbar](#installation-for-lemonbar)
+- [General installation](#general-installation)
 - [Installation in FreeBSD](#installation-in-freebsd)
 - [Installation in OpenBSD](#installation-in-openbsd)
-- [Installation for anything else](#installation-for-anything-else)
 - [Configure Options](#gnu-build-system-configure-options)
 - [Program Options](#program-options)
 - [Supported Linux Distributions](#supported-linux-distributions)
@@ -47,7 +42,7 @@ py3status
 
 ![](img/py3status.png)
 
-Gather some system information and show it in this statusbar program, not tied to any Window Manager, terminal multiplexer, etc.
+Gather some system information and show it in this program, not tied to any Window Manager, terminal multiplexer, etc.
 
 Please note that the program won't detect fans connected via Molex connectors or external fan controllers. Also I have not tested it with fan splitters either.
 
@@ -65,99 +60,19 @@ If you compile your kernel from source code make sure to include your CPU and mo
 
 ---
 
-## Installation for dwm
+## General installation
 
 ```bash
 perl set.pl "distro"
 autoreconf --install --force
 
-./configure --prefix=$HOME/.cache --with-dwm --with-colors
+# program installed in $HOME/.cache/bin/pinkybar
+./configure --prefix=$HOME/.cache
 make
 make install
 ```
 
 Copy the code from extra/scripts/dwm.sh or `exec` it from **xinitrc** or the script used to start dwm.
-
----
-
-## Installation for py3status
-
-```bash
-perl set.pl "distro"
-autoreconf --install --force
-
-./configure --prefix=$HOME/.cache --with-py3status --with-colors
-make
-make install
-```
-
----
-
-## Installation for tmux
-
-```bash
-perl set.pl "distro"
-autoreconf --install --force
-
-./configure --prefix=$HOME/.cache --with-tmux --with-colors
-make
-make install
-```
-```bash
-# ~/.tmux.conf
-set -g status-style 'bg=black'
-set -g status-right '#(~/.cache/bin/pinkybar)'
-```
-
----
-
-## Installation for xmonad (or other WM)
-
-```bash
-# copy the xbm icons
-mkdir -p --mode=700 $HOME/.xmonad/icons
-cp -r extra/xbm_icons/*.xbm $HOME/.xmonad/icons
-
-perl set.pl "distro"
-autoreconf --install --force
-
-# here you can specify --with-awesomewm or --with-xmobar
-./configure --prefix=$HOME/.cache --with-colors icons=$HOME/.xmonad/icons
-
-# compile 'n install
-make
-make install
-```
-
-Copy the code from extra/scripts/xmonad.sh or `exec` it from **xinitrc** or the script used to start xmonad.
-
----
-
-## Installation for lemonbar
-
-```bash
-perl set.pl "distro"
-autoreconf --install --force
-
-./configure --prefix=$HOME/.cache --with-lemonbar --with-colors
-make
-make install
-```
-```bash
-#!/usr/bin/env bash
-while true; do
-    echo -n "%{r}"
-    ~/.cache/bin/pinkybar
-    sleep 2
-done
-```
-```bash
-~/script.sh | lemonbar -p
-```
-One-liner.
-```bash
-while true; do echo -n "%{r}" ; ~/.cache/bin/pinkybar ; sleep 2; done | lemonbar -p
-```
 
 ---
 
@@ -212,7 +127,6 @@ ls /usr/local/bin/autoconf-*
 export AUTOCONF_VERSION=2.69
 export AUTOMAKE_VERSION=1.15
 
-# your call, gcc or llvm ?
 pkg_add gcc
 
 # after that:
@@ -226,29 +140,6 @@ make install
 
 ---
 
-## Installation for anything else
-
-pinky-bar is no longer tied to Window Managers only. With the addition of "without colors", the output can be shown in any program, just bear in mind that the more options you've supplied the more system information will be shown.
-
-The tmux status bar in action:
-
-![](img/pic4.png)
-
-The installation steps:
-
-```bash
-perl set.pl "distro"
-autoreconf --install --force
-
-./configure --prefix=$HOME/.cache --without-colors
-make
-make install
-```
-
-By choosing this 3rd installation method it is up to you where, how to start and use the system information that's produced by pinky-bar.
-
----
-
 ## GNU Build System (configure) options
 
 Before the source code is passed to the compiler, you can enable/disable the following **configure** options that will increase/reduce the number of dependencies required to compile the program.
@@ -257,15 +148,6 @@ It's up to you to decide which features suit you best.
 
 | Build With | Without | Description                                                                                |
 |----------------|:---------------------:|--------------------------------------------------------------------------------------------|
-| `--with-dwm`     | `--without-dwm`       | Output data to the root window for dwm.<br /> Can be colorized with **--with-colors**|
-| `--with-ncurses` | `--without-ncurses`   | Output data to the terminal using ncurses library.<br />Can be colorized with **--with-colors**|
-| `--with-py3status` | `--without-py3status` | Output data in different format for py3status.<br />Can be colorized with **--with-colors**             |
-| `--with-tmux`  | `--without-tmux`    | Output data in different format for tmux.<br />Can be colorized with **--with-colors**                  |
-| `--with-awesomewm` | `--without-awesomewm` | Output data in different format for awesomewm.<br />Can be colorized with **--with-colors**             |
-| `--with-xmobar`  | `--without-xmobar`    | Output data in different format for xmobar.<br />Can be colorized with **--with-colors**                  |
-| `--with-lemonbar`  | `--without-lemonbar`    | Output data in different format for lemonbar.<br />Can be colorized with **--with-colors**                  |
-| `--with-colors`  | `--without-colors`    | Colorize the output, must be combined with **icons=PATH**<br />if not used with dwm, ncurses, or py3status. |
-| &emsp;&emsp;&#11169;`icons=/tmp`     |                     | Enable XBM icons for dzen2 and others.<br />Discarded when used with **--with-dwm** |
 | `--with-alsa`    | `--without-alsa`      | Enable sound volume |
 | `--with-oss`     | `--without-oss`       | Enable sound volume (\*BSD)                                                     |
 | `--with-net`     | `--without-net`       | Enable Internet related options                                                        |
@@ -358,8 +240,8 @@ The order of supplied options will dictate how, where and what system informatio
 |`-X`| `--mpdtitle`       | Print song title                                                     |
 |`-y`| `--mpdalbum`       | Print song album name                                                |
 |`-Y`| `--mpddate`        | Print song date                                                      |
-|`-c`| `--cpu-percent`    | Print current CPU percent for system-wide utilization |
-|`-L`| `--cpu-percent-all`| Print current CPU percent for each core and thread        |
+|`-c`| `--cpu-percent`    | Print current CPU percent for system-wide utilization                |
+|`-L`| `--cpu-percent-all`| Print current CPU percent for each core and thread                   |
 |`-T`| `--cputemp`        | Print current CPU temperature                                        |
 |`-C`| `--cpuspeed`       | Print maximum CPU clock speed in MHz, regardless of the used governor. **Assembly.**|
 |`-I`| `--cpuinfo`        | Print CPU vendor, stepping, family, clflush, l1/l2 cache and line size, physical cores, physical and virtual bits. **Assembly.**|
@@ -372,7 +254,7 @@ The order of supplied options will dictate how, where and what system informatio
 |`-n`| `--drivetotal`     | Print total drive storage                                            |
 |`-N`| `--drivefree`      | Print free drive storage                                             |
 |`-O`| `--driveavail`     | Print available drive storage (total - used)                         |
-|    | `--drivetemp`      | Print current drive temperature from *S.M.A.R.T.*                  |
+|    | `--drivetemp`      | Print current drive temperature from *S.M.A.R.T.*                    |
 |`-g`| `--battery`        | Print remaining battery charge                                       |
 |`-z`| `--dvdstr`         | Print vendor and model name of CD-ROM/DVD-ROM                        |
 |`-S`| `--statio=sda`     | Print read and written MBs to the drive                              |
@@ -391,54 +273,54 @@ The order of supplied options will dictate how, where and what system informatio
 |    | `--gmail`          | Print number of unread emails                                        |
 |    | `--github`         | Print number of unread notifications                                 |
 |    | `--reddit`         | Print number of unread notifications                                 |
-|    | `--password=20`    | Generate random password |
+|    | `--password=20`    | Generate random password                                             |
 |    | `--shell whoami` | Execute shell command (Configuration file only)<br/> *Short Example:* `--shell uptime --pretty`|
-|    | `--title=RAM`      | Display a static string                                               |
-|    | `--perl`           | Run scripts written in Perl                                           |
-|    | `--python`         | Run scripts written in Python                                         |
-|    | `--ruby`           | Run scripts written in Ruby                                           |
-|    | `--lua`            | Run scripts written in Lua                                            |
-|    | `--R`              | Run scripts written in R                                              |
-|    | `--asm`            | Run scripts written in Assembly                                       |
-|    | `--lisp`           | Run scripts written in Lisp                                           |
-|    | `--ocaml`          | Run scripts written in OCaml                                          |
-|    | `--rust`           | Run scripts written in Rust                                           |
-|    | `--go`             | Run scripts written in Go                                             |
-|    | `--cpp`            | Run programs written in C++                                           |
-|    | `--slang`          | Run programs written in Slang                                         |
-|    | `--tcl`            | Run programs written in Tcl                                           |
-|    | `--fmt`         | Format the output data for different WM/terminal multiplexer          |
-|    | `--color1`         | Color for the `--title`                                               |
-|    | `--color2`         | Color for the above/below options                                     |
-|    | `--color3`         | Color for the kernel/misc                                             |
+|    | `--title=RAM`      | Display a static string                                              |
+|    | `--perl`           | Run scripts written in Perl                                          |
+|    | `--python`         | Run scripts written in Python                                        |
+|    | `--ruby`           | Run scripts written in Ruby                                          |
+|    | `--lua`            | Run scripts written in Lua                                           |
+|    | `--R`              | Run scripts written in R                                             |
+|    | `--asm`            | Run scripts written in Assembly                                      |
+|    | `--lisp`           | Run scripts written in Lisp                                          |
+|    | `--ocaml`          | Run scripts written in OCaml                                         |
+|    | `--rust`           | Run scripts written in Rust                                          |
+|    | `--go`             | Run scripts written in Go                                            |
+|    | `--cpp`            | Run programs written in C++                                          |
+|    | `--slang`          | Run programs written in Slang                                        |
+|    | `--tcl`            | Run programs written in Tcl                                          |
+|    | `--fmt`         | Format the output data for different WM/terminal multiplexer            |
+|    | `--color1`         | Color for the `--title`                                              |
+|    | `--color2`         | Color for the above/below options                                    |
+|    | `--color3`         | Color for the kernel/misc                                            |
 |    | `--sqlite="SELECT`<br />` * from COMPANY`<br />`where ID=1"` | Query a statement on a database file|
-|`-q`| `--weather=`<br />`London,UK` | Print current weather temperature                          |
-|`-U`| `--uptime`          | Print system uptime                                                  |
-|`-w`| `--load-1min`       | Print system load average for past 1 minutes                         |
-|    | `--load-5min`       | Print system load average for past 5 minutes                         |
-|    | `--load-15min`      | Print system load average for past 15 minutes                        |
-|`-v`| `--voltage`         | Print system voltage                                                 |
-|`-f`| `--fans`            | Print system fans and speeds in RPM                                  |
-|`-m`| `--mobo`            | Print motherboard name and vendor                                    |
-|`-d`| `--mobotemp`        | Print motherboard temperature                                        |
-|`-V`| `--volume`          | Print current volume                                                 |
-|`-t`| `--time`            | Print current time                                                   |
-|    | `--ip`              | Print external IP address (IPv4).                                    |
-|`-a`| `--ipaddr=eno1`     | Print local IP address                                               |
-|`-b`| `--bandwidth=eno1`  | Print Internet bandwidth                                             |
-|`-i`| `--iface=eno1`      | Print current download and upload speed                              |
-|`-A`| `--ipmac=eno1`      | Print NIC MAC address                                                |
-|`-B`| `--ipmask=eno1`     | Print NIC subnet mask                                                |
-|`-D`| `--ipcast=eno1`     | Print NIC broadcast address                                          |
-|`-E`| `--iplookup=`<br />`google.com` | Perform a IP lookup on a domain name |
+|`-q`| `--weather=`<br />`London,UK` | Print current weather temperature                         |
+|`-U`| `--uptime`          | Print system uptime                                                 |
+|`-w`| `--load-1min`       | Print system load average for past 1 minutes                        |
+|    | `--load-5min`       | Print system load average for past 5 minutes                        |
+|    | `--load-15min`      | Print system load average for past 15 minutes                       |
+|`-v`| `--voltage`         | Print system voltage                                                |
+|`-f`| `--fans`            | Print system fans and speeds in RPM                                 |
+|`-m`| `--mobo`            | Print motherboard name and vendor                                   |
+|`-d`| `--mobotemp`        | Print motherboard temperature                                       |
+|`-V`| `--volume`          | Print current volume                                                |
+|`-t`| `--time`            | Print current time                                                  |
+|    | `--ip`              | Print external IP address (IPv4).                                   |
+|`-a`| `--ipaddr=eno1`     | Print local IP address                                              |
+|`-b`| `--bandwidth=eno1`  | Print Internet bandwidth                                            |
+|`-i`| `--iface=eno1`      | Print current download and upload speed                             |
+|`-A`| `--ipmac=eno1`      | Print NIC MAC address                                               |
+|`-B`| `--ipmask=eno1`     | Print NIC subnet mask                                               |
+|`-D`| `--ipcast=eno1`     | Print NIC broadcast address                                         |
+|`-E`| `--iplookup=`<br />`google.com` | Perform a IP lookup on a domain name                    |
 |    | `--pingtime=`<br />`https://google.com` | Perform a GET request and measure the round trip time    |
 
 Options mentioning **Assembly** are tested only on AMD and Intel CPUs (starting from pentium 4 onwards).
 
 The following options are available only in Linux:
 
-|Opt| Option | Description                                                        |
-|:---:|--------------------|------------------------------------------------|
+|Opt| Option | Description                                                 |
+|:---:|--------------------|-----------------------------------------------|
 |    | `--ramused`        | Print used RAM, in MB                          |
 |`-F`| `--drivemodel=sda` | Print drive vendor                             |
 |`-G`| `--nicinfo=eth0`   | Print NIC vendor and model with pciutils       |
@@ -450,14 +332,14 @@ The following options are available only in Linux:
 
 The following options are available only in Arch Linux, Debian, Gentoo, RHEL, FreeBSD (w/ ports tree):
 
-|Opt| Option | Description                               |
+|Opt| Option | Description                                |
 |------|-------------|------------------------------------|
 |      | `--updates` |  Print number of available updates |
 
 The following options are available only to FreeBSD and OpenBSD:
 
-|Opt| Option | Description                                        |
-|:---:|---------------|-------------------------------------------|
+|Opt| Option | Description                                       |
+|:---:|---------------|------------------------------------------|
 |`-j`| `--nicgw=re0` | Print NIC gateway address                 |
 |`-Z`| `--swapused`  | Print used drive swap, in MB              |
 |`-F`| `--swaperc`   | Print used drive swap, in percentage      |
@@ -467,8 +349,8 @@ The following options are available only to FreeBSD and OpenBSD:
 
 The following options are available only in OpenBSD:
 
-|Opt| Option | Description                     |
-|:---:|-------------|---------------------------------|
+|Opt| Option | Description                           |
+|:---:|-------------|--------------------------------|
 |`-l`| `--ramused` | Print used RAM, in MB           |
 
 ---
@@ -519,6 +401,13 @@ Use one option per line. Contrary to your shell, the "parser" won't expand ~/my\
 *
 */
 
+/*
+* Use fmt when using the following programs:
+*  --fmt=py3status
+*  --fmt=awesomewm
+*  --fmt=xmobar
+*/
+
 /* 
 * Here you can specify different
 * colors for the title, option, misc
@@ -537,6 +426,10 @@ Use one option per line. Contrary to your shell, the "parser" won't expand ~/my\
 *   --color2="<fc=#f0c674> "
 *  dzen2:
 *   --color2="^fg(#f0c674)"
+*  dwm:
+*   --color1="\x0a"
+*   --color2="\x0b"
+*   --color3="\x09"
 */
 
 ;; town followed by country code
@@ -544,7 +437,7 @@ Use one option per line. Contrary to your shell, the "parser" won't expand ~/my\
 
 /* 
 * In dzen2 you can replace title with
-* the desired xbm icon
+* the desired xbm icon from extra/xbm_icons/*.xbm
 */
 
 --title=CPU
@@ -960,13 +853,12 @@ For non-dwm WM:
 * py3status
 * awesomewm
 * xmobar
+* lemonbar
 
 For dwm:
 
 * libx11
 * xorg-server
-
-Use **--without-colors** to skip the following step:
 * dwm compiled with statuscolor patch. The colors are specified in your dwm config.h
 
 ---
