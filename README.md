@@ -407,6 +407,7 @@ The order of supplied options will dictate how, where and what system informatio
 |    | `--cpp`            | Run programs written in C++                                           |
 |    | `--slang`          | Run programs written in Slang                                         |
 |    | `--tcl`            | Run programs written in Tcl                                           |
+|    | `--format`         | Format the output data for different WM/terminal multiplexer          |
 |    | `--color1`         | Color for the `--title`                                               |
 |    | `--color2`         | Color for the above/below options                                     |
 |    | `--color3`         | Color for the kernel/misc                                             |
