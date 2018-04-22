@@ -51,10 +51,10 @@ static const char *ENT = "";
 
 
 /* options.c format constants */
-#define FMT           mk_str("%s%s%s", NAME_VAL"%%", ENT, " ")    /* STR1 10%             */
-#define FMT_TIME      mk_str("%s%s%s", NAME_VAL, ENT)            /* Time 10:00 PM        */
-#define FMT_MOBO      mk_str("%s%s%s", NAME_VAL, ENT, " ")        /* VEND NAME            */
-#define FMT_CPU       mk_str("%s%s%s", NAME_VAL"%%", ENT, " ")    /* CPU 10%              */
+#define FMT           mk_str("%s%s%s%s", NAME_VAL"%%", ENT, " ")    /* STR1 10%             */
+#define FMT_TIME      mk_str("%s%s%s%s", NAME_VAL, ENT)            /* Time 10:00 PM        */
+#define FMT_MOBO      mk_str("%s%s%s%s", NAME_VAL, ENT, " ")        /* VEND NAME            */
+#define FMT_CPU       mk_str("%s%s%s%s", NAME_VAL"%%", ENT, " ")    /* CPU 10%              */
 #define FMT_CORES     FMT_TIME                                /* CPU varying          */
 #define FMT_RAM       FMT                                     /* RAM 10%              */
 #define FMT_RAM2      FMT_MOBO                                /* RAM 10MB             */
