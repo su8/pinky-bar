@@ -46,8 +46,8 @@ static const char *ENT = "";
 
 #define NAME_VAL  PINK, STR_SPEC                              /* STR1 STR2       */
 #define TEMP      mk_str("%s%s%s%s", YELLOW, STR_SPEC "C", ENT, " ") /* 32C             */
-#define FMT_KERN  mk_str("%s%s%s", YELLOW, STR_SPEC, ENT, " ")           /* Kernel Version  */
-#define FMT_SONG  mk_str("%s%s%s", PINK, STR_SPEC, ENT, " ")             /* Song            */
+#define FMT_KERN  mk_str("%s%s%s%s", YELLOW, STR_SPEC, ENT, " ")           /* Kernel Version  */
+#define FMT_SONG  mk_str("%s%s%s%s", PINK, STR_SPEC, ENT, " ")             /* Song            */
 
 
 /* options.c format constants */
