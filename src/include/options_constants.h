@@ -49,32 +49,7 @@
 
 #ifndef WITH_NCURSES
 #define WITH_NCURSES 6
-#endif
-#if defined (HAVE_X11_XLIB_H) && WITH_DWM == 1 || WITH_NCURSES == 1 || \
-  WITH_COLOURS == 0 || WITH_PY3STATUS == 1 || WITH_AWESOMEWM == 1 || \
-  WITH_XMOBAR == 1 || WITH_LEMONBAR == 1 || WITH_TMUX == 1
-
-#define CPU_STR    "CPU"
-#define RAM_STR    "RAM"
-#define SSD_STR    "SSD"
-#define PKG_STR    "Pkgs"
-#define VOLT_STR   "Voltage"
-#define FANS_STR   "Fans/RPM"
-#define MOBO_STR   "Mobo"
-#define VOL_STR    "Volume"
-#define TIME_STR   "Time"
-#define NET_STR    "Used Net"
-#define STATIO_STR "Statio"
-#define SPEED_STR  "Speed"
-#define BATT_STR   "BATT"
-#define UP_STR     "Up"
-#define LOAD_STR   "Load/avg"
-#define OUT_STR    "Out "
-#define MAIL_STR   "Mail"
-#define MOUSE_STR  "Mouse"
-
-#endif /* HAVE_X11_XLIB_H && WITH_DWM || WITH_NCURSES || WITH_COLOURS || WITH_PY3STATUS || WITH_AWESOMEWM || WITH_XMOBAR || WITH LEMONBAR || WITH_TMUX */
-
+#endif /* WITH_NCURSES */
 
 #if defined(HAVE_X11_XLIB_H) && WITH_DWM == 1
 #include "colours/x11_colours.h"
@@ -125,5 +100,6 @@
 #define FMT_UP        FMT_TIME" "                             /* Up 10 min            */
 #define FMT_LOAD      FMT_TIME" "                             /* Load/avg 0.01 0.01 0.01       */
 
+#define FMT_PINK PINK STR_SPEC ENT " "
 
 #endif /* CONSTANTS_H_ */

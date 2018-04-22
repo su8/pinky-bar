@@ -68,7 +68,6 @@ enum {
   PASSWORD,
   GITHUB,
   REDDIT,
-  SHELL,
   PING,
   SQLITEE,
   UPDATES,
@@ -129,7 +128,6 @@ static const struct argp_option options[] = {
   { .name = "iplookup",     .key = 'E', .arg = "site", .doc = "Mini website IP lookup."                                  },
   { .name = "statio",       .key = 'S', .arg = "sda",  .doc = "Read and written MBs to the drive so far."                },
   { .name = "password",     .key = PASSWORD, .arg = "num",  .doc = "Generate 20 character long password."                },
-  { .name = "shell",        .key = SHELL, .arg = "Do Stuff",  .doc = "Static string that's displayed to you, could be a TODO or notes." },
   { .name = "updates",      .key = UPDATES,            .doc = "Number all pending system updates."                       },
   { .name = "title",        .key = TITLE, .arg = "Do Stuff",  .doc = "Static string that's displayed to you, could be a title or header to prefix other option." },
 
@@ -285,29 +283,29 @@ parse_opt(int key, char *arg, struct argp_state *state) {
 
     NEW_MPD_LABEL('M', char song[VLA], song, 6, FMT_SONG);
 
-    NEW_CPU_LABEL('c', char cpu[VLA], cpu, FMT_CPU, CPU_STR);
+    NEW_CPU_LABEL('c', char cpu[VLA], cpu, FMT_CPU);
 
-    NEW_CPU_LABEL('L', char cores_load[VLA], cores_load, FMT_CORES, CPU_STR);
+    NEW_CPU_LABEL('L', char cores_load[VLA], cores_load, FMT_CORES);
 
     NEW_LABEL('T', char cpu_temp[VLA], cpu_temp, FMT_TEMP);
 
-    NEW_RAM_LABEL('J', char ram_total[VLA], ram_total, 1, FMT_RAM2, RAM_STR);
+    NEW_RAM_LABEL('J', char ram_total[VLA], ram_total, 1, FMT_RAM2);
 
-    NEW_RAM_LABEL('K', char ram_free[VLA], ram_free, 2, FMT_RAM2, RAM_STR);
+    NEW_RAM_LABEL('K', char ram_free[VLA], ram_free, 2, FMT_RAM2);
 
-    NEW_RAM_LABEL('l', char ram_shared[VLA], ram_shared, 3, FMT_RAM2, RAM_STR);
+    NEW_RAM_LABEL('l', char ram_shared[VLA], ram_shared, 3, FMT_RAM2);
 
-    NEW_RAM_LABEL('r', char ram_perc[VLA], ram_perc, 5, FMT_RAM, RAM_STR);
+    NEW_RAM_LABEL('r', char ram_perc[VLA], ram_perc, 5, FMT_RAM);
 
-    NEW_SSD_LABEL('n', char ssd_total[VLA], ssd_total, 1, FMT_SSD2, SSD_STR);
+    NEW_SSD_LABEL('n', char ssd_total[VLA], ssd_total, 1, FMT_SSD2);
 
-    NEW_SSD_LABEL('N', char ssd_free[VLA], ssd_free, 2, FMT_SSD2, SSD_STR);
+    NEW_SSD_LABEL('N', char ssd_free[VLA], ssd_free, 2, FMT_SSD2);
 
-    NEW_SSD_LABEL('O', char ssd_avail[VLA], ssd_avail, 3, FMT_SSD2, SSD_STR);
+    NEW_SSD_LABEL('O', char ssd_avail[VLA], ssd_avail, 3, FMT_SSD2);
 
-    NEW_SSD_LABEL('s', char ssd_perc[VLA], ssd_perc, 4, FMT_SSD, SSD_STR);
+    NEW_SSD_LABEL('s', char ssd_perc[VLA], ssd_perc, 4, FMT_SSD);
 
-    NEW_LABEL('p', char packs[VLA], packs, FMT_PKGS, PKG_STR);
+    NEW_LABEL('p', char packs[VLA], packs, FMT_PKGS);
 
     NEW_KERNEL_LABEL('P', char kernel_sys[VLA], kernel_sys, 1, FMT_KERN);
 
@@ -321,149 +319,147 @@ parse_opt(int key, char *arg, struct argp_state *state) {
 
     NEW_KERNEL_LABEL('k', char kernel[VLA], kernel, 6, FMT_KERN);
 
-    NEW_LABEL('U', char uptime[VLA], uptime, FMT_UP, UP_STR);
+    NEW_LABEL('U', char uptime[VLA], uptime, FMT_UP);
 
-    NEW_LOADAVG_LABEL('w', char loadavg_1min[VLA], loadavg_1min, 0, FMT_KERN);
+    NEW_LOADAVG_LABEL('w', char loadavg_1min[VLA], loadavg_1min, 0, FMT_PINK);
 
-    NEW_LOADAVG_LABEL(LOADAVG5, char loadavg_5min[VLA], loadavg_5min, 1, FMT_KERN);
+    NEW_LOADAVG_LABEL(LOADAVG5, char loadavg_5min[VLA], loadavg_5min, 1, FMT_PINK);
 
-    NEW_LOADAVG_LABEL(LOADAVG15, char loadavg_15min[VLA], loadavg_15min, 2, FMT_KERN);
+    NEW_LOADAVG_LABEL(LOADAVG15, char loadavg_15min[VLA], loadavg_15min, 2, FMT_PINK);
 
-    NEW_LABEL('v', char voltage[VLA], voltage, FMT_VOLT, VOLT_STR);
+    NEW_LABEL('v', char voltage[VLA], voltage, FMT_VOLT);
 
-    NEW_LABEL('m', char mobo[VLA], mobo, FMT_MOBO, MOBO_STR);
+    NEW_LABEL('m', char mobo[VLA], mobo, FMT_MOBO);
 
     NEW_LABEL('d', char mobo_temp[VLA], mobo_temp, FMT_TEMP);
 
-    NEW_LABEL('f', char fans[VLA], fans, FMT_FANS, FANS_STR);
+    NEW_LABEL('f', char fans[VLA], fans, FMT_FANS);
 
-    NEW_LABEL('t', char taim[VLA], taim, FMT_TIME" ", TIME_STR);
+    NEW_LABEL('t', char taim[VLA], taim, FMT_TIME" ");
 
-    NEW_NET_LABEL('b', char net[VLA], net, 1, FMT_NET, NET_STR);
+    NEW_NET_LABEL('b', char net[VLA], net, 1, FMT_NET);
 
-    NEW_NET_LABEL('i', char net_speed[VLA], net_speed, 2, FMT_NET, SPEED_STR);
+    NEW_NET_LABEL('i', char net_speed[VLA], net_speed, 2, FMT_NET);
 
-    NEW_NET_LABEL('a', char net_addr[VLA], net_addr, 3, FMT_KERN);
+    NEW_NET_LABEL('a', char net_addr[VLA], net_addr, 3, FMT_PINK);
 
-    NEW_NET_LABEL('A', char mac[VLA], mac, 4, FMT_KERN);
+    NEW_NET_LABEL('A', char mac[VLA], mac, 4, FMT_PINK);
 
-    NEW_NET_LABEL('B', char mask[VLA], mask, 5, FMT_KERN);
+    NEW_NET_LABEL('B', char mask[VLA], mask, 5, FMT_PINK);
 
-    NEW_NET_LABEL('D', char net_cast[VLA], net_cast, 6, FMT_KERN);
+    NEW_NET_LABEL('D', char net_cast[VLA], net_cast, 6, FMT_PINK);
 
-    NEW_ARG_LABEL('E', char ip_lookup[VLA], ip_lookup, FMT_KERN);
+    NEW_ARG_LABEL('E', char ip_lookup[VLA], ip_lookup, FMT_PINK);
 
-    NEW_LABEL('g', char battery[VLA], battery, FMT_BATT, BATT_STR);
+    NEW_LABEL('g', char battery[VLA], battery, FMT_BATT);
 
-    NEW_ARG_LABEL('S', char statio[VLA], statio, FMT_STATIO, STATIO_STR);
+    NEW_ARG_LABEL('S', char statio[VLA], statio, FMT_STATIO);
 
-    NEW_LABEL(DRIVETEMP, char drivetemp[VLA], drivetemp, FMT_KERN);
+    NEW_LABEL(DRIVETEMP, char drivetemp[VLA], drivetemp, FMT_PINK);
 
-    NEW_ARG_LABEL(PASSWORD, char password[VLA], password, FMT_KERN);
+    NEW_ARG_LABEL(PASSWORD, char password[VLA], password, FMT_PINK);
 
-    NEW_ARG_LABEL(SHELL, char shell[VLA], shell, FMT_KERN);
+    NEW_LABEL(UPDATES, char updates[VLA], updates, FMT_PINK);
 
-    NEW_LABEL(UPDATES, char updates[VLA], updates, FMT_KERN);
-
-    NEW_ARG_LABEL(TITLE, char title[VLA], title, FMT_KERN);
+    NEW_ARG_LABEL(TITLE, char title[VLA], title, FMT_PINK);
 
 #if WITH_SQLITE == 1
-    NEW_ARG_LABEL(SQLITEE, char sqlite[VLA], sqlite, FMT_KERN);
+    NEW_ARG_LABEL(SQLITEE, char sqlite[VLA], sqlite, FMT_PINK);
 #endif /* WITH_SQLITE */
 
 
 #if WITH_PING == 1
-    NEW_ARG_LABEL(PING, char ping[VLA], ping, FMT_KERN);
+    NEW_ARG_LABEL(PING, char ping[VLA], ping, FMT_PINK);
 #endif /* WITH_PING */
 
 
 #if WITH_REDDIT == 1
-    NEW_LABEL(REDDIT, char reddit[VLA], reddit, FMT_KERN);
+    NEW_LABEL(REDDIT, char reddit[VLA], reddit, FMT_PINK);
 #endif /* WITH_REDDIT */
 
 
 #if WITH_GITHUB == 1
-    NEW_LABEL(GITHUB, char github[VLA], github, FMT_KERN);
+    NEW_LABEL(GITHUB, char github[VLA], github, FMT_PINK);
 #endif /* WITH_GITHUB */
 
 
 #if WITH_IP == 1
-    NEW_LABEL(IP, char ip[VLA], ip, FMT_KERN);
+    NEW_LABEL(IP, char ip[VLA], ip, FMT_PINK);
 #endif /* WITH_IP */
 
 
 #if WITH_GMAIL == 1
-    NEW_LABEL(GMAIL, char gmail[VLA], gmail, FMT_TIME, MAIL_STR);
+    NEW_LABEL(GMAIL, char gmail[VLA], gmail, FMT_TIME);
 #endif /* WITH_GMAIL */
 
 
 #if WITH_PERL == 1
-    NEW_ARG_LABEL(PERLSCRIPT, char perl[VLA], perl, FMT_KERN);
+    NEW_ARG_LABEL(PERLSCRIPT, char perl[VLA], perl, FMT_PINK);
 #endif /* WITH_PERL */
 
 
 #if WITH_LUA == 1
-    NEW_ARG_LABEL(LUASCRIPT, char lua[VLA], lua, FMT_KERN);
+    NEW_ARG_LABEL(LUASCRIPT, char lua[VLA], lua, FMT_PINK);
 #endif /* WITH_LUA */
 
 
 #if WITH_RUBY == 1
-    NEW_ARG_LABEL(RUBYSCRIPT, char ruby[VLA], ruby, FMT_KERN);
+    NEW_ARG_LABEL(RUBYSCRIPT, char ruby[VLA], ruby, FMT_PINK);
 #endif /* WITH_RUBY */
 
 
 #if WITH_PYTHON == 1
-    NEW_ARG_LABEL(PYTHONSCRIPT, char python[VLA], python, FMT_KERN);
+    NEW_ARG_LABEL(PYTHONSCRIPT, char python[VLA], python, FMT_PINK);
 #endif /* WITH_PYTHON */
 
 
 #if WITH_R == 1
-    NEW_ARG_LABEL(RSCRIPT, char r[VLA], r, FMT_KERN);
+    NEW_ARG_LABEL(RSCRIPT, char r[VLA], r, FMT_PINK);
 #endif /* WITH_R */
 
 
 #if WITH_ASSEMBLY == 1
-    NEW_LABEL(ASSEMBLY, char assembly[VLA], assembly, FMT_KERN);
+    NEW_LABEL(ASSEMBLY, char assembly[VLA], assembly, FMT_PINK);
 #endif /* WITH_ASSEMBLY */
 
 
 #if WITH_ECL == 1
-    NEW_ARG_LABEL(LISP, char ecl[VLA], ecl, FMT_KERN);
+    NEW_ARG_LABEL(LISP, char ecl[VLA], ecl, FMT_PINK);
 #endif /* WITH_ECL */
 
 
 #if WITH_OCAML == 1
-    NEW_LABEL(OCAML, char ocaml[VLA], ocaml, FMT_KERN);
+    NEW_LABEL(OCAML, char ocaml[VLA], ocaml, FMT_PINK);
 #endif /* WITH_OCAML */
 
 
 #if WITH_RUST == 1
-    NEW_LABEL(RUST, char rust[VLA], rust, FMT_KERN);
+    NEW_LABEL(RUST, char rust[VLA], rust, FMT_PINK);
 #endif /* WITH_RUST */
 
 
 #if WITH_GO == 1
-    NEW_LABEL(GO, char go[VLA], go, FMT_KERN);
+    NEW_LABEL(GO, char go[VLA], go, FMT_PINK);
 #endif /* WITH_GO */
 
 
 #if WITH_CPP == 1
-    NEW_LABEL(CPP, char cpp[VLA], cpp, FMT_KERN);
+    NEW_LABEL(CPP, char cpp[VLA], cpp, FMT_PINK);
 #endif /* WITH_CPP */
 
 
 #if WITH_SLANG == 1
-    NEW_ARG_LABEL(SLANG, char slang[VLA], slang, FMT_KERN);
+    NEW_ARG_LABEL(SLANG, char slang[VLA], slang, FMT_PINK);
 #endif /* WITH_SLANG */
 
 
 #if WITH_TCL == 1
-    NEW_ARG_LABEL(TCL, char tcl[VLA], tcl, FMT_KERN);
+    NEW_ARG_LABEL(TCL, char tcl[VLA], tcl, FMT_PINK);
 #endif /* WITH_TCL */
 
 
 #if WITH_WEATHER == 1
-    NEW_ARG_LABEL('q', char weather[VLA], weather, OUT_STR YELLOW STR_SPEC ENT " ");
+    NEW_ARG_LABEL('q', char weather[VLA], weather, FMT_PINK);
 #endif /* WITH_WEATHER */
 
 
@@ -473,65 +469,65 @@ parse_opt(int key, char *arg, struct argp_state *state) {
 
 
 #if WITH_KEYBOARD == 1 && defined(HAVE_X11_XKBLIB_H)
-    NEW_LABEL(KEYBOARD, char keyboard[VLA], keyboard, FMT_KERN);
+    NEW_LABEL(KEYBOARD, char keyboard[VLA], keyboard, FMT_PINK);
 #endif /* WITH_KEYBOARD && HAVE_X11_XKBLIB_H */
 
 
 #if WITH_MOUSE == 1 && defined(HAVE_X11_XLIB_H)
-    NEW_LABEL(MOUSE, char mouse[VLA], mouse, FMT, MOUSE_STR);
+    NEW_LABEL(MOUSE, char mouse[VLA], mouse, FMT);
 #endif /* WITH_MOUSE && HAVE_X11_XLIB_H */
 
 
 #if WITH_NUMLOCK == 1 && defined(HAVE_X11_XLIB_H)
-    NEW_LABEL(NUMLOCK, char numlock[VLA], numlock, FMT_KERN);
+    NEW_LABEL(NUMLOCK, char numlock[VLA], numlock, FMT_PINK);
 
-    NEW_LABEL(CAPSLOCK, char capslock[VLA], capslock, FMT_KERN);
+    NEW_LABEL(CAPSLOCK, char capslock[VLA], capslock, FMT_PINK);
 
-    NEW_LABEL(SCROLLLOCK, char scrolllock[VLA], scrolllock, FMT_KERN);
+    NEW_LABEL(SCROLLLOCK, char scrolllock[VLA], scrolllock, FMT_PINK);
 #endif /* WITH_KEYBOARD && HAVE_X11_XLIB_H */
 
 
 #if defined(HAVE_CDIO_CDIO_H) || defined(__linux__)
-    NEW_LABEL('z', char dvd[VLA], dvd, FMT_KERN);
+    NEW_LABEL('z', char dvd[VLA], dvd, FMT_PINK);
 #endif /* HAVE_CDIO_CDIO_H || __linux__ */
 
 
 #if !defined(__OpenBSD__)
-    NEW_RAM_LABEL('o', char ram_buffer[VLA], ram_buffer, 4, FMT_RAM2, RAM_STR);
+    NEW_RAM_LABEL('o', char ram_buffer[VLA], ram_buffer, 4, FMT_RAM2);
 #endif /* !__OpenBSD__ */
 
 
 #if defined(__FreeBSD__) || defined(__OpenBSD__)
-    NEW_SWAPP_LABEL('h', char swapp_total[VLA], swapp_total, 1, FMT_SSD2, SSD_STR);
+    NEW_SWAPP_LABEL('h', char swapp_total[VLA], swapp_total, 1, FMT_SSD2);
 
-    NEW_SWAPP_LABEL('H', char swapp_avail[VLA], swapp_avail, 2, FMT_SSD2, SSD_STR);
+    NEW_SWAPP_LABEL('H', char swapp_avail[VLA], swapp_avail, 2, FMT_SSD2);
 
-    NEW_SWAPP_LABEL('Z', char swapp_used[VLA], swapp_used, 3, FMT_SSD2, SSD_STR);
+    NEW_SWAPP_LABEL('Z', char swapp_used[VLA], swapp_used, 3, FMT_SSD2);
 
-    NEW_SWAPP_LABEL('F', char swapp_perc[VLA], swapp_perc, 4, FMT_SSD2, SSD_STR);
+    NEW_SWAPP_LABEL('F', char swapp_perc[VLA], swapp_perc, 4, FMT_SSD2);
 
-    NEW_NET_LABEL('j', char nic_info[VLA], nic_info, 7, FMT_KERN);
+    NEW_NET_LABEL('j', char nic_info[VLA], nic_info, 7, FMT_PINK);
 
-    NEW_NET_LABEL(WIFINAME, char wifiname[VLA], wifiname, 11, FMT_KERN);
+    NEW_NET_LABEL(WIFINAME, char wifiname[VLA], wifiname, 11, FMT_PINK);
 #endif /* __FreeBSD__ || __OpenBSD__ */
 
 
 #if defined(__linux__)
-    NEW_NET_LABEL('j', char nic_info[VLA], nic_info, 10, FMT_KERN);
+    NEW_NET_LABEL('j', char nic_info[VLA], nic_info, 10, FMT_PINK);
 
-    NEW_NET_LABEL('h', char wifiname[VLA], wifiname, 11, FMT_KERN);
+    NEW_NET_LABEL('h', char wifiname[VLA], wifiname, 11, FMT_PINK);
 
-    NEW_ARG_LABEL('F', char ssd_model[VLA], ssd_model, FMT_KERN);
+    NEW_ARG_LABEL('F', char ssd_model[VLA], ssd_model, FMT_PINK);
 
-    NEW_NET_LABEL(NICDRV, char nic_drv[VLA], nic_drv, 8, FMT_KERN);
+    NEW_NET_LABEL(NICDRV, char nic_drv[VLA], nic_drv, 8, FMT_PINK);
 
-    NEW_NET_LABEL('H', char nic_ver[VLA], nic_ver, 9, FMT_KERN);
+    NEW_NET_LABEL('H', char nic_ver[VLA], nic_ver, 9, FMT_PINK);
 
-    NEW_ARG_LABEL('G', char nic_info[VLA], nic_info, FMT_KERN);
+    NEW_ARG_LABEL('G', char nic_info[VLA], nic_info, FMT_PINK);
 
-    NEW_NET_LABEL('e', char link_speed[VLA], link_speed, 7, FMT_KERN);
+    NEW_NET_LABEL('e', char link_speed[VLA], link_speed, 7, FMT_PINK);
 
-    NEW_RAM_LABEL(RAMUSED, char ram_used[VLA], ram_used, 6, FMT_RAM2, RAM_STR);
+    NEW_RAM_LABEL(RAMUSED, char ram_used[VLA], ram_used, 6, FMT_RAM2);
 #endif /* __linux__ */
 
 
@@ -540,7 +536,7 @@ parse_opt(int key, char *arg, struct argp_state *state) {
     defined(HAVE_SOUNDCARD_H)
       {
         char volume[VLA];
-        GET_N_FMT(volume, arguments->all, FMT_VOL, VOL_STR, volume);
+        GET_N_FMT(volume, arguments->all, FMT_VOL, volume);
       }
       break;
 #else
@@ -631,7 +627,7 @@ parse_konf(char *combined) {
           continue;
         }
         CHECK_FSCANF(fp2, "%[^\n]", output);
-        GLUE(arguments.all, FMT_KERN, output);
+        GLUE(arguments.all, FMT_PINK, output);
         if (-1 == (pclose(fp2))) {
           exit_with_err(CANNOT_CLOSE, "popen()");
         }

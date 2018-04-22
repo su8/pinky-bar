@@ -36,7 +36,7 @@
 
 #endif /* WITH_COLOURS */
 
-#define NAME_VAL  BLUE STR_SPEC " " PINK STR_SPEC      /* STR1 STR2       */
+#define NAME_VAL  PINK STR_SPEC                        /* STR1 STR2       */
 #define TEMP      YELLOW STR_SPEC "C "                 /* 32C             */
 #define FMT_KERN  YELLOW KERN_ORIG                     /* Kernel Version  */
 #define FMT_SONG  PINK SONG_ORIG                       /* Song            */
