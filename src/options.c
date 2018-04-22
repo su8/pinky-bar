@@ -361,7 +361,7 @@ parse_opt(int key, char *arg, struct argp_state *state) {
 
     NEW_LABEL(UPDATES, char updates[VLA], updates, FMT_PINK);
 
-    NEW_ARG_LABEL(TITLE, char title[VLA], title, FMT_PINK);
+    NEW_ARG_LABEL(TITLE, char title[VLA], title, BLUE STR_SPEC " ");
 
 #if WITH_SQLITE == 1
     NEW_ARG_LABEL(SQLITEE, char sqlite[VLA], sqlite, FMT_PINK);
