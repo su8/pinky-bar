@@ -379,7 +379,7 @@ get_password(char *str1, char *str2) {
   }
   srandom((unsigned int)t);
 
-  for (; z < x && 199 > z; z++) {
+  for (; z < x && VLA-1 > z; z++) {
     *str1++ = letters[random() % len];
   }
   *str1 = '\0';
@@ -392,14 +392,14 @@ get_title(char *str1, char *str2) {
 }
 
 
-char GLOBAL_BUF[200];
+char GLOBAL_BUF[VLA];
 char *
 mk_str(const char *fmt, ...) {
   char *ptr = GLOBAL_BUF;
   va_list ap;
 
   va_start(ap, fmt);
-  vsnprintf(ptr, (size_t)199, fmt, ap);
+  vsnprintf(ptr, (size_t)VLA-1, fmt, ap);
   va_end(ap);
 
   return ptr;
