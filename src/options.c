@@ -367,7 +367,7 @@ parse_opt(int key, char *arg, struct argp_state *state) {
 
     NEW_LABEL(UPDATES, char updates[VLA], updates, FMT_PINK);
 
-    NEW_ARG_LABEL(TITLE, char title[VLA], title, mk_str("%s%s", BLUE, STR_SPEC " "));
+    NEW_ARG_LABEL(TITLE, char title[VLA], title, mk_str("%s%s", BLUE, STR_SPEC ENT " "));
 
     case CLR1:
     {
