@@ -35,6 +35,7 @@
 #include <cdio/mmc.h>
 #endif /* HAVE_CDIO_CDIO_H */
 
+#include <stdarg.h>
 #include "include/headers.h"
 
 #if defined(__FreeBSD__)
@@ -386,12 +387,20 @@ get_password(char *str1, char *str2) {
 
 
 void
-get_shell(char *str1, char *str2) {
+get_title(char *str1, char *str2) {
   FILL_STR_ARR(1, str1, str2);
 }
 
 
-void
-get_title(char *str1, char *str2) {
-  FILL_STR_ARR(1, str1, str2);
+char GLOBAL_BUF[200];
+char *
+mk_str(const char *fmt, ...) {
+  char *ptr = GLOBAL_BUF;
+  va_list ap;
+
+  va_start(ap, fmt);
+  vsnprintf(ptr, (size_t)199, fmt, ap);
+  va_end(ap);
+
+  return ptr;
 }

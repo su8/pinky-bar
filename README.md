@@ -393,22 +393,25 @@ The order of supplied options will dictate how, where and what system informatio
 |    | `--reddit`         | Print number of unread notifications                                 |
 |    | `--password=20`    | Generate random password |
 |    | `--shell whoami` | Execute shell command (Configuration file only)<br/> *Short Example:* `--shell uptime --pretty`|
-|    | `--title=RAM`      | Display a static string                      |
-|    | `--perl`           | Run scripts written in Perl                  |
-|    | `--python`         | Run scripts written in Python                |
-|    | `--ruby`           | Run scripts written in Ruby                  |
-|    | `--lua`            | Run scripts written in Lua                   |
-|    | `--R`              | Run scripts written in R                     |
-|    | `--asm`            | Run scripts written in Assembly |
-|    | `--lisp`           | Run scripts written in Lisp                  |
-|    | `--ocaml`          | Run scripts written in OCaml                 |
-|    | `--rust`           | Run scripts written in Rust                  |
-|    | `--go`             | Run scripts written in Go                    |
-|    | `--cpp`            | Run programs written in C++                  |
-|    | `--slang`          | Run programs written in Slang                |
-|    | `--tcl`            | Run programs written in Tcl                  |
+|    | `--title=RAM`      | Display a static string                                               |
+|    | `--perl`           | Run scripts written in Perl                                           |
+|    | `--python`         | Run scripts written in Python                                         |
+|    | `--ruby`           | Run scripts written in Ruby                                           |
+|    | `--lua`            | Run scripts written in Lua                                            |
+|    | `--R`              | Run scripts written in R                                              |
+|    | `--asm`            | Run scripts written in Assembly                                       |
+|    | `--lisp`           | Run scripts written in Lisp                                           |
+|    | `--ocaml`          | Run scripts written in OCaml                                          |
+|    | `--rust`           | Run scripts written in Rust                                           |
+|    | `--go`             | Run scripts written in Go                                             |
+|    | `--cpp`            | Run programs written in C++                                           |
+|    | `--slang`          | Run programs written in Slang                                         |
+|    | `--tcl`            | Run programs written in Tcl                                           |
+|    | `--color1`         | Color for the `--title`                                               |
+|    | `--color2`         | Color for the above/below options                                     |
+|    | `--color3`         | Color for the kernel/misc                                             |
 |    | `--sqlite="SELECT`<br />` * from COMPANY`<br />`where ID=1"` | Query a statement on a database file|
-|`-q`| `--weather=`<br />`London,UK` | Print current weather temperature              |
+|`-q`| `--weather=`<br />`London,UK` | Print current weather temperature                          |
 |`-U`| `--uptime`          | Print system uptime                                                  |
 |`-w`| `--load-1min`       | Print system load average for past 1 minutes                         |
 |    | `--load-5min`       | Print system load average for past 5 minutes                         |
@@ -513,6 +516,26 @@ Use one option per line. Contrary to your shell, the "parser" won't expand ~/my\
 *   // comment, /* comment */
 *   # comment, ;; comment
 *
+*/
+
+/* 
+* Here you can specify different
+* colors for the title, option, misc
+* available options:
+* --color1, --color2, --color3
+*
+*  awesomewm:
+*   --color2="<span color='#f0c674'>"
+*  lemonbar:
+*   --color2="%{F#f0c674}"
+*  py3status:
+*   --color2="[\?color=violet&show "
+*  tmux:
+*   --color2="#[fg=magenta,bright]"
+*  xmobar:
+*   --color2="<fc=#f0c674> "
+*  dzen2:
+*   --color2="^fg(#f0c674)"
 */
 
 ;; town followed by country code
