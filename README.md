@@ -518,17 +518,41 @@ Use one option per line. Contrary to your shell, the "parser" won't expand ~/my\
 ;; town followed by country code
 --weather=London,uk
 
+/* 
+* In dzen2 you can replace title with
+* the desired xbm icon
+*/
+
+--title=CPU
 --cpu-percent-all
+
 --cputemp
+
+--title=RAM
 --ramperc
+
+--title=HDD
 --driveperc
+
+--title=Pkgs
 --packages
+
 --kernel
+
+--title=Volatage
 --voltage
+
+--title=Fans/RPM
 --fans
+
+--title=Mobo
 --mobo
+
 --mobotemp
+
+
 # perl script to run
+--title=Script
 --perl=/home/User/my_script.pl
 
 // shell command to run
