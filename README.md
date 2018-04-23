@@ -42,6 +42,10 @@ py3status
 
 ![](img/py3status.png)
 
+tmux
+
+![](img/tmux.png)
+
 Gather some system information and show it in this program, not tied to any Window Manager, terminal multiplexer, etc.
 
 Please note that the program won't detect fans connected via Molex connectors or external fan controllers. Also I have not tested it with fan splitters either.
@@ -410,7 +414,7 @@ Execute the program without supplying any command line options and it will parse
 *  --fmt=xmobar
 */
 
-/* 
+/*
 * Here you can specify different
 * colors for the title, option, misc
 * available options:
@@ -437,7 +441,7 @@ Execute the program without supplying any command line options and it will parse
 ;; town followed by country code
 --weather=London,uk
 
-/* 
+/*
 * In dzen2 you can replace title with
 * the desired xbm icon from extra/xbm_icons/*.xbm
 */
