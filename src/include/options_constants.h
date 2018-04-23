@@ -33,28 +33,56 @@
 
 #include "options_generator.h"
 
+#if WITH_PY3STATUS == 1 && WITH_COLOURS == 1
+# define ENT "]"
+#elif WITH_AWESOMEWM == 1 && WITH_COLOURS == 1
+# define ENT "</span>"
+#elif WITH_XMOBAR == 1 && WITH_COLOURS == 1
+# define ENT "</fc>"
+#else
+# define ENT ""
+#endif /* WITH_PY3STATUS */
+
 #define STR_SPEC "%s"
+#define SONG_ORIG STR_SPEC ENT " "
+#define KERN_ORIG STR_SPEC ENT " "
 
 #ifndef WITH_NCURSES
 #define WITH_NCURSES 6
 #endif /* WITH_NCURSES */
 
-static const char *BLUE = "";
-static const char *PINK = "";
-static const char *YELLOW = "";
-static const char *ENT = "";
+#if defined(HAVE_X11_XLIB_H) && WITH_DWM == 1
+#include "colours/x11_colours.h"
+ 
+#elif WITH_NCURSES == 1
+#include "colours/ncurses_colours.h"
 
-#define NAME_VAL  PINK, STR_SPEC                              /* STR1 STR2       */
-#define TEMP      mk_str("%s%s%s%s", YELLOW, STR_SPEC "C", ENT, " ") /* 32C             */
-#define FMT_KERN  mk_str("%s%s%s%s", YELLOW, STR_SPEC, ENT, " ")           /* Kernel Version  */
-#define FMT_SONG  mk_str("%s%s%s%s", PINK, STR_SPEC, ENT, " ")             /* Song            */
+#elif WITH_PY3STATUS == 1
+#include "colours/py3status_colours.h"
+
+#elif WITH_AWESOMEWM == 1
+#include "colours/awesomewm_colours.h"
+
+#elif WITH_XMOBAR == 1
+#include "colours/xmobar_colours.h"
+
+#elif WITH_LEMONBAR == 1
+#include "colours/lemonbar_colours.h"
+
+#elif WITH_TMUX == 1
+#include "colours/tmux_colours.h"
+
+#else
+#include "colours/dzen2_colours.h"
+
+#endif /* HAVE_X11_XLIB_H && WITH_DWM */
 
 
 /* options.c format constants */
-#define FMT           mk_str("%s%s%s%s", NAME_VAL"%%", ENT, " ")    /* STR1 10%             */
-#define FMT_TIME      mk_str("%s%s%s", NAME_VAL, ENT)            /* Time 10:00 PM        */
-#define FMT_MOBO      mk_str("%s%s%s%s", NAME_VAL, ENT, " ")        /* VEND NAME            */
-#define FMT_CPU       mk_str("%s%s%s%s", NAME_VAL"%%", ENT, " ")    /* CPU 10%              */
+#define FMT           NAME_VAL"%%" ENT " "                    /* STR1 10%             */
+#define FMT_TIME      NAME_VAL ENT                            /* Time 10:00 PM        */
+#define FMT_MOBO      FMT_TIME" "                             /* VEND NAME            */
+#define FMT_CPU       NAME_VAL"%%" ENT " "                    /* CPU 10%              */
 #define FMT_CORES     FMT_TIME                                /* CPU varying          */
 #define FMT_RAM       FMT                                     /* RAM 10%              */
 #define FMT_RAM2      FMT_MOBO                                /* RAM 10MB             */
@@ -66,12 +94,12 @@ static const char *ENT = "";
 #define FMT_VOL       FMT                                     /* Volume 10%           */
 #define FMT_NET       FMT_PKGS                                /* Down 123 Up 123      */
 #define FMT_STATIO    FMT_NET                                 /* Read 123 Written 123 */
-#define FMT_CPUSPEED  mk_str("%s%s%s%s", PINK, STR_SPEC, ENT, " ")  /* 1234 MHz             */
+#define FMT_CPUSPEED  PINK STR_SPEC ENT " "                   /* 1234 MHz             */
 #define FMT_TEMP      TEMP                                    /* 32C                  */
 #define FMT_BATT      FMT                                     /* BATT 10%             */
 #define FMT_UP        FMT_MOBO                                /* Up 10 min            */
 #define FMT_LOAD      FMT_MOBO                                /* Load/avg 0.01 0.01 0.01       */
 
-#define FMT_PINK mk_str("%s%s%s%s", PINK, STR_SPEC, ENT, " ")
+#define FMT_PINK PINK STR_SPEC ENT " "
 
 #endif /* CONSTANTS_H_ */

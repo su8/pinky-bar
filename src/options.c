@@ -75,10 +75,6 @@ enum {
   LOADAVG5,
   LOADAVG15,
   TITLE,
-  CLR1,
-  CLR2,
-  CLR3,
-  FORMA7,
   BULLSHIFT
 };
 const char *argp_program_version = PACKAGE_STRING;
@@ -134,10 +130,6 @@ static const struct argp_option options[] = {
   { .name = "password",     .key = PASSWORD, .arg = "num",  .doc = "Generate 20 character long password."                },
   { .name = "updates",      .key = UPDATES,            .doc = "Number all pending system updates."                       },
   { .name = "title",        .key = TITLE, .arg = "Do Stuff",  .doc = "Static string that's displayed to you, could be a title or header to prefix other option." },
-  { .name = "color1",       .key = CLR1, .arg = "hex color",  .doc = "Color for the title."                              },
-  { .name = "color2",       .key = CLR2, .arg = "hex color",  .doc = "Color for the option."                             },
-  { .name = "color3",       .key = CLR3, .arg = "hex color",  .doc = "Kernel/misc color."                                },
-  { .name = "fmt",       .key = FORMA7, .arg = "tmux",  .doc = "Use different format for the output data."            },
 
 #if WITH_SQLITE == 1
   { .name = "sqlite",       .key = SQLITEE, .arg = "string", .doc = "Connect to sqlite db and perform SELECT operation." },
@@ -369,39 +361,7 @@ parse_opt(int key, char *arg, struct argp_state *state) {
 
     NEW_LABEL(UPDATES, char updates[VLA], updates, FMT_PINK);
 
-    NEW_ARG_LABEL(TITLE, char title[VLA], title, mk_str("%s%s%s%s", BLUE, STR_SPEC, ENT, " "));
-
-    case CLR1:
-    {
-      BLUE = arg;
-      break;
-    }
-
-    case CLR2:
-    {
-      PINK = arg;
-      break;
-    }
-
-    case CLR3:
-    {
-      YELLOW = arg;
-      break;
-    }
-
-    case FORMA7:
-    {
-      if (STREQ(arg, "py3status")) {
-        ENT = "]";
-      }
-      else if (STREQ(arg, "awesomewm")) {
-        ENT = "</span>";
-      }
-      else if (STREQ(arg, "xmobar")) {
-        ENT = "</fc>";
-      }
-      break;
-    }
+    NEW_ARG_LABEL(TITLE, char title[VLA], title, BLUE STR_SPEC ENT " ");
 
 #if WITH_SQLITE == 1
     NEW_ARG_LABEL(SQLITEE, char sqlite[VLA], sqlite, FMT_PINK);
