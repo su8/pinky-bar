@@ -1,10 +1,14 @@
 The code doesn't age, neither it has expiration date.
 
 ## Table of Contents
-
-- [General installation](#general-installation)
+- [Installation for dwm](#installation-for-dwm)
+- [Installation for py3status](#installation-for-py3status)
+- [Installation for tmux](#installation-for-tmux)
+- [Installation for xmonad/other WM](#installation-for-xmonad-or-other-wm)
+- [Installation for lemonbar](#installation-for-lemonbar)
 - [Installation in FreeBSD](#installation-in-freebsd)
 - [Installation in OpenBSD](#installation-in-openbsd)
+- [Installation for anything else](#installation-for-anything-else)
 - [Configure Options](#gnu-build-system-configure-options)
 - [Program Options](#program-options)
 - [Supported Linux Distributions](#supported-linux-distributions)
@@ -69,26 +73,89 @@ If you compile your kernel from source code make sure to include your CPU and mo
 
 ---
 
-## General installation
+## Installation for py3status
 
 ```bash
 perl set.pl "distro"
 autoreconf --install --force
 
-# program installed in $HOME/.cache/bin/pinkybar
-./configure --prefix=$HOME/.cache
+./configure --prefix=$HOME/.cache --with-py3status --with-colors
+make
+make install
+```
+
+---
+
+## Installation for tmux
+
+```bash
+perl set.pl "distro"
+autoreconf --install --force
+
+./configure --prefix=$HOME/.cache --with-tmux --with-colors
 make
 make install
 ```
 ```bash
-# ~/.xinitrc
-
-# start pinkybar
-while true; do
-    ~/.cache/bin/pinkybar -LTrspkvfmdVt
-    sleep 2
-done &
+# ~/.tmux.conf
+set -g status-style 'bg=black'
+set -g status-right '#(~/.cache/bin/pinkybar)'
 ```
+
+---
+
+## Installation for xmonad (or other WM)
+
+```bash
+# copy the xbm icons
+mkdir -p --mode=700 $HOME/.xmonad/icons
+cp -r extra/xbm_icons/*.xbm $HOME/.xmonad/icons
+
+perl set.pl "distro"
+autoreconf --install --force
+
+# here you can specify --with-awesomewm or --with-xmobar
+./configure --prefix=$HOME/.cache --with-colors icons=$HOME/.xmonad/icons
+
+# compile 'n install
+make
+make install
+```
+
+Copy the code from extra/scripts/xmonad.sh or `exec` it from **xinitrc** or the script used to start xmonad.
+
+---
+
+## Installation for lemonbar
+
+```bash
+perl set.pl "distro"
+autoreconf --install --force
+
+./configure --prefix=$HOME/.cache --with-lemonbar --with-colors
+make
+make install
+```
+
+```bash
+#!/usr/bin/env bash
+while true; do
+    echo -n "%{r}"
+    ~/.cache/bin/pinkybar
+    sleep 2
+done
+```
+
+```bash
+~/script.sh | lemonbar -p
+```
+
+One-liner.
+
+```bash
+while true; do echo -n "%{r}" ; ~/.cache/bin/pinkybar ; sleep 2; done | lemonbar -p
+```
+
 ---
 
 ## Installation in FreeBSD
@@ -155,6 +222,29 @@ make install
 
 ---
 
+## Installation for anything else
+
+pinky-bar is no longer tied to Window Managers only. With the addition of "without colors", the output can be shown in any program, just bear in mind that the more options you've supplied the more system information will be shown.
+
+The tmux status bar in action:
+
+![](img/pic4.png)
+
+The installation steps:
+
+```bash
+perl set.pl "distro"
+autoreconf --install --force
+
+./configure --prefix=$HOME/.cache --without-colors
+make
+make install
+```
+
+By choosing this 3rd installation method it is up to you where, how to start and use the system information that's produced by pinky-bar.
+
+---
+
 ## GNU Build System (configure) options
 
 Before the source code is passed to the compiler, you can enable/disable the following **configure** options that will increase/reduce the number of dependencies required to compile the program.
@@ -163,6 +253,15 @@ It's up to you to decide which features suit you best.
 
 | Build With | Without | Description                                                                                |
 |----------------|:---------------------:|--------------------------------------------------------------------------------------------|
+| `--with-dwm`     | `--without-dwm`       | Output data to the root window for dwm.<br /> Can be colorized with **--with-colors**|
+| `--with-ncurses` | `--without-ncurses`   | Output data to the terminal using ncurses library.<br />Can be colorized with **--with-colors**|
+| `--with-py3status` | `--without-py3status` | Output data in different format for py3status.<br />Can be colorized with **--with-colors**             |
+| `--with-tmux`  | `--without-tmux`    | Output data in different format for tmux.<br />Can be colorized with **--with-colors**                  |
+| `--with-awesomewm` | `--without-awesomewm` | Output data in different format for awesomewm.<br />Can be colorized with **--with-colors**             |
+| `--with-xmobar`  | `--without-xmobar`    | Output data in different format for xmobar.<br />Can be colorized with **--with-colors**                  |
+| `--with-lemonbar`  | `--without-lemonbar`    | Output data in different format for lemonbar.<br />Can be colorized with **--with-colors**                  |
+| `--with-colors`  | `--without-colors`    | Colorize the output, must be combined with **icons=PATH**<br />if not used with dwm, ncurses, or py3status. |
+| &emsp;&emsp;&#11169;`icons=/tmp`     |                     | Enable XBM icons for dzen2 and others.<br />Discarded when used with **--with-dwm** |
 | `--with-alsa`    | `--without-alsa`      | Enable sound volume |
 | `--with-oss`     | `--without-oss`       | Enable sound volume (\*BSD)                                                     |
 | `--with-net`     | `--without-net`       | Enable Internet related options                                                        |
@@ -416,37 +515,6 @@ Execute the program without supplying any command line options and it will parse
 *   // comment, /* comment */
 *   # comment, ;; comment
 *
-*/
-
-/*
-* Use fmt when using the following programs:
-*  --fmt=py3status
-*  --fmt=awesomewm
-*  --fmt=xmobar
-*/
-
-/*
-* Here you can specify different
-* colors for the title, option, misc
-* available options:
-* --color1, --color2, --color3
-*
-*  awesomewm:
-*   --color2="<span color='#f0c674'>"
-*  lemonbar:
-*   --color2="%{F#f0c674}"
-*  py3status:
-*   --color2="[\?color=violet&show "
-*  tmux:
-*   --color2="#[fg=magenta,bright]"
-*  xmobar:
-*   --color2="<fc=#f0c674> "
-*  dzen2:
-*   --color2="^fg(#f0c674)"
-*  dwm:
-*   --color1="\x0a"
-*   --color2="\x0b"
-*   --color3="\x09"
 */
 
 ;; town followed by country code
@@ -822,6 +890,9 @@ For dwm:
 
 * libx11
 * xorg-server
+
+Use **--without-colors** to skip the following step:
+
 * dwm compiled with statuscolor patch. The colors are specified in your dwm config.h
 
 ## OCaml Language
