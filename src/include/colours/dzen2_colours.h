@@ -60,6 +60,7 @@
 
 #define PINK ""
 #define YELLOW ""
+#define BLUE ""
 #define NAME_VAL  STR_SPEC                            /* STR1 STR2       */
 #define TEMP      STR_SPEC "C "                       /* 32C             */
 #define FMT_KERN  KERN_ORIG                           /* Kernel Version  */
