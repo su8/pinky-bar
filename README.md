@@ -46,6 +46,10 @@ tmux
 
 ![](img/tmux.png)
 
+lemonbar
+
+![](img/lemonbar.png)
+
 Gather some system information and show it in this program, not tied to any Window Manager, terminal multiplexer, etc.
 
 Please note that the program won't detect fans connected via Molex connectors or external fan controllers. Also I have not tested it with fan splitters either.
