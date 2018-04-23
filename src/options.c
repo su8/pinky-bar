@@ -610,7 +610,8 @@ parse_konf(char *combined, const char *user_config) {
     snprintf(conf, VLA-1, "%s", user_config);
   }
   if (NULL == (fp = fopen(conf, "r"))) {
-    exit_with_err(ERR, "~/.pinky doesn't exist or $HOME is unset");
+    exit_with_err(ERR,
+      mk_str("%s %s", conf, "doesn't exist or $HOME is unset"));
   }
 
   while (NULL != (fgets(buf, VLA-1, fp))) {
