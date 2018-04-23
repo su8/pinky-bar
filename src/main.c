@@ -31,8 +31,17 @@ int main(int argc, char *argv[]) {
   }
 
   if (1 == argc) {
-    parse_konf(all);
-  } else {
+    parse_konf(all, NULL);
+  }
+  else if (3 == argc) {
+    if (STREQ(argv[1], "--conf")) {
+      parse_konf(all, argv[2]);
+    }
+    else {
+      parse_opts(argc, argv, all);
+    }
+  }
+  else {
     parse_opts(argc, argv, all);
   }
 

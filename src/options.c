@@ -633,7 +633,7 @@ parse_opts(int argc, char *argv[], char *combined) {
 
 
 void
-parse_konf(char *combined) {
+parse_konf(char *combined, const char *user_config) {
   FILE *fp = NULL, *fp2 = NULL;
   char *ptr = NULL;
   char *ello[] = { (char *)PACKAGE_STRING, NULL };
@@ -643,7 +643,12 @@ parse_konf(char *combined) {
     .all = combined
   };
 
-  snprintf(conf, VLA-1, "%s%s", home, "/.pinky");
+  if (NULL == user_config) {
+    snprintf(conf, VLA-1, "%s%s", home, "/.pinky");
+  }
+  else {
+    snprintf(conf, VLA-1, "%s", user_config);
+  }
   if (NULL == (fp = fopen(conf, "r"))) {
     exit_with_err(ERR, "~/.pinky doesn't exist or $HOME is unset");
   }

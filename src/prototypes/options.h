@@ -20,7 +20,7 @@
 #ifndef OPTIONS_H_
 #define OPTIONS_H_
 
-void parse_opts(int argc, char *argv[], char *combined);
-void parse_konf(char *combined);
+void parse_opts(int , char *argv[], char *);
+void parse_konf(char *, const char *);
 
 #endif /* OPTIONS_H_ */

@@ -385,11 +385,13 @@ Cannot list the \*BSD flavours as "distros", so they deserve their own options:
 
 ## Configuration File
 
-**~/.pinky** is the location of the configuration file.
+**~/.pinky** is the location of the configuration file. You can specify different config location via the `--conf` option.
 
 If any option depends on argument, don't put any space between the option and the argument. Only true if you are not using the `--shell` option.
 
 Use one option per line. Contrary to your shell, the "parser" won't expand ~/my\_script.pl to /home/User/my\_script.pl
+
+Execute the program without supplying any command line options and it will parse the configuration file. Optionally you can use different location for the configuration file, thus if you have tmux and lemonbar configs they won't clash. Here's how to use different config `pinkybar --conf ~/.config/pinky-tmux.conf`
 
 ```bash
 /*
@@ -475,8 +477,6 @@ Use one option per line. Contrary to your shell, the "parser" won't expand ~/my\
 // shell command to run
 --shell echo 'hi'
 ```
-
-Execute the program without supplying any command line options and it will parse the configuration file.
 
 ---
 
