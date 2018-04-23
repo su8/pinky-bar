@@ -12,6 +12,7 @@ The code doesn't age, neither it has expiration date.
 - [Linux Mandatory Requirements](#linux-mandatory-requirements)
 - [BSD Mandatory Requirements](#bsd-mandatory-requirements)
 - [Opt-in Requirements](#opt-in-requirements)
+- [Execute Scripts](#execute-scripts)
 - [WM Specific Requirements](#wm-specific-requirements)
 - [OCaml Language](#ocaml-language)
 - [Rust Language](#rust-language)
@@ -79,9 +80,15 @@ autoreconf --install --force
 make
 make install
 ```
+```bash
+# ~/.xinitrc
 
-Copy the code from extra/scripts/dwm.sh or `exec` it from **xinitrc** or the script used to start dwm.
-
+# start pinkybar
+while true; do
+    ~/.cache/bin/pinkybar -LTrspkvfmdVt
+    sleep 2
+done &
+```
 ---
 
 ## Installation in FreeBSD
@@ -179,26 +186,26 @@ It's up to you to decide which features suit you best.
 | `--with-slang`   | `--without-slang`     | Build pinkybar with Slang support
 | `--with-tcl`     | `--without-tcl`       | Build pinkybar with Tcl support |
 | `--with-weather` | `--without-weather`   | Enable weather from OpenWeatherMap |
-| &emsp;&#11169;`api_key='123458976'`               | | Required OpenWeatherMap API key, must be combined **--with-weather**  |
+| &emsp;&#8627;`api_key='123458976'`               | | Required OpenWeatherMap API key, must be combined **--with-weather**  |
 | `--with-smartemp` | `--without-smartemp`   | Enable drive temperature from *S.M.A.R.T.* (cross-platform)<br />with smartmontools|
 | `--with-drivetemp` | `--without-drivetemp`   | Enable drive temperature from *S.M.A.R.T.* (Linux only)<br />with curl |
 | `--with-drivetemp-light` | `--without-drivetemp-light`   | Enable drive temperature from *S.M.A.R.T.* (Linux only). Light version does not use curl nor will it force `-O0 CFLAG`. |
-| &emsp;&#11169;`drive_port='7634'`  |                | Optional listening TCP port for drive temperature, default is 7634, must be combined **--with-drivetemp** or **--with-drivetemp-light**   |
+| &emsp;&#8627;`drive_port='7634'`  |                | Optional listening TCP port for drive temperature, default is 7634, must be combined **--with-drivetemp** or **--with-drivetemp-light**   |
 | `--with-mpd`     | `--without-mpd`       | Enable MPD support for songs currently playing in mpd
 | `--with-keyboard` | `--without-keyboard` | Enable Xorg support for keyboard layouts                                     |
 | `--with-mouse`   | `--without-mouse`     | Enable Xorg support for mouse speed, in percentage |
 | `--with-lock-keys` | `--without-lock-keys` | Enable Xorg support for Num Lock, Caps Lock and Scroll Lock |
 | `--with-ip`      | `--without-ip`        | Enable External IP address (IPv4).                                                    |
 | `--with-gmail`    | `--without-gmail`      | Enable Gmail for a number of unread emails, must be combined with **gmail_account** and **gmail_password**  |
-| &emsp;&#11169;`gmail_account=foo`  |                | Required Gmail account, must be combined **--with-gmail**                            |
-| &emsp;&#11169;`gmail_password=bar` |                | Required Gmail password, must be combined **--with-gmail**                   |
+| &emsp;&#8627;`gmail_account=foo`  |                | Required Gmail account, must be combined **--with-gmail**                            |
+| &emsp;&#8627;`gmail_password=bar` |                | Required Gmail password, must be combined **--with-gmail**                   |
 | `--with-github`  | `--without-github`    | Enable GitHub for a number of unread notifications                                           |
-| &emsp;&#11169;`github_token=foo`  |                 | Required GitHub token [Generate token for specific scope](https://github.com/settings/tokens/new?scopes=notifications&description=pinky-bar), must be combined **--with-github**  |
+| &emsp;&#8627;`github_token=foo`  |                 | Required GitHub token [Generate token for specific scope](https://github.com/settings/tokens/new?scopes=notifications&description=pinky-bar), must be combined **--with-github**  |
 | `--with-reddit`  | `--without-reddit`    | Enable Reddit for a number of unread notifications|
-| &emsp;&#11169;`reddit_feed=`<br />`https://...`  |                  | Required Reddit URL ![](img/reddit.png)[Copy and Paste JSON URL](https://www.reddit.com/prefs/feeds/), must be combined **--with-reddit**  |
+| &emsp;&#8627;`reddit_feed=`<br />`https://...`  |                  | Required Reddit URL ![](img/reddit.png)[Copy and Paste JSON URL](https://www.reddit.com/prefs/feeds/), must be combined **--with-reddit**  |
 | `--with-pingtime` | `--without-pingtime` | Perform a GET request and measure the round trip time                                      |
 | `--with-sqlite`  | `--without-sqlite`    | Enable SQLite support to query a statement on a database file              |
-| &emsp;&#11169;`sqlite_db=foo` |                     | Location of a SQLite database file                                                      |
+| &emsp;&#8627;`sqlite_db=foo` |                     | Location of a SQLite database file                                                      |
 | `--prefix=`<br />`$HOME/.cache`  |                     | Install `pinkybar` to this directory |
 | `mobo_sensor=`<br />`'dev.aibs.0'`  |         | FreeBSD motherboard sensor module name to use in the sysctl calls. Read the FreeBSD installation below  |
 | `cpu_sensor=`<br />`'dev.cpu.0.temperature'` |  | FreeBSD CPU temperature module name to use in the sysctl calls. Read the FreeBSD installation below  |
@@ -282,18 +289,18 @@ The order of supplied options will dictate how, where and what system informatio
 |    | `--github`         | Print number of unread notifications                                 |
 |    | `--reddit`         | Print number of unread notifications                                 |
 |    | `--password=20`    | Generate random password                                             |
-|    | `--shell whoami` | Execute shell command (Configuration file only)<br/> *Short Example:* `--shell uptime --pretty`|
+|    | `--shell whoami` | Execute shell command (Configuration file only)<br/> *Example:* `--shell uptime --pretty`|
 |    | `--title=RAM`      | Display a static string                                              |
-|    | `--perl`           | Run scripts written in Perl                                          |
-|    | `--python`         | Run scripts written in Python                                        |
-|    | `--ruby`           | Run scripts written in Ruby                                          |
-|    | `--lua`            | Run scripts written in Lua                                           |
-|    | `--R`              | Run scripts written in R                                             |
-|    | `--asm`            | Run scripts written in Assembly                                      |
-|    | `--lisp`           | Run scripts written in Lisp                                          |
-|    | `--ocaml`          | Run scripts written in OCaml                                         |
-|    | `--rust`           | Run scripts written in Rust                                          |
-|    | `--go`             | Run scripts written in Go                                            |
+|    | `--perl`           | Execute scripts written in Perl                                          |
+|    | `--python`         | Execute scripts written in Python                                        |
+|    | `--ruby`           | Execute scripts written in Ruby                                          |
+|    | `--lua`            | Execute scripts written in Lua                                           |
+|    | `--R`              | Execute scripts written in R                                             |
+|    | `--asm`            | Execute scripts written in Assembly                                      |
+|    | `--lisp`           | Execute scripts written in Lisp                                          |
+|    | `--ocaml`          | Execute scripts written in OCaml                                         |
+|    | `--rust`           | Execute scripts written in Rust                                          |
+|    | `--go`             | Execute scripts written in Go                                            |
 |    | `--cpp`            | Run programs written in C++                                          |
 |    | `--slang`          | Run programs written in Slang                                        |
 |    | `--tcl`            | Run programs written in Tcl                                          |
@@ -397,7 +404,7 @@ Cannot list the \*BSD flavours as "distros", so they deserve their own options:
 
 If any option depends on argument, don't put any space between the option and the argument. Only true if you are not using the `--shell` option.
 
-Use one option per line. Contrary to your shell, the "parser" won't expand ~/my\_script.pl to /home/User/my\_script.pl
+Use one option per line. Contrary to your shell, the "parser" won't expand `~/my_script.pl` to `/home/User/my_script.pl`.
 
 Execute the program without supplying any command line options and it will parse the configuration file. Optionally you can use different location for the configuration file, thus if you have tmux and lemonbar configs they won't clash. Here's how to use different config `pinkybar --conf ~/.config/pinky-tmux.conf`
 
@@ -516,7 +523,7 @@ Execute the program without supplying any command line options and it will parse
 * pkg-config
 * **as** from binutils
 
-Some llvm and gcc versions will not check for headers and libraries in /usr/local, and you might get something like **ld cannot find -largp**, if that's the case for you, you should export the following environment variables:
+Some llvm and gcc versions will not check for headers and libraries in `/usr/local`, and you might get something like **ld cannot find -largp**, if that's the case for you, you should export the following environment variables:
 
 ```bash
 export LDFLAGS='-L/usr/local/lib'
@@ -533,17 +540,17 @@ The majority of SCN\* macros differs from their PRI\* cousins. And I cannot guar
 
 ## Opt-in Requirements
 
-Linux camp:
+*Start linux camp:*
 
 The Internet related options rely on headers provided by iproute2.
 By default, the program will try to compile with those headers included.
-If for any reason you would like to compile the program without Internet related options, configure **--without-net**.
+If you want to use this program without Internet related options, configure **--without-net**.
 
 * iproute2
 
 WiFi/wireless chipsets supporting mac80211/cfg80211:
 
-* libnl (>= 3.0)
+* libnl *(>= 3.0)*
 * pkg-config
 
 In Gentoo, there are two versions of pkg-config. The first one is `dev-util/pkgconfig` and the second one is `dev-ruby/pkg-config`. In order to use the first one, you'll have to export pkg-config path to the following environment variable:
@@ -556,14 +563,21 @@ You also have to edit **m4/extend.m4** and edit the line `PKG_CHECK_MODULES([RUB
 [ruby-2.2 >= 2.2]` to point to the correct ruby version that you have installed. Finally, configure with **--with-libnl**.
 
 
-To read drive temperature from *S.M.A.R.T*, install:
+To read drive temperature from *S.M.A.R.T*.:
 
-* The **--with-drivetemp** version requires curl.
-* The **--with-drivetemp-light** light version does not rely on curl, and will not force `-O0 CFLAGS`.
-* The **--with-smartemp** version requires smartmontools.
-    * smartmontools are not mandatory in OpenBSD, `atactl` does the same job.
+* The **--with-drivetemp** requires `curl`.
+* The **--with-drivetemp-light** does not rely on `curl`, and will not force `-O0 CFLAGS`.
 
-    Execute the following command as root `visudo` and append:
+    ```bash
+    # --with-drivetemp
+    0.01s user 0.00s system 72% cpu 0.008
+
+    # --with-drivetemp-light
+    0.00s user 0.00s system 15% cpu 0.006
+    ```
+* The **--with-smartemp** requires `smartmontools` *(not mandatory in OpenBSD, `atactl` does the same job.)*
+
+    Execute the following command `visudo` as root and append:
 
     ```bash
     # 'frost' is my computer username
@@ -572,13 +586,6 @@ To read drive temperature from *S.M.A.R.T*, install:
 
     Copy the code from **extra/scripts/drive-temperature.sh** or `exec` it from **xinitrc** or the script used to start your DE/WM.
 
-```bash
-# --with-drivetemp-light
-0.00s user 0.00s system 15% cpu 0.006
-
-# --with-drivetemp
-0.01s user 0.00s system 72% cpu 0.008
-```
 
 Try running hddtemp to see if it detects your drive, depending if it has temperature sensor in first place:
 
@@ -641,163 +648,7 @@ Open up your browser and navigate to 127.0.0.1:7634 and you'll get instant tempe
 
 The "init" lock-in for those of you that cannot choose between udev or eudev puts me in position not rely on libatasmart, regardless how neat the library is. There is stripped example program in extra/misc/skdump.c if you are curious to check and test libatasmart.
 
-Linux camp end.
-
-Pinkybar can execute scripts written in the following binaries:
-
-* perl
-* python == 2.7 (--with-python2)
-* python >= 3.3 (--with-python3)
-* lua >= 5.1
-* ruby >= 2.0 and pkg-config
-* R
-* assembly (the **as** program from binutils)
-* ecl for lisp
-* ocaml
-* rust
-* go
-* slang
-* tcl
-
-You can find the examples for *Python, Perl, Ruby, Lua, R, Assembly, Lisp, OCaml, Rust, Go, C++, Slang, and Tcl* in **extra/scripts** and you can also use all languages simultaneously at same time.
-
-**--with-python2** / **--with-python3**:
-
-`# example command` with Python script `getloadavg.py`
-```python
-#!/usr/bin/env python
-from os import getloadavg
-
-                ↶ # VIF: VERY IMPORTANT FUNCTION
-def uzer_func():
-    return ', '.join([format(x) for x in getloadavg()])
-```
-
-Please, please do **not** export or set `PYTHONPATH` on its own line.
-
-```bash
-# export PYTHONPATH=~/script_dir  # WRONG, DO NOT EXPORT PYTHONPATH ON ITS OWN LINE
-# pinkybar --python getloadavg
-```
-```bash
-# PYTHONPATH=~/script_dir  # WRONG, DO NOT SET PYTHONPATH ON ITS OWN LINE
-# pinkybar --python getloadavg
-```
-```bash
-# python2
-PYTHONPATH=~/scripts_dir ~/.cache/bin/pinkybar --python getloadavg  # CORRECT
-PYTHONPATH=~/scripts_dir ~/.cache/bin/pinkybar --python getloadavg.py  # WRONG
-```
-```bash
-# python3
-# executed once
-ONETIME=$(python3 -c 'import sys;print(":".join([x for x in sys.path]))')
-
-# executed in a loop
-PYTHONPATH=$ONETIME:~/scripts_dir ~/.cache/bin/pinkybar --python getloadavg
-```
-
-**--with-perl**:
-
-```bash
-# example command
-~/pinkybar --perl ~/chewbacca/pinky.pl
-```
-
-**--with-ruby**:
-
-```bash
-# example command
-~/pinkybar --ruby ~/chewbacca/pinky.rb
-```
-
-**--with-lua**:
-
-```bash
-
-# example command with "non byte-compiled script"
-~/pinkybar --lua ~/chewbacca/pinky.lua
-```
-```bash
-# compile source code
-luac -o pinky.luac pinky.lua
-
-# example command
-~/pinkybar --lua ~/chewbacca/pinky.luac # <-- .luac and not .lua
-```
-
-**--with-r**
-
-```bash
-# example command
-~/pinkybar --R ~/chewbacca/pinky.R
-```
-
-**--with-assembly**
-
-```bash
-# example command
-~/pinkybar --asm
-```
-
-**--with-lisp**
-
-```bash
-# example command
-~/pinkybar --lisp ~/chewbacca/pinky.lisp
-```
-
-**--with-ocaml**
-
-```bash
-# source code: /src/pinky.ml
-
-# example command
-~/pinkybar --ocaml
-```
-
-**--with-rust**
-
-```bash
-# source code: /extra/scripts/pinky.rs
-
-# example command
-~/pinkybar --rust
-```
-
-**--with-go**
-
-```bash
-# source code: extra/scripts/pinky2.go
-
-# example command
-~/pinkybar --go
-```
-
-**--with-cpp**
-
-```bash
-# source code: /src/c++.cpp
-
-# example command
-~/pinkybar --cpp
-```
-
-**--with-slang**
-
-```bash
-# example command
-~/pinkybar --slang ~/pinky.sl
-```
-
-**--with-tcl**
-
-```bash
-# example command
-~/pinkybar --tcl ~/pinky.tcl
-```
-
------
+*End of linux camp.*
 
 To get the sound volume level:
 
@@ -851,6 +702,110 @@ Keep an eye on the **log file size** if you are using raspberry pi (or equivalen
 
 ---
 
+## Execute Scripts
+
+You can execute scripts of the following languages: *Perl/Python/Ruby/Lua/R/Assembly/Lisp/OCaml/Rust/Go/C++/Slang/Tcl* and you can also simultaneously execute all of them at same time too.
+
+**--with-python2** *(==2.7)* / **--with-python3** *(>=3.3)*
+
+Example script `getloadavg.py`
+```python
+#!/usr/bin/env python
+from os import getloadavg
+
+                ↶ # VIF: VERY IMPORTANT FUNCTION
+def uzer_func():
+    return ', '.join([format(x) for x in getloadavg()])
+```
+
+Please do **not** export or set `PYTHONPATH` on its own line.
+
+```bash
+# export PYTHONPATH=~/script_dir  # WRONG, DO NOT EXPORT PYTHONPATH ON ITS OWN LINE
+# pinkybar --python getloadavg
+```
+```bash
+# PYTHONPATH=~/script_dir  # WRONG, DO NOT SET PYTHONPATH ON ITS OWN LINE
+# pinkybar --python getloadavg
+```
+```bash
+# python2
+PYTHONPATH=~/scripts_dir ~/.cache/bin/pinkybar --python getloadavg  # CORRECT
+PYTHONPATH=~/scripts_dir ~/.cache/bin/pinkybar --python getloadavg.py  # WRONG
+```
+```bash
+# python3
+# executed once
+ONETIME=$(python3 -c 'import sys;print(":".join([x for x in sys.path]))')
+
+# executed in a loop
+PYTHONPATH=$ONETIME:~/scripts_dir ~/.cache/bin/pinkybar --python getloadavg
+```
+
+**--with-perl**
+```bash
+~/pinkybar --perl src/pinky.pl
+```
+
+**--with-ruby** *(>= 2.0 and pkg-config required)*
+```bash
+~/pinkybar --ruby extra/scripts/pinky.rb
+```
+
+**--with-lua** *(>= 5.1)*
+```bash
+~/pinkybar --lua extra/scripts/pinky.lua  # non byte-compiled script
+```
+```bash
+luac -o pinky.luac pinky.lua  # compiled code
+~/pinkybar --lua ~/scripts_dir/pinky.luac # <-- .luac and not .lua
+```
+
+**--with-r**
+```bash
+~/pinkybar --R extra/scripts/pinky.R
+```
+
+**--with-assembly** *(**as** from binutils required)*
+```bash
+~/pinkybar --asm  # no example code?
+```
+
+**--with-lisp** *(esl for lisp required)*
+```bash
+~/pinkybar --lisp extra/scripts/pinky.lisp
+```
+
+**--with-ocaml**
+```bash
+~/pinkybar --ocaml src/pinky.ml
+```
+
+**--with-rust**
+```bash
+~/pinkybar --rust extra/scripts/pinky.rs
+```
+
+**--with-go**
+```bash
+~/pinkybar --go extra/scripts/pinky2.go
+```
+
+**--with-cpp**
+```bash
+~/pinkybar --cpp src/c++.cpp
+```
+
+**--with-slang**
+```bash
+~/pinkybar --slang extra/scripts/pinky.sl
+```
+
+**--with-tcl**
+```bash
+~/pinkybar --tcl extra/scripts/pinky.tcl
+```
+
 ## WM Specific Requirements
 
 If you would like the output to be shown in your Window Manager, those are the following requirements:
@@ -869,8 +824,6 @@ For dwm:
 * xorg-server
 * dwm compiled with statuscolor patch. The colors are specified in your dwm config.h
 
----
-
 ## OCaml Language
 
 Before invoking any of the installation commands you'll have to edit **src/Makefail.skel**:
@@ -878,8 +831,6 @@ Before invoking any of the installation commands you'll have to edit **src/Makef
 ```bash
 pinkybar_SOURCES = pinky.ml \
 ```
-
----
 
 ## Rust Language
 
@@ -889,8 +840,6 @@ The source code that you should edit is in **extra/scripts/pinky.rs**, but you'l
 pinkybar_LDADD = pinky.a
 ```
 
----
-
 ## Go Language
 
 The source code that you should edit is in **extra/scripts/pinky.go**, but you'll have to edit **src/Makefail.skel** and add the following at the end:
@@ -898,8 +847,6 @@ The source code that you should edit is in **extra/scripts/pinky.go**, but you'l
 ```bash
 pinkybar_LDADD = pinky2.a
 ```
-
----
 
 ## Assembly Language
 
@@ -909,26 +856,17 @@ The source code that you should edit is in **extra/scripts/pinky.s**, but you'll
 pinkybar_SOURCES = ../extra/scripts/pinky.s \
 ```
 
----
-
 ## Void Linux
 
-By default you won't have the following packages installed:
-
 ```bash
-pkg-config
-libtool
-automake
-autoconf
-m4
-make
-gcc/llvm/clang
+# install the dependencies
+xbps-install -S pkg-config libtool automake autoconf m4 make  # and gcc/llvm/clang
 ```
 
-The packages alsa-utils and alsa-lib does not ship with **asoundlib.h**, so if you want to use **--with-alsa** you'll have to compile the library manually:
+Packages `alsa-utils`, `alsa-lib` does not ship with **asoundlib.h**.<br />
+If you want to use **--with-alsa**, you'll have to compile the library manually:
 
 ```bash
-# Make sure that you got wget and tar
 wget ftp://ftp.alsa-project.org/pub/plugins/alsa-plugins-1.1.5.tar.bz2
 bzip2 --decompress alsa-plugins-1.1.5.tar.bz2
 tar -xvf alsa-plugins-1.1.5.tar
@@ -938,19 +876,14 @@ make
 sudo make install
 ```
 
----
-
 ## Tiny Core Linux
 
-Install the following dependencies from [here](http://distro.ibiblio.org/tinycorelinux/7.x/x86/tcz/):
-
 ```bash
-tce-load -wi sed.tcz pkg-config.tcz libtool.tcz grep.tcz glibc_base-dev.tcz gcc.tcz m4.tcz perl5.tcz gawk.tcz make.tcz autoconf.tcz automake.tcz
-```
+# install the dependencies
+tce-load -wi sed.tcz pkg-config.tcz libtool.tcz grep.tcz glibc_base-dev.tcz \
+gcc.tcz m4.tcz perl5.tcz gawk.tcz make.tcz autoconf.tcz automake.tcz
 
-Then followed by:
-
-```bash
+# run this next
 libtoolize --force
 aclocal
 autoheader
@@ -961,17 +894,13 @@ make
 make install
 ```
 
----
-
 ## Wish List
 
 It would be great if we can add NetBSD support.
 
----
-
 ## History
 
-The project began (on February 22, 2015) as simple conky replacement written in 3 days when I switched from Openbox to dwm, here's some history:
+The project began (on February 22, 2015) as simple Conky replacement written in 3 days when I switched from Openbox to dwm, here's some history:
 
 *I had 8 wonderful months with Openbox and the time to try and learn something new has come.*
 
@@ -985,7 +914,7 @@ The project began (on February 22, 2015) as simple conky replacement written in 
 
 *Since it is written and configured in C, I had no trouble getting it running, patched and configured they way I want to in the very first day.*
 
-*My first day was all around to get dwm working, and deprecate **conky** with my own version written in C that depends entirely on the standard library and doesn't call any 3rd party program. And that is how [dwm-bar.c](https://github.com/su8/dotfiles/blob/master/archlinux/home/frost/.config/dwm_scripts/dwm-bar.c) was born.*
+*My first day was all around to get dwm working, and deprecate **Conky** with my own version written in C that depends entirely on the standard library and doesn't call any 3rd party program. And that is how [dwm-bar.c](https://github.com/su8/dotfiles/blob/master/archlinux/home/frost/.config/dwm_scripts/dwm-bar.c) was born.*
 
 *Later on saw that in the dwm website there was **dwmstatus** examples and borrowed the code that sets the root window name (the colored ram, drive, kernel, volume and time), so edited my program to output the data to the root window, instead using xsetroot in addition with my first dwm-bar.c version. I have cloned and pushed my program to their git, so by the time you read this post it will be merged.*
 
