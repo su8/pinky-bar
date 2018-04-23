@@ -73,6 +73,19 @@ If you compile your kernel from source code make sure to include your CPU and mo
 
 ---
 
+## Installation for dwm
+
+```bash
+perl set.pl "distro"
+autoreconf --install --force
+
+./configure --prefix=$HOME/.cache --with-dwm --with-colors
+make
+make install
+```
+
+---
+
 ## Installation for py3status
 
 ```bash
