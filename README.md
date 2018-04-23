@@ -18,10 +18,6 @@ The code doesn't age, neither it has expiration date.
 - [Opt-in Requirements](#opt-in-requirements)
 - [Execute Scripts](#execute-scripts)
 - [WM Specific Requirements](#wm-specific-requirements)
-- [OCaml Language](#ocaml-language)
-- [Rust Language](#rust-language)
-- [Go Language](#go-language)
-- [Assembly Language](#assembly-language)
 - [Void Linux](#void-linux)
 - [Tiny Core Linux](#tiny-core-linux)
 - [Wish List](#wish-list)
@@ -848,6 +844,14 @@ luac -o pinky.luac pinky.lua  # compiled code
 ```
 
 **--with-assembly** *(**as** from binutils required)*
+
+The source code that you should edit is in **extra/scripts/pinky.s**,<br />
+but you'll have to edit **src/Makefail.skel** to add the following at the end:
+
+```bash
+# src/Makefail.skel
+pinkybar_SOURCES = ../extra/scripts/pinky.s \
+```
 ```bash
 ~/pinkybar --asm  # no example code?
 ```
@@ -858,23 +862,49 @@ luac -o pinky.luac pinky.lua  # compiled code
 ```
 
 **--with-ocaml**
+
+Before invoking any of the installation commands, you'll have to edit
+**src/Makefail.skel**<br />to add the following at the end:
 ```bash
-~/pinkybar --ocaml src/pinky.ml
+# src/Makefail.skel
+pinkybar_SOURCES = pinky.ml \
+```
+
+```bash
+# ocaml source: src/pinky.ml
+~/pinkybar --ocaml  # no path
 ```
 
 **--with-rust**
+
+The source code that you should edit is in **extra/scripts/pinky.rs**,<br />
+but you'll have to edit **src/Makefail.skel** to add the following at the end:
+
+```bash
+# src/Makefail.skel
+pinkybar_LDADD = pinky.a
+```
 ```bash
 ~/pinkybar --rust extra/scripts/pinky.rs
 ```
 
 **--with-go**
+
+The source code that you should edit is in **extra/scripts/pinky.go**,<br />
+but you'll have to edit **src/Makefail.skel** to add the following at the end:
+
+```bash
+# src/Makefail.skel
+pinkybar_LDADD = pinky2.a
+```
 ```bash
 ~/pinkybar --go extra/scripts/pinky2.go
 ```
 
-**--with-cpp**
+**--with-cpp** *(C++)*
 ```bash
-~/pinkybar --cpp src/c++.cpp
+# cpp source: src/c++.cpp
+~/pinkybar --cpp  # no path
 ```
 
 **--with-slang**
@@ -907,38 +937,6 @@ For dwm:
 Use **--without-colors** to skip the following step:
 
 * dwm compiled with statuscolor patch. The colors are specified in your dwm config.h
-
-## OCaml Language
-
-Before invoking any of the installation commands you'll have to edit **src/Makefail.skel**:
-
-```bash
-pinkybar_SOURCES = pinky.ml \
-```
-
-## Rust Language
-
-The source code that you should edit is in **extra/scripts/pinky.rs**, but you'll have to edit **src/Makefail.skel** and add the following at the end:
-
-```bash
-pinkybar_LDADD = pinky.a
-```
-
-## Go Language
-
-The source code that you should edit is in **extra/scripts/pinky.go**, but you'll have to edit **src/Makefail.skel** and add the following at the end:
-
-```bash
-pinkybar_LDADD = pinky2.a
-```
-
-## Assembly Language
-
-The source code that you should edit is in **extra/scripts/pinky.s**, but you'll have to edit **src/Makefail.skel** add the following at the end:
-
-```bash
-pinkybar_SOURCES = ../extra/scripts/pinky.s \
-```
 
 ## Void Linux
 
