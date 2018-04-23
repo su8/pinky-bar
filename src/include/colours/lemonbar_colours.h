@@ -22,9 +22,9 @@
 
 
 #if WITH_COLOURS == 1
-#define PINK "%{F#f0c674}"
+#define PINK "%{F#b294bb}"
 #define BLUE "%{F#1793d1}"
-#define YELLOW "%{F#b294bb}"
+#define YELLOW "%{F#f0c674}"
 
 #else
 #define PINK ""
