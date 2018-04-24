@@ -19,6 +19,7 @@ src/pinky_curses
 __pycache__
 *.info
 *.swp
+src/pinky.cm[i|o]
 
 
 
