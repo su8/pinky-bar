@@ -139,11 +139,14 @@ read_yahoo_data_cb(char *data, size_t size, size_t nmemb, char *str1) {
 
   if (0 == one_run) {
     for (; *ptr; ptr++, x++) {
+      if ('.' == *ptr) {
+        break;
+      }
       if ('\n' == *ptr) {
         z++;
       }
     }
-    FILL_ARR(str1, "%zu", z);
+    FILL_ARR(str1, "%zu", z - 1);
     one_run = 1;
   }
   return sz;
