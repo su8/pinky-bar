@@ -302,6 +302,9 @@ It's up to you to decide which features suit you best.
 | `--with-gmail`    | `--without-gmail`      | Enable Gmail for a number of unread emails, must be combined with **gmail_account** and **gmail_password**  |
 | &emsp;&#8627;`gmail_account=foo`  |                | Required Gmail account, must be combined **--with-gmail**                            |
 | &emsp;&#8627;`gmail_password=bar` |                | Required Gmail password, must be combined **--with-gmail**                   |
+| `--with-yahoo`    | `--without-yahoo`      | Enable Yahoo for a number of unread emails, must be combined with **yahoo_account** and **yahoo_password**  |
+| &emsp;&#8627;`yahoo_account=foo`  |                | Required Yahoo account, must be combined **--with-yahoo**                            |
+| &emsp;&#8627;`yahoo_password=bar` |                | Required Yahoo password, must be combined **--with-yahoo**                   |
 | `--with-github`  | `--without-github`    | Enable GitHub for a number of unread notifications                                           |
 | &emsp;&#8627;`github_token=foo`  |                 | Required GitHub token [Generate token for specific scope](https://github.com/settings/tokens/new?scopes=notifications&description=pinky-bar), must be combined **--with-github**  |
 | `--with-reddit`  | `--without-reddit`    | Enable Reddit for a number of unread notifications|
@@ -389,6 +392,7 @@ The order of supplied options will dictate how, where and what system informatio
 |    | `--capslock`       | Print current state of Caps Lock                                     |
 |    | `--scrolllock`     | Print current state of Scroll Lock                                   |
 |    | `--gmail`          | Print number of unread emails                                        |
+|    | `--yahoo`          | Print number of unread emails                                        |
 |    | `--github`         | Print number of unread notifications                                 |
 |    | `--reddit`         | Print number of unread notifications                                 |
 |    | `--password=20`    | Generate random password                                             |

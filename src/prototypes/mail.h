@@ -24,4 +24,8 @@
 void get_gmail(char *);
 #endif /* WITH_MAIL */
 
+#if WITH_YAHOO == 1
+void get_yahoo(char *);
+#endif /* WITH_YAHOO */
+
 #endif /* MAIL_H_ */

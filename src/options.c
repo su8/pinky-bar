@@ -75,6 +75,7 @@ enum {
   LOADAVG5,
   LOADAVG15,
   TITLE,
+  YAHOO,
   BULLSHIFT
 };
 const char *argp_program_version = PACKAGE_STRING;
@@ -154,6 +155,10 @@ static const struct argp_option options[] = {
 #if WITH_GMAIL == 1
   { .name = "gmail",        .key = GMAIL,              .doc = "Count all unread gmail emails."                           },
 #endif /* WITH_GMAIL */
+
+#if WITH_YAHOO == 1
+  { .name = "yahoo",        .key = YAHOO,              .doc = "Count all unread gmail emails."                           },
+#endif /* WITH_YAHOO */
 
 #if WITH_PERL == 1
   { .name = "perl",  .key = PERLSCRIPT, .arg = "script", .doc = "Extend the program with perl, read README."             },
@@ -391,6 +396,11 @@ parse_opt(int key, char *arg, struct argp_state *state) {
 #if WITH_GMAIL == 1
     NEW_LABEL(GMAIL, char gmail[VLA], gmail, FMT_TIME);
 #endif /* WITH_GMAIL */
+
+
+#if WITH_YAHOO == 1
+    NEW_LABEL(YAHOO, char yahoo[VLA], yahoo, FMT_TIME);
+#endif /* WITH_YAHOO */
 
 
 #if WITH_PERL == 1

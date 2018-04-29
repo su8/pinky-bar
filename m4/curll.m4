@@ -31,6 +31,9 @@ AC_DEFUN([TEST_CURLL],[
   GMAIL_ACC=""
   GMAIL_PASS=""
   WITH_GMAIL=0
+  YAHOO_ACC=""
+  YAHOO_PASS=""
+  WITH_YAHOO=0
   WITH_IP=0
   WITH_GITHUB=0
   GITHUB_TOKEN=""
@@ -101,12 +104,21 @@ AC_DEFUN([TEST_CURLL],[
     [with_pingtime=no]
   )
 
+  AC_ARG_WITH([yahoo],
+    AS_HELP_STRING([--with-yahoo],
+      [Count all unread emails]),
+    [],
+    [with_yahoo=no]
+  )
+
   AC_ARG_VAR(drive_port, [TCP port to listen to])
   AC_ARG_VAR(api_key, [weather api key])
   AC_ARG_VAR(gmail_account, [gmail account])
   AC_ARG_VAR(gmail_password, [gmail password])
   AC_ARG_VAR(github_token, [github token])
   AC_ARG_VAR(reddit_feed, [reddit feed])
+  AC_ARG_VAR(yahoo_account, [yahoo account])
+  AC_ARG_VAR(yahoo_password, [yahoo password])
 
   AS_IF([test "x$with_drivetemp" = "xyes" && test "x$with_drivetemp_light" = "xyes"],[
     with_drivetemp=no
@@ -150,6 +162,21 @@ AC_DEFUN([TEST_CURLL],[
 
   AS_IF([test "x$with_pingtime" = "xyes"],[
     WITH_PING=1
+  ])
+
+
+  if [[ ! -z "${yahoo_account}" ]]
+  then
+    YAHOO_ACC=\""${yahoo_account}"\"
+  fi
+  if [[ ! -z "${yahoo_password}" ]]
+  then
+    YAHOO_PASS=\""${yahoo_password}"\"
+  fi
+  AS_IF([test "x$with_yahoo" = "xyes"],[
+    WITH_YAHOO=1
+    AC_DEFINE_UNQUOTED([YAHOO_ACC],[$YAHOO_ACC],[yahoo account])
+    AC_DEFINE_UNQUOTED([YAHOO_PASS],[$YAHOO_PASS],[yahoo password])
   ])
 
   ifdef([LINUKS],[
@@ -245,7 +272,7 @@ AC_DEFUN([TEST_CURLL],[
   ],[
   ])
 
-  AS_IF([test "x$with_weather" = "xyes" || test "x$with_drivetemp" = "xyes" || test "x$with_gmail" = "xyes" || test "x$with_ip" = "xyes" || test "x$with_github" = "xyes" || test "x$with_reddit" = "xyes" || test "x$with_pingtime" = "xyes"], [
+  AS_IF([test "x$with_weather" = "xyes" || test "x$with_drivetemp" = "xyes" || test "x$with_gmail" = "xyes" || test "x$with_ip" = "xyes" || test "x$with_github" = "xyes" || test "x$with_reddit" = "xyes" || test "x$with_pingtime" = "xyes" || test "x$with_yahoo" = "xyes"], [
     CHECK_CFLAGZ([-O0])
 
     AC_CHECK_HEADERS([curl/curl.h], [
@@ -290,8 +317,9 @@ AC_DEFUN([TEST_CURLL],[
   AC_DEFINE_UNQUOTED([WITH_GITHUB],[$WITH_GITHUB],[Query GitHub and number all unread notifications])
   AC_DEFINE_UNQUOTED([WITH_REDDIT],[$WITH_REDDIT],[Query reddit and number all unread notifications])
   AC_DEFINE_UNQUOTED([WITH_PING],[$WITH_PING],[Perform a GET request and measure the round trip])
+  AC_DEFINE_UNQUOTED([WITH_YAHOO],[$WITH_YAHOO],[Count all unread emails])
 
-  AS_IF([test "x$with_weather" = "xyes" || test "x$with_drivetemp" = "xyes" || test "x$with_gmail" = "xyes" || test "x$with_ip" = "xyes" || test "x$with_github" = "xyes" || test "x$with_reddit" = "xyes" || test "x$with_pingtime" = "xyes"], [
+  AS_IF([test "x$with_weather" = "xyes" || test "x$with_drivetemp" = "xyes" || test "x$with_gmail" = "xyes" || test "x$with_ip" = "xyes" || test "x$with_github" = "xyes" || test "x$with_reddit" = "xyes" || test "x$with_pingtime" = "xyes" || test "x$with_yahoo" = "xyes"], [
     AC_LINK_IFELSE([
       AC_LANG_SOURCE([[
         #include <stdio.h>

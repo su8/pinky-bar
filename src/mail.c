@@ -19,13 +19,13 @@
 
 #include "config.h" /* Auto-generated */
 
-#if WITH_GMAIL == 1
+#if WITH_GMAIL == 1 || WITH_YAHOO == 1
 
 #include <ctype.h>
 #include <curl/curl.h>
 #include "include/headers.h"
 
-#endif /* WITH_GMAIL */
+#endif /* WITH_GMAIL || WITH_YAHOO */
 
 #include "prototypes/mail.h"
 
@@ -102,10 +102,74 @@ get_gmail(char *str1) {
   curl_easy_setopt(curl, CURLOPT_PASSWORD, GMAIL_PASS);
   curl_easy_setopt(curl, CURLOPT_URL, da_url);
   curl_easy_setopt(curl, CURLOPT_ACCEPT_ENCODING, "gzip");
-  curl_easy_setopt(curl, CURLOPT_USE_SSL, (long)CURLUSESSL_ALL); 
+  curl_easy_setopt(curl, CURLOPT_USE_SSL, (long)CURLUSESSL_ALL);
   curl_easy_setopt(curl, CURLOPT_TIMEOUT, 20L);
   curl_easy_setopt(curl, CURLOPT_PROTOCOLS, CURLPROTO_HTTPS);
   curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, read_gmail_data_cb);
+  curl_easy_setopt(curl, CURLOPT_WRITEDATA, str1);
+
+  res = curl_easy_perform(curl);
+  if (CURLE_OK != res) {
+    goto error;
+  }
+
+error:
+  if (NULL != curl) {
+    curl_easy_cleanup(curl);
+  }
+  curl_global_cleanup();
+  return;
+}
+
+
+#elif WITH_YAHOO == 1
+static size_t read_yahoo_data_cb(char *, size_t , size_t , char *);
+
+/* The data that we parse:
+ *   1 12519
+ *   2 22134
+ *   3 13792 
+ * */
+static size_t
+read_yahoo_data_cb(char *data, size_t size, size_t nmemb, char *str1) {
+  char *ptr = data;
+  static size_t z = 0;
+  static char one_run = 0;
+  size_t sz = nmemb * size, x = 0;
+
+  if (0 == one_run) {
+    for (; *ptr; ptr++, x++) {
+      if ('\n' == *ptr) {
+        z++;
+      }
+    }
+    FILL_ARR(str1, "%zu", z);
+    one_run = 1;
+  }
+  return sz;
+}
+
+void 
+get_yahoo(char *str1) {
+  const char *const da_url = "pop3s://pop.mail.yahoo.com";
+
+  CURL *curl = NULL;
+  CURLcode res;
+
+  FILL_STR_ARR(1, str1, "0");
+  curl_global_init(CURL_GLOBAL_ALL);
+
+  if (NULL == (curl = curl_easy_init())) {
+    goto error;
+  }
+
+  curl_easy_setopt(curl, CURLOPT_USERNAME, YAHOO_ACC);
+  curl_easy_setopt(curl, CURLOPT_PASSWORD, YAHOO_PASS);
+  curl_easy_setopt(curl, CURLOPT_URL, da_url);
+  curl_easy_setopt(curl, CURLOPT_ACCEPT_ENCODING, "gzip");
+  curl_easy_setopt(curl, CURLOPT_USE_SSL, (long)CURLUSESSL_ALL);
+  curl_easy_setopt(curl, CURLOPT_TIMEOUT, 20L);
+  curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, read_yahoo_data_cb);
   curl_easy_setopt(curl, CURLOPT_WRITEDATA, str1);
 
   res = curl_easy_perform(curl);
