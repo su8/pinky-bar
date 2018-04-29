@@ -116,15 +116,11 @@ set -g status-right '#(~/.cache/bin/pinkybar)'
 ## Installation for xmonad (or other WM)
 
 ```bash
-# copy the xbm icons
-mkdir -p --mode=700 $HOME/.xmonad/icons
-cp -r extra/xbm_icons/*.xbm $HOME/.xmonad/icons
-
 perl set.pl "distro"
 autoreconf --install --force
 
 # here you can specify --with-awesomewm or --with-xmobar
-./configure --prefix=$HOME/.cache --with-colors icons=$HOME/.xmonad/icons
+./configure --prefix=$HOME/.cache --with-colors
 
 # compile 'n install
 make
@@ -269,8 +265,7 @@ It's up to you to decide which features suit you best.
 | `--with-awesomewm` | `--without-awesomewm` | Output data in different format for awesomewm.<br />Can be colorized with **--with-colors**             |
 | `--with-xmobar`  | `--without-xmobar`    | Output data in different format for xmobar.<br />Can be colorized with **--with-colors**                  |
 | `--with-lemonbar`  | `--without-lemonbar`    | Output data in different format for lemonbar.<br />Can be colorized with **--with-colors**                  |
-| `--with-colors`  | `--without-colors`    | Colorize the output, must be combined with **icons=PATH**<br />if not used with dwm, ncurses, or py3status. |
-| &emsp;&emsp;&#11169;`icons=/tmp`     |                     | Enable XBM icons for dzen2 and others.<br />Discarded when used with **--with-dwm** |
+| `--with-colors`  | `--without-colors`    | Colorize the output |
 | `--with-alsa`    | `--without-alsa`      | Enable sound volume |
 | `--with-oss`     | `--without-oss`       | Enable sound volume (\*BSD)                                                     |
 | `--with-net`     | `--without-net`       | Enable Internet related options                                                        |
