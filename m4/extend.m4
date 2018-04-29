@@ -334,8 +334,8 @@ AC_DEFUN([TEST_R],[
   AS_IF([test "x$with_r" = "xyes"], [
     CHECK_CFLAGZ([-O0])
 
-    R_CF="-I/usr/lib64/R/include -I/usr/share/R/include"
-    R_LZ="-L/usr/lib64/R/lib -L/usr/share/R/lib -lR"
+    R_CF="-I/usr/lib64/R/include -I/usr/share/R/include -I/usr/lib/R/include"
+    R_LZ="-L/usr/lib64/R/lib -L/usr/share/R/lib -L/usr/lib/R/lib -lR"
     WITH_R=1
 
   ])
