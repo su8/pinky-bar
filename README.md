@@ -325,6 +325,8 @@ If no options are passed, the program will be compiled with:
 
 Affects **--with-gmail**. If you get error 403 unauthorized, then allow [less secure apps](https://myaccount.google.com/lesssecureapps) to access your account.
 
+Affects **--with-yahoo**. If you get error 403 unauthorized, then allow [less secure apps](https://login.yahoo.com/account/security#less-secure-apps) to access your account.
+
 Affects only FreeBSD users with laptops, **--without-apm** will compile the program with ACPI support to obtain the current battery life.
 
 **--without-mpd** will compile the program with cmus support, the options syntax stays as is.
