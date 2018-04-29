@@ -408,7 +408,7 @@ get_ruby(char *str1, char *str2) {
 
 
 #if WITH_RUST == 1
-extern char *uzer_func(void);
+extern char *uzer_func2(void);
 extern void Rfree(char *);
 
 void
