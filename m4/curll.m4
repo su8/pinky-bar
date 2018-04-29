@@ -120,7 +120,7 @@ AC_DEFUN([TEST_CURLL],[
   then
     GMAIL_PASS=\""${gmail_password}"\"
   fi
-  AS_IF([test "x$with_mail" = "xyes"],[
+  AS_IF([test "x$with_gmail" = "xyes"],[
     WITH_GMAIL=1
     AC_DEFINE_UNQUOTED([GMAIL_ACC],[$GMAIL_ACC],[gmail account])
     AC_DEFINE_UNQUOTED([GMAIL_PASS],[$GMAIL_PASS],[gmail password])
@@ -245,7 +245,7 @@ AC_DEFUN([TEST_CURLL],[
   ],[
   ])
 
-  AS_IF([test "x$with_weather" = "xyes" || test "x$with_drivetemp" = "xyes" || test "x$with_mail" = "xyes" || test "x$with_ip" = "xyes" || test "x$with_github" = "xyes" || test "x$with_reddit" = "xyes" || test "x$with_pingtime" = "xyes"], [
+  AS_IF([test "x$with_weather" = "xyes" || test "x$with_drivetemp" = "xyes" || test "x$with_gmail" = "xyes" || test "x$with_ip" = "xyes" || test "x$with_github" = "xyes" || test "x$with_reddit" = "xyes" || test "x$with_pingtime" = "xyes"], [
     CHECK_CFLAGZ([-O0])
 
     AC_CHECK_HEADERS([curl/curl.h], [
@@ -291,7 +291,7 @@ AC_DEFUN([TEST_CURLL],[
   AC_DEFINE_UNQUOTED([WITH_REDDIT],[$WITH_REDDIT],[Query reddit and number all unread notifications])
   AC_DEFINE_UNQUOTED([WITH_PING],[$WITH_PING],[Perform a GET request and measure the round trip])
 
-  AS_IF([test "x$with_weather" = "xyes" || test "x$with_drivetemp" = "xyes" || test "x$with_mail" = "xyes" || test "x$with_ip" = "xyes" || test "x$with_github" = "xyes" || test "x$with_reddit" = "xyes" || test "x$with_pingtime" = "xyes"], [
+  AS_IF([test "x$with_weather" = "xyes" || test "x$with_drivetemp" = "xyes" || test "x$with_gmail" = "xyes" || test "x$with_ip" = "xyes" || test "x$with_github" = "xyes" || test "x$with_reddit" = "xyes" || test "x$with_pingtime" = "xyes"], [
     AC_LINK_IFELSE([
       AC_LANG_SOURCE([[
         #include <stdio.h>
