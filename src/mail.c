@@ -42,6 +42,8 @@ static size_t read_gmail_data_cb(char *, size_t , size_t , char *);
 static size_t
 read_gmail_data_cb(char *data, size_t size, size_t nmemb, char *str1) {
   char *ptr = data;
+  static char buf[VLA];
+  static char *ptr2 = buf;
   size_t sz = nmemb * size, x = 0;
 
   for (; *ptr; ptr++, x++) {
@@ -49,23 +51,22 @@ read_gmail_data_cb(char *data, size_t size, size_t nmemb, char *str1) {
 
       if ('f' == *ptr) { /* fullcount */
         if ('u' == *(ptr+1) && 'l' == *(ptr+2) && 'l' == *(ptr+3)) {
-          *str1++ = *(ptr+10); /* 1 email */
+          *ptr2++ = *(ptr+10); /* 1 email */
           if (0 != (isdigit((unsigned char) *(ptr+11)))) {
-            *str1++ = *(ptr+11); /* 10 emails */
+            *ptr2++ = *(ptr+11); /* 10 emails */
           }
           if (0 != (isdigit((unsigned char) *(ptr+12)))) {
-            *str1++ = *(ptr+12); /* 100 emails */
+            *ptr2++ = *(ptr+12); /* 100 emails */
           }
           if (0 != (isdigit((unsigned char) *(ptr+13)))) {
-            *str1++ = *(ptr+13); /* 1000 emails */
+            *ptr2++ = *(ptr+13); /* 1000 emails */
           }
           if (0 != (isdigit((unsigned char) *(ptr+14)))) {
-            *str1++ = *(ptr+14); /* 10 000 emails */
+            *ptr2++ = *(ptr+14); /* 10 000 emails */
           }
           if (0 != (isdigit((unsigned char) *(ptr+15)))) {
-            *str1++ = *(ptr+15); /* 100 000 emails */
+            *ptr2++ = *(ptr+15); /* 100 000 emails */
           }
-          *str1 = '\0';
           break;
         }
       }
@@ -73,9 +74,7 @@ read_gmail_data_cb(char *data, size_t size, size_t nmemb, char *str1) {
     }
   }
 
-  if (!('0' == *str1) && '\0' != *str1) {
-    *str1++ = '\0';
-  }
+  FILL_STR_ARR(1, str1, buf);
   return sz;
 }
 
@@ -105,6 +104,7 @@ get_gmail(char *str1) {
   curl_easy_setopt(curl, CURLOPT_ACCEPT_ENCODING, "gzip");
   curl_easy_setopt(curl, CURLOPT_USE_SSL, (long)CURLUSESSL_ALL); 
   curl_easy_setopt(curl, CURLOPT_TIMEOUT, 20L);
+  curl_easy_setopt(curl, CURLOPT_PROTOCOLS, CURLPROTO_HTTPS);
   curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, read_gmail_data_cb);
   curl_easy_setopt(curl, CURLOPT_WRITEDATA, str1);
 
