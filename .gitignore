@@ -20,6 +20,7 @@ __pycache__
 *.info
 *.swp
 src/pinky.cm[i|o]
+src/pinky.a
 
 
 

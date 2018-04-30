@@ -908,7 +908,8 @@ but you'll have to edit **src/Makefail.skel** to add the following at the end:
 pinkybar_LDADD = pinky.a
 ```
 ```bash
-~/pinkybar --rust extra/scripts/pinky.rs
+# rust source: extra/scripts/pinky.rs
+~/pinkybar --rust  # no path
 ```
 
 **--with-go**
