@@ -922,7 +922,7 @@ but you'll have to edit **src/Makefail.skel** to add the following at the end:
 pinkybar_LDADD = pinky2.a
 ```
 ```bash
-~/pinkybar --go extra/scripts/pinky2.go
+~/pinkybar --go  # no path
 ```
 
 **--with-cpp** *(C++)*
