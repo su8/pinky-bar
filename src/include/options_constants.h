@@ -39,6 +39,8 @@
 # define ENT "</span>"
 #elif WITH_XMOBAR == 1 && WITH_COLOURS == 1
 # define ENT "</fc>"
+#elif WITH_TPUT == 1 && WITH_COLOURS == 1
+# define ENT "$(tput sgr0)"
 #else
 # define ENT ""
 #endif /* WITH_PY3STATUS */
@@ -53,7 +55,7 @@
 
 #if defined(HAVE_X11_XLIB_H) && WITH_DWM == 1
 #include "colours/x11_colours.h"
- 
+
 #elif WITH_NCURSES == 1
 #include "colours/ncurses_colours.h"
 
@@ -71,6 +73,9 @@
 
 #elif WITH_TMUX == 1
 #include "colours/tmux_colours.h"
+
+#elif WITH_TPUT == 1
+#include "colours/tput_colours.h"
 
 #else
 #include "colours/dzen2_colours.h"

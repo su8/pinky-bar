@@ -6,6 +6,7 @@ The code doesn't age, neither it has expiration date.
 - [Installation for tmux](#installation-for-tmux)
 - [Installation for xmonad/other WM](#installation-for-xmonad-or-other-wm)
 - [Installation for lemonbar](#installation-for-lemonbar)
+- [Installation for tput](#installation-for-tput)
 - [Installation in FreeBSD](#installation-in-freebsd)
 - [Installation in OpenBSD](#installation-in-openbsd)
 - [Installation for anything else](#installation-for-anything-else)
@@ -50,6 +51,10 @@ tmux
 lemonbar
 
 ![](img/lemonbar.png)
+
+tput
+
+![](img/tput.png)
 
 Gather some system information and show it in this program, not tied to any Window Manager, terminal multiplexer, etc.
 
@@ -159,6 +164,23 @@ One-liner.
 
 ```bash
 while true; do echo -n "%{r}" ; ~/.cache/bin/pinkybar ; sleep 2; done | lemonbar -p
+```
+
+---
+
+## Installation for tput
+
+```bash
+perl set.pl "distro"
+autoreconf --install --force
+
+./configure --prefix=$HOME/.cache --with-tput --with-colors
+make
+make install
+```
+```bash
+# terminal
+PS1="$(~/.cache/bin/pinkybar)"
 ```
 
 ---
