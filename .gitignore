@@ -21,6 +21,8 @@ __pycache__
 *.swp
 src/pinky.cm[i|o]
 src/pinky.a
+src/pinky2.a
+src/pinky2.h
 
 
 

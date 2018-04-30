@@ -287,6 +287,7 @@ It's up to you to decide which features suit you best.
 | `--with-awesomewm` | `--without-awesomewm` | Output data in different format for awesomewm.<br />Can be colorized with **--with-colors**             |
 | `--with-xmobar`  | `--without-xmobar`    | Output data in different format for xmobar.<br />Can be colorized with **--with-colors**                  |
 | `--with-lemonbar`  | `--without-lemonbar`    | Output data in different format for lemonbar.<br />Can be colorized with **--with-colors**                  |
+| `--with-tput`    | `--without-tput`      | Output data in different format for your terminals.<br />Can be colorized with **--with-colors**                  |
 | `--with-colors`  | `--without-colors`    | Colorize the output |
 | `--with-alsa`    | `--without-alsa`      | Enable sound volume |
 | `--with-oss`     | `--without-oss`       | Enable sound volume (\*BSD)                                                     |
