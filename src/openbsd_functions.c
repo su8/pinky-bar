@@ -50,7 +50,7 @@ get_ram(char *str1, uint8_t num) {
     case 1:
     case 2:
       FILL_ARR(str1, FMT_UINT "%s",
-        ((1 == num) ? total: freeram), "MB");
+        ((1 == num) ? total : freeram), "MB");
       break;
     case 3:
       FILL_ARR(str1, FMT_UINT "%s", (total - freeram), "MB");

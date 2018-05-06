@@ -494,7 +494,7 @@ parse_opt(int key, char *arg, struct argp_state *state) {
     NEW_LABEL(CAPSLOCK, char capslock[VLA], capslock, FMT_PINK);
 
     NEW_LABEL(SCROLLLOCK, char scrolllock[VLA], scrolllock, FMT_PINK);
-#endif /* WITH_KEYBOARD && HAVE_X11_XLIB_H */
+#endif /* WITH_NUMLOCK && HAVE_X11_XLIB_H */
 
 
 #if defined(HAVE_CDIO_CDIO_H) || defined(__linux__)
