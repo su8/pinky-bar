@@ -125,7 +125,7 @@ perl set.pl "distro"
 autoreconf --install --force
 
 # here you can specify --with-awesomewm or --with-xmobar
-./configure --prefix=$HOME/.cache --with-colors
+./configure --prefix=$HOME/.cache --with-dzen2 --with-colors
 
 # compile 'n install
 make
@@ -284,6 +284,7 @@ It's up to you to decide which features suit you best.
 | `--with-ncurses` | `--without-ncurses`   | Output data to the terminal using ncurses library.<br />Can be colorized with **--with-colors**|
 | `--with-py3status` | `--without-py3status` | Output data in different format for py3status.<br />Can be colorized with **--with-colors**             |
 | `--with-tmux`  | `--without-tmux`    | Output data in different format for tmux.<br />Can be colorized with **--with-colors**                  |
+| `--with-dzen2`  | `--without-dzen2`    | Output data in different format for dzen2.<br />Can be colorized with **--with-colors**                  |
 | `--with-awesomewm` | `--without-awesomewm` | Output data in different format for awesomewm.<br />Can be colorized with **--with-colors**             |
 | `--with-xmobar`  | `--without-xmobar`    | Output data in different format for xmobar.<br />Can be colorized with **--with-colors**                  |
 | `--with-lemonbar`  | `--without-lemonbar`    | Output data in different format for lemonbar.<br />Can be colorized with **--with-colors**                  |
@@ -303,13 +304,13 @@ It's up to you to decide which features suit you best.
 | `--with-python2` | `--without-python2`   | Build pinkybar with Python 2 support                         |
 | `--with-python3` | `--without-python3`   | Build pinkybar with Python 3 support                         |
 | `--with-r`       | `--without-r`         | Build pinkybar with R support                                |
-| `--with-assembly`| `--without-assembly`  | Build pinkybar with Assembly support
-| `--with-lisp`    | `--without-lisp`      | Build pinkybar with Lisp support                              |
+| `--with-assembly`| `--without-assembly`  | Build pinkybar with Assembly support                         |
+| `--with-lisp`    | `--without-lisp`      | Build pinkybar with Lisp support                             |
 | `--with-ocaml`   | `--without-ocaml`     | Build pinkybar with OCaml support                            |
 | `--with-rust`    | `--without-rust`      | Build pinkybar with Rust support                             |
 | `--with-go`      | `--without-go`        | Build pinkybar with Go support                               |
-| `--with-cpp`     | `--without-cpp`       | Build pinkybar with C++ support
-| `--with-slang`   | `--without-slang`     | Build pinkybar with Slang support
+| `--with-cpp`     | `--without-cpp`       | Build pinkybar with C++ support                              |
+| `--with-slang`   | `--without-slang`     | Build pinkybar with Slang support                            |
 | `--with-tcl`     | `--without-tcl`       | Build pinkybar with Tcl support |
 | `--with-weather` | `--without-weather`   | Enable weather from OpenWeatherMap |
 | &emsp;&#8627;`api_key='123458976'`               | | Required OpenWeatherMap API key, must be combined **--with-weather**  |
@@ -317,7 +318,7 @@ It's up to you to decide which features suit you best.
 | `--with-drivetemp` | `--without-drivetemp`   | Enable drive temperature from *S.M.A.R.T.* (Linux only)<br />with curl |
 | `--with-drivetemp-light` | `--without-drivetemp-light`   | Enable drive temperature from *S.M.A.R.T.* (Linux only). Light version does not use curl nor will it force `-O0 CFLAG`. |
 | &emsp;&#8627;`drive_port='7634'`  |                | Optional listening TCP port for drive temperature, default is 7634, must be combined **--with-drivetemp** or **--with-drivetemp-light**   |
-| `--with-mpd`     | `--without-mpd`       | Enable MPD support for songs currently playing in mpd
+| `--with-mpd`     | `--without-mpd`       | Enable MPD support for songs currently playing in mpd |
 | `--with-keyboard` | `--without-keyboard` | Enable Xorg support for keyboard layouts                                     |
 | `--with-mouse`   | `--without-mouse`     | Enable Xorg support for mouse speed, in percentage |
 | `--with-lock-keys` | `--without-lock-keys` | Enable Xorg support for Num Lock, Caps Lock and Scroll Lock |

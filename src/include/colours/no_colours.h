@@ -1,5 +1,5 @@
 /*
-   04/18/2018
+   05/12/2018
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -17,21 +17,13 @@
    MA 02110-1301, USA.
 */
 
-#ifndef TMUX_COLOURS_H_
-#define TMUX_COLOURS_H_
+#ifndef NO_COLOURS_H_
+#define NO_COLOURS_H_
 
 
-#if WITH_COLOURS == 1
-#define PINK "#[fg=magenta,bright]"
-#define BLUE "#[fg=blue,bright]"
-#define YELLOW "#[fg=yellow,bright]"
-
-#else
 #define PINK ""
 #define BLUE ""
 #define YELLOW ""
-
-#endif /* WITH_COLOURS */
 
 #define NAME_VAL  PINK STR_SPEC                        /* STR1 STR2       */
 #define TEMP      YELLOW STR_SPEC "C" ENT " "          /* 32C             */
@@ -39,4 +31,4 @@
 #define FMT_SONG  PINK SONG_ORIG                       /* Song            */
 
 
-#endif /* TMUX_COLOURS_H_ */
+#endif /* NO_COLOURS_H_ */

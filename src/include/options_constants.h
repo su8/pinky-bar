@@ -77,8 +77,14 @@
 #elif WITH_TPUT == 1
 #include "colours/tput_colours.h"
 
-#else
+#elif WITH_DZEN2 == 1
 #include "colours/dzen2_colours.h"
+
+#elif WITH_COLOURS == 0
+#include "colours/no_colours.h"
+
+#else
+# error "Either you have a typo in your ./configure commands or you miss argument to --with-colors such as --with-dzen2 for example."
 
 #endif /* HAVE_X11_XLIB_H && WITH_DWM */
 

@@ -34,6 +34,7 @@ AC_DEFUN([TEST_X11],[
   WITH_LEMONBAR=0
   WITH_TMUX=0
   WITH_TPUT=0
+  WITH_DZEN2=0
 
   AC_ARG_WITH([dwm],
     AS_HELP_STRING([--with-dwm],
@@ -105,6 +106,13 @@ AC_DEFUN([TEST_X11],[
     [with_tput=no]
   )
 
+  AC_ARG_WITH([dzen2],
+    AS_HELP_STRING([--with-dzen2],
+      [Format the output data for dzen2]),
+    [],
+    [with_dzen2=no]
+  )
+
   AC_ARG_VAR(icons, [path to xbm icons for non-dwm WM])
 
   AS_IF([test "x$with_colors" = "xyes"], [
@@ -140,6 +148,10 @@ AC_DEFUN([TEST_X11],[
 
   AS_IF([test "x$with_tput" = "xyes"], [
     WITH_TPUT=1
+  ])
+
+  AS_IF([test "x$with_dzen2" = "xyes"], [
+    WITH_DZEN2=1
   ])
 
   AS_IF([test "x$with_dwm" = "xyes" || test "x$with_keyboard" = "xyes" || test "x$with_mouse" = "xyes" || test "x$with_lock_keys" = "xyes"], [
@@ -197,6 +209,7 @@ AC_DEFUN([TEST_X11],[
   AC_DEFINE_UNQUOTED([WITH_LEMONBAR],[$WITH_LEMONBAR],[Format the output data for lemonbar])
   AC_DEFINE_UNQUOTED([WITH_TMUX],[$WITH_TMUX],[Format the output data for tmux])
   AC_DEFINE_UNQUOTED([WITH_TPUT],[$WITH_TPUT],[Format the output data for your terminals])
+  AC_DEFINE_UNQUOTED([WITH_DZEN2],[$WITH_DZEN2],[Format the output data for dzen2])
 
   AS_IF([test "x$with_dwm" = "xyes" || test "x$with_keyboard" = "xyes" || test "x$with_mouse" = "xyes"], [
     AC_LINK_IFELSE([

@@ -17,8 +17,8 @@
    MA 02110-1301, USA.
 */
 
-#ifndef COLOURS_H_
-#define COLOURS_H_
+#ifndef DZEN2_COLOURS_H_
+#define DZEN2_COLOURS_H_
 
 
 #if WITH_COLOURS == 1
@@ -26,8 +26,8 @@
 #define BLUE     "^fg(#1793D1)"
 #define PINK     "^fg(#b294bb)"
 
-#define NAME_VAL  PINK STR_SPEC      /* STR1 STR2        */
-#define TEMP      YELLOW STR_SPEC "C " /* 32C              */
+#define NAME_VAL  PINK STR_SPEC                        /* STR1 STR2        */
+#define TEMP      YELLOW STR_SPEC "C "                 /* 32C              */
 #define FMT_KERN  YELLOW KERN_ORIG                     /* Kernel Version   */
 #define FMT_SONG  PINK SONG_ORIG                       /* Song             */
 
@@ -36,6 +36,7 @@
 #define PINK ""
 #define YELLOW ""
 #define BLUE ""
+
 #define NAME_VAL  STR_SPEC                            /* STR1 STR2       */
 #define TEMP      STR_SPEC "C "                       /* 32C             */
 #define FMT_KERN  KERN_ORIG                           /* Kernel Version  */
@@ -44,4 +45,4 @@
 #endif /* WITH_COLOURS */
 
 
-#endif /* COLOURS_H_ */
+#endif /* DZEN2_COLOURS_H_ */
