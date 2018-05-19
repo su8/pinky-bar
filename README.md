@@ -1,5 +1,7 @@
 The code doesn't age, neither it has expiration date.
 
+![](img/logo.png)
+
 ## Table of Contents
 - [Installation for dwm](#installation-for-dwm)
 - [Installation for py3status](#installation-for-py3status)
