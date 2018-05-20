@@ -1,6 +1,6 @@
 The code doesn't age, neither it has expiration date.
 
-![](img/logo2.png)
+![pinkibarreadme](https://user-images.githubusercontent.com/36028424/40280974-be35dec2-5c8d-11e8-821b-18ec29da797f.png)
 
 ## Table of Contents
 - [Installation for dwm](#installation-for-dwm)
