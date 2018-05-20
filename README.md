@@ -1,6 +1,6 @@
 The code doesn't age, neither it has expiration date.
 
-![](img/logo.png)
+![](img/logo2.png)
 
 ## Table of Contents
 - [Installation for dwm](#installation-for-dwm)
