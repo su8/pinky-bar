@@ -105,8 +105,8 @@ sub reflace_single {
   );
   my $hasMatch = any { $_ eq $osEntered } @osArr;
   if ($hasMatch eq "") {
-    print GREEN, "Pick one base: ", BRIGHT_BLUE, "@osArr\n", RESET;
-    die RED, "Invalid \"", YELLOW, $osEntered, RED, "\" - OS/Distro supplied.", RESET;
+    print BOLD, GREEN, "Pick one base: ", BOLD, BRIGHT_BLUE, "@osArr\n", RESET;
+    die BOLD, RED, "Invalid \"", BOLD, YELLOW, $osEntered, BOLD, RED, "\" - OS/Distro supplied.", RESET;
   }
 
   my $srcMake = "src/Makefile.am";
@@ -136,10 +136,10 @@ sub reflace_single {
 
   copy("src/Makefail.skel",$srcMake)
     or die "Could not copy src/Makefail.skel $!";
-  print "Copying src/Makefail.skel as $srcMake ... ", GREEN, "OK\n", RESET;
+  print "Copying src/Makefail.skel as $srcMake ... ", BOLD, GREEN, "OK\n", RESET;
 
   reflace_configure(\$defTits);
-  print "Replacing variables in configure.ac ... ", GREEN, "OK\n", RESET;
+  print "Replacing variables in configure.ac ... ", BOLD, GREEN, "OK\n", RESET;
 
   my @hugeArr = (
     [\$amStr, \$$amCF],
@@ -147,7 +147,7 @@ sub reflace_single {
     [\$bsdStr, \$bsdLibs]
   );
   reflace_many(\@hugeArr,\$srcMake);
-  print "Replacing variables in $srcMake ... ", GREEN, "OK\n", RESET;
+  print "Replacing variables in $srcMake ... ", BOLD, GREEN, "OK\n", RESET;
 
-  print "Setting up $osEntered ... ", GREEN, "OK\n", RESET;
+  print "Setting up $osEntered ... ", BOLD, GREEN, "OK\n", RESET;
 }
