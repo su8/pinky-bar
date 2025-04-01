@@ -18,6 +18,6 @@ jobs:
     - name: autoreconf
       run: autoreconf --install --force
     - name: configure
-      run: ./configure --without-colors
+      run: ./configure --without-colors --without-alsa --without-colors --without-net --without-pci
     - name: make
       run: make -j8
