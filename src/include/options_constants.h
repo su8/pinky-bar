@@ -1,5 +1,5 @@
 /*
-   07/29/2015, 07/18/2016
+   07/29/2015, 07/18/2016, 04/01/2025
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -33,67 +33,25 @@
 
 #include "options_generator.h"
 
-#if WITH_PY3STATUS == 1 && WITH_COLOURS == 1
-# define ENT "]"
-#elif WITH_AWESOMEWM == 1 && WITH_COLOURS == 1
-# define ENT "</span>"
-#elif WITH_XMOBAR == 1 && WITH_COLOURS == 1
-# define ENT "</fc>"
-#elif WITH_TPUT == 1 && WITH_COLOURS == 1
-# define ENT "$(tput sgr0)"
-#else
-# define ENT ""
-#endif /* WITH_PY3STATUS */
-
 #define STR_SPEC "%s"
-#define SONG_ORIG STR_SPEC ENT " "
-#define KERN_ORIG STR_SPEC ENT " "
+
+#define SONG_ORIG mk_str("%s%s%s", STR_SPEC, ENT, " ")
+#define KERN_ORIG mk_str("%s%s%s", STR_SPEC, ENT, " ")
 
 #ifndef WITH_NCURSES
 #define WITH_NCURSES 6
 #endif /* WITH_NCURSES */
 
-#if defined(HAVE_X11_XLIB_H) && WITH_DWM == 1
-#include "colours/x11_colours.h"
-
-#elif WITH_NCURSES == 1
-#include "colours/ncurses_colours.h"
-
-#elif WITH_PY3STATUS == 1
-#include "colours/py3status_colours.h"
-
-#elif WITH_AWESOMEWM == 1
-#include "colours/awesomewm_colours.h"
-
-#elif WITH_XMOBAR == 1
-#include "colours/xmobar_colours.h"
-
-#elif WITH_LEMONBAR == 1
-#include "colours/lemonbar_colours.h"
-
-#elif WITH_TMUX == 1
-#include "colours/tmux_colours.h"
-
-#elif WITH_TPUT == 1
-#include "colours/tput_colours.h"
-
-#elif WITH_DZEN2 == 1
-#include "colours/dzen2_colours.h"
-
-#elif WITH_COLOURS == 0
-#include "colours/no_colours.h"
-
-#else
-# error "Either you have a typo in your ./configure commands or you miss argument to --with-colors such as --with-dzen2 for example."
-
-#endif /* HAVE_X11_XLIB_H && WITH_DWM */
-
+#define NAME_VAL  PINK, STR_SPEC                              /* STR1 STR2       */
+#define TEMP      mk_str("%s%s%s%s", YELLOW, STR_SPEC "C", ENT, " ") /* 32C             */
+#define FMT_KERN  mk_str("%s%s%s", YELLOW, STR_SPEC, ENT, " ")           /* Kernel Version  */
+#define FMT_SONG  mk_str("%s%s%s", PINK, STR_SPEC, ENT, " ")             /* Song            */
 
 /* options.c format constants */
-#define FMT           NAME_VAL"%%" ENT " "                    /* STR1 10%             */
-#define FMT_TIME      NAME_VAL ENT                            /* Time 10:00 PM        */
-#define FMT_MOBO      FMT_TIME" "                             /* VEND NAME            */
-#define FMT_CPU       NAME_VAL"%%" ENT " "                    /* CPU 10%              */
+#define FMT           mk_str("%s%s%s%s", NAME_VAL"%%", ENT, " ")                    /* STR1 10%             */
+#define FMT_TIME      mk_str("%s%s%s", NAME_VAL, ENT)                            /* Time 10:00 PM        */
+#define FMT_MOBO      mk_str("%s%s%s%s", NAME_VAL, ENT, " ")                             /* VEND NAME            */
+#define FMT_CPU       mk_str("%s%s%s%s", NAME_VAL"%%", ENT, " ")                    /* CPU 10%              */
 #define FMT_CORES     FMT_TIME                                /* CPU varying          */
 #define FMT_RAM       FMT                                     /* RAM 10%              */
 #define FMT_RAM2      FMT_MOBO                                /* RAM 10MB             */
@@ -105,12 +63,12 @@
 #define FMT_VOL       FMT                                     /* Volume 10%           */
 #define FMT_NET       FMT_PKGS                                /* Down 123 Up 123      */
 #define FMT_STATIO    FMT_NET                                 /* Read 123 Written 123 */
-#define FMT_CPUSPEED  PINK STR_SPEC ENT " "                   /* 1234 MHz             */
+#define FMT_CPUSPEED  mk_str("%s%s%s%s", NAME_VAL, ENT, " ")                   /* 1234 MHz             */
 #define FMT_TEMP      TEMP                                    /* 32C                  */
 #define FMT_BATT      FMT                                     /* BATT 10%             */
 #define FMT_UP        FMT_MOBO                                /* Up 10 min            */
 #define FMT_LOAD      FMT_MOBO                                /* Load/avg 0.01 0.01 0.01       */
 
-#define FMT_PINK PINK STR_SPEC ENT " "
+#define FMT_PINK mk_str("%s%s%s%s", NAME_VAL, ENT, " ")
 
 #endif /* CONSTANTS_H_ */
