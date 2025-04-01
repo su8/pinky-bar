@@ -1,4 +1,4 @@
-The code doesn't age, neither it has expiration date.
+The code doesn't age, neither it has expiration date. [![C/C++ CI](https://github.com/su8/pinky-bar/actions/workflows/c-cpp.yml/badge.svg)](https://github.com/su8/pinky-bar/actions/workflows/c-cpp.yml)
 
 ![image by Tobaloidee](img/PINKYBAR-02.png)
 
