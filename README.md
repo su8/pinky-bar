@@ -4,7 +4,7 @@ The code doesn't age, neither it has expiration date. [![C/C++ CI](https://githu
 
 ## Table of Contents
 - [Installation for dwm](#installation-for-dwm)
-- [Installation for tmux](#installation-for-tmux, py3status)
+- [Installation for tmux](#installation-for-tmux,py3status)
 - [Installation for xmonad/other WM](#installation-for-xmonad-or-other-wm)
 - [Installation for lemonbar](#installation-for-lemonbar)
 - [Installation for tput](#installation-for-tput)
@@ -88,7 +88,7 @@ make install
 
 ---
 
-## Installation for tmux, py3status
+## Installation for tmux,py3status
 
 ```bash
 perl set.pl "distro"
