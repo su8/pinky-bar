@@ -12,12 +12,12 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v3
-    -name: perl set.pl debian
+    - uses: actions/checkout@v4
+    - name: perl set.pl debian
       run: perl set.pl debian
-    -name: autoreconf
+    - name: autoreconf
       run: autoreconf --install --force
     - name: configure
       run: ./configure --without-colors
     - name: make
-      run: make
+      run: make -j8
