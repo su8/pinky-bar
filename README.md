@@ -4,8 +4,7 @@ The code doesn't age, neither it has expiration date.
 
 ## Table of Contents
 - [Installation for dwm](#installation-for-dwm)
-- [Installation for py3status](#installation-for-py3status)
-- [Installation for tmux](#installation-for-tmux)
+- [Installation for tmux](#installation-for-tmux,py3status)
 - [Installation for xmonad/other WM](#installation-for-xmonad-or-other-wm)
 - [Installation for lemonbar](#installation-for-lemonbar)
 - [Installation for tput](#installation-for-tput)
@@ -82,33 +81,20 @@ If you compile your kernel from source code make sure to include your CPU and mo
 perl set.pl "distro"
 autoreconf --install --force
 
-./configure --prefix=$HOME/.cache --with-dwm --with-colors
+./configure --prefix=$HOME/.cache --with-dwm
 make
 make install
 ```
 
 ---
 
-## Installation for py3status
+## Installation for tmux, py3status
 
 ```bash
 perl set.pl "distro"
 autoreconf --install --force
 
-./configure --prefix=$HOME/.cache --with-py3status --with-colors
-make
-make install
-```
-
----
-
-## Installation for tmux
-
-```bash
-perl set.pl "distro"
-autoreconf --install --force
-
-./configure --prefix=$HOME/.cache --with-tmux --with-colors
+./configure --prefix=$HOME/.cache
 make
 make install
 ```
@@ -552,6 +538,15 @@ Execute the program without supplying any command line options and it will parse
 *   # comment, ;; comment
 *
 */
+
+// Format the output data for different WM/terminal multiplexer
+// --fmt=py3status,xmobar,awesomewm
+
+// colors to use for the output
+--color1=^fg(#1793D1)
+--color2=^fg(#b294bb)
+--color3=^fg(#f0c674)
+
 
 ;; town followed by country code
 --weather=London,uk
